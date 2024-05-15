@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   nextjs-app:
-    container_name: electromart
+    container_name: login-exam
     build:
       context: .
       dockerfile: Dockerfile

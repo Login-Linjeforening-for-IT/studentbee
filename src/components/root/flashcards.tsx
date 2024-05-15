@@ -1,6 +1,6 @@
 'use client'
 import shuffle from "@/utils/shuffle"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import getCourseByID from "@/utils/getCourseByID"
 import getCookie from "@/utils/cookies"
 
@@ -9,6 +9,7 @@ type AlternativesProps = {
     selected: number
     animateAnswer: string
     setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
+    checkAnswer: (input: number) => void
 }
 
 type animate200msProps = {
@@ -21,6 +22,8 @@ export default function Flashcards({id}: {id?: string}) {
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
+    const selectedRef = useRef(selected)
+    selectedRef.current = selected
     const course = getCourseByID(id || "PROG1001")
     const flashcards = course.flashcards
     const flashcard = flashcards[current]
@@ -31,7 +34,6 @@ export default function Flashcards({id}: {id?: string}) {
             ? "bg-green-500" 
             : "bg-gray-800"
 
-    // Function to handle navigation
     function handleNavigation(direction: string) {
         switch (direction) {
             case 'back': 
@@ -45,46 +47,41 @@ export default function Flashcards({id}: {id?: string}) {
                 setSelected(-1)
                 break
             case 'next':
+                checkAnswer(selectedRef.current)
                 animate200ms({key: 'next', setAnimateAnswer})
                 setSelected(-1)
-                checkAnswer()
                 break
             case '1': 
-                animate200ms({key: '0', setAnimateAnswer}); 
-                setSelected(0)
-                checkAnswer()
+                animate200ms({key: '0', setAnimateAnswer})
+                checkAnswer(0)
+                setSelected(-1)
                 break
             case '2': 
-                animate200ms({key: '1', setAnimateAnswer}); 
-                setSelected(1)
-                checkAnswer()
+                animate200ms({key: '1', setAnimateAnswer})
+                checkAnswer(1)
+                setSelected(-1)
                 break
             case '3':
-                animate200ms({key: '2', setAnimateAnswer}); 
-                setSelected(2)
-                checkAnswer()
+                animate200ms({key: '2', setAnimateAnswer})
+                checkAnswer(2)
+                setSelected(-1)
                 break
             case '4': 
-                animate200ms({key: '3', setAnimateAnswer}); 
-                setSelected(3)
-                checkAnswer()
+                animate200ms({key: '3', setAnimateAnswer})
+                checkAnswer(3)
+                setSelected(-1)
                 break
-            case 'up': changeSelected('up'); break
-            case 'down': changeSelected('down'); break
+            case 'up': 
+                setSelected((prev) => (prev === flashcard.alternatives.length - 1 ? 0 : prev + 1))
+                break
+            case 'down': 
+                setSelected((prev) => (prev === 0 ? flashcard.alternatives.length - 1 : prev - 1 >= 0 ? prev - 1 : flashcard.alternatives.length - 1))
+                break
         }
     }
 
-    function changeSelected(direction: 'up' | 'down') {
-        if (direction === 'up') {
-            setSelected((prev) => (prev === 0 || prev === -1 ? flashcard.alternatives.length - 1 : prev - 1))
-        } else {
-            setSelected((prev) => (prev === flashcard.alternatives.length - 1 ? 0 : prev + 1))
-        }
-    }
-
-    function checkAnswer() {
-        console.log(selected, flashcard.correct)
-        if (selected === flashcard.correct) {
+    function checkAnswer(input: number) {
+        if (input === flashcard.correct) {
             setAnimate("correct")
             setTimeout(() => setAnimate("-1"), 200)
             setCurrent((prev) => (prev + 2) % flashcards.length)
@@ -94,10 +91,8 @@ export default function Flashcards({id}: {id?: string}) {
         }
     }
 
-    // Listen for arrow key presses
     useEffect(() => {
         function handleKeyDown(event: any) {
-            console.log(event.key)
             switch (event.key) {
                 case 'd':
                 case 'D':
@@ -127,25 +122,29 @@ export default function Flashcards({id}: {id?: string}) {
 
     return (
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
-            <div className={`w-full h-full ${flashColor} rounded-xl p-8 row-span-9 pb-8`}>
-                <h1 className="text-4xl mb-8">{flashcard.question}</h1>
+            <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
+                <div className="w-full grid grid-cols-2">
+                    <h1 className="text-4xl mb-8">{flashcard.question}</h1>
+                    <h1 className="text-right text-gray-500">{current + 1} / {flashcards.length}</h1>
+                </div>
                 <Alternatives 
                     alternatives={flashcard.alternatives}
                     selected={selected}
                     animateAnswer={animateAnswer} 
                     setAnimateAnswer={setAnimateAnswer} 
+                    checkAnswer={checkAnswer}
                 />
             </div>
             <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
                 <h1 className={`${button} ${animateAnswer === 'back' ? "bg-gray-700" : "bg-gray-800"}`}>back</h1>
                 <h1 className={`${button} ${animateAnswer === 'skip' ? "bg-gray-700" : "bg-gray-800"}`}>skip</h1>
-                <h1 className={`${button} ${animateAnswer === 'next' ? "bg-gray-700" : "bg-gray-800"}`}>next</h1>
+                <h1 className={`${button} ${flashColor}`}>next</h1>
             </div>
         </div>
     )
 }
 
-function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer}: AlternativesProps) {
+function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, checkAnswer}: AlternativesProps) {
     // const answers  = shuffle(alternatives)
 
     return (
@@ -154,7 +153,10 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer}:
                 <div key={index} className="grid grid-cols-10 h-[6vh]">
                     <h1 className="text-2xl grid place-items-center">{index + 1}</h1>
                     <button 
-                        onClick={() => animate200ms({key: index.toString(), setAnimateAnswer})}
+                        onClick={() => {
+                            animate200ms({key: index.toString(), setAnimateAnswer})
+                            checkAnswer(index)
+                        }}
                         className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-2xl col-span-9`}>
                         {answer}
                     </button>
