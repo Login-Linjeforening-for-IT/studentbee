@@ -1,5 +1,5 @@
 # Latest node base image
-FROM node:latest
+FROM node:20-alpine
 
 # Container working directory
 WORKDIR /app
