@@ -1,0 +1,11 @@
+{
+    "left": {
+        "title": "Left side"
+    },
+    "mid": {
+        "title": "Middle"
+    },
+    "right": {
+        "title": "Right side"
+    }
+}
