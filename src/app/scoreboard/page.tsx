@@ -1,4 +1,4 @@
-import List from "@/components/scoreboard/list"
+import List from "@components/scoreboard/list"
 
 export default function Scoreboard(): JSX.Element {
 

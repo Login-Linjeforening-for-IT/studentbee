@@ -21,6 +21,7 @@ npm-debug.log*
 # local env files
 .env
 secret.json
+.secret.json
 
 # typescript
 *.tsbuildinfo

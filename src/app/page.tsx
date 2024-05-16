@@ -1,7 +1,7 @@
 import React from 'react';
-import Courses from '@/components/root/courses';
-import Flashcards from '@/components/root/flashcards';
-import Elements from '@/components/root/elements';
+import Courses from '@components/root/courses';
+import Flashcards from '@components/root/flashcards';
+import Elements from '@components/root/elements';
 
 // Main component of the program, holds the main page and the user can navigate
 // to different pages from here

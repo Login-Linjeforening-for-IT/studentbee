@@ -1,8 +1,8 @@
 'use client'
-import shuffle from "@/utils/shuffle"
+import shuffle from "@utils/shuffle"
 import { useEffect, useState, useRef } from "react"
-import getCourseByID from "@/utils/getCourseByID"
-import getCookie from "@/utils/cookies"
+import getCourseByID from "@utils/getCourseByID"
+import getCookie from "@utils/cookies"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -17,8 +17,13 @@ type animate200msProps = {
     setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function Flashcards({id}: {id?: string}) {
-    const [current, setCurrent] = useState(0)
+type FlashCardsProps = {
+    id?: string
+    current?: number
+    setCurrent?: React.Dispatch<React.SetStateAction<number>>
+}
+
+export default function Flashcards({id, current, setCurrent}: FlashCardsProps) {
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
@@ -26,7 +31,7 @@ export default function Flashcards({id}: {id?: string}) {
     selectedRef.current = selected
     const course = getCourseByID(id || "PROG1001")
     const flashcards = course.flashcards
-    const flashcard = flashcards[current]
+    const flashcard = flashcards[current || 0]
     const button = `text-2xl rounded-xl grid place-items-center`
     const flashColor = animate === "wrong" 
         ? "bg-red-800" 
@@ -37,12 +42,18 @@ export default function Flashcards({id}: {id?: string}) {
     function handleNavigation(direction: string) {
         switch (direction) {
             case 'back': 
-                setCurrent((prev) => (prev === 0 ? 0 : prev - 1))
+                if (setCurrent) {
+                    setCurrent((prev) => (prev === 0 ? 0 : prev - 1))
+                }
+
                 animate200ms({key: 'back', setAnimateAnswer})
                 setSelected(-1)
                 break
             case 'skip': 
-                setCurrent((prev) => (prev + 1) % flashcards.length)
+                if (setCurrent) {
+                    setCurrent((prev) => (prev + 1) % flashcards.length)
+                }
+
                 animate200ms({key: 'skip', setAnimateAnswer})
                 setSelected(-1)
                 break
@@ -84,7 +95,9 @@ export default function Flashcards({id}: {id?: string}) {
         if (input === flashcard.correct) {
             setAnimate("correct")
             setTimeout(() => setAnimate("-1"), 200)
-            setCurrent((prev) => (prev + 2) % flashcards.length)
+            if (setCurrent) {
+                setCurrent((prev) => (prev + 2) % flashcards.length)
+            }
         } else {
             setAnimate("wrong")
             setTimeout(() => setAnimate("-1"), 200)
@@ -125,7 +138,7 @@ export default function Flashcards({id}: {id?: string}) {
             <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-2">
                     <h1 className="text-4xl mb-8">{flashcard.question}</h1>
-                    <h1 className="text-right text-gray-500">{current + 1} / {flashcards.length}</h1>
+                    <h1 className="text-right text-gray-500">{(current || 0) + 1} / {flashcards.length}</h1>
                 </div>
                 <Alternatives 
                     alternatives={flashcard.alternatives}

@@ -1,8 +1,8 @@
 import './globals.css'
-import Navbar from '@/components/nav'
+import Navbar from '@components/nav'
 
 export const metadata = {
-  title: 'Electromart',
+  title: 'Exam',
   description: 'The only electronics shopping website you will ever need.',
 }
 

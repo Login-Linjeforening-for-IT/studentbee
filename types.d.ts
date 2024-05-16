@@ -21,8 +21,19 @@ type FlashCardUnreviewed = {
     correct: number | undefined
 }
 
+type FlashCardAsText = {
+    input: string
+}
+
 type User = {
     id: number
+    name: string
+}
+
+type UserPage = {
+    id: number
+    username: string
+    password: string
     position: number
     name: string
     score: number
@@ -33,4 +44,22 @@ type User = {
 type UserSolved = {
     id: string
     flashcards: number[]
+}
+
+type RegisterUser = {
+    username: string
+    password: string
+    firstName: string
+    lastName: string
+}
+
+type LoginUser = {
+    username: string
+    password: string
+}
+
+type LoginResponse = {
+    id: number
+    name: string
+    token: string
 }

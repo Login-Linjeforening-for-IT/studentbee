@@ -1,5 +1,5 @@
 # frontend
-Frontend for electromart written in Nextjs, TypeScript and Tailwind.
+Frontend for exam.login.no written in Nextjs, TypeScript and Tailwind.
 This website is a complete implementation of a shopping website with products, search functionality, login functionality, profile, orders etc fully implemented.
 In theory this website could be put in production and work out of the box.
 

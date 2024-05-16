@@ -1,4 +1,4 @@
-import swap from "@/utils/swap"
+import swap from "@utils/swap"
 import ListHeader from "./listHeader"
 import ScoreBoardEntry from "./scoreboardEntry"
 import getScoreBoard from "./getScoreBoard"

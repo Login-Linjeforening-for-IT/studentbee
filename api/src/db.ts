@@ -1,9 +1,10 @@
-import pgPromise from 'pg-promise';
-import dotenv from 'dotenv';
+import admin from 'firebase-admin';
 
-dotenv.config();
+const serviceAccount = require('../.secret.json');
 
-const pgp = pgPromise();
-const db = pgp(process.env.DATABASE_URL || '');
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+})
 
+const db = admin.firestore();
 export default db;
