@@ -134,7 +134,7 @@ export async function sendRegister(user: RegisterUser): Promise<Boolean> {
         setCookie('redirect', '/login')
         getRedirect()
 
-        console.log("register successfull")
+        console.log("Register successful. Redirecting to login.")
         return true
     } catch (error) {
         console.error('Failed to send Register Payload:', error)

@@ -3,7 +3,57 @@ export const courses: Course[] = [
         id: "BMA1010",
         flashcards: [
             {
-                "question": "Hva er 2 + 2?",
+                "question": "Hva 1 er 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva 2 er 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva 3 er 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva4 er 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva 5er 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva e6r 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva er7 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva er 82 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva er9 2 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva er 102 + 2?",
+                "alternatives": ["1", "2", "3", "4"],
+                "correct": 3
+            },
+            {
+                "question": "Hva er 119 + 2?",
                 "alternatives": ["1", "2", "3", "4"],
                 "correct": 3
             }

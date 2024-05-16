@@ -7,12 +7,14 @@ type Course = {
     id: string
     flashcards: FlashCard[]
     unreviewed: FlashCardUnreviewed[]
+    help?: string
 }
 
 type FlashCard = {
     question: string
     alternatives: string[]
     correct: number
+    help?: string
 }
 
 type FlashCardUnreviewed = {

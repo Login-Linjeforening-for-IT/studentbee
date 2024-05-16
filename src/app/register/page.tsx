@@ -4,7 +4,7 @@ import { sendRegister } from "@/utils/user"
 import Link from "next/link"
 import { useState } from "react"
 
-export default function Signup() {
+export default function Register() {
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [mail, setMail] = useState("")
@@ -17,25 +17,25 @@ export default function Signup() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            <div className="bg-gray-800 w-[35vw] h-[75vh] rounded-xl grid place-items-center grid grid-rows-10 gap-4 p-5 px-10">
-                <h1 className=" text-3xl font-semibold">Lag bruker</h1>
+            <div className="bg-gray-800 w-[35vw] h-[45vh] rounded-xl grid place-items-center grid grid-rows-6 gap-4 p-5 px-10">
+                <h1 className=" text-3xl font-semibold">Register</h1>
                 <div className={inputParent}>
-                    <h1 className={inputText}>Fornavn:</h1>
+                    <h1 className={inputText}>First name:</h1>
                     <input 
                         value={firstName} 
                         onChange={(e) => setFirstName(e.target.value)} 
                         type="text" 
-                        placeholder="Fornavn" 
+                        placeholder="First name" 
                         className={input} 
                     />
                 </div>
                 <div className={inputParent}>
-                    <h1 className={inputText}>Etternavn:</h1>
+                    <h1 className={inputText}>Last name:</h1>
                     <input 
                         value={lastName} 
                         onChange={(e) => setLastName(e.target.value)} 
                         type="text" 
-                        placeholder="Etternavn" 
+                        placeholder="Last name" 
                         className={input} 
                     />
                 </div>
@@ -55,12 +55,12 @@ export default function Signup() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         type="password"
-                        placeholder="Passord"
+                        placeholder="Password"
                         className={input}
                     />
                 </div>
                 <Link 
-                    href={!error ? '/' : '/signup'}
+                    href={!error ? '/' : '/register'}
                     className="grid w-full h-full bg-orange-500 rounded-xl" 
                     onClick={() => sendRegister({
                         username: mail,
@@ -68,7 +68,7 @@ export default function Signup() {
                         firstName,
                         lastName,
                     })}>
-                    <h1 className="text-2xl place-self-center">Lag bruker</h1>
+                    <h1 className="text-2xl place-self-center">Create account</h1>
                 </Link>
                 <div className={inputParent} /> 
         </div>  

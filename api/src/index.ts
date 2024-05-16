@@ -2,10 +2,18 @@ import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
 import router from './routes';
+import cors from 'cors';
 
 dotenv.config();
 
+
 const app = express();
+app.use(cors({
+    origin: 'http://localhost:3000',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}))
+
 const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());

@@ -1,6 +1,5 @@
 import getCourseByID from "@/utils/getCourseByID"
 
-
 type ElementsProps = {
     id?: string
     current?: number
@@ -18,12 +17,12 @@ export default function Elements({id, current}: ElementsProps) {
     const flashcards = course.flashcards
 
     return (
-        <div className='w-full h-full rounded-xl col-span-2 grid grid-rows-2 gap-8 overflow-auto'>
-            <div className="w-full h-full bg-green-500 rounded-xl p-4">
-                <h1 className="text-2xl">Help</h1>
-            </div>
-            <div className="w-full h-full bg-blue-500 rounded-xl p-4 overflow-auto">
-                <h1 className="text-2xl">Next question</h1>
+        <div className='w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden'>
+            {course.help ? <div className="w-full h-full bg-gray-600 rounded-xl p-4 overflow-auto">
+                <h1 className="text-2xl">Info</h1>
+            </div> : null}
+            <div className="w-full h-full rounded-xl p-4 overflow-auto">
+                <h1 className="text-2xl mb-2">Upcoming</h1>
                 <GetNextQuestions flashcards={flashcards} current={current} amount={amount} />
             </div>
         </div>
@@ -34,9 +33,9 @@ export default function Elements({id, current}: ElementsProps) {
 function GetNextQuestions({flashcards, current, amount}: Next10Props) {
     const relevant = flashcards.slice(current, amount)
 
-    return (
-        <div className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-4 flex items-center pl-4`}>
-            {relevant.map((card) => <h1>{card.question}</h1>)}
+    return relevant.map((card) => 
+        <div className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-2 flex items-center pl-4`}>
+            <h1>{card.question}</h1>
         </div>
     )
 }

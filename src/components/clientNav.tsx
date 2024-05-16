@@ -37,7 +37,7 @@ export function RegisterIcon() {
     }
     
     return (
-        <Link href='/signup' className='grid place-items-center'>
+        <Link href='/register' className='grid place-items-center'>
             <Image src="/images/join.svg" alt="logo" height={55} width={55} />
         </Link>
     )

@@ -160,6 +160,7 @@ export async function getUserProfile(req: Request, res: Response) {
 }
 
 // Moves the approved flashcards from unreviewed to reviewed
+// id: number
 // user_id: number
 // course_id: number
 // {
@@ -174,7 +175,7 @@ export async function getUserProfile(req: Request, res: Response) {
 // [{},{},{}]
 export async function postApproved(req: Request, res: Response) {
     try {
-        const { user_id, course_id, flashcards } = req.body;
+        const { id, user_id, course_id, flashcards } = req.body;
 
         // Validate the required fields
         if (!user_id || !course_id || !flashcards || !Array.isArray(flashcards)) {
@@ -197,10 +198,7 @@ export async function postApproved(req: Request, res: Response) {
 
             // Find the document in FlashCardUnreviewed collection
             const snapshot = await db.collection('FlashCardUnreviewed')
-                .where('course_id', '==', course_id)
-                .where('question', '==', question)
-                .where('alternatives', 'array-contains-any', alternatives)
-                .where('correct', '==', correct)
+                .where('id', '==', id)
                 .get();
 
             snapshot.forEach(doc => {
@@ -230,22 +228,25 @@ export async function postApproved(req: Request, res: Response) {
 // Denies the given flashcard from Firebase, and removes them from the storage
 // This is relevant when there are duplicate questions, or bad questions that
 // should not be reviewed
+// id: number
 // user_id: number
 // course_id: number
 // {
+//     id: number
 //     question: string
 //     alternatives: string[]
 //     correct: number
 // }
 //
 // or 
-//
+// 
+// id: number
 // user_id: number
 // course_id: number 
 // [{},{},{}]
 export async function postDenied(req: Request, res: Response) {
     try {
-        const { user_id, course_id } = req.body;
+        const { id, user_id, course_id } = req.body;
         const flashcards = req.body.flashcards || req.body;
 
         // Validate the required fields
@@ -272,11 +273,7 @@ export async function postDenied(req: Request, res: Response) {
 
             // Find the document to delete
             const snapshot = await db.collection('FlashCardUnreviewed')
-                .where('user_id', '==', user_id)
-                .where('course_id', '==', course_id)
-                .where('question', '==', question)
-                .where('alternatives', 'array-contains-any', alternatives)
-                .where('correct', '==', correct)
+                .where('id', '==', id)
                 .get();
 
             snapshot.forEach(doc => {

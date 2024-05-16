@@ -2,7 +2,7 @@
 import shuffle from "@utils/shuffle"
 import { useEffect, useState, useRef } from "react"
 import getCourseByID from "@utils/getCourseByID"
-import getCookie from "@utils/cookies"
+import { useRouter } from "next/navigation"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -20,10 +20,10 @@ type animate200msProps = {
 type FlashCardsProps = {
     id?: string
     current?: number
-    setCurrent?: React.Dispatch<React.SetStateAction<number>>
 }
 
-export default function Flashcards({id, current, setCurrent}: FlashCardsProps) {
+export default function Flashcards({id, current}: FlashCardsProps) {
+    const router = useRouter();
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
@@ -40,19 +40,22 @@ export default function Flashcards({id, current, setCurrent}: FlashCardsProps) {
             : "bg-gray-800"
 
     function handleNavigation(direction: string) {
+
         switch (direction) {
             case 'back': 
-                if (setCurrent) {
-                    setCurrent((prev) => (prev === 0 ? 0 : prev - 1))
+                if (current != undefined) {
+                    const previous = current === 0 ? 0 : current - 1
+                    router.push(`/course/${id}/${previous}`)
                 }
 
                 animate200ms({key: 'back', setAnimateAnswer})
                 setSelected(-1)
                 break
             case 'skip': 
-                if (setCurrent) {
-                    setCurrent((prev) => (prev + 1) % flashcards.length)
-                }
+                if (current != undefined) {
+                    const skip = (current + 1) % flashcards.length
+                    router.push(`/course/${id}/${skip}`)
+                } else console.log('no current')
 
                 animate200ms({key: 'skip', setAnimateAnswer})
                 setSelected(-1)
@@ -93,11 +96,12 @@ export default function Flashcards({id, current, setCurrent}: FlashCardsProps) {
 
     function checkAnswer(input: number) {
         if (input === flashcard.correct) {
+            if (current != undefined) {
+                const next = current + 1 < flashcards.length ? current + 1 : -1
+                router.push(`/course/${id}/${next}`)
+            }
             setAnimate("correct")
             setTimeout(() => setAnimate("-1"), 200)
-            if (setCurrent) {
-                setCurrent((prev) => (prev + 2) % flashcards.length)
-            }
         } else {
             setAnimate("wrong")
             setTimeout(() => setAnimate("-1"), 200)
@@ -112,6 +116,8 @@ export default function Flashcards({id, current, setCurrent}: FlashCardsProps) {
                 case 'ArrowRight': handleNavigation('next'); break
                 case 'a':
                 case 'A':
+                case 'b':
+                case 'B':
                 case 'ArrowLeft': handleNavigation('back'); break
                 case 's': 
                 case 'S': handleNavigation('skip'); break
@@ -130,7 +136,19 @@ export default function Flashcards({id, current, setCurrent}: FlashCardsProps) {
     }, [])
 
     if (!flashcards.length) {
-        return <div className="w-full h-full grid place-items-center col-span-6"><h1 className="text-3xl">Course {course.id} has no content yet.</h1></div>
+        return (
+            <div className="w-full h-full grid place-items-center col-span-6">
+                <h1 className="text-3xl">Course {course.id} has no content yet.</h1>
+            </div>
+        )
+    }
+
+    if (!flashcard) {
+        return (
+            <div className="w-full h-full grid place-items-center col-span-6">
+                <h1 className="text-3xl">Course {course.id} only has {course.flashcards.length} questions. You tried to access Q{current}.</h1>
+            </div>
+        )
     }
 
     return (
@@ -149,9 +167,24 @@ export default function Flashcards({id, current, setCurrent}: FlashCardsProps) {
                 />
             </div>
             <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
-                <h1 className={`${button} ${animateAnswer === 'back' ? "bg-gray-700" : "bg-gray-800"}`}>back</h1>
-                <h1 className={`${button} ${animateAnswer === 'skip' ? "bg-gray-700" : "bg-gray-800"}`}>skip</h1>
-                <h1 className={`${button} ${flashColor}`}>next</h1>
+                <button 
+                    className={`${button} ${animateAnswer === 'back' ? "bg-gray-700" : "bg-gray-800"}`}
+                    onClick={() => handleNavigation('back')}
+                >
+                    back
+                </button>
+                <button 
+                    className={`${button} ${animateAnswer === 'skip' ? "bg-gray-700" : "bg-gray-800"}`}
+                    onClick={() => handleNavigation('skip')}
+                >
+                    skip
+                </button>
+                <button 
+                    className={`${button} ${flashColor}`}
+                    onClick={() => handleNavigation('next')}
+                >
+                    next
+                </button>
             </div>
         </div>
     )

@@ -1,10 +1,14 @@
-import { courses } from "@/app/data"
+import { getCourses } from "@/utils/fetch"
 import Link from "next/link"
 
-export default function Courses(): JSX.Element {
+export default async function Courses() {
+    const courses = await getCourses()
     return (
         <div className='w-full h-full rounded-xl col-span-2 overflow-auto pr-5'>
-            <h1 className="text-2xl mb-2">Courses</h1>
+            <div className="flex flex-cols">
+                <h1 className="text-2xl mb-2 mr-2">Courses</h1>
+                <Link href='/add' className="text-2xl bg-gray-500 rounded-xl text-center px-2 mb-1 pb-[5px]">+</Link>
+            </div>
             {courses.map((course, index) => 
                 <Course key={index} course={course} margin={index != courses.length - 1} /> 
             )}

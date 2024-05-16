@@ -22,11 +22,11 @@ router.get('/courses', getCourses);
 router.get('/courses/:courseId/reviewed', getReviewedFlashcards);
 router.get('/courses/:courseId/flashcards', getAllFlashcards);
 router.get('/users/:userId', getUserProfile);
-router.get('register', postRegister);
-router.get('/login', postLogin);
-router.get('/upload_text', postUploadedAsText)
-router.get('/upload_struct', postUploadedAsStruct)
-router.get('/approve', postApproved)
-router.get('/deny', postDenied)
+router.post('/register', postRegister);
+router.post('/login', postLogin);
+router.post('/upload_text', postUploadedAsText)
+router.post('/upload_struct', postUploadedAsStruct)
+router.post('/approve', postApproved)
+router.post('/deny', postDenied)
 
 export default router;
