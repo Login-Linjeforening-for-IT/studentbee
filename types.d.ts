@@ -63,3 +63,12 @@ type LoginResponse = {
     name: string
     token: string
 }
+
+type ScoreBoardUser = {
+    position: number
+    account_id: number
+    account_url: string
+    name: string
+    score: number
+    time: number
+}

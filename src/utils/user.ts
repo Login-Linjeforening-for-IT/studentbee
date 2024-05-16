@@ -38,10 +38,12 @@ export async function sendLogin(user: LoginUser): Promise<Boolean | string> {
 // Function to logout the user
 export async function sendLogout(): Promise<Boolean | string> {
     try {
+        const token = getCookie('token')
         const user = getCookie('user')
 
-        if (!user) {
+        if (!token || !user) {
             // Removes cookies and user from localstorage if the user wants to log out
+            removeCookie('token')
             removeCookie('user')
             window.location.href = '/login'
             return "Logged out successfully."
@@ -49,21 +51,23 @@ export async function sendLogout(): Promise<Boolean | string> {
         }
 
         // Removes cookies and user from localstorage if the user wants to log out
+        removeCookie('token')
         removeCookie('user')
 
-        const response = await fetch(`${API}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user)
-        })
+        // const response = await fetch(`${API}/login`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': token
+        //     },
+        //     body: JSON.stringify(user)
+        // })
 
-        if (!response.ok) {
-            const data = await response.json()
+        // if (!response.ok) {
+        //     const data = await response.json()
 
-            throw Error(data.error)
-        }
+        //     throw Error(data.error)
+        // }
 
         return true
     } catch (error) {
