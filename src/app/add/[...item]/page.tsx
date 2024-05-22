@@ -29,7 +29,6 @@ type AddTextProps = {
 type AddTextForCourseProps = {
     course: Course
     setCourse: Dispatch<SetStateAction<Course>>
-    setSelected: Dispatch<SetStateAction<number>>
 }
 
 type AlternativeProps = {
@@ -146,12 +145,27 @@ function TextOrNormal({course, setCourse, selected, setSelected}: TextOrNormalPr
         setSelected(input)
     }
 
+    function handleCardClick(index: number) {
+        setCardIndex(index)
+        setAlternativeIndex(0)
+    }
+
     return (
         <div className={`w-full ${cols}`}>
             {selected === 0 ? <button className="w-full h-full bg-orange-500 rounded-xl text-xl" onClick={() => handleClick(1)}>Add questions</button> : null}
             {selected === 1 ? <div className="grid w-full">
                 <div className="mb-2">
-                    {course.unreviewed.map((card, index) => <h1 key={index}>{card.question} ({card.alternatives.length} alt)<p className="text-gray-500">({card.alternatives.length})</p></h1>)}
+                    {course.unreviewed.map((card, index) => {
+                        if (!card.question.length || card.alternatives.length < 2) {
+                            return
+                        }
+
+                        return (
+                            <button className="w-full text-left" key={index} onClick={() => handleCardClick(index)}>
+                                {card.question} {card.question != "" ? `(${card.alternatives.length} alt)` : ''}
+                            </button>
+                        )
+                    })}
                 </div>
             </div> : null}
             {selected === 1 ? <AddCardForCourse 
@@ -163,12 +177,12 @@ function TextOrNormal({course, setCourse, selected, setSelected}: TextOrNormalPr
                 setAlternativeIndex={setAlternativeIndex}
             /> : null}
             {selected === 0 ? <button className="w-full h-full bg-orange-500 rounded-xl text-xl" onClick={() => handleClick(2)}>Add text field</button> : null}
-            {selected === 2 ? <AddTextForCourse course={course} setCourse={setCourse} setSelected={setSelected} /> : null}
+            {selected === 2 ? <AddTextForCourse course={course} setCourse={setCourse} /> : null}
         </div>
     )
 }
 
-function AddTextForCourse({course, setCourse, setSelected}: AddTextForCourseProps) {
+function AddTextForCourse({course, setCourse}: AddTextForCourseProps) {
     function handleChange(text: string) {
         setCourse({...course, textUnreviewed: text})
     }
@@ -198,7 +212,6 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
 
     // Adds a new card to the course
     function addCardToCourse() {
-        console.log(course.unreviewed[cardIndex].alternatives.length)
         // Aborts if there is no question or less than 2 alternatives
         if (course.unreviewed[cardIndex].question === "" || course.unreviewed[cardIndex].alternatives.length < 2) {
             return
@@ -207,6 +220,11 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
         const tempCards = [...course.unreviewed, emptyCard]
         setCourse({...course, unreviewed: tempCards})
         setCardIndex(cardIndex + 1)
+        setAlternativeIndex(0)
+    }
+
+    function handleAlternativeClick(index: number) {
+        setAlternativeIndex(index)
     }
 
     return (
@@ -224,7 +242,19 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
             <div className="grid grid-cols-8 w-full mt-4">
                 <div className="col-span-2" />
                 <div className="col-span-6">
-                    {course.unreviewed[cardIndex].alternatives.map(alternative => <h1 key={alternative} className="w-full">{alternative}</h1>)}
+                    {course.unreviewed[cardIndex].alternatives.map((alternative, index) => {
+                        if (!alternative.length) {
+                            return
+                        }
+
+                        return (
+                            <button 
+                                onClick={() => handleAlternativeClick(index)} 
+                                key={alternative} 
+                                className="w-full text-left"
+                            >{alternative}</button>
+                        )
+                    })}
                 </div>
             </div>
             <Alternative
