@@ -1,7 +1,7 @@
 export const courses: Course[] = [
     {
         id: "BMA1010",
-        flashcards: [
+        cards: [
             {
                 "question": "Hva 1 er 2 + 2?",
                 "alternatives": ["1", "2", "3", "4"],
@@ -62,137 +62,137 @@ export const courses: Course[] = [
     },
     {
         id: "BMA1020",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "DCSG2003",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "EXPH0300",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IDATG2102",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IDATG2202",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IDATG2204",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IDATG2206",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IDG1362",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IIKG1001",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IIKG2001",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IIKG3005",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IMT3603",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IMT4116",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "IØ2000",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "ISTG1003",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG1001",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG1003",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG1004",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2002",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2005",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2006",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2007",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2051",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2052",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2053",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "PROG2900",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
     {
         id: "SMF1194",
-        flashcards: [],
+        cards: [],
         unreviewed: []
     },
 ]

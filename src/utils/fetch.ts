@@ -1,24 +1,5 @@
 import { API } from "@parent/constants"
 
-type AddCourseProps = {
-    id: string
-    course: string
-    content: FlashCard[] | string
-
-}
-
-type AddCardProps = {
-    user_id: string
-    course_id: string
-    flashcard: FlashCard
-}
-
-type AddTextProps = {
-    user_id: string
-    course_id: string
-    text: string
-}
-
 export async function getScoreBoard() {
     const response = await fetch(`${API}/scoreboard`, {
         method: 'GET',
@@ -56,16 +37,19 @@ export async function getCourses(): Promise<Course[]> {
 // .............................................................................
 
 // Adds a course with the given user id, course name and questions
-export function addCourse({id, course, content}: AddCourseProps) {
-
+export function addCourse(course: Course): void | string {
+    // get user_id
+    return 'not implemented'
 }
 
 // Adds a question to the course with the given user id
-export function addCard({user_id, course_id, flashcard}: AddCardProps) {
-    
+export function addCard(course_id: string, card: Card): void | string {
+    // get user_id
+    return 'not implemented'
 }
 
 // Adds a textinput to the course with the given user id
-export function addText({user_id, course_id, text}: AddTextProps) {
-
+export function addText(course_id: string, text: string): void | string {
+    // get user_id
+    return 'not implemented'
 }

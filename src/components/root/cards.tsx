@@ -17,12 +17,12 @@ type animate200msProps = {
     setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
 }
 
-type FlashCardsProps = {
+type CardsProps = {
     id?: string
     current?: number
 }
 
-export default function Flashcards({id, current}: FlashCardsProps) {
+export default function Cards({id, current}: CardsProps) {
     const router = useRouter();
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
@@ -30,8 +30,8 @@ export default function Flashcards({id, current}: FlashCardsProps) {
     const selectedRef = useRef(selected)
     selectedRef.current = selected
     const course = getCourseByID(id || "PROG1001")
-    const flashcards = course.flashcards
-    const flashcard = flashcards[current || 0]
+    const cards = course.cards
+    const card = cards[current || 0]
     const button = `text-2xl rounded-xl grid place-items-center`
     const flashColor = animate === "wrong" 
         ? "bg-red-800" 
@@ -53,7 +53,7 @@ export default function Flashcards({id, current}: FlashCardsProps) {
                 break
             case 'skip': 
                 if (current != undefined) {
-                    const skip = (current + 1) % flashcards.length
+                    const skip = (current + 1) % cards.length
                     router.push(`/course/${id}/${skip}`)
                 } else console.log('no current')
 
@@ -86,18 +86,18 @@ export default function Flashcards({id, current}: FlashCardsProps) {
                 setSelected(-1)
                 break
             case 'up': 
-                setSelected((prev) => (prev === flashcard.alternatives.length - 1 ? 0 : prev + 1))
+                setSelected((prev) => (prev === card.alternatives.length - 1 ? 0 : prev + 1))
                 break
             case 'down': 
-                setSelected((prev) => (prev === 0 ? flashcard.alternatives.length - 1 : prev - 1 >= 0 ? prev - 1 : flashcard.alternatives.length - 1))
+                setSelected((prev) => (prev === 0 ? card.alternatives.length - 1 : prev - 1 >= 0 ? prev - 1 : card.alternatives.length - 1))
                 break
         }
     }
 
     function checkAnswer(input: number) {
-        if (input === flashcard.correct) {
+        if (input === card.correct) {
             if (current != undefined) {
-                const next = current + 1 < flashcards.length ? current + 1 : -1
+                const next = current + 1 < cards.length ? current + 1 : -1
                 router.push(`/course/${id}/${next}`)
             }
             setAnimate("correct")
@@ -135,7 +135,7 @@ export default function Flashcards({id, current}: FlashCardsProps) {
         return () => window.removeEventListener('keydown', handleKeyDown)
     }, [])
 
-    if (!flashcards.length) {
+    if (!cards.length) {
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
                 <h1 className="text-3xl">Course {course.id} has no content yet.</h1>
@@ -143,10 +143,10 @@ export default function Flashcards({id, current}: FlashCardsProps) {
         )
     }
 
-    if (!flashcard) {
+    if (!card) {
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-3xl">Course {course.id} only has {course.flashcards.length} questions. You tried to access Q{current}.</h1>
+                <h1 className="text-3xl">Course {course.id} only has {course.cards.length} questions. You tried to access Q{current}.</h1>
             </div>
         )
     }
@@ -155,11 +155,11 @@ export default function Flashcards({id, current}: FlashCardsProps) {
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
             <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-2">
-                    <h1 className="text-4xl mb-8">{flashcard.question}</h1>
-                    <h1 className="text-right text-gray-500">{(current || 0) + 1} / {flashcards.length}</h1>
+                    <h1 className="text-4xl mb-8">{card.question}</h1>
+                    <h1 className="text-right text-gray-500">{(current || 0) + 1} / {cards.length}</h1>
                 </div>
                 <Alternatives 
-                    alternatives={flashcard.alternatives}
+                    alternatives={card.alternatives}
                     selected={selected}
                     animateAnswer={animateAnswer} 
                     setAnimateAnswer={setAnimateAnswer} 
@@ -191,8 +191,6 @@ export default function Flashcards({id, current}: FlashCardsProps) {
 }
 
 function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, checkAnswer}: AlternativesProps) {
-    // const answers  = shuffle(alternatives)
-
     return (
         <div className='grid grid-rows-auto w-full gap-4'>
             {alternatives.map((answer, index) =>

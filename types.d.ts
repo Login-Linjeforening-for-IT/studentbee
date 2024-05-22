@@ -5,25 +5,19 @@ type CourseProps = {
 
 type Course = {
     id: string
-    flashcards: FlashCard[]
-    unreviewed: FlashCardUnreviewed[]
-    help?: string
+    cards: Card[]
+    unreviewed: Card[]
+    textUnreviewed: string
 }
 
-type FlashCard = {
+type Card = {
     question: string
     alternatives: string[]
     correct: number
     help?: string
 }
 
-type FlashCardUnreviewed = {
-    question: string
-    alternatives: string[] | undefined
-    correct: number | undefined
-}
-
-type FlashCardAsText = {
+type CardAsText = {
     input: string
 }
 
@@ -45,7 +39,7 @@ type UserPage = {
 
 type UserSolved = {
     id: string
-    flashcards: number[]
+    cards: number[]
 }
 
 type RegisterUser = {

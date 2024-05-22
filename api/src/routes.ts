@@ -2,8 +2,8 @@ import express from 'express';
 import {
     getScoreboard,
     getCourses,
-    getReviewedFlashcards,
-    getAllFlashcards,
+    getReviewedCards,
+    getAllCards,
     getUserProfile,
     getIndexHandler,
     postRegister,
@@ -19,8 +19,8 @@ const router = express.Router();
 router.get('/', getIndexHandler)
 router.get('/scoreboard', getScoreboard);
 router.get('/courses', getCourses);
-router.get('/courses/:courseId/reviewed', getReviewedFlashcards);
-router.get('/courses/:courseId/flashcards', getAllFlashcards);
+router.get('/courses/:courseId/reviewed', getReviewedCards);
+router.get('/courses/:courseId/cards', getAllCards);
 router.get('/users/:userId', getUserProfile);
 router.post('/register', postRegister);
 router.post('/login', postLogin);

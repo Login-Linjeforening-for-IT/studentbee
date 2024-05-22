@@ -6,7 +6,7 @@ type ElementsProps = {
 }
 
 type Next10Props = {
-    flashcards: FlashCard[]
+    cards: Card[]
     current?: number
     amount: number
 }
@@ -14,7 +14,7 @@ type Next10Props = {
 export default function Elements({id, current}: ElementsProps) {
     const course = getCourseByID(id || "PROG1001")
     const amount = 10
-    const flashcards = course.flashcards
+    const cards = course.cards
 
     return (
         <div className='w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden'>
@@ -23,15 +23,15 @@ export default function Elements({id, current}: ElementsProps) {
             </div> : null}
             <div className="w-full h-full rounded-xl p-4 overflow-auto">
                 <h1 className="text-2xl mb-2">Upcoming</h1>
-                <GetNextQuestions flashcards={flashcards} current={current} amount={amount} />
+                <GetNextQuestions cards={cards} current={current} amount={amount} />
             </div>
         </div>
     )
 }
 
 // Gets the next 10 questions or however many are left
-function GetNextQuestions({flashcards, current, amount}: Next10Props) {
-    const relevant = flashcards.slice(current, amount)
+function GetNextQuestions({cards, current, amount}: Next10Props) {
+    const relevant = cards.slice(current, amount)
 
     return relevant.map((card) => 
         <div className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-2 flex items-center pl-4`}>
