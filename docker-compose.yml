@@ -12,4 +12,5 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=production
-    command: npm run build && npm run start
+    # command: npm run build && npm run start
+    command: npm run dev
