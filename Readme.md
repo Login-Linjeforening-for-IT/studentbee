@@ -1,6 +1,6 @@
-# frontend
-Frontend for exam.login.no written in Nextjs, TypeScript and Tailwind.
-This website is a complete implementation of a shopping website with products, search functionality, login functionality, profile, orders etc fully implemented.
+# exam.login.no
+Website to practice for exams written in Nextjs, TypeScript and Tailwind.
+This website is a complete implementation of a card based learning website with all functionality implemented.
 In theory this website could be put in production and work out of the box.
 
 ## Building
