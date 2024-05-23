@@ -1,7 +1,7 @@
 import swap from "@utils/swap"
 import ListHeader from "./listHeader"
 import ScoreBoardEntry from "./scoreboardEntry"
-import { getScoreBoard } from "@/utils/fetch"
+import { getScoreBoard } from "@utils/fetch"
 
 export default async function List(): Promise<JSX.Element> {
     const scoreboard = await getScoreBoard()

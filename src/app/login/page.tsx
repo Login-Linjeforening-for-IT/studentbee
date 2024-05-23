@@ -1,6 +1,7 @@
 'use client'
 
 import { sendLogin } from "@utils/user"
+import Link from "next/link"
 import { useState } from "react"
 
 export default function Login() {
@@ -45,12 +46,13 @@ export default function Login() {
                         className={input} 
                     />
                 </div>
-                <div 
-                    className="grid w-full h-full bg-orange-500 rounded-xl" 
+                <Link
+                    href={error.length ? '/login' : `/profile/${username}`}
+                    className="grid w-full h-full bg-orange-500 rounded-xl text-2xl place-items-center" 
                     onClick={handleClick}
                 >
-                    <h1 className="text-2xl place-self-center">Login</h1>
-                </div>
+                    Login
+                </Link>
                 <div className={inputParent} /> 
             </div>
         </div>  

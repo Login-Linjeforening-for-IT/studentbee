@@ -1,32 +1,36 @@
-import express from 'express';
+import express from 'express'
 import {
     getScoreboard,
     getCourses,
+    getCourse,
     getReviewedCards,
-    getAllCards,
     getUserProfile,
     getIndexHandler,
     postRegister,
     postLogin,
     postApproved,
     postDenied,
-    postUploadedAsStruct,
-    postUploadedAsText
-} from './controllers';
+    postCard,
+    postCourse,
+    postText,
+    putCourse
+} from './controllers'
 
-const router = express.Router();
+const router = express.Router()
 
 router.get('/', getIndexHandler)
-router.get('/scoreboard', getScoreboard);
-router.get('/courses', getCourses);
-router.get('/courses/:courseId/reviewed', getReviewedCards);
-router.get('/courses/:courseId/cards', getAllCards);
-router.get('/users/:userId', getUserProfile);
-router.post('/register', postRegister);
-router.post('/login', postLogin);
-router.post('/upload_text', postUploadedAsText)
-router.post('/upload_struct', postUploadedAsStruct)
+router.get('/scoreboard', getScoreboard)
+router.get('/courses', getCourses)
+router.get('/course/:courseId/cards', getReviewedCards)
+router.get('/course/:courseId', getCourse)
+router.get('/users/:userId', getUserProfile)
+router.put('/course', putCourse)
+router.post('/register', postRegister)
+router.post('/login', postLogin)
+router.post('/upload_card', postCard)
+router.post('/upload_course', postCourse)
+router.post('/upload_text', postText)
 router.post('/approve', postApproved)
 router.post('/deny', postDenied)
 
-export default router;
+export default router

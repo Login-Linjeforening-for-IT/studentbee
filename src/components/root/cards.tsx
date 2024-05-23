@@ -1,8 +1,11 @@
 'use client'
 import shuffle from "@utils/shuffle"
-import { useEffect, useState, useRef } from "react"
-import getCourseByID from "@utils/getCourseByID"
+import { useEffect, useState, useRef, MutableRefObject, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import handleCardsNavigation, { animate200ms, handleKeyDown } from "@utils/navigation"
+import { focusCheck, windowFocused, windowUnfocused } from "@utils/focus"
+import { useCardNavigation } from "@/hooks/cardNavigation"
+import { getCourse } from "@/utils/fetch"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -12,25 +15,35 @@ type AlternativesProps = {
     checkAnswer: (input: number) => void
 }
 
-type animate200msProps = {
-    key: string
-    setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
-}
-
 type CardsProps = {
     id?: string
     current?: number
 }
 
+type ButtonsProps = {
+    button: string
+    animateAnswer: string
+    navigate: (direction: string) => void
+    flashColor: string
+}
+
 export default function Cards({id, current}: CardsProps) {
-    const router = useRouter();
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
     const selectedRef = useRef(selected)
     selectedRef.current = selected
-    const course = getCourseByID(id || "PROG1001")
-    const cards = course.cards
+    const [course, setCourse] = useState<Course | string>("Loading...")
+
+    if (typeof course === 'string') {
+        return (
+            <div className="w-full h-full grid place-items-center col-span-6">
+                <h1 className="text-2xl">Course {id} has no content yet.</h1>
+            </div>
+        )
+    }
+
+    const cards = course.cards as Card[]
     const card = cards[current || 0]
     const button = `text-2xl rounded-xl grid place-items-center`
     const flashColor = animate === "wrong" 
@@ -39,106 +52,32 @@ export default function Cards({id, current}: CardsProps) {
             ? "bg-green-500" 
             : "bg-gray-800"
 
-    function handleNavigation(direction: string) {
-
-        switch (direction) {
-            case 'back': 
-                if (current != undefined) {
-                    const previous = current === 0 ? 0 : current - 1
-                    router.push(`/course/${id}/${previous}`)
-                }
-
-                animate200ms({key: 'back', setAnimateAnswer})
-                setSelected(-1)
-                break
-            case 'skip': 
-                if (current != undefined) {
-                    const skip = (current + 1) % cards.length
-                    router.push(`/course/${id}/${skip}`)
-                } else console.log('no current')
-
-                animate200ms({key: 'skip', setAnimateAnswer})
-                setSelected(-1)
-                break
-            case 'next':
-                checkAnswer(selectedRef.current)
-                animate200ms({key: 'next', setAnimateAnswer})
-                setSelected(-1)
-                break
-            case '1': 
-                animate200ms({key: '0', setAnimateAnswer})
-                checkAnswer(0)
-                setSelected(-1)
-                break
-            case '2': 
-                animate200ms({key: '1', setAnimateAnswer})
-                checkAnswer(1)
-                setSelected(-1)
-                break
-            case '3':
-                animate200ms({key: '2', setAnimateAnswer})
-                checkAnswer(2)
-                setSelected(-1)
-                break
-            case '4': 
-                animate200ms({key: '3', setAnimateAnswer})
-                checkAnswer(3)
-                setSelected(-1)
-                break
-            case 'up': 
-                setSelected((prev) => (prev === card.alternatives.length - 1 ? 0 : prev + 1))
-                break
-            case 'down': 
-                setSelected((prev) => (prev === 0 ? card.alternatives.length - 1 : prev - 1 >= 0 ? prev - 1 : card.alternatives.length - 1))
-                break
-        }
-    }
-
-    function checkAnswer(input: number) {
-        if (input === card.correct) {
-            if (current != undefined) {
-                const next = current + 1 < cards.length ? current + 1 : -1
-                router.push(`/course/${id}/${next}`)
-            }
-            setAnimate("correct")
-            setTimeout(() => setAnimate("-1"), 200)
-        } else {
-            setAnimate("wrong")
-            setTimeout(() => setAnimate("-1"), 200)
-        }
-    }
+    const { navigate, checkAnswer } = useCardNavigation({
+        current,
+        id: id || "PROG1001",
+        card,
+        cards,
+        setAnimate,
+        setAnimateAnswer,
+        setSelected,
+        selectedRef,
+    })
 
     useEffect(() => {
-        function handleKeyDown(event: any) {
-            switch (event.key) {
-                case 'd':
-                case 'D':
-                case 'ArrowRight': handleNavigation('next'); break
-                case 'a':
-                case 'A':
-                case 'b':
-                case 'B':
-                case 'ArrowLeft': handleNavigation('back'); break
-                case 's': 
-                case 'S': handleNavigation('skip'); break
-                case '1': handleNavigation("1"); break
-                case '2': handleNavigation("2"); break
-                case '3': handleNavigation("3"); break
-                case '4': handleNavigation("4"); break
-                case 'Enter': handleNavigation('next'); break
-                case 'ArrowUp': handleNavigation('up'); break
-                case 'ArrowDown': handleNavigation('down'); break
-            }
-        }
+        (async() => {
+            const newCourse: Course | string = await getCourse(id || "PROG1001")
 
-        window.addEventListener('keydown', handleKeyDown)
-        return () => window.removeEventListener('keydown', handleKeyDown)
+            if (typeof course === typeof newCourse) {
+                setCourse(newCourse)
+            }
+        })()
     }, [])
+
 
     if (!cards.length) {
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-3xl">Course {course.id} has no content yet.</h1>
+                <h1 className="text-2xl">Course {course.id} has no content yet.</h1>
             </div>
         )
     }
@@ -166,26 +105,37 @@ export default function Cards({id, current}: CardsProps) {
                     checkAnswer={checkAnswer}
                 />
             </div>
-            <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
-                <button 
-                    className={`${button} ${animateAnswer === 'back' ? "bg-gray-700" : "bg-gray-800"}`}
-                    onClick={() => handleNavigation('back')}
-                >
-                    back
-                </button>
-                <button 
-                    className={`${button} ${animateAnswer === 'skip' ? "bg-gray-700" : "bg-gray-800"}`}
-                    onClick={() => handleNavigation('skip')}
-                >
-                    skip
-                </button>
-                <button 
-                    className={`${button} ${flashColor}`}
-                    onClick={() => handleNavigation('next')}
-                >
-                    next
-                </button>
-            </div>
+            <Buttons 
+                button={button} 
+                animateAnswer={animateAnswer} 
+                navigate={navigate} 
+                flashColor={flashColor} 
+            />
+        </div>
+    )
+}
+
+function Buttons({button, animateAnswer, navigate, flashColor}: ButtonsProps) {
+    return (
+        <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
+            <button 
+                className={`${button} ${animateAnswer === 'back' ? "bg-gray-700" : "bg-gray-800"}`}
+                onClick={() => navigate('back')}
+            >
+                back
+            </button>
+            <button 
+                className={`${button} ${animateAnswer === 'skip' ? "bg-gray-700" : "bg-gray-800"}`}
+                onClick={() => navigate('skip')}
+            >
+                skip
+            </button>
+            <button 
+                className={`${button} ${flashColor}`}
+                onClick={() => navigate('next')}
+            >
+                next
+            </button>
         </div>
     )
 }
@@ -208,9 +158,4 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
             )}
         </div>
     )
-}
-
-function animate200ms({key, setAnimateAnswer}: animate200msProps) {
-    setAnimateAnswer(key)
-    setTimeout(() => setAnimateAnswer("-1"), 200)
 }

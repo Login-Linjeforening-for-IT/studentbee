@@ -7,7 +7,13 @@ type Course = {
     id: string
     cards: Card[]
     unreviewed: Card[]
-    textUnreviewed: string
+    textUnreviewed: string[]
+}
+
+type CourseAsList = {
+    id: string
+    cards: Card[]
+    count: number
 }
 
 type Card = {
@@ -24,6 +30,14 @@ type CardAsText = {
 type User = {
     id: number
     name: string
+    username: string
+}
+
+type LoggedInUser = {
+    id: number
+    name: string
+    username: string
+    time: number
 }
 
 type UserPage = {
@@ -57,6 +71,7 @@ type LoginUser = {
 type LoginResponse = {
     id: number
     name: string
+    username: string
     token: string
 }
 

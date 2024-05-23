@@ -1,9 +1,8 @@
 'use client'
 
-import getCookie from "@/utils/cookies"
-import { addCourse, addCard, addText } from "@utils/fetch"
+import { addCourse, addCard, addText } from "@utils/fetchClient"
 import Link from "next/link"
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 type TextOrNormalProps = {
     course: Course
@@ -61,7 +60,6 @@ export default function Add({ params }: { params: { item: string[] } }) {
 }
 
 function AddCourse() {
-    const [user, setUser] = useState({ id: 0 })
     const [error, setError] = useState("")
     const emptyCard: Card = {
         question: "",
@@ -73,9 +71,8 @@ function AddCourse() {
         id: "",
         cards: [],
         unreviewed: [emptyCard],
-        textUnreviewed: "",
+        textUnreviewed: [],
     }
-
     const [course, setCourse] = useState<Course>(emptyCourse)
     const [selected, setSelected] = useState(0)
     const courseIDspan = selected === 0 ? "col-span-12" : "col-span-10"
@@ -85,9 +82,8 @@ function AddCourse() {
         setCourse({ ...course, id: courseName})
     }
 
-    function handleAddCourse() {
-        const err = addCourse(course)
-
+    async function handleAddCourse() {
+        const err = await addCourse(course)
         if (err) {
             setError(err)
         }
@@ -96,15 +92,6 @@ function AddCourse() {
     function handleBack() {
         setSelected(0)
     }
-
-    useEffect(() => {
-        const cookie = getCookie('user')
-        const userFromCookie = cookie ? JSON.parse(cookie) : undefined
-
-        if (userFromCookie) {
-            setUser(userFromCookie)
-        }
-    }, [])
 
     return (
         <div className="w-full h-full grid place-items-center">
@@ -115,7 +102,7 @@ function AddCourse() {
                     {selected != 0 ? <div/> : null}
                 </div>
                 <div className="grid grid-cols-8 w-full space-between h-[5vh]">
-                    <h1 className={inputText}>Course name:</h1>
+                    <h1 className={inputText}>Course ID:</h1>
                     <input 
                         value={course.id} 
                         onChange={(e) => handleCourseNameChange(e.target.value)} 
@@ -126,9 +113,10 @@ function AddCourse() {
                 </div>
                 <TextOrNormal course={course} setCourse={setCourse} selected={selected} setSelected={setSelected} />
                 <Link
-                    href={!error ? '/' : `/course/${course}`}
+                    href={!error ? '/add/course/' : `/course/${course.id}`}
                     className="grid w-full bg-orange-500 rounded-xl text-xl h-[5vh] place-items-center" 
-                    onClick={handleAddCourse}>
+                    onClick={handleAddCourse}
+                >
                     Add course
                 </Link>
             </div>  
@@ -162,7 +150,7 @@ function TextOrNormal({course, setCourse, selected, setSelected}: TextOrNormalPr
 
                         return (
                             <button className="w-full text-left" key={index} onClick={() => handleCardClick(index)}>
-                                {card.question} {card.question != "" ? `(${card.alternatives.length} alt)` : ''}
+                                {card.question} {card.question != "" ? `(${card.alternatives.length} alts)` : ''}
                             </button>
                         )
                     })}
@@ -184,7 +172,7 @@ function TextOrNormal({course, setCourse, selected, setSelected}: TextOrNormalPr
 
 function AddTextForCourse({course, setCourse}: AddTextForCourseProps) {
     function handleChange(text: string) {
-        setCourse({...course, textUnreviewed: text})
+        setCourse({...course, textUnreviewed: [...course.textUnreviewed, text]})
     }
 
     return (
@@ -201,7 +189,6 @@ function AddTextForCourse({course, setCourse}: AddTextForCourseProps) {
 }
 
 function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCardIndex, setAlternativeIndex}: AddCardProps) {
-    const emptyCard = { question: "", alternatives: [], correct: 0 }
     
     // Updates the question of the selected course in the course object
     function updateCardQuestion(question: string) {
@@ -217,7 +204,7 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
             return
         }
 
-        const tempCards = [...course.unreviewed, emptyCard]
+        const tempCards = [...course.unreviewed, { question: "", alternatives: [], correct: 0 }]
         setCourse({...course, unreviewed: tempCards})
         setCardIndex(cardIndex + 1)
         setAlternativeIndex(0)
@@ -252,7 +239,7 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
                                 onClick={() => handleAlternativeClick(index)} 
                                 key={alternative} 
                                 className="w-full text-left"
-                            >{alternative}</button>
+                            >{alternative} {`${course.unreviewed[cardIndex].correct === index ? '(correct)' : '(wrong)'}`}</button>
                         )
                     })}
                 </div>
@@ -285,7 +272,7 @@ function Alternative({course, setCourse, cardIndex, alternativeIndex, setAlterna
     // Adds a new alternative to the current card
     function handleAddAlternative() {
         // Aborts if the current alternative is empty
-        if (course.unreviewed[cardIndex].alternatives[alternativeIndex] === "") {
+        if (!course.unreviewed[cardIndex].alternatives[alternativeIndex]) {
             return
         }
 
@@ -296,17 +283,33 @@ function Alternative({course, setCourse, cardIndex, alternativeIndex, setAlterna
         setAlternativeIndex(alternativeIndex + 1)
     }
 
+    // Sets the selected alternative to be the correct one for the card
+    function handleSetCorrectAlternative() {
+        const tempCards = [...course.unreviewed]
+        tempCards[cardIndex].correct = alternativeIndex
+        setCourse({...course, unreviewed: tempCards})
+    }
+
     return (
         <div className="w-full mt-2">
             <div className="grid grid-cols-8 mb-4">
                 <h1 className="flex items-center justify-start text-xl col-span-2 h-[5vh]">Alternative {alternativeIndex + 1}:</h1>
-                <input 
-                    value={course.unreviewed[cardIndex].alternatives[alternativeIndex]} 
-                    onChange={(e) => handleInput(e.target.value)} 
-                    type="text"
-                    placeholder={`Alternative ${alternativeIndex + 1}`}
-                    className="col-span-6 bg-gray-600 h-[5vh] rounded-xl px-2"
-                />
+                <div className="w-full col-span-6 flex flex-cols-auto">
+                    <input 
+                        value={course.unreviewed[cardIndex].alternatives[alternativeIndex]} 
+                        onChange={(e) => handleInput(e.target.value)} 
+                        type="text"
+                        placeholder={`Alternative ${alternativeIndex + 1}`}
+                        className="w-full bg-gray-600 h-[5vh] rounded-xl px-2 mr-4"
+                    />
+                    <button
+                        value={Number(course.unreviewed[cardIndex].correct === alternativeIndex)}
+                        className="h-full col-span-1 text-5xl col-span-1"
+                        onClick={handleSetCorrectAlternative}
+                    >
+                        ✅
+                    </button>
+                </div>
             </div>
             <button 
                 className="w-full h-[5vh] bg-orange-500 rounded-xl text-xl"
@@ -315,82 +318,3 @@ function Alternative({course, setCourse, cardIndex, alternativeIndex, setAlterna
         </div>
     )
 }
-
-
-// function AddCard({cards, setCards}: AddCardProps) {
-//     const [question, setQuestion] = useState("")
-//     const [error, setError] = useState("")
-
-//     const input = "bg-gray-600 rounded-xl overflow-hidden px-8 col-span-6"
-//     const inputParent = "grid grid-cols-8 w-full h-full space-between"
-//     const inputText = "text-xl flex items-center justify-start col-span-2"
-
-//     return (
-//         <div className="w-full h-full grid place-items-center">
-//             <div className="bg-gray-800 w-[35vw] h-[45vh] rounded-xl grid place-items-center grid grid-rows-6 gap-4 p-5 px-10">
-//                 <h1 className=" text-3xl font-semibold">Add card</h1>
-//                 <div className={inputParent}>
-//                     <h1 className={inputText}>Question:</h1>
-//                     <input 
-//                         value={question} 
-//                         onChange={(e) => setQuestion(e.target.value)} 
-//                         type="text" 
-//                         placeholder="Course name" 
-//                         className={input} 
-//                     />
-//                 </div>
-//                 <Link 
-//                     href={!error ? '/' : '/register'}
-//                     className="grid w-full h-full bg-orange-500 rounded-xl" 
-//                     // onClick={() => addCard({
-//                     //     user_id,
-//                     //     course_id,
-//                     //     card
-//                     // })}
-//                 >
-//                     <h1 className="text-xl place-self-center">Add card</h1>
-//                 </Link>
-//                 <div className={inputParent} /> 
-//             </div>  
-//         </div>
-//     )
-// }
-
-// function AddText({text, setText}: AddTextProps) {
-//     const [course, setCourse] = useState("")
-//     const [error, setError] = useState("")
-
-//     const input = "bg-gray-600 rounded-xl overflow-hidden px-8 col-span-6"
-//     const inputParent = "grid grid-cols-8 w-full h-full space-between"
-//     const inputText = "text-xl flex items-center justify-start col-span-2"
-
-//     return (
-//         <div className="w-full h-full grid place-items-center">
-//             <div className="bg-gray-800 w-[35vw] h-[45vh] rounded-xl grid place-items-center grid grid-rows-6 gap-4 p-5 px-10">
-//                 <h1 className="text-3xl font-semibold">Add text</h1>
-//                 <div className={inputParent}>
-//                     <h1 className={inputText}>Course name:</h1>
-//                     <input 
-//                         value={course} 
-//                         onChange={(e) => setCourse(e.target.value)} 
-//                         type="text" 
-//                         placeholder="Course name" 
-//                         className={input} 
-//                     />
-//                 </div>
-//                 <Link 
-//                     href={!error ? '/' : '/register'}
-//                     className="grid w-full h-full bg-orange-500 rounded-xl" 
-//                     // onClick={() => addText({
-//                     //     user_id,
-//                     //     course_id,
-//                     //     text
-//                     // })}
-//                 >
-//                     <h1 className="text-xl place-self-center">Add text</h1>
-//                 </Link>
-//                 <div className={inputParent} /> 
-//             </div>  
-//         </div>
-//     )
-// }

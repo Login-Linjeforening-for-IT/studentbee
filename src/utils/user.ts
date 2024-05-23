@@ -4,7 +4,7 @@ import { API } from "@parent/constants"
 import getCookie, { removeCookie, setCookie } from "./cookies"
 
 // Function to login the user
-export async function sendLogin(user: LoginUser): Promise<Boolean | string> {
+export async function sendLogin(user: LoginUser): Promise<true | string> {
     try {
         const response = await fetch(`${API}/login`, {
             method: 'POST',
@@ -22,16 +22,17 @@ export async function sendLogin(user: LoginUser): Promise<Boolean | string> {
         const result: LoginResponse = await response.json()
         const userResult: User = {
             id: result.id,
-            name: result.name
+            name: result.name,
+            username: result.username,
         }
 
         setCookie('token', result.token)
         setCookie('user', JSON.stringify(userResult))
-        getRedirect('/profile')
-
+        window.location.reload()
         return true
-    } catch (error) {
-        return false
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message
     }
 }
 
@@ -53,6 +54,7 @@ export async function sendLogout(): Promise<Boolean | string> {
         // Removes cookies and user from localstorage if the user wants to log out
         removeCookie('token')
         removeCookie('user')
+        window.location.reload()
 
         // const response = await fetch(`${API}/login`, {
         //     method: 'POST',
@@ -112,7 +114,7 @@ export async function sendDelete(): Promise<Boolean | string> {
 }
 
 // Function to register the user
-export async function sendRegister(user: RegisterUser): Promise<Boolean> {
+export async function sendRegister(user: RegisterUser): Promise<true | string> {
 
     try {
         const response = await fetch(`${API}/register`, {
@@ -134,11 +136,41 @@ export async function sendRegister(user: RegisterUser): Promise<Boolean> {
         setCookie('redirect', '/login')
         getRedirect()
 
-        console.log("Register successful. Redirecting to login.")
         return true
-    } catch (error) {
-        console.error('Failed to send Register Payload:', error)
-        return false
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message
+    }
+}
+
+// Sends the time spent on the page to the server
+export async function sendTimeSpent(): Promise<true | string> {
+    const userCookie = getCookie('user')
+    const token = getCookie('token')
+    const userFromCookie: LoggedInUser = userCookie ? JSON.parse(userCookie) : undefined
+
+    try {
+        const response = await fetch(`${API}/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                user_id: userFromCookie.id,
+                time: userFromCookie.time
+            })
+        })
+
+        if (!response.ok) {
+            const data = await response.json()
+            throw Error(data.error)
+        }
+
+        return true
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message
     }
 }
 

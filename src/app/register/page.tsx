@@ -1,6 +1,6 @@
 'use client'
 
-import { sendRegister } from "@/utils/user"
+import { sendRegister } from "@utils/user"
 import Link from "next/link"
 import { useState } from "react"
 
@@ -15,10 +15,24 @@ export default function Register() {
     const inputParent = "grid grid-cols-8 w-full h-full space-between"
     const inputText = "text-xl flex items-center justify-start col-span-2"
 
+    async function handleRegister() {
+        const err = await sendRegister({
+            username: mail,
+            password,
+            firstName,
+            lastName,
+        })
+
+        if (typeof err === 'string') {
+            setError(err)
+        }
+    }
+
     return (
         <div className="w-full h-full grid place-items-center">
             <div className="bg-gray-800 w-[35vw] h-[45vh] rounded-xl grid place-items-center grid grid-rows-6 gap-4 p-5 px-10">
-                <h1 className=" text-3xl font-semibold">Register</h1>
+                <h1 className="text-3xl font-semibold">Register</h1>
+                {error ? <h1 className="text-md text-red-500">{error}</h1> : null}
                 <div className={inputParent}>
                     <h1 className={inputText}>First name:</h1>
                     <input 
@@ -60,14 +74,9 @@ export default function Register() {
                     />
                 </div>
                 <Link 
-                    href={!error ? '/' : '/register'}
+                    href={error.length ? '/register' : '/login'}
                     className="grid w-full h-full bg-orange-500 rounded-xl" 
-                    onClick={() => sendRegister({
-                        username: mail,
-                        password,
-                        firstName,
-                        lastName,
-                    })}>
+                    onClick={handleRegister}>
                     <h1 className="text-2xl place-self-center">Create account</h1>
                 </Link>
                 <div className={inputParent} /> 
