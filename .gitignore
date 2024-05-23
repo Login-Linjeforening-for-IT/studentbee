@@ -22,6 +22,7 @@ npm-debug.log*
 .env
 secret.json
 .secret.json
+.secret2.json
 
 # typescript
 *.tsbuildinfo

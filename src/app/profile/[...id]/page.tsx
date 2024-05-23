@@ -6,8 +6,8 @@ export default function Profile({ params }: { params: { id: string[] } }) {
     const id = params.id[0]
 
     return (
-        <div className="w-full h-full rounded-xl overflow-auto grid grid-cols-10 gap-8 noscroll">
-            <h1>User: {id}</h1>
+        <div className="w-full h-full rounded-xl">
+            <h1 className='w-full h-full grid place-items-center text-2xl'>User: {id} (Profile coming soon)</h1>
         </div>
     )
 }

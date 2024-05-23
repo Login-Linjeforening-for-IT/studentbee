@@ -5,12 +5,11 @@ import getCookie from "./cookies"
 
 // Adds a course with the given user id, course name and questions
 export async function addCourse(course: Course): Promise<void | string> {
-    const userCookie = getCookie('user')
+    const user: User | undefined = getCookie('user') as User | undefined
     const token = getCookie('token')
-    const userFromCookie: LoggedInUser = userCookie ? JSON.parse(userCookie) : undefined
 
     try {
-        if (userFromCookie) {
+        if (user) {
             const response = await fetch(`${API}/upload_course`, {
                 method: 'POST',
                 headers: {
@@ -18,7 +17,7 @@ export async function addCourse(course: Course): Promise<void | string> {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    user_id: userFromCookie.id,
+                    userID: user.id,
                     course
                 }),
             })
@@ -29,8 +28,8 @@ export async function addCourse(course: Course): Promise<void | string> {
                 throw Error(data.error)
             }
     
-            const resp = response.json()
-            return resp
+            const result = response.json()
+            return result
         }
 
         return 'Please log in to add a course'
@@ -41,12 +40,11 @@ export async function addCourse(course: Course): Promise<void | string> {
 }
 
 // Adds a question to the course with the given user id
-export async function addCard(course_id: string, card: Card): Promise<void | string> {
-    const userCookie = getCookie('user')
+export async function addCard(courseID: string, card: Card): Promise<void | string> {
+    const user: User | undefined = getCookie('user') as User | undefined
     const token = getCookie('token')
-    const userFromCookie: LoggedInUser = userCookie ? JSON.parse(userCookie) : undefined
 
-    if (userFromCookie) {
+    if (user) {
         const response = await fetch(`${API}/upload_card`, {
             method: 'POST',
             headers: {
@@ -54,8 +52,8 @@ export async function addCard(course_id: string, card: Card): Promise<void | str
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                course_id,
-                user_id: userFromCookie.id,
+                courseID,
+                userID: user.id,
                 card
             }),
         })
@@ -73,12 +71,11 @@ export async function addCard(course_id: string, card: Card): Promise<void | str
 }
 
 // Adds a textinput to the course with the given user id
-export async function addText(course_id: string, text: string): Promise<void | string> {
-    const userCookie = getCookie('user')
+export async function addText(courseID: string, text: string): Promise<void | string> {
+    const user: User | undefined = getCookie('user') as User | undefined
     const token = getCookie('token')
-    const userFromCookie: LoggedInUser = userCookie ? JSON.parse(userCookie) : undefined
 
-    if (userFromCookie) {
+    if (user) {
         const response = await fetch(`${API}/upload_text`, {
             method: 'POST',
             headers: {
@@ -86,8 +83,8 @@ export async function addText(course_id: string, text: string): Promise<void | s
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                course_id,
-                user_id: userFromCookie.id,
+                courseID,
+                userID: user.id,
                 text
             }),
         })

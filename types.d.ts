@@ -1,6 +1,11 @@
 type CourseProps = {
-    course: Course
+    course: CourseAsList
     margin: boolean
+}
+
+type Editing = {
+    cards: Card[]
+    texts: string[]
 }
 
 type Course = {
@@ -31,6 +36,7 @@ type User = {
     id: number
     name: string
     username: string
+    time: number
 }
 
 type LoggedInUser = {
@@ -73,6 +79,7 @@ type LoginResponse = {
     name: string
     username: string
     token: string
+    time: number
 }
 
 type ScoreBoardUser = {

@@ -13,11 +13,20 @@ type Next10Props = {
 
 export default async function Elements({id, current}: ElementsProps) {
     const course = await getCourse(id || 'PROG1001')
+    const error = typeof course === 'string' && id ? course : 'No course selected'
 
     if (typeof course === 'string') {
         return (
-            <div className="w-full h-full grid place-items-center">
-                <h1 className="text-3xl">{course}</h1>
+            <div className="w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden">
+                <h1 className="text-xl">{error}</h1>
+            </div>
+        )
+    }
+
+    if (current === -1) {
+        return (
+            <div className="w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden">
+                <h1 className="text-xl">Course complete.</h1>
             </div>
         )
     }
@@ -29,7 +38,7 @@ export default async function Elements({id, current}: ElementsProps) {
     function Help() {
         if (help) {
             return (
-                <div className="w-full h-full bg-gray-600 rounded-xl p-4 overflow-auto">
+                <div className="w-full h-full bg-gray-700 rounded-xl p-4 overflow-auto">
                     <h1 className="text-2xl">Info</h1>
                     <div className="h-full w-full bg-red-200">
                         {help}

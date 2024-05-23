@@ -14,4 +14,5 @@ RUN npm install --frozen-lockfile
 COPY . .
 
 # Starts the application
-CMD npm run build && npm run start
+# CMD npm run build && npm run start
+CMD npm run dev

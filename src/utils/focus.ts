@@ -1,4 +1,5 @@
 import { MutableRefObject } from "react"
+import { updateUserTime } from "./fetch"
 
 type FocusCheckProps = {
     startFocusTime: MutableRefObject<Date | undefined>
@@ -29,15 +30,8 @@ export function windowFocused({lastUserInteraction, startFocusTime}: WindowFocus
 export function windowUnfocused(startFocusTime: MutableRefObject<Date | undefined>) {
     if (startFocusTime.current != undefined) {
         let stopFocusTime = new Date()
-        let totalFocusTime = stopFocusTime.getTime() - startFocusTime.current.getTime()
+        let time = stopFocusTime.getTime() - startFocusTime.current.getTime()
         startFocusTime.current = undefined
-        let message = {
-            type: "time_spent",
-            domain: document.domain,
-            time_spent: totalFocusTime
-        }
-        // Replace this with your logic to send the message, e.g., an API call
-        // Update time spent in the database
-        console.log(message)
+        updateUserTime({time})
     }
 }

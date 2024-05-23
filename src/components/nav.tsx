@@ -1,9 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import RightIcon, { LeftIcon } from './clientNav'
-import getCookie from '@utils/cookies'
 import UserInfo from './userInfo'
-// import logo from "/images/logo/logo.svg"
 
 // Displays the header
 export default function Navbar() {

@@ -8,7 +8,7 @@ export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
-    const input = "bg-gray-600 rounded-xl overflow-hidden px-8 col-span-6"
+    const input = "bg-gray-700 rounded-xl overflow-hidden px-8 col-span-6"
     const inputParent = "grid grid-cols-8 w-full h-full space-between"
     const inputText = "text-xl flex items-center justify-start col-span-2"
     const rows = error.length ? "grid-rows-5 h-[35vh]" : "grid-rows-4 h-[30vh]"

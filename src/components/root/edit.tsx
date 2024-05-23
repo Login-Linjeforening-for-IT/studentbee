@@ -9,19 +9,14 @@ export default function Edit() {
     const [error, setError] = useState('')
     const [displayCourseSelector, setDisplayCourseSelector] = useState(false)
 
-    // Handles error
-    if (typeof courses === 'string') {
-        return <h1 className="w-full h-full grid place-items-center">{courses}</h1>
-    }
-
     useEffect(() => {
         (async() => {
-            const courses = await getCourses()
+            const newCourses = await getCourses()
 
-            if (typeof courses === 'string') {
-                setError(courses)
+            if (typeof newCourses === 'string') {
+                setError(newCourses)
             } else {   
-                setCourses(courses)
+                setCourses(newCourses)
             }
         })()
     }, [])
@@ -36,16 +31,24 @@ export default function Edit() {
                 <div className="w-[35vw] h-[45vh] bg-gray-800 rounded-xl p-8 overflow-auto">
                     <h1 className="text-2xl text-center font-semibold mb-8">Edit course</h1>
                     <div className="w-full grid">
-                        {courses.map((course) => <Link
-                            href={`/edit/${course.id}`}
-                            key={course.id}
-                            className="text-xl bg-gray-700 w-full mb-2 rounded-md p-2">
-                            {course.id}
-                        </Link>)}
+                        {courses.map((course) => (
+                            <Link
+                                href={`/edit/${course.id}`}
+                                key={course.id}
+                                className="text-xl bg-gray-700 w-full mb-2 rounded-md p-2"
+                            >
+                                {course.id}
+                            </Link>
+                        ))}
                     </div>
                 </div>
             </div>
         )
+    }
+
+    // Handles error
+    if (typeof courses === 'string') {
+        return <h1 className="w-full h-full grid place-items-center">{courses}</h1>
     }
 
     return (

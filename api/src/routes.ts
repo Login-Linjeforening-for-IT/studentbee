@@ -13,7 +13,8 @@ import {
     postCard,
     postCourse,
     postText,
-    putCourse
+    putCourse,
+    putTime
 } from './controllers'
 
 const router = express.Router()
@@ -21,10 +22,11 @@ const router = express.Router()
 router.get('/', getIndexHandler)
 router.get('/scoreboard', getScoreboard)
 router.get('/courses', getCourses)
-router.get('/course/:courseId/cards', getReviewedCards)
-router.get('/course/:courseId', getCourse)
-router.get('/users/:userId', getUserProfile)
-router.put('/course', putCourse)
+router.get('/course/:courseID/cards', getReviewedCards)
+router.get('/course/:courseID', getCourse)
+router.get('/users/:userID', getUserProfile)
+router.put('/course/:courseID', putCourse)
+router.put('/time', putTime)
 router.post('/register', postRegister)
 router.post('/login', postLogin)
 router.post('/upload_card', postCard)

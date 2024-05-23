@@ -24,6 +24,7 @@ export async function sendLogin(user: LoginUser): Promise<true | string> {
             id: result.id,
             name: result.name,
             username: result.username,
+            time: result.time,
         }
 
         setCookie('token', result.token)
@@ -145,9 +146,12 @@ export async function sendRegister(user: RegisterUser): Promise<true | string> {
 
 // Sends the time spent on the page to the server
 export async function sendTimeSpent(): Promise<true | string> {
-    const userCookie = getCookie('user')
+    const user: User | undefined = getCookie('user') as User | undefined
     const token = getCookie('token')
-    const userFromCookie: LoggedInUser = userCookie ? JSON.parse(userCookie) : undefined
+
+    if (!user) {
+        return 'Please log in to log your efforts.'
+    }
 
     try {
         const response = await fetch(`${API}/register`, {
@@ -157,8 +161,8 @@ export async function sendTimeSpent(): Promise<true | string> {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                user_id: userFromCookie.id,
-                time: userFromCookie.time
+                userID: user.id,
+                time: user.time
             })
         })
 
@@ -183,13 +187,13 @@ export default function isLoggedIn() {
         return false
     }
 
-    const user = localStorage.getItem('user')
+    const user: User | undefined = getCookie('user') as User | undefined
 
     if (!user) {
         return false
     }
 
-    return true
+    return user.username
 }
 
 // Redirects the user to the page they were trying to access after successful login or register

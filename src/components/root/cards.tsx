@@ -1,9 +1,8 @@
 'use client'
 import shuffle from "@utils/shuffle"
-import { useEffect, useState, useRef, MutableRefObject, useCallback } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useRouter } from "next/navigation"
 import handleCardsNavigation, { animate200ms, handleKeyDown } from "@utils/navigation"
-import { focusCheck, windowFocused, windowUnfocused } from "@utils/focus"
 import { useCardNavigation } from "@/hooks/cardNavigation"
 import { getCourse } from "@/utils/fetch"
 
@@ -35,15 +34,7 @@ export default function Cards({id, current}: CardsProps) {
     selectedRef.current = selected
     const [course, setCourse] = useState<Course | string>("Loading...")
 
-    if (typeof course === 'string') {
-        return (
-            <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-2xl">Course {id} has no content yet.</h1>
-            </div>
-        )
-    }
-
-    const cards = course.cards as Card[]
+    const cards = typeof course === 'object' ? course.cards as Card[] : []
     const card = cards[current || 0]
     const button = `text-2xl rounded-xl grid place-items-center`
     const flashColor = animate === "wrong" 
@@ -67,12 +58,21 @@ export default function Cards({id, current}: CardsProps) {
         (async() => {
             const newCourse: Course | string = await getCourse(id || "PROG1001")
 
-            if (typeof course === typeof newCourse) {
+            if (typeof course === typeof newCourse || typeof newCourse === 'object') {
                 setCourse(newCourse)
+                console.log("after", course)
             }
         })()
     }, [])
 
+    console.log(typeof course)
+    if (typeof course === 'string') {
+        return (
+            <div className="w-full h-full grid place-items-center col-span-6">
+                <h1 className="text-2xl">{course}</h1>
+            </div>
+        )
+    }
 
     if (!cards.length) {
         return (
@@ -82,10 +82,18 @@ export default function Cards({id, current}: CardsProps) {
         )
     }
 
+    if (current === -1) {
+        return (
+            <div className="w-full h-full grid place-items-center col-span-6">
+                <h1 className="text-2xl">Course {course.id} completed ({course.cards.length} cards).</h1>
+            </div>
+        )
+    }
+
     if (!card) {
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-3xl">Course {course.id} only has {course.cards.length} questions. You tried to access Q{current}.</h1>
+                <h1 className="text-2xl">Course {course.id} only has {course.cards.length} questions. You tried to access Q{current}.</h1>
             </div>
         )
     }
@@ -151,7 +159,7 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
                             animate200ms({key: index.toString(), setAnimateAnswer})
                             checkAnswer(index)
                         }}
-                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-2xl col-span-9`}>
+                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-2xl col-span-9 text-left pl-2`}>
                         {answer}
                     </button>
                 </div>

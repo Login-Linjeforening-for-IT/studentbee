@@ -5,8 +5,8 @@ import crypto from 'crypto'
 
 type HandleTokenProps = {
     authorizationHeader: string | undefined
-    user_id: number
-    verifyToken: (token: string, userId: string) => boolean
+    userID: number
+    verifyToken: (token: string, userID: string) => boolean
 }
 
 type Course = {
@@ -21,6 +21,11 @@ type Card = {
     alternatives: string[]
     correct: number
     help?: string
+}
+
+type Editing = {
+    cards: Card[]
+    texts: string[]
 }
 
 dotenv.config()
@@ -75,11 +80,11 @@ export async function getCourses(_: Request, res: Response) {
 // Fetches the list of cards from the course with the given id
 export async function getReviewedCards(req: Request, res: Response) {
     try {
-        const { courseId } = req.params
+        const { courseID } = req.params
 
         // Fetches the cards for the given course
         const cardSnapshot = await db.collection('Card')
-            .where('course_id', '==', courseId)
+            .where('courseID', '==', courseID)
             .get()
 
         // Returns the data
@@ -95,19 +100,19 @@ export async function getReviewedCards(req: Request, res: Response) {
 // Fetches course by id
 export async function getCourse(req: Request, res: Response) {
     try {
-        const { courseId } = req.params
+        const { courseID } = req.params
 
         // Fetch course by id from firebase
-        const courseSnapshot = await db.collection('Course').doc(courseId).get()
+        const courseSnapshot = await db.collection('Course').doc(courseID).get()
         
         if (!courseSnapshot.exists) {
-            return res.status(404).json({ error: 'Course not found' });
+            return res.status(404).json({ error: 'Course not found' })
         }
 
-        const course = courseSnapshot.data();
+        const course = courseSnapshot.data()
 
         if (!course) {
-            return res.status(404).json({ error: 'Course has no data' });
+            return res.status(404).json({ error: 'Course has no data' })
         }
 
         res.json(course)
@@ -120,8 +125,8 @@ export async function getCourse(req: Request, res: Response) {
 // Fetches the user profile for the given user
 export async function getUserProfile(req: Request, res: Response) {
     try {
-        const { userId } = req.params
-        const userProfileDoc = await db.collection('User').doc(userId).get()
+        const { userID } = req.params
+        const userProfileDoc = await db.collection('User').doc(userID).get()
 
         if (!userProfileDoc.exists) {
             return res.status(404).json({ error: 'User not found' })
@@ -141,8 +146,8 @@ export async function getUserProfile(req: Request, res: Response) {
 
 // Moves the approved cards from unreviewed to reviewed
 // id: number
-// user_id: number
-// course_id: number
+// userID: number
+// courseID: number
 // {
 //     question: string
 //     alternatives: string[]
@@ -151,18 +156,18 @@ export async function getUserProfile(req: Request, res: Response) {
 //
 // or 
 //
-// course_id: number 
+// courseID: number 
 // [{},{},{}]
 export async function postApproved(req: Request, res: Response) {
     try {
-        const { id, user_id, course_id, cards } = req.body
+        const { id, userID, courseID, cards } = req.body
 
         // Validate the required fields
-        if (!user_id || !course_id || !cards || !Array.isArray(cards)) {
+        if (!userID || !courseID || !cards || !Array.isArray(cards)) {
             return res.status(400).json({ error: 'Missing or invalid required fields' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], user_id: user_id, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID: userID, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -184,7 +189,7 @@ export async function postApproved(req: Request, res: Response) {
             snapshot.forEach(doc => {
                 // Add the document to the Card collection
                 batch.set(db.collection('Card').doc(doc.id), {
-                    course_id,
+                    courseID,
                     question,
                     alternatives,
                     correct
@@ -209,8 +214,8 @@ export async function postApproved(req: Request, res: Response) {
 // This is relevant when there are duplicate questions, or bad questions that
 // should not be reviewed
 // id: number
-// user_id: number
-// course_id: number
+// userID: number
+// courseID: number
 // {
 //     id: number
 //     question: string
@@ -221,20 +226,20 @@ export async function postApproved(req: Request, res: Response) {
 // or 
 // 
 // id: number
-// user_id: number
-// course_id: number 
+// userID: number
+// courseID: number 
 // [{},{},{}]
 export async function postDenied(req: Request, res: Response) {
     try {
-        const { id, user_id, course_id } = req.body
+        const { id, userID, courseID } = req.body
         const cards = req.body.cards || req.body
 
         // Validate the required fields
-        if (!user_id || !course_id || !cards) {
+        if (!userID || !courseID || !cards) {
             return res.status(400).json({ error: 'Missing required fields' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], user_id: user_id, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID: userID, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -272,9 +277,9 @@ export async function postDenied(req: Request, res: Response) {
 }
 
 // Uploads the given cards to storage as a struct (a unreviewed card struct directly)
-// user_id: number(the user id)
+// userID: number(the user id)
 // token: string (user token)
-// course_id: number (the course the unreviewed question is for)
+// courseID: number (the course the unreviewed question is for)
 // {
 //     question: string
 //     alternatives: string[]
@@ -283,19 +288,19 @@ export async function postDenied(req: Request, res: Response) {
 export async function postCard(req: Request, res: Response) {
     try {
         const card = req.body as {
-            user_id: number
-            course_id: number
+            userID: number
+            courseID: number
             question: string
             alternatives: string[]
             correct: number
         }
 
         // Validate the required fields
-        if (!card.user_id || !card.course_id || !card.question || !card.alternatives || card.correct === undefined) {
+        if (!card.userID || !card.courseID || !card.question || !card.alternatives || card.correct === undefined) {
             return res.status(400).json({ error: 'Missing required fields' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], user_id: card.user_id, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID: card.userID, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -303,10 +308,10 @@ export async function postCard(req: Request, res: Response) {
         // Generate a new document reference with an auto-generated ID
         const cardRef = db.collection('CardUnreviewed').doc()
 
-        // Save the card data to Firestore, including the course_id
+        // Save the card data to Firestore, including the courseID
         await cardRef.set({
-            user_id: card.user_id,
-            course_id: card.course_id,
+            userID: card.userID,
+            courseID: card.courseID,
             question: card.question,
             alternatives: card.alternatives,
             correct: card.correct
@@ -321,18 +326,18 @@ export async function postCard(req: Request, res: Response) {
 }
 
 // Uploads the given cards to storage as a text string to be reviewed
-// user_id: number (the id of the user who submitted the question)
-// course_id: number (the course the unreviewed question is for)
+// userID: number (the id of the user who submitted the question)
+// courseID: number (the course the unreviewed question is for)
 // input: string
 export async function postText(req: Request, res: Response) {
     try {
-        const { user_id, course_id, text } = req.body as { user_id: number, course_id: number, text: string }
+        const { userID, courseID, text } = req.body as { userID: number, courseID: number, text: string }
 
-        if (!user_id || !course_id || !text) {
-            return res.status(400).json({ error: 'user_id, course_id and text are required' })
+        if (!userID || !courseID || !text) {
+            return res.status(400).json({ error: 'userID, courseID and text are required' })
         }
 
-        const error = checkToken({authorizationHeader: req.headers['authorization'], user_id: user_id, verifyToken})
+        const error = checkToken({authorizationHeader: req.headers['authorization'], userID: userID, verifyToken})
         if (error) {
             return res.status(401).json({ error })
         }
@@ -340,8 +345,8 @@ export async function postText(req: Request, res: Response) {
         // Generate a new document reference with an auto-generated ID
         const textRef = db.collection('CardUnreviewedText').doc()
 
-        // Save the text string to Firestore, including the course_id
-        await textRef.set({ user_id, course_id, text })
+        // Save the text string to Firestore, including the courseID
+        await textRef.set({ userID, courseID, text })
 
         // Return the generated ID as the response
         res.status(201).json({ id: textRef.id })
@@ -354,13 +359,13 @@ export async function postText(req: Request, res: Response) {
 // Uploads the given course to storage as a Course object
 export async function postCourse(req: Request, res: Response) {
     try {
-        const { user_id, course } = req.body as { user_id: number, course: Course }
+        const { userID, course } = req.body as { userID: number, course: Course }
 
-        if (!user_id || !course) {
-            return res.status(400).json({ error: 'user_id and course are required' })
+        if (!userID || !course) {
+            return res.status(400).json({ error: 'userID and course are required' })
         }
         
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], user_id, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -422,6 +427,7 @@ export async function postLogin(req: Request, res: Response) {
             id: userDoc.id,
             name: `${userData.firstName} ${userData.lastName}`,
             username,
+            time: userData.time,
             token
         })
     } catch (err) {
@@ -465,24 +471,24 @@ export async function postRegister(req: Request, res: Response) {
         }
 
         // Get the next available numeric ID
-        const idDoc = db.collection('Metadata').doc('userIdCounter')
+        const idDoc = db.collection('Metadata').doc('userIDCounter')
         const idDocSnapshot = await idDoc.get()
 
         if (!idDocSnapshot.exists) {
-            await idDoc.set({ nextId: 1 })
+            await idDoc.set({ nextID: 1 })
         }
 
-        const nextId = idDocSnapshot.exists ? idDocSnapshot.data()!.nextId : 1
+        const nextID = idDocSnapshot.exists ? idDocSnapshot.data()!.nextID : 1
 
         // Increment the counter for the next user
-        await idDoc.update({ nextId: nextId + 1 })
+        await idDoc.update({ nextID: nextID + 1 })
 
         // Generate a new document reference with the incrementing numeric ID
-        const userRef = db.collection('User').doc(nextId.toString())
+        const userRef = db.collection('User').doc(nextID.toString())
 
         // Create the user data object
         const user = {
-            id: nextId,
+            id: nextID,
             username: username.split('@')[0],
             password,
             firstName,
@@ -504,31 +510,60 @@ export async function postRegister(req: Request, res: Response) {
     }
 }
 
-export function putCourse(req: Request, res: Response) {
-    // try {
-    //     const { user_id, course } = req.body as { user_id: number, course: Course }
-    //     console.log("api", course)
-    //     if (!user_id || !course) {
-    //         return res.status(400).json({ error: 'user_id and course are required' })
-    //     }
+export async function putCourse(req: Request, res: Response) {
+    try {
+        const { courseID } = req.params
+        const { userID, accepted, editing } = req.body as { userID: number, accepted: Card[], editing: Editing }
         
-    //     // const error = checkToken({authorizationHeader: req.headers['authorization'], user_id, verifyToken})
-    //     // if (error) {
-    //     //     return res.status(401).json({ error })
-    //     // }
-        
-    //     const courseID = course.id
-    //     if (!courseID) {
-    //         return res.status(400).json({ error: 'Course ID is required.' })
-    //     }
+        if (!userID || accepted === undefined || editing === undefined) {
+            return res.status(400).json({ error: 'userID, accepted, and editing are required' })
+        }
 
-    //     const courseRef = db.collection('Course').doc(courseID)
-    //     await courseRef.set(course)
-    //     res.status(201).json({ id: courseRef.id })
-    // } catch (err) {
-    //     const error = err as Error
-    //     res.status(500).json({ error: error.message })
-    // }
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // if (error) {
+        //     return res.status(401).json({ error })
+        // }
+
+        if (!courseID) {
+            return res.status(400).json({ error: 'Course ID is required.' })
+        }
+
+        const courseRef = db.collection('Course').doc(courseID)
+        await courseRef.update({
+            userID,
+            cards: accepted,
+            unreviewed: editing.cards,
+            textUnreviewed: editing.texts
+        })
+
+        res.status(200).json({ id: courseRef.id })
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
+export async function putTime(req: Request, res: Response) {
+    try {
+        const { userID, time } = req.body as { userID: string, time: number }
+        
+        if (!userID || typeof time !== 'number') {
+            return res.status(400).json({ error: 'userID, accepted, and editing are required' })
+        }
+
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // if (error) {
+        //     return res.status(401).json({ error })
+        // }
+
+        const courseRef = db.collection('User').doc(userID)
+        await courseRef.update({time})
+
+        res.status(200).json({ id: courseRef.id })
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
 }
 
 // Base information about the api if the route was not specified
@@ -536,9 +571,9 @@ export async function getIndexHandler(_: Request, res: Response) {
     res.json({ message: "Welcome to the API!\n\nValid endpoints are:\n\n/ - Y" +
     "ou are here, this displays info about the API\n/scoreboard - Returns the" +
     " first 100 users on the scoreboard\n/courses - Returns a list of all cou" +
-    "rses\n/courses/:courseId/reviewed - Returns a list of all reviewed flash" + 
-    "cards\n/courses/:courseId/cards - Returns all cards, reviewed " +
-    "or not\n/users/:userId - Returns all info for every user" })
+    "rses\n/courses/:courseID/reviewed - Returns a list of all reviewed flash" + 
+    "cards\n/courses/:courseID/cards - Returns all cards, reviewed " +
+    "or not\n/users/:userID - Returns all info for every user" })
 }
 
 // Generates a token for the given user ID
@@ -552,15 +587,15 @@ function generateToken(id: string): string {
 }
 
 // Verifies that the passed token is valid for the given user
-function verifyToken(token: string, userId: string): boolean {
+function verifyToken(token: string, userID: string): boolean {
     const tokenData = Buffer.from(token, 'base64').toString('ascii')
     const tokenParts = tokenData.split(':')
     if (tokenParts.length !== 3) return false
 
     const [id, timestamp, hash] = tokenParts
 
-    // Ensure the id in the token matches the provided userId
-    if (id !== userId) return false
+    // Ensure the id in the token matches the provided userID
+    if (id !== userID) return false
 
     const data = `${id}:${timestamp}:${BACKEND_SECRET}`
     const expectedHash = crypto.createHash('sha256').update(data).digest('hex')
@@ -569,7 +604,7 @@ function verifyToken(token: string, userId: string): boolean {
 }
 
 // Checks the token and returns an error message if the token is invalid
-function checkToken({authorizationHeader, user_id, verifyToken}: HandleTokenProps): boolean | string  {
+function checkToken({authorizationHeader, userID, verifyToken}: HandleTokenProps): boolean | string  {
     if (!authorizationHeader) {
         return 'Authorization header missing'
     }
@@ -579,7 +614,7 @@ function checkToken({authorizationHeader, user_id, verifyToken}: HandleTokenProp
         return 'Token missing from authorization header'
     }
 
-    if (!verifyToken(token, user_id.toString())) {
+    if (!verifyToken(token, userID.toString())) {
         return 'Invalid token'
     }
 
