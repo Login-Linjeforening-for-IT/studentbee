@@ -99,8 +99,15 @@ export default function Cards({id, current}: CardsProps) {
     return (
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
             <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
-                <div className="w-full grid grid-cols-2">
-                    <h1 className="text-xl mb-8">{card.question}</h1>
+                <div className="w-full grid grid-cols-12">
+                    <h1 className={`${card.question.length > 500 ? "text-md" : "text-xl"} mb-8 max-h-[45vh] overflow-auto col-span-11`}>
+                    {card.question.split('\n').map((line, index) => (
+                        <span key={index}>
+                        {line}
+                        <br />
+                        </span>
+                    ))}    
+                    </h1>
                     <h1 className="text-right text-gray-500">{(current || 0) + 1} / {cards.length}</h1>
                 </div>
                 <Alternatives 
