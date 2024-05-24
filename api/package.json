@@ -8,6 +8,14 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.1.0"
+  },
   "description": "",
   "devDependencies": {
     "@types/body-parser": "^1.19.5",
@@ -16,13 +24,5 @@
     "@types/node": "^20.12.12",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.5"
-  },
-  "dependencies": {
-    "body-parser": "^1.20.2",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "firebase-admin": "^12.1.0"
   }
 }
