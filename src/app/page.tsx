@@ -9,9 +9,9 @@ export default async function Home() {
 
     if (typeof courses === 'string') {
         return (
-            <div className="w-full h-full ">
-                <h1 className="w-full grid place-items-center">No courses</h1>
-                <Link href='/add/course' className="text-2xl bg-gray-500 rounded-md px-2 mr-2">Add course</Link>
+            <div className="w-full h-full grid grid grid-rows-12">
+                <h1 className="w-full grid place-items-center text-2xl">No courses</h1>
+                <Link href={`/add/course`} className="text-2xl rounded-xl px-2 bg-gray-800 p-2 px-8 row-span-11 grid place-self-center">Add course</Link>
             </div>
         )
     }

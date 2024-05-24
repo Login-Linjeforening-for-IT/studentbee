@@ -9,6 +9,25 @@ type HandleTokenProps = {
     verifyToken: (token: string, userID: string) => boolean
 }
 
+type Course = {
+    id: string
+    cards: Card[]
+    unreviewed: Card[]
+    textUnreviewed: string[]
+}
+
+type Editing = {
+    cards: Card[]
+    texts: string[]
+}
+
+type Card = {
+    question: string
+    alternatives: string[]
+    correct: number
+    help?: string
+}
+
 dotenv.config()
 
 const { BACKEND_SECRET } = process.env

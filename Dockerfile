@@ -13,7 +13,6 @@ RUN npm install
 # Copies source code
 COPY . .
 
-
 # Starts the application
 # CMD npm run build && npm run start
 CMD npm run dev

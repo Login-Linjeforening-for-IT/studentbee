@@ -20,11 +20,6 @@ type AddCardProps = {
     setAlternativeIndex: Dispatch<SetStateAction<number>>
 }
 
-type AddTextProps = {
-    text?: string
-    setText?: (text: string) => void
-}
-
 type AddTextForCourseProps = {
     course: Course
     setCourse: Dispatch<SetStateAction<Course>>
@@ -52,7 +47,7 @@ export default function Add({ params }: { params: { item: string[] } }) {
     }
 
     switch (item) {
-        case 'course': return <AddCourse /> 
+        case 'COURSE': return <AddCourse /> 
         // case 'card': return <AddCard />
         // case 'text': return <AddText />
         default: return <h1>404</h1>

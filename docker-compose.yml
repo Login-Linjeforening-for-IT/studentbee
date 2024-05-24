@@ -10,3 +10,12 @@ services:
       - "3000:3000"
     # command: npm run build && npm run start
     command: npm run dev
+
+  api:
+    container_name: api
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    command: npm start
