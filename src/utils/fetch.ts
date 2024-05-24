@@ -102,7 +102,6 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
         return result
     } catch (error: unknown) {
         const err = error as Error
-        console.log("error", err.message)
         return err.message
     }
 }

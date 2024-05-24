@@ -60,12 +60,10 @@ export default function Cards({id, current}: CardsProps) {
 
             if (typeof course === typeof newCourse || typeof newCourse === 'object') {
                 setCourse(newCourse)
-                console.log("after", course)
             }
         })()
     }, [])
 
-    console.log(typeof course)
     if (typeof course === 'string') {
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
