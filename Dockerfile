@@ -5,7 +5,7 @@ FROM node:20-alpine
 WORKDIR /app
 
 # Copies package versions
-COPY package*.json yarn.lock* ./
+COPY package*.json ./
 
 # Installs dependencies
 RUN npm install
