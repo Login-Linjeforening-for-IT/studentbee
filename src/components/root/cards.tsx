@@ -100,7 +100,7 @@ export default function Cards({id, current}: CardsProps) {
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
             <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-2">
-                    <h1 className="text-4xl mb-8">{card.question}</h1>
+                    <h1 className="text-2xl mb-8">{card.question}</h1>
                     <h1 className="text-right text-gray-500">{(current || 0) + 1} / {cards.length}</h1>
                 </div>
                 <Alternatives 
@@ -157,7 +157,7 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
                             animate200ms({key: index.toString(), setAnimateAnswer})
                             checkAnswer(index)
                         }}
-                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-2xl col-span-9 text-left pl-2`}>
+                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-lg col-span-9 text-left pl-2`}>
                         {answer}
                     </button>
                 </div>
