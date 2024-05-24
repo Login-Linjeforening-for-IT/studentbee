@@ -86,6 +86,17 @@ export default function Edit({ params }: { params: { item: string[] } }) {
             }
         })()
     }, [item])
+
+    useEffect(() => {
+        editing.cards.forEach((card, cardIndex) => {
+            card.alternatives.forEach((_, index) => {
+                const ref = textareaRefs.current[cardIndex * card.alternatives.length + index]
+                if (ref) {
+                    autoResizeTextarea(ref)
+                }
+            })
+        })
+    }, [editing.cards, selected])
     
     function handleSubmit() {
         updateCourse({courseID: item, accepted, editing})
@@ -172,17 +183,6 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         }
         setEditing({...editing, cards: tempCards})
     }
-
-    useEffect(() => {
-        editing.cards.forEach((card, cardIndex) => {
-            card.alternatives.forEach((_, index) => {
-                const ref = textareaRefs.current[cardIndex * card.alternatives.length + index];
-                if (ref) {
-                    autoResizeTextarea(ref);
-                }
-            });
-        });
-    }, [editing.cards, selected]);
  
     return (
         <div className="w-full h-full rounded-xl gap-8 grid grid-rows-12">

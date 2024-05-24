@@ -5,7 +5,7 @@ type ElementsProps = {
     current?: number
 }
 
-type Next10Props = {
+type NextQuestionProps = {
     cards: Card[]
     current?: number
     amount: number
@@ -54,7 +54,6 @@ export default async function Elements({id, current}: ElementsProps) {
         <div className='w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden'>
             <Help />
             <div className="w-full h-full rounded-xl p-4 overflow-auto">
-                <h1 className="text-2xl mb-2">Upcoming</h1>
                 <GetNextQuestions cards={cards} current={current} amount={amount} />
             </div>
         </div>
@@ -62,12 +61,21 @@ export default async function Elements({id, current}: ElementsProps) {
 }
 
 // Gets the x next questions (max = amount)
-function GetNextQuestions({cards, current, amount}: Next10Props) {
-    const relevant = cards.slice(current, amount)
+function GetNextQuestions({cards, current, amount}: NextQuestionProps) {
+    const relevant = cards.slice(current, amount).slice(1)
 
-    return relevant.map((card) => 
-        <div key={card.question} className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-2 flex items-center pl-4`}>
-            <h1>{card.question.slice(0, 40)}</h1>
+    if (!relevant.length) {
+        return <h1 className="text-2xl">Last question!</h1>
+    }
+
+    return (
+        <div>
+            <h1 className="text-2xl mb-2">Upcoming</h1>
+            {relevant.map((card) => (
+                <div key={card.question} className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-2 flex items-center pl-4`}>
+                    <h1>{card.question.slice(0, 40)}</h1>
+                </div>
+            ))}
         </div>
     )
 }
