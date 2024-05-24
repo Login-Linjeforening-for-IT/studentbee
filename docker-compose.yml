@@ -1,15 +1,14 @@
 version: '3.8'
 
 services:
-  nextjs-app:
+  login-exam:
     container_name: login-exam
     build:
       context: .
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    # command: npm run build && npm run start
-    command: npm run dev
+    command: npm start
 
   api:
     container_name: api
