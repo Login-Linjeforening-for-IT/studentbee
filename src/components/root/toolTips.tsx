@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 
 export default function ToolTips() {
     const [displayTips, setDisplayTips] = useState(false)
-    const [autonext, setAutonext] = useState(localStorage.getItem('autonext') === 'true' ? 'on' : 'off')
+    const [autonext, setAutonext] = useState('off')
 
     useEffect(() => {
         const handleKeyPress = (e: KeyboardEvent) => {
