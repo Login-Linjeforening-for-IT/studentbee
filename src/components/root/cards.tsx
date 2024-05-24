@@ -19,7 +19,6 @@ type CardsProps = {
 }
 
 type ButtonsProps = {
-    button: string
     animateAnswer: string
     navigate: (direction: string) => void
     flashColor: string
@@ -34,7 +33,6 @@ export default function Cards({id, current, course}: CardsProps) {
 
     const cards = typeof course === 'object' ? course.cards as Card[] : []
     const card = cards[current || 0]
-    const button = `text-2xl rounded-xl grid place-items-center`
     const flashColor = animate === "wrong" 
         ? "bg-red-800" 
         : animate === "correct" 
@@ -86,20 +84,12 @@ export default function Cards({id, current, course}: CardsProps) {
 
     const alternativeLength = card.alternatives.reduce((acc, curr) => acc + curr.length, 0)
     const questionLength = card.question.length
-    const textSize = questionLength > 500 
-        ? questionLength > 750 && alternativeLength > 200 
-            ? "text-md"
-            : alternativeLength > 100
-                ? "text-md"
-                : "text-lg"
-        : "text-xl"
-
     
     function maxHeight(questionLength: number, alternativeLength: number) {
         const table = [
-            { condition: (q: number, a: number) => q > 500 && a > 1200, height: "max-h-[22vh]" },
-            { condition: (q: number, a: number) => q > 500 && a > 800, height: "max-h-[26vh]" },
-            { condition: (q: number, a: number) => q > 500 && a > 400, height: "max-h-[30vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 1200, height: "max-h-[18vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 800, height: "max-h-[22vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 400, height: "max-h-[26vh]" },
             { condition: (q: number, _a: number) => q > 500, height: "max-h-[34vh]" },
             { condition: (_q: number, _a: number) => true, height: "max-h-[45vh]" }
         ]
@@ -115,7 +105,7 @@ export default function Cards({id, current, course}: CardsProps) {
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
             <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-12">
-                    <h1 className={`${textSize} mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto col-span-11`}>
+                    <h1 className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto col-span-11`}>
                     {card.question.split('\n').map((line, index) => (
                         <span key={index}>
                             {line}
@@ -134,7 +124,6 @@ export default function Cards({id, current, course}: CardsProps) {
                 />
             </div>
             <Buttons 
-                button={button} 
                 animateAnswer={animateAnswer} 
                 navigate={navigate} 
                 flashColor={flashColor} 
@@ -143,7 +132,9 @@ export default function Cards({id, current, course}: CardsProps) {
     )
 }
 
-function Buttons({button, animateAnswer, navigate, flashColor}: ButtonsProps) {
+function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
+    const button = `text-xl rounded-xl grid place-items-center`
+
     return (
         <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
             <button 
@@ -172,14 +163,14 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
     return (
         <div className='w-full'>
             {alternatives.map((answer, index) =>
-                <div key={index} className="grid grid-cols-10 mb-2">
-                    <h1 className="text-lg grid place-items-center">{index + 1}</h1>
+                <div key={index} className="grid grid-cols-12 mb-2">
+                    <h1 className="text-md grid place-items-center">{index + 1}</h1>
                     <button 
                         onClick={() => {
                             animate200ms({key: index.toString(), setAnimateAnswer})
                             checkAnswer(index)
                         }}
-                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-md col-span-9 text-left p-2`}>
+                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-sm col-span-11 text-left p-2`}>
                         {answer}
                     </button>
                 </div>

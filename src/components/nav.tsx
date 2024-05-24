@@ -10,7 +10,7 @@ export default function Navbar() {
             {/* logo */}
             {/* {logo} */}
             <Link href='/' className='grid place-items-center'>
-                <Image src={"/images/logo/logo.svg"} alt="logo" height={45} width={45} />
+                <Image src={"/images/logo/logo.svg"} alt="logo" height={40} width={40} />
             </Link>
             {/* Info for the user */}
             <UserInfo />
