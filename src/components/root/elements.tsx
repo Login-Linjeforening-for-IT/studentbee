@@ -73,7 +73,7 @@ function GetNextQuestions({cards, current, amount}: NextQuestionProps) {
             <h1 className="text-2xl mb-2">Upcoming</h1>
             {relevant.map((card) => (
                 <div key={card.question} className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-2 flex items-center pl-4`}>
-                    <h1>{card.question.slice(0, 40)}</h1>
+                    <h1>{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
                 </div>
             ))}
         </div>

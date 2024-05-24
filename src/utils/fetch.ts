@@ -9,6 +9,7 @@ type UpdateCourseProps = {
 
 export async function getScoreBoard() {
     const response = await fetch(`${API}/scoreboard`, {
+        next: { revalidate: 10 },
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -27,6 +28,7 @@ export async function getScoreBoard() {
 export async function getCourses(): Promise<CourseAsList[] | string> {
     try {
         const response = await fetch(`${API}/courses`, {
+            next: { revalidate: 10 },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,6 +52,7 @@ export async function getCourses(): Promise<CourseAsList[] | string> {
 export async function getCourse(id: string): Promise<Course | string> {
     try {
         const response = await fetch(`${API}/course/${id.toUpperCase()}`, {
+            next: { revalidate: 10 },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

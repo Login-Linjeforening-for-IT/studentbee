@@ -22,6 +22,7 @@ type AlternativeProps = {
 
 type AcceptedProps = {
     accepted: Card[]
+    setAccepted: Dispatch<SetStateAction<Card[]>>
     handleAcceptedIndexClick: (index: number) => void
 }
 
@@ -43,6 +44,7 @@ type EditCardsProps = {
 type HeaderProps = {
     selected: 'cards' | 'text',
     setSelected: Dispatch<SetStateAction<'cards' | 'text'>>
+    clearCard: () => void
 }
 
 export default function Edit({ params }: { params: { item: string[] } }) {
@@ -117,6 +119,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
             const tempAccepted = [...accepted]
             tempAccepted[cardIndex] = card
             tempAccepted[cardIndex].alternatives = card.alternatives.filter((alternative) => alternative.length)
+            console.log(tempAccepted)
             setAccepted(tempAccepted)
             setCard(emptyCard)
             return
@@ -183,13 +186,18 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         }
         setEditing({...editing, cards: tempCards})
     }
+
+    function clearCard() {
+        setCard(emptyCard)
+        setAlternativeIndex(0)
+    }
  
     return (
         <div className="w-full h-full rounded-xl gap-8 grid grid-rows-12">
             <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
                 <Rejected selected={selected} rejected={rejected} handleRejectedIndexClick={handleRejectedIndexClick} />
                 <div className={`w-full h-[76vh] bg-gray-800 ${editingSpan} rounded-xl p-4 flex flex-col`}>
-                    <Header selected={selected} setSelected={setSelected} />
+                    <Header selected={selected} setSelected={setSelected} clearCard={clearCard} />
                     <div className="w-full h-[68vh]">
                         {selected === 'cards' ? (
                             <EditCards 
@@ -219,7 +227,11 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                         )}
                         </div>
                 </div>
-                <Accepted accepted={accepted} handleAcceptedIndexClick={handleAcceptedIndexClick} />
+                <Accepted 
+                    accepted={accepted} 
+                    setAccepted={setAccepted}
+                    handleAcceptedIndexClick={handleAcceptedIndexClick}
+                />
             </div>
             <div className="w-full h-full grid place-items-center">
                 <Link
@@ -244,34 +256,38 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
         setAlternativeIndex(index)
     }
 
+    function removeAlternative(index: number) {
+        const tempAlternatives = [...card.alternatives]
+        tempAlternatives.splice(index, 1)
+        setCard({...card, alternatives: tempAlternatives})
+    }
+
     return (
         <div className="w-full h-full overflow-auto noscroll">
             <div className="grid grid-cols-12 w-full">
                 <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Q:</h1>
-                <input 
+                <textarea
                     value={card.question} 
                     onChange={(e) => updateQuestion(e.target.value)}
-                    type="text" 
                     placeholder={`Add question about ${courseID}...`}
-                    className="col-span-11 bg-gray-700 h-[4vh] rounded-xl px-2"
+                    className="col-span-11 bg-gray-700 h-[4vh] rounded-xl px-2 min-h-[20vh]"
                 />
             </div>
             <div className="grid grid-cols-12 w-full">
                 <div className="col-span-1" />
                 <div className="col-span-11">
-                    {card.alternatives.map((alternative, index) => {
-                        if (!alternative.length) {
-                            return
-                        }
-
-                        return (
+                    {card.alternatives.map((alternative, index) => (
+                        <div className="grid grid-cols-12">
                             <button 
                                 onClick={() => handleAlternativeClick(index)} 
                                 key={alternative} 
-                                className="w-full text-left"
-                            >{alternative} {`${card.correct === index ? '(correct)' : '(wrong)'}`}</button>
-                        )
-                    })}
+                                className="w-full text-left col-span-11"
+                            >
+                                {alternative} {`${card.correct === index ? '(correct)' : '(wrong)'}`}
+                            </button>
+                            <button onClick={() => removeAlternative(index)}>❌</button>
+                        </div>
+                    ))}
                 </div>
             </div>
             <Alternative
@@ -342,20 +358,30 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
     )
 }
 
-function Accepted({accepted, handleAcceptedIndexClick}: AcceptedProps) {
+function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedProps) {
+
+    function handleRemove(index: number) {
+        const tempAccepted = [...accepted]
+        tempAccepted.splice(index, 1)
+        setAccepted(tempAccepted)
+    }
+
     return (
         <div className="w-full h-full bg-gray-800 rounded-xl p-4">
             <h1 className="text-2xl mb-4">Accepted</h1>
             <div>
                 {accepted.map((card: Card, index: number) => (
-                    <button
-                        key={card.question}
-                        onClick={() => handleAcceptedIndexClick(index)} 
-                        className="w-full bg-gray-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2"
-                    >
-                        <h1>{card.question.slice(0, 40)}...</h1>
-                        <h1 className="text-gray-500">{card.alternatives.length}</h1>
-                    </button>
+                    <div className="grid grid-cols-12">
+                        <button
+                            key={card.question}
+                            onClick={() => handleAcceptedIndexClick(index)} 
+                            className="w-full bg-gray-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11"
+                        >
+                            <h1>{card.question.slice(0, 40)}...</h1>
+                            <h1 className="text-gray-500">{card.alternatives.length}</h1>
+                        </button>
+                        <button onClick={() => handleRemove(index)}>❌</button>
+                    </div>
                 ))}
             </div>
         </div>
@@ -435,14 +461,21 @@ function EditCards({editing, textareaRefs, handleQuestionChange, setCorrectAnswe
     )
 }
 
-function Header({selected, setSelected}: HeaderProps) {
-    const editingCols = selected === 'cards' ? 'grid-cols-4' : 'grid-cols-6'
-    const editingColSpan = selected === 'cards' ? 'col-span-3' : 'col-span-5'
+function Header({selected, setSelected, clearCard}: HeaderProps) {
+    const editingCols = selected === 'cards' ? 'grid-cols-4' : 'grid-cols-4'
+    const editingColSpan = selected === 'cards' ? 'col-span-3' : 'col-span-3'
+    const isText = selected === 'text'
 
     return (
         <div className={`w-full flex space-between grid ${editingCols} mb-4`}>
             <h1 className={`text-2xl ${editingColSpan}`}>Editing {selected}</h1>
-            <div className="grid grid-cols-2 place-items-center gap-4">
+            <div className={`grid ${isText ? "grid-cols-3" : "grid-cols-2"} place-items-center gap-4`}>
+                {isText && <button 
+                    className="bg-gray-700 w-full h-full rounded-lg" 
+                    onClick={clearCard}
+                >
+                    Clear
+                </button>}
                 <button 
                     className="bg-gray-700 w-full h-full rounded-lg" 
                     onClick={() => setSelected('cards')}

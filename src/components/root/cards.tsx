@@ -96,15 +96,33 @@ export default function Cards({id, current}: CardsProps) {
         )
     }
 
+    const alternativeLength = card.alternatives.reduce((acc, curr) => acc + curr.length, 0)
+    const questionLength = card.question.length
+    const textSize = questionLength > 500 
+        ? questionLength > 750 && alternativeLength > 200 
+            ? "text-md"
+            : alternativeLength > 100
+                ? "text-md"
+                : "text-lg"
+        : "text-xl"
+
+    const maxHeight = questionLength > 500 
+        ? questionLength > 750 && alternativeLength > 200 
+            ? "max-h-[34vh]"
+            : alternativeLength > 100
+                ? "max-h-[40vh]"
+                : "max-h-[45vh]"
+        : "max-h-[45vh]"
+
     return (
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
             <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-12">
-                    <h1 className={`${card.question.length > 500 ? "text-md" : "text-xl"} mb-8 max-h-[45vh] overflow-auto col-span-11`}>
+                    <h1 className={`${textSize} mb-8 ${maxHeight} overflow-auto col-span-11`}>
                     {card.question.split('\n').map((line, index) => (
                         <span key={index}>
-                        {line}
-                        <br />
+                            {line}
+                            <br />
                         </span>
                     ))}    
                     </h1>
@@ -158,13 +176,13 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
         <div className='w-full'>
             {alternatives.map((answer, index) =>
                 <div key={index} className="grid grid-cols-10 mb-2">
-                    <h1 className="text-2xl grid place-items-center">{index + 1}</h1>
+                    <h1 className="text-lg grid place-items-center">{index + 1}</h1>
                     <button 
                         onClick={() => {
                             animate200ms({key: index.toString(), setAnimateAnswer})
                             checkAnswer(index)
                         }}
-                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-lg col-span-9 text-left pl-2`}>
+                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-md col-span-9 text-left p-2`}>
                         {answer}
                     </button>
                 </div>
