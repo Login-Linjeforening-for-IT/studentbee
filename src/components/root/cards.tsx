@@ -1,10 +1,8 @@
 'use client'
 import shuffle from "@utils/shuffle"
-import { useEffect, useState, useRef } from "react"
-import { useRouter } from "next/navigation"
-import handleCardsNavigation, { animate200ms, handleKeyDown } from "@utils/navigation"
+import { useState, useRef } from "react"
+import { animate200ms } from "@utils/navigation"
 import { useCardNavigation } from "@/hooks/cardNavigation"
-import { getCourse } from "@/utils/fetch"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -17,6 +15,7 @@ type AlternativesProps = {
 type CardsProps = {
     id?: string
     current?: number
+    course: Course | string
 }
 
 type ButtonsProps = {
@@ -26,13 +25,12 @@ type ButtonsProps = {
     flashColor: string
 }
 
-export default function Cards({id, current}: CardsProps) {
+export default function Cards({id, current, course}: CardsProps) {
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
     const selectedRef = useRef(selected)
     selectedRef.current = selected
-    const [course, setCourse] = useState<Course | string>("Loading...")
 
     const cards = typeof course === 'object' ? course.cards as Card[] : []
     const card = cards[current || 0]
@@ -53,16 +51,6 @@ export default function Cards({id, current}: CardsProps) {
         setSelected,
         selectedRef,
     })
-
-    useEffect(() => {
-        (async() => {
-            const newCourse: Course | string = await getCourse(id || "PROG1001")
-
-            if (typeof course === typeof newCourse || typeof newCourse === 'object') {
-                setCourse(newCourse)
-            }
-        })()
-    }, [])
 
     if (typeof course === 'string') {
         return (
@@ -106,19 +94,17 @@ export default function Cards({id, current}: CardsProps) {
                 : "text-lg"
         : "text-xl"
 
-    const maxHeight = questionLength > 500 
-        ? questionLength > 750 && alternativeLength > 200 
-            ? "max-h-[34vh]"
-            : alternativeLength > 100
-                ? "max-h-[40vh]"
-                : "max-h-[45vh]"
-        : "max-h-[45vh]"
+    function maxHeight(questionLength: number, alternativeLength: number) {
+        const score = questionLength > 500 ? alternativeLength : 0
+        const height = score > 0 ? 34 - Math.floor((score / 100) / 4) * 4 : 45
+        return `max-h-[${height.toFixed(0)}vh]`
+    }
 
     return (
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
             <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-12">
-                    <h1 className={`${textSize} mb-8 ${maxHeight} overflow-auto col-span-11`}>
+                    <h1 className={`${textSize} mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto col-span-11`}>
                     {card.question.split('\n').map((line, index) => (
                         <span key={index}>
                             {line}

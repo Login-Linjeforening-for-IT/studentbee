@@ -51,6 +51,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     const [selected, setSelected] = useState<'cards' | 'text'>('cards')
     const [rejected, setRejected] = useState<Card[]>([])
     const [editing, setEditing] = useState<Editing>({ cards: [], texts: [] })
+    const [editingIndex, setEditingIndex] = useState(-1)
     const [accepted, setAccepted] = useState<Card[]>([])
     const [text, setText] = useState(editing.texts.join('\n\n'))
     const editingSpan = selected === 'cards' ? 'col-span-2' : 'col-span-3'
@@ -114,14 +115,14 @@ export default function Edit({ params }: { params: { item: string[] } }) {
             return
         }
 
-        const cardIndex = accepted.findIndex((c) => c.question === card.question)
-        if (cardIndex !== -1) {
+
+        if (editingIndex !== -1) {
             const tempAccepted = [...accepted]
-            tempAccepted[cardIndex] = card
-            tempAccepted[cardIndex].alternatives = card.alternatives.filter((alternative) => alternative.length)
-            console.log(tempAccepted)
+            tempAccepted[editingIndex] = card
+            tempAccepted[editingIndex].alternatives = card.alternatives.filter((alternative) => alternative.length)
             setAccepted(tempAccepted)
             setCard(emptyCard)
+            setEditingIndex(-1)
             return
         } 
 
@@ -134,6 +135,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         if (selected === 'text') {
             setCard(accepted[index])
             setAlternativeIndex(accepted[index].alternatives.length - 1)
+            setEditingIndex(index)
         } else {
             const tempCards = [...accepted]
             const card = tempCards.splice(index, 1)[0]
@@ -190,6 +192,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     function clearCard() {
         setCard(emptyCard)
         setAlternativeIndex(0)
+        setEditingIndex(-1)
     }
  
     return (
@@ -260,12 +263,13 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
         const tempAlternatives = [...card.alternatives]
         tempAlternatives.splice(index, 1)
         setCard({...card, alternatives: tempAlternatives})
+        setAlternativeIndex(alternativeIndex - 1)
     }
 
     return (
         <div className="w-full h-full overflow-auto noscroll">
             <div className="grid grid-cols-12 w-full">
-                <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Q:</h1>
+                <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh] mb-2">Q:</h1>
                 <textarea
                     value={card.question} 
                     onChange={(e) => updateQuestion(e.target.value)}
@@ -277,8 +281,8 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
                 <div className="col-span-1" />
                 <div className="col-span-11">
                     {card.alternatives.map((alternative, index) => (
-                        <div className="grid grid-cols-12">
-                            <button 
+                        <div key={index} className="grid grid-cols-12">
+                            <button
                                 onClick={() => handleAlternativeClick(index)} 
                                 key={alternative} 
                                 className="w-full text-left col-span-11"
@@ -334,12 +338,11 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
             <div className="grid grid-cols-12 mb-2">
                 <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">{alternativeIndex + 1}:</h1>
                 <div className="w-full col-span-11 flex flex-cols-auto">
-                    <input 
+                    <textarea
                         value={card.alternatives[alternativeIndex]} 
                         onChange={(e) => handleInput(e.target.value)} 
-                        type="text"
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className="w-full bg-gray-700 h-[4vh] rounded-xl px-2 mr-4"
+                        className="min-h-[5vh] w-full bg-gray-700 h-[4vh] rounded-xl px-2 mr-4"
                     />
                     <button
                         value={Number(card.correct === alternativeIndex)}
@@ -367,18 +370,20 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
     }
 
     return (
-        <div className="w-full h-full bg-gray-800 rounded-xl p-4">
+        <div className="w-full h-full bg-gray-800 rounded-xl p-4 overflow-auto">
             <h1 className="text-2xl mb-4">Accepted</h1>
             <div>
                 {accepted.map((card: Card, index: number) => (
-                    <div className="grid grid-cols-12">
+                    <div key={index} className="grid grid-cols-12">
                         <button
                             key={card.question}
                             onClick={() => handleAcceptedIndexClick(index)} 
-                            className="w-full bg-gray-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11"
+                            className="w-full bg-gray-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left"
                         >
-                            <h1>{card.question.slice(0, 40)}...</h1>
-                            <h1 className="text-gray-500">{card.alternatives.length}</h1>
+                            <div className="grid grid-cols-12 w-full">
+                                <h1 className="w-full col-span-11">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
+                                <h1 className="text-gray-500 text-right w-full">{card.alternatives.length}</h1>
+                            </div>
                         </button>
                         <button onClick={() => handleRemove(index)}>❌</button>
                     </div>
@@ -391,7 +396,7 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
 function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps) {
     if (selected === 'cards') {
         return (
-            <div className="w-full h-full bg-gray-800 rounded-xl p-4">
+            <div className="w-full h-full bg-gray-800 rounded-xl p-4 overflow-auto">
                 <h1 className="text-2xl">Rejected</h1>
                 <div>
                     {rejected.map((card: Card, index: number) => (

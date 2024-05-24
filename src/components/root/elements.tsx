@@ -31,7 +31,7 @@ export default async function Elements({id, current}: ElementsProps) {
         )
     }
 
-    const amount = 10
+    const amount = 13
     const cards = course.cards
     const help = current ? course.cards[current].help : null
 
@@ -62,7 +62,7 @@ export default async function Elements({id, current}: ElementsProps) {
 
 // Gets the x next questions (max = amount)
 function GetNextQuestions({cards, current, amount}: NextQuestionProps) {
-    const relevant = cards.slice(current, amount).slice(1)
+    const relevant = cards.slice(current, (current || 0) + amount).slice(1)
 
     if (!relevant.length) {
         return <h1 className="text-2xl">Last question!</h1>
@@ -72,8 +72,8 @@ function GetNextQuestions({cards, current, amount}: NextQuestionProps) {
         <div>
             <h1 className="text-2xl mb-2">Upcoming</h1>
             {relevant.map((card) => (
-                <div key={card.question} className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-2 flex items-center pl-4`}>
-                    <h1>{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
+                <div key={card.question} className={`w-full h-[5vh] bg-gray-700 rounded-xl mb-2 flex items-center p-2`}>
+                    <h1>{card.question.slice(0, 55)}{card.question.length > 55 && '...'}</h1>
                 </div>
             ))}
         </div>
