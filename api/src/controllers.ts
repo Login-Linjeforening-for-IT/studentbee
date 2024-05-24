@@ -46,7 +46,7 @@ export async function getScoreboard(_: Request, res: Response) {
             .get()
 
         // Constructs the scoreboard
-        const scoreboard = snapshot.docs.map(doc => ({
+        const scoreboard = snapshot.docs.map((doc: any) => ({
             id: doc.id,
             ...doc.data()
         }))
@@ -64,7 +64,7 @@ export async function getCourses(_: Request, res: Response) {
         const coursesSnapshot = await db.collection('Course').get()
 
         // Returns the courses with the cards and card count
-        const courses = coursesSnapshot.docs.map(doc => ({
+        const courses = coursesSnapshot.docs.map((doc: any) => ({
             id: doc.id,
             cards: doc.data().cards,
             count: doc.data().cards.length
@@ -88,7 +88,7 @@ export async function getReviewedCards(req: Request, res: Response) {
             .get()
 
         // Returns the data
-        const cards = cardSnapshot.docs.map(doc => ({id: doc.id,...doc.data()}))
+        const cards = cardSnapshot.docs.map((doc: any) => ({id: doc.id,...doc.data()}))
 
         res.json(cards)
     } catch (err) {
@@ -186,7 +186,7 @@ export async function postApproved(req: Request, res: Response) {
                 .where('id', '==', id)
                 .get()
 
-            snapshot.forEach(doc => {
+            snapshot.forEach((doc: any) => {
                 // Add the document to the Card collection
                 batch.set(db.collection('Card').doc(doc.id), {
                     courseID,
@@ -261,7 +261,7 @@ export async function postDenied(req: Request, res: Response) {
                 .where('id', '==', id)
                 .get()
 
-            snapshot.forEach(doc => {
+            snapshot.forEach((doc: any) => {
                 batch.delete(doc.ref)
             })
         }
