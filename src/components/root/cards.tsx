@@ -94,10 +94,21 @@ export default function Cards({id, current, course}: CardsProps) {
                 : "text-lg"
         : "text-xl"
 
+    
     function maxHeight(questionLength: number, alternativeLength: number) {
-        const score = questionLength > 500 ? alternativeLength : 0
-        const height = score > 0 ? 34 - Math.floor((score / 100) / 4) * 4 : 45
-        return `max-h-[${height.toFixed(0)}vh]`
+        const table = [
+            { condition: (q: number, a: number) => q > 500 && a > 1200, height: "max-h-[22vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 800, height: "max-h-[26vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 400, height: "max-h-[30vh]" },
+            { condition: (q: number, _a: number) => q > 500, height: "max-h-[34vh]" },
+            { condition: (_q: number, _a: number) => true, height: "max-h-[45vh]" }
+        ]
+    
+        for (let entry of table) {
+            if (entry.condition(questionLength, alternativeLength)) {
+                return entry.height
+            }
+        }
     }
 
     return (
