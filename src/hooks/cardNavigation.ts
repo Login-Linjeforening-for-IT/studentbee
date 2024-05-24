@@ -33,13 +33,31 @@ export const useCardNavigation = ({
             if (input === card.correct) {
                 if (current != undefined) {
                     const next = current + 1 < cards.length ? current + 1 : -1
-                    router.push(`/course/${id}/${next}`)
+                    const autonext = localStorage.getItem('autonext')
+                    const autonextTime = localStorage.getItem('autonextTime')
+
+                    // Skips automatically if allowed, otherwise gives visual 
+                    // input on first interaction and actually proceeds on the
+                    // second interaction. Reset when the user navigates away 
+                    if (autonext === 'true') {
+                        router.push(`/course/${id}/${next}`)
+                        setAnimate('correct')
+                        localStorage.removeItem('autonextTime')
+                        setTimeout(() => setAnimate('-1'), 400)
+                    } else if (autonextTime === card.correct.toString()) {
+                        router.push(`/course/${id}/${next}`)
+                        setAnimate('correct')
+                        localStorage.removeItem('autonextTime')
+                    } else {
+                        localStorage.setItem('autonextTime', input.toString())
+                        setAnimate('correct')
+                    }
+
                 }
-                setAnimate('correct')
-                setTimeout(() => setAnimate('-1'), 200)
             } else {
                 setAnimate('wrong')
                 setTimeout(() => setAnimate('-1'), 200)
+                localStorage.removeItem('autonextTime')
             }
         },
         [current, router, id, card, cards, setAnimate]

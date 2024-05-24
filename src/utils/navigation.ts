@@ -25,9 +25,20 @@ type animate200msProps = {
 }
 
 // Handles navigation for the cards component
-export default function handleCardsNavigation({direction, current, router, setAnimateAnswer, 
-    setSelected, checkAnswer, id, card, cards, selectedRef}: HandleNavigationProps) {
-    switch (direction) {
+export default function handleCardsNavigation({
+    direction, 
+    current, 
+    router, 
+    setAnimateAnswer, 
+    setSelected, 
+    checkAnswer,
+    id,
+    card, 
+    cards, 
+    selectedRef
+}: HandleNavigationProps) {
+
+        switch (direction) {
         case 'back': 
             if (current != undefined) {
                 const previous = current === 0 ? 0 : current - 1
@@ -47,6 +58,14 @@ export default function handleCardsNavigation({direction, current, router, setAn
             setSelected(-1)
             break
         case 'next':
+            const autonextTime = localStorage.getItem('autonextTime') 
+            
+            if (autonextTime) {
+                checkAnswer(Number(autonextTime))
+                localStorage.removeItem('autonextTime')
+                setSelected(-1)
+            }
+
             checkAnswer(selectedRef.current)
             animate200ms({key: 'next', setAnimateAnswer})
             setSelected(-1)
@@ -71,6 +90,8 @@ export default function handleCardsNavigation({direction, current, router, setAn
             checkAnswer(3)
             setSelected(-1)
             break
+        case 'w':
+        case 'W':
         case 'up': 
             setSelected((prev) => (prev === card.alternatives.length - 1 ? 0 : prev + 1))
             break
@@ -102,6 +123,8 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case '3': navigate("3"); break
         case '4': navigate("4"); break
         case 'Enter': navigate('next'); break
+        case 'w':
+        case 'W':
         case 'ArrowUp': navigate('up'); break
         case 'ArrowDown': navigate('down'); break
     }
