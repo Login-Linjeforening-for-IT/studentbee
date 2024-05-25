@@ -414,10 +414,10 @@ export async function postLogin(req: Request, res: Response) {
         const userDoc = userSnapshot.docs[0]
         const userData = userDoc.data()
 
-        // Validate the password (In a real application, ensure passwords are hashed and use bcrypt for comparison)
-        if (userData.password !== password) { 
-            return res.status(401).json({ error: 'Invalid username or password' })
-        }
+        // Temporarily disabled till after exams
+        // if (userData.password !== password) { 
+        //     return res.status(401).json({ error: 'Invalid username or password' })
+        // }
 
         // Generate the token
         const token = generateToken(userDoc.id)
