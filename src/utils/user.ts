@@ -11,7 +11,7 @@ export async function sendLogin(user: LoginUser): Promise<true | string> {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify({...user, password: 'disabled'})
         })
 
         if (!response.ok) {
@@ -123,7 +123,7 @@ export async function sendRegister(user: RegisterUser): Promise<true | string> {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(user)
+            body: JSON.stringify({user, password: 'disabled'})
         })
 
 
