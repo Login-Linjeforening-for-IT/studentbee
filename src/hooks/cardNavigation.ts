@@ -6,8 +6,8 @@ import { focusCheck, windowFocused, windowUnfocused } from "@utils/focus"
 type UseCardNavigationProps = {
     current: number | undefined
     id: string
-    card: any
-    cards: any[]
+    card: Card
+    cards: Card[]
     setAnimate: Dispatch<SetStateAction<string>>
     setAnimateAnswer: Dispatch<SetStateAction<string>>
     setSelected: Dispatch<SetStateAction<number>>
@@ -90,8 +90,13 @@ export const useCardNavigation = ({
     )
 
     useEffect(() => {
-        const focusHandler = () => windowFocused({ lastUserInteraction, startFocusTime })
-        const unfocusedHandler = () => windowUnfocused(startFocusTime)
+        function focusHandler() {
+            windowFocused({ lastUserInteraction, startFocusTime })
+        }
+
+        function unfocusedHandler() {
+            windowUnfocused(startFocusTime)
+        }
 
         window.addEventListener('focus', focusHandler)
         window.addEventListener('blur', unfocusedHandler)
@@ -108,7 +113,10 @@ export const useCardNavigation = ({
     }, [])
 
     useEffect(() => {
-        const keyDownHandler = (event: any) => handleKeyDown({ event, navigate })
+        function keyDownHandler(event: any) {
+            handleKeyDown({ event, navigate })
+        }
+
         window.addEventListener('keydown', keyDownHandler)
         return () => window.removeEventListener('keydown', keyDownHandler)
     }, [navigate])

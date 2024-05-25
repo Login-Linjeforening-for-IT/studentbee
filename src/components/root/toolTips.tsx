@@ -7,7 +7,7 @@ export default function ToolTips() {
     const [autonext, setAutonext] = useState('off')
 
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
+        function handleKeyDown(e: KeyboardEvent) {
             if (e.key === 'q' || e.key === 'Q') {
                 setDisplayTips(prevDisplayTips => !prevDisplayTips)
                 localStorage.setItem('tooltips', 'false')

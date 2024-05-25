@@ -21,7 +21,7 @@ app.use(bodyParser.json())
 app.use('/api', router)
 
 // Catch-all route to handle undefined paths
-app.use((_: any, res: any) => {
+app.use((_: Request, res: any) => {
     res.status(404).json({
         error: 'Not Found',
         message: 'The requested resource was not found on this server. Please refer to the API documentation for more information.'
