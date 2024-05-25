@@ -12,6 +12,7 @@ type AlternativesProps = {
     checkAnswer: (input: number, attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => void
     attempted: number[]
     setAttempted: React.Dispatch<React.SetStateAction<number[]>>
+    correct: number
 }
 
 type CardsProps = {
@@ -128,6 +129,7 @@ export default function Cards({id, current, course}: CardsProps) {
                     checkAnswer={checkAnswer}
                     attempted={attempted}
                     setAttempted={setAttempted}
+                    correct={card.correct}
                 />
             </div>
             <Buttons 
@@ -166,13 +168,23 @@ function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
     )
 }
 
-function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, checkAnswer, attempted, setAttempted}: AlternativesProps) {
+function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, checkAnswer, attempted, setAttempted, correct}: AlternativesProps) {
+    const [remainGreen, setRemainGreen] = useState("-1")
+
     function getColor(index: number): string {
+        if (remainGreen === index.toString()) {
+            return "bg-green-500"
+        }
+
         if (attempted.includes(index)) {
             return "bg-red-800"
         }
 
         if (animateAnswer === index.toString()) {
+            if (animateAnswer === correct.toString()) {
+                setRemainGreen(index.toString())
+                return "bg-green-500"
+            }
             return "bg-orange-500"
         }
 
