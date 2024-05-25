@@ -128,8 +128,8 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case '4': navigate("4"); break
         case 'Enter': navigate('next'); break
         case 'w':
-        case 'W':
         case 'ArrowUp': navigate('up'); break
+        case 'W':
         case 'ArrowDown': navigate('down'); break
     }
 }
