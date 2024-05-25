@@ -12,7 +12,7 @@ COPY package*.json ./
 
 # Installs dependencies
 RUN npm install
-RUN npm install express @types/express dotenv firebase-admin cors @types/cors firebase
+RUN npm install express @types/express dotenv firebase-admin cors @types/cors
 
 # Copies source code
 COPY . .
