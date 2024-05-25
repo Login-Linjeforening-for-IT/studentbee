@@ -31,7 +31,7 @@ export default async function Elements({id, current}: ElementsProps) {
         )
     }
 
-    const amount = 13
+    const amount = 12
     const cards = course.cards
     const help = current ? course.cards[current].help : null
 

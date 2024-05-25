@@ -59,8 +59,8 @@ export default function ToolTips() {
 function Tips({hotkey, info}: {hotkey: string, info: string}) {
     return (
         <div className="w-full p-2 flex flex-rows">
-            <h1 className="text-lg px-2 bg-gray-500 rounded-lg grid place-items-center mr-2">{hotkey}</h1>
-            <h1 className="text-lg grid place-items-center">{info}</h1>
+            <h1 className="text-sm px-2 bg-gray-500 rounded-md grid place-items-center mr-2">{hotkey}</h1>
+            <h1 className="text-sm grid place-items-center">{info}</h1>
         </div>
     )
 }
