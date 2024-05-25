@@ -37,14 +37,16 @@ export default function Login() {
                     />
                 </div>
                 <div className={inputParent}>
-                    <h1 className={inputText}>Password:</h1>
+                    <div/>
+                    <h1 className="w-full col-span-11 text-red-500 text-center">Password is currently disabled.</h1>
+                    {/* <h1 className={inputText}>Password:</h1>
                     <input 
                         value={password} 
                         onChange={(e) => setPassword(e.target.value)} 
                         type="password" 
                         placeholder="Password" 
                         className={input} 
-                    />
+                    /> */}
                 </div>
                 <Link
                     href={error.length ? '/login' : `/profile/${username}`}

@@ -64,14 +64,16 @@ export default function Register() {
                     />
                 </div>
                 <div className={inputParent}>
-                    <h1 className={inputText}>Password:</h1>
+                    <div/>
+                    <h1 className="text-red-500 text-center col-span-11">Password is currently disabled.</h1>
+                    {/* <h1 className={inputText}>Password:</h1>
                     <input
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         type="password"
                         placeholder="Password"
                         className={input}
-                    />
+                    /> */}
                 </div>
                 <Link 
                     href={error.length ? '/register' : '/login'}
