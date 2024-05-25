@@ -1,6 +1,7 @@
 import { getCourses } from "@utils/fetch"
 import Link from "next/link"
 import Edit from "./edit"
+import ToolTipsButton from "./toolTipsButton"
 
 export default async function Courses() {
     const courses = await getCourses()
@@ -21,10 +22,7 @@ export default async function Courses() {
                     <Course key={index} course={course} margin={index != courses.length - 1} /> 
                 )}
             </div>
-            <div className="mt-4 w-full p-2 flex flex-rows">
-                <h1 className="text-lg px-2 bg-gray-500 rounded-lg grid place-items-center mr-2">Q</h1>
-                <h1 className="text-lg grid place-items-center">Tooltips</h1>
-            </div>
+            <ToolTipsButton />
         </div>
     )
 }

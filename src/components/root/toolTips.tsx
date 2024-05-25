@@ -7,9 +7,10 @@ export default function ToolTips() {
     const [autonext, setAutonext] = useState('off')
 
     useEffect(() => {
-        const handleKeyPress = (e: KeyboardEvent) => {
+        const handleKeyDown = (e: KeyboardEvent) => {
             if (e.key === 'q' || e.key === 'Q') {
                 setDisplayTips(prevDisplayTips => !prevDisplayTips)
+                localStorage.setItem('tooltips', 'false')
             }
 
             if (e.key === 't' || e.key === 'T') {
@@ -19,11 +20,35 @@ export default function ToolTips() {
             }
         }
 
-        window.addEventListener('keypress', handleKeyPress)
+        window.addEventListener('keydown', handleKeyDown)
 
         // Cleanup the event listener on component unmount
         return () => {
-            window.removeEventListener('keypress', handleKeyPress)
+            window.removeEventListener('keydown', handleKeyDown)
+        }
+    }, [])
+
+    useEffect(() => {
+        function checkTooltips() {
+            const tooltips = localStorage.getItem('tooltips')
+            if (tooltips === 'true') {
+                setDisplayTips(true)
+            }
+        }
+
+        function handleStorageChange(e: Event) {
+            const event = e as CustomEvent
+            if (event.detail.key === 'tooltips') {
+                setDisplayTips(event.detail.value === 'true')
+            }
+        }
+
+        window.addEventListener('customStorageChange', handleStorageChange)
+
+        checkTooltips()
+
+        return () => {
+            window.removeEventListener('customStorageChange', handleStorageChange)
         }
     }, [])
 

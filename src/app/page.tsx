@@ -17,10 +17,10 @@ export default async function Home() {
     }
 
     return (
-        <div className="w-full h-full rounded-xl overflow-auto grid noscroll place-items-center">
-            <div className="w-[35vw] h-[45vh] bg-gray-800 rounded-xl p-8 overflow-auto">
-                <h1 className="text-2xl text-center font-semibold mb-8">Select course</h1>
-                <div className="w-full grid">
+        <div className="w-full h-full rounded-xl overflow-auto noscroll flex justify-center flex-col place-items-center">
+            <div className="w-[35vw] h-[45vh] bg-gray-800 rounded-xl p-8 overflow-auto mb-8">
+                <h1 className="text-2xl text-center font-semibold mb-4">Select course</h1>
+                <div className="w-full h-[5vh] grid">
                     {courses.map((course) => <Link
                         href={`/course/${course.id}`}
                         key={course.id}
@@ -29,6 +29,7 @@ export default async function Home() {
                     </Link>)}
                 </div>
             </div>
+            <Link href="/add/course" className='bg-gray-800 h-[5vh] w-[35vw] grid place-items-center rounded-xl px-8'>Add course</Link>
         </div>
     )
 }
