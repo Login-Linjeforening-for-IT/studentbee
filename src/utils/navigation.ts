@@ -1,5 +1,5 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import { MutableRefObject } from "react"
+import { Dispatch, MutableRefObject, SetStateAction } from "react"
 
 type HandleNavigationProps = {
     direction: string
@@ -7,11 +7,13 @@ type HandleNavigationProps = {
     router: AppRouterInstance
     setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
     setSelected: React.Dispatch<React.SetStateAction<number>>
-    checkAnswer: (input: number) => void
+    checkAnswer: (input: number, attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => void
     id: string | undefined
     card: Card
     cards: Card[]
     selectedRef: MutableRefObject<number>
+    attempted: number[]
+    setAttempted: React.Dispatch<React.SetStateAction<number[]>>
 }
 
 type HandleKeyDownProps = {
@@ -35,7 +37,9 @@ export default function handleCardsNavigation({
     id,
     card, 
     cards, 
-    selectedRef
+    selectedRef,
+    attempted,
+    setAttempted
 }: HandleNavigationProps) {
 
         switch (direction) {
@@ -61,33 +65,33 @@ export default function handleCardsNavigation({
             const autonextTime = localStorage.getItem('autonextTime') 
             
             if (autonextTime) {
-                checkAnswer(Number(autonextTime))
+                checkAnswer(Number(autonextTime), attempted, setAttempted)
                 localStorage.removeItem('autonextTime')
                 setSelected(-1)
             }
 
-            checkAnswer(selectedRef.current)
+            checkAnswer(selectedRef.current, attempted, setAttempted)
             animate200ms({key: 'next', setAnimateAnswer})
             setSelected(-1)
             break
         case '1': 
             animate200ms({key: '0', setAnimateAnswer})
-            checkAnswer(0)
+            checkAnswer(0, attempted, setAttempted)
             setSelected(-1)
             break
         case '2': 
             animate200ms({key: '1', setAnimateAnswer})
-            checkAnswer(1)
+            checkAnswer(1, attempted, setAttempted)
             setSelected(-1)
             break
         case '3':
             animate200ms({key: '2', setAnimateAnswer})
-            checkAnswer(2)
+            checkAnswer(2, attempted, setAttempted)
             setSelected(-1)
             break
         case '4': 
             animate200ms({key: '3', setAnimateAnswer})
-            checkAnswer(3)
+            checkAnswer(3, attempted, setAttempted)
             setSelected(-1)
             break
         case 'w':

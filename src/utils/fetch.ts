@@ -1,4 +1,4 @@
-import { API, TEST_API } from "@parent/constants"
+import { API } from "@parent/constants"
 import getCookie from "./cookies"
 
 type UpdateCourseProps = {

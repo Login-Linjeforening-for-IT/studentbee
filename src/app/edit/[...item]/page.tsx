@@ -196,12 +196,12 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     }
  
     return (
-        <div className="w-full h-full rounded-xl gap-8 grid grid-rows-12">
+        <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
             <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
                 <Rejected selected={selected} rejected={rejected} handleRejectedIndexClick={handleRejectedIndexClick} />
-                <div className={`w-full h-[76vh] bg-gray-800 ${editingSpan} rounded-xl p-4 flex flex-col`}>
+                <div className={`w-full h-full bg-gray-800 ${editingSpan} rounded-xl flex flex-col`}>
                     <Header selected={selected} setSelected={setSelected} clearCard={clearCard} />
-                    <div className="w-full h-[68vh]">
+                    <div className="w-full h-[68vh] px-4 pb-4">
                         {selected === 'cards' ? (
                             <EditCards 
                                 editing={editing} 
@@ -240,7 +240,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                 <Link
                     href={`/`}
                     onClick={handleSubmit}
-                    className="h-full rounded-xl bg-gray-800 px-8 text-2xl grid place-items-center"
+                    className="h-full rounded-xl bg-gray-800 px-8 text-xl grid place-items-center"
                 >
                     Publish changes
                 </Link>
@@ -323,8 +323,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
             return
         }
 
-        const alternatives = [...card.alternatives, ""]
-        setCard({...card, alternatives})
+        card.alternatives.push("")
         setAlternativeIndex(alternativeIndex + 1)
     }
 
@@ -362,7 +361,6 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
 }
 
 function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedProps) {
-
     function handleRemove(index: number) {
         const tempAccepted = [...accepted]
         tempAccepted.splice(index, 1)
@@ -371,7 +369,10 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
 
     return (
         <div className="w-full h-full bg-gray-800 rounded-xl p-4 overflow-auto">
-            <h1 className="text-2xl mb-4">Accepted</h1>
+            <div className="grid grid-cols-12">
+                <h1 className="text-xl mb-4 grid grid-row col-span-11">Accepted</h1>
+                <h1 className="text-gray-500">({accepted.length})</h1>
+            </div>
             <div>
                 {accepted.map((card: Card, index: number) => (
                     <div key={index} className="grid grid-cols-12">
@@ -397,7 +398,10 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
     if (selected === 'cards') {
         return (
             <div className="w-full h-full bg-gray-800 rounded-xl p-4 overflow-auto">
-                <h1 className="text-2xl">Rejected</h1>
+                <div className="grid grid-cols-12">
+                    <h1 className="text-xl mb-4 grid grid-row col-span-11">Rejected</h1>
+                    <h1 className="text-gray-500">({rejected.length})</h1>
+                </div>
                 <div>
                     {rejected.map((card: Card, index: number) => (
                         <button
@@ -472,8 +476,8 @@ function Header({selected, setSelected, clearCard}: HeaderProps) {
     const isText = selected === 'text'
 
     return (
-        <div className={`w-full flex space-between grid ${editingCols} mb-4`}>
-            <h1 className={`text-2xl ${editingColSpan}`}>Editing {selected}</h1>
+        <div className={`w-full flex space-between grid ${editingCols} p-4`}>
+            <h1 className={`text-xl ${editingColSpan}`}>Editing {selected}</h1>
             <div className={`grid ${isText ? "grid-cols-3" : "grid-cols-2"} place-items-center gap-4`}>
                 {isText && <button 
                     className="bg-gray-700 w-full h-full rounded-lg" 

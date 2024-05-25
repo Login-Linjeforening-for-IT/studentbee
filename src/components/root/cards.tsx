@@ -1,6 +1,6 @@
 'use client'
 import shuffle from "@utils/shuffle"
-import { useState, useRef } from "react"
+import { useState, useRef, SetStateAction, Dispatch } from "react"
 import { animate200ms } from "@utils/navigation"
 import { useCardNavigation } from "@/hooks/cardNavigation"
 
@@ -9,7 +9,9 @@ type AlternativesProps = {
     selected: number
     animateAnswer: string
     setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
-    checkAnswer: (input: number) => void
+    checkAnswer: (input: number, attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => void
+    attempted: number[]
+    setAttempted: React.Dispatch<React.SetStateAction<number[]>>
 }
 
 type CardsProps = {
@@ -28,6 +30,7 @@ export default function Cards({id, current, course}: CardsProps) {
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
+    const [attempted, setAttempted] = useState<number[]>([])
     const selectedRef = useRef(selected)
     selectedRef.current = selected
 
@@ -48,6 +51,8 @@ export default function Cards({id, current, course}: CardsProps) {
         setAnimateAnswer,
         setSelected,
         selectedRef,
+        attempted,
+        setAttempted
     })
 
     if (typeof course === 'string') {
@@ -121,6 +126,8 @@ export default function Cards({id, current, course}: CardsProps) {
                     animateAnswer={animateAnswer} 
                     setAnimateAnswer={setAnimateAnswer} 
                     checkAnswer={checkAnswer}
+                    attempted={attempted}
+                    setAttempted={setAttempted}
                 />
             </div>
             <Buttons 
@@ -159,7 +166,23 @@ function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
     )
 }
 
-function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, checkAnswer}: AlternativesProps) {
+function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, checkAnswer, attempted, setAttempted}: AlternativesProps) {
+    function getColor(index: number): string {
+        if (attempted.includes(index)) {
+            return "bg-red-800"
+        }
+
+        if (animateAnswer === index.toString()) {
+            return "bg-orange-500"
+        }
+
+        if (selected === index) {
+            return "bg-gray-400"
+        }
+        
+        return "bg-gray-700"
+    }
+
     return (
         <div className='w-full'>
             {alternatives.map((answer, index) =>
@@ -168,9 +191,10 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
                     <button 
                         onClick={() => {
                             animate200ms({key: index.toString(), setAnimateAnswer})
-                            checkAnswer(index)
+                            checkAnswer(index, attempted, setAttempted)
                         }}
-                        className={`${Number(animateAnswer) === index ? "bg-orange-500" : selected === index ? "bg-gray-400" : "bg-gray-700"} rounded-xl text-sm col-span-11 text-left p-2`}>
+                        className={`${getColor(index)} rounded-xl text-sm col-span-11 text-left p-2`}
+                    >
                         {answer}
                     </button>
                 </div>

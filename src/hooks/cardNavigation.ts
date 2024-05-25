@@ -12,6 +12,8 @@ type UseCardNavigationProps = {
     setAnimateAnswer: Dispatch<SetStateAction<string>>
     setSelected: Dispatch<SetStateAction<number>>
     selectedRef: MutableRefObject<number>
+    attempted: number[]
+    setAttempted: Dispatch<SetStateAction<number[]>>
 }
 
 export const useCardNavigation = ({
@@ -23,13 +25,15 @@ export const useCardNavigation = ({
     setAnimateAnswer,
     setSelected,
     selectedRef,
+    attempted,
+    setAttempted
 }: UseCardNavigationProps) => {
     const router = useRouter()
     let startFocusTime = useRef<Date | undefined>(undefined)
     let lastUserInteraction = useRef<Date | undefined>(undefined)
 
     const checkAnswer = useCallback(
-        (input: number) => {
+        (input: number, attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => {
             if (input === card.correct) {
                 if (current != undefined) {
                     const next = current + 1 < cards.length ? current + 1 : -1
@@ -40,11 +44,13 @@ export const useCardNavigation = ({
                     // input on first interaction and actually proceeds on the
                     // second interaction. Reset when the user navigates away 
                     if (autonext === 'true') {
+                        setAttempted([])
                         router.push(`/course/${id}/${next}`)
                         setAnimate('correct')
                         localStorage.removeItem('autonextTime')
                         setTimeout(() => setAnimate('-1'), 400)
                     } else if (autonextTime === card.correct.toString()) {
+                        setAttempted([])
                         router.push(`/course/${id}/${next}`)
                         setAnimate('correct')
                         localStorage.removeItem('autonextTime')
@@ -55,6 +61,7 @@ export const useCardNavigation = ({
 
                 }
             } else {
+                !attempted.includes(input) && attempted.push(input)
                 setAnimate('wrong')
                 setTimeout(() => setAnimate('-1'), 200)
                 localStorage.removeItem('autonextTime')
@@ -75,9 +82,11 @@ export const useCardNavigation = ({
                 card,
                 cards,
                 selectedRef,
+                attempted,
+                setAttempted
             })
         },
-        [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef]
+        [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted]
     )
 
     useEffect(() => {
