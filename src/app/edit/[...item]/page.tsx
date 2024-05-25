@@ -375,7 +375,7 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
             </div>
             <div>
                 {accepted.map((card: Card, index: number) => (
-                    <div key={index} className="grid grid-cols-12">
+                    <div key={index} className="grid grid-cols-12 gap-2">
                         <button
                             key={card.question}
                             onClick={() => handleAcceptedIndexClick(index)} 
