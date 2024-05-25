@@ -11,7 +11,7 @@ export default function Edit() {
 
     useEffect(() => {
         (async() => {
-            const newCourses = await getCourses()
+            const newCourses = await getCourses('client')
 
             if (typeof newCourses === 'string') {
                 setError(newCourses)
@@ -46,7 +46,6 @@ export default function Edit() {
         )
     }
 
-    // Handles error
     if (typeof courses === 'string') {
         return <h1 className="w-full h-full grid place-items-center">{courses}</h1>
     }
@@ -55,6 +54,7 @@ export default function Edit() {
         <div>
             {displayCourseSelector && <CourseSelector />}
             <button onClick={handleReview} className="text-2xl rounded-md">🔁</button>
+            {error && <h1 className="w-full h-full grid place-items-center">{error}</h1>}
         </div>
     )
 }

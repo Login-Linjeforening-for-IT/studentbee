@@ -4,7 +4,7 @@ import Edit from "./edit"
 import ToolTipsButton from "./toolTipsButton"
 
 export default async function Courses() {
-    const courses = await getCourses()
+    const courses = await getCourses('server')
 
     if (typeof courses === 'string') {
         return <h1 className="w-full h-full grid place-items-center">{courses}</h1>

@@ -5,7 +5,7 @@ import Link from 'next/link'
 // Main component of the program, holds the main page and the user can navigate
 // to different pages from here
 export default async function Home() {
-    const courses = await getCourses()
+    const courses = await getCourses('server')
 
     if (typeof courses === 'string') {
         return (

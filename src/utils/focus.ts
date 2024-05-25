@@ -11,6 +11,7 @@ type WindowFocusedProps = {
     startFocusTime: MutableRefObject<Date | undefined>
 }
 
+// Check if the user has been inactive for more than 4.5 minutes
 export function focusCheck({startFocusTime, lastUserInteraction}: FocusCheckProps) {
     if (startFocusTime.current != undefined) {
         let currentTime = new Date()
@@ -20,6 +21,7 @@ export function focusCheck({startFocusTime, lastUserInteraction}: FocusCheckProp
     }
 }
 
+// handler for window focus event to update the last user interaction time
 export function windowFocused({lastUserInteraction, startFocusTime}: WindowFocusedProps) {
     lastUserInteraction.current = new Date()
     if (startFocusTime.current == undefined) {
@@ -27,6 +29,7 @@ export function windowFocused({lastUserInteraction, startFocusTime}: WindowFocus
     }
 }
 
+// Handler for window unfocus event to update time spent on the page
 export function windowUnfocused(startFocusTime: MutableRefObject<Date | undefined>) {
     if (startFocusTime.current != undefined) {
         let stopFocusTime = new Date()

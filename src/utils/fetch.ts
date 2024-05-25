@@ -1,4 +1,4 @@
-import { API } from "@parent/constants"
+import { API, BROWSER_API } from "@parent/constants"
 import getCookie from "./cookies"
 
 type UpdateCourseProps = {
@@ -7,6 +7,7 @@ type UpdateCourseProps = {
     editing: Editing
 }
 
+// Fetches the scoreboard from the server
 export async function getScoreBoard() {
     const response = await fetch(`${API}/scoreboard`, {
         next: { revalidate: 10 },
@@ -25,9 +26,13 @@ export async function getScoreBoard() {
     return await response.json()
 }
 
-export async function getCourses(): Promise<CourseAsList[] | string> {
+// Fetches courses from server, different url based on location, therefore the 
+// location parameter to ensure all requests are successful
+export async function getCourses(location: 'server' | 'client'): Promise<CourseAsList[] | string> {
+    const url = location === 'server' ? `${API}/courses` : `${BROWSER_API}/courses`
+
     try {
-        const response = await fetch(`${API}/courses`, {
+        const response = await fetch(url, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -49,9 +54,14 @@ export async function getCourses(): Promise<CourseAsList[] | string> {
     }
 }
 
-export async function getCourse(id: string): Promise<Course | string> {
+// Fetches the requested course from the server if possible.
+// ID - Course ID
+// location - Whether the request is coming from SSR or CSR
+export async function getCourse(id: string, location: 'server' | 'client'): Promise<Course | string> {
+    const url = location === 'server' ? API : BROWSER_API
+
     try {
-        const response = await fetch(`${API}/course/${id.toUpperCase()}`, {
+        const response = await fetch(`${url}/course/${id.toUpperCase()}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -73,6 +83,7 @@ export async function getCourse(id: string): Promise<Course | string> {
     }
 }
 
+// Updates the passed course
 export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
     const user: User | undefined = getCookie('user') as User | undefined  
     const token = getCookie('token')
@@ -82,7 +93,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
             throw Error('User not logged in')
         }
 
-        const response = await fetch(`${API}/course/${courseID}`, {
+        const response = await fetch(`${BROWSER_API}/course/${courseID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -119,7 +130,7 @@ export async function updateUserTime({time}: {time: number}) {
             throw Error('Please log in to log your efforts.')
         }
 
-        const response = await fetch(`${API}/time`, {
+        const response = await fetch(`${BROWSER_API}/time`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

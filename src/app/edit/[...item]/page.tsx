@@ -69,7 +69,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
 
     useEffect(() => {
         (async () => {
-            const newCourse = await getCourse(item)
+            const newCourse = await getCourse(item, 'client')
 
             if (newCourse) {
                 if (!editing.cards.length && typeof newCourse === 'object') {

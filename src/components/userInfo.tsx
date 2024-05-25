@@ -28,7 +28,7 @@ export default function UserInfo() {
             setMiddle(`Editing ${window.location.pathname.split('/')[2]}`);
 
             (async() => {
-                const courseByID = await getCourse(course)
+                const courseByID = await getCourse(course, 'client')
                 if (typeof courseByID === 'object') {
                     setRight(`${courseByID.cards.length} cards`)
                 }

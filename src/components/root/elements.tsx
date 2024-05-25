@@ -12,7 +12,7 @@ type NextQuestionProps = {
 }
 
 export default async function Elements({id, current}: ElementsProps) {
-    const course = await getCourse(id || 'PROG1001')
+    const course = await getCourse(id || 'PROG1001', 'server')
     const error = typeof course === 'string' && id ? course : 'No course selected'
 
     if (typeof course === 'string') {

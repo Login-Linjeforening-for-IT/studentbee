@@ -9,7 +9,7 @@ import { getCourse } from '@/utils/fetch'
 export default async function Course({ params }: { params: { id: string[] } }) {
     const id = params.id[0]
     const current = Number(params.id[1] || 0)
-    const course = await getCourse(id)
+    const course = await getCourse(id, 'server')
 
     return (
         <div className="w-full h-full rounded-xl overflow-auto grid grid-cols-10 gap-8 noscroll">
