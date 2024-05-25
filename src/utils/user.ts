@@ -1,12 +1,12 @@
 'use client'
 
-import { API } from "@parent/constants"
+import { BROWSER_API } from "@parent/constants"
 import getCookie, { removeCookie, setCookie } from "./cookies"
 
 // Function to login the user
 export async function sendLogin(user: LoginUser): Promise<true | string> {
     try {
-        const response = await fetch(`${API}/login`, {
+        const response = await fetch(`${BROWSER_API}/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export async function sendDelete(): Promise<Boolean | string> {
         // Removes cookies and user from localstorage if the user wants to delete their account
         removeCookie('user')
 
-        const response = await fetch(`${API}/account/delete`, {
+        const response = await fetch(`${BROWSER_API}/account/delete`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -118,7 +118,7 @@ export async function sendDelete(): Promise<Boolean | string> {
 export async function sendRegister(user: RegisterUser): Promise<true | string> {
 
     try {
-        const response = await fetch(`${API}/register`, {
+        const response = await fetch(`${BROWSER_API}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -154,7 +154,7 @@ export async function sendTimeSpent(): Promise<true | string> {
     }
 
     try {
-        const response = await fetch(`${API}/register`, {
+        const response = await fetch(`${BROWSER_API}/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

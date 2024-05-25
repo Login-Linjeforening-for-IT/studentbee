@@ -1,6 +1,6 @@
 'use client'
 
-import { API } from "@parent/constants"
+import { BROWSER_API } from "@parent/constants"
 import getCookie from "./cookies"
 
 // Adds a course with the given user id, course name and questions
@@ -10,7 +10,7 @@ export async function addCourse(course: Course): Promise<void | string> {
 
     try {
         if (user) {
-            const response = await fetch(`${API}/upload_course`, {
+            const response = await fetch(`${BROWSER_API}/upload_course`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
     const token = getCookie('token')
 
     if (user) {
-        const response = await fetch(`${API}/upload_card`, {
+        const response = await fetch(`${BROWSER_API}/upload_card`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export async function addText(courseID: string, text: string): Promise<void | st
     const token = getCookie('token')
 
     if (user) {
-        const response = await fetch(`${API}/upload_text`, {
+        const response = await fetch(`${BROWSER_API}/upload_text`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
