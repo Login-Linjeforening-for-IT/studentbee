@@ -41,7 +41,7 @@ export default function Cards({id, current, course}: CardsProps) {
         ? "bg-red-800" 
         : animate === "correct" 
             ? "bg-green-500" 
-            : "bg-gray-800"
+            : "bg-dark"
 
     const { navigate, checkAnswer } = useCardNavigation({
         current,
@@ -109,7 +109,7 @@ export default function Cards({id, current, course}: CardsProps) {
 
     return (
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
-            <div className={`w-full h-full rounded-xl bg-gray-800 p-8 row-span-9 pb-8`}>
+            <div className={`w-full h-full rounded-xl bg-dark p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-12">
                     <h1 className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto col-span-11`}>
                     {card.question.split('\n').map((line, index) => (
@@ -147,13 +147,13 @@ function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
     return (
         <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
             <button 
-                className={`${button} ${animateAnswer === 'back' ? "bg-gray-700" : "bg-gray-800"}`}
+                className={`${button} ${animateAnswer === 'back' ? "bg-light" : "bg-dark"}`}
                 onClick={() => navigate('back')}
             >
                 back
             </button>
             <button 
-                className={`${button} ${animateAnswer === 'skip' ? "bg-gray-700" : "bg-gray-800"}`}
+                className={`${button} ${animateAnswer === 'skip' ? "bg-light" : "bg-dark"}`}
                 onClick={() => navigate('skip')}
             >
                 skip
@@ -189,10 +189,10 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
         }
 
         if (selected === index) {
-            return "bg-gray-400"
+            return "bg-extralight"
         }
         
-        return "bg-gray-700"
+        return "bg-light"
     }
 
     return (

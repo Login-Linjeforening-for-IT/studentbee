@@ -2,6 +2,7 @@
 
 import { getCourse, updateCourse } from "@/utils/fetch"
 import Link from "next/link"
+import Script from "next/script"
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react"
 
 type AddCardProps = {
@@ -45,6 +46,10 @@ type HeaderProps = {
     selected: 'cards' | 'text',
     setSelected: Dispatch<SetStateAction<'cards' | 'text'>>
     clearCard: () => void
+    editing: Editing
+    setEditing: Dispatch<SetStateAction<Editing>>
+    text: string
+    setText: Dispatch<SetStateAction<string>>
 }
 
 export default function Edit({ params }: { params: { item: string[] } }) {
@@ -199,8 +204,16 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
             <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
                 <Rejected selected={selected} rejected={rejected} handleRejectedIndexClick={handleRejectedIndexClick} />
-                <div className={`w-full h-full bg-gray-800 ${editingSpan} rounded-xl flex flex-col`}>
-                    <Header selected={selected} setSelected={setSelected} clearCard={clearCard} />
+                <div className={`w-full h-full bg-dark ${editingSpan} rounded-xl flex flex-col`}>
+                    <Header
+                        selected={selected} 
+                        setSelected={setSelected} 
+                        clearCard={clearCard} 
+                        editing={editing}
+                        setEditing={setEditing}
+                        text={text}
+                        setText={setText}
+                    />
                     <div className="w-full h-[68vh] px-4 pb-4">
                         {selected === 'cards' ? (
                             <EditCards 
@@ -216,7 +229,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                                 <textarea 
                                     value={text} 
                                     onChange={handleTextChange}
-                                    className="w-full h-full overflow-auto noscroll bg-gray-600 rounded-xl p-2" 
+                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2" 
                                 />
                                 <AddCard
                                     courseID={item}
@@ -240,7 +253,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                 <Link
                     href={`/`}
                     onClick={handleSubmit}
-                    className="h-full rounded-xl bg-gray-800 px-8 text-xl grid place-items-center"
+                    className="h-full rounded-xl bg-dark px-8 text-xl grid place-items-center"
                 >
                     Publish changes
                 </Link>
@@ -274,7 +287,7 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
                     value={card.question} 
                     onChange={(e) => updateQuestion(e.target.value)}
                     placeholder={`Add question about ${courseID}...`}
-                    className="col-span-11 bg-gray-700 h-[4vh] rounded-xl px-2 min-h-[20vh]"
+                    className="col-span-11 bg-light h-[4vh] rounded-xl px-2 min-h-[20vh]"
                 />
             </div>
             <div className="grid grid-cols-12 w-full">
@@ -341,7 +354,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
                         value={card.alternatives[alternativeIndex]} 
                         onChange={(e) => handleInput(e.target.value)} 
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className="min-h-[5vh] w-full bg-gray-700 h-[4vh] rounded-xl px-2 mr-4"
+                        className="min-h-[5vh] w-full bg-light h-[4vh] rounded-xl px-2 mr-4"
                     />
                     <button
                         value={Number(card.correct === alternativeIndex)}
@@ -368,7 +381,7 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
     }
 
     return (
-        <div className="w-full h-full bg-gray-800 rounded-xl p-4 overflow-auto">
+        <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
             <div className="grid grid-cols-12">
                 <h1 className="text-xl mb-4 grid grid-row col-span-11">Accepted</h1>
                 <h1 className="text-gray-500">({accepted.length})</h1>
@@ -379,7 +392,7 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
                         <button
                             key={card.question}
                             onClick={() => handleAcceptedIndexClick(index)} 
-                            className="w-full bg-gray-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left"
+                            className="w-full bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left"
                         >
                             <div className="grid grid-cols-12 w-full">
                                 <h1 className="w-full col-span-11">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
@@ -397,7 +410,7 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
 function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps) {
     if (selected === 'cards') {
         return (
-            <div className="w-full h-full bg-gray-800 rounded-xl p-4 overflow-auto">
+            <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
                 <div className="grid grid-cols-12">
                     <h1 className="text-xl mb-4 grid grid-row col-span-11">Rejected</h1>
                     <h1 className="text-gray-500">({rejected.length})</h1>
@@ -407,7 +420,7 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
                         <button
                             key={card.question}
                             onClick={() => handleRejectedIndexClick(index)} 
-                            className="w-full bg-gray-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2"
+                            className="w-full bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2"
                         >
                             <h1>{card.question.slice(0, 40)}...</h1>
                             <h1 className="text-gray-500">{card.alternatives.length}</h1>
@@ -426,12 +439,12 @@ function EditCards({editing, textareaRefs, handleQuestionChange, setCorrectAnswe
                 <div key={cardIndex} className="w-full">
                     <textarea
                         ref={(el) => { textareaRefs.current[cardIndex] = el }}
-                        className="bg-gray-600 p-2 w-full rounded-xl"
+                        className="bg-extralight p-2 w-full rounded-xl"
                         value={card.question}
                         onChange={(event) => handleQuestionChange(event, cardIndex)}
                         style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
                     />
-                    <div className="bg-gray-700 rounded-xl">
+                    <div className="bg-normal rounded-xl">
                         {card.alternatives.map((answer, index) => (
                             <div key={index} className="p-2 grid grid-col w-full">
                                 <button className="text-left" onClick={() => setCorrectAnswer(index, cardIndex)}>
@@ -440,7 +453,7 @@ function EditCards({editing, textareaRefs, handleQuestionChange, setCorrectAnswe
                                 <textarea
                                     key={index}
                                     ref={(el) => { textareaRefs.current[cardIndex * card.alternatives.length + index] = el }}
-                                    className="bg-gray-600 p-2 w-full rounded-xl"
+                                    className="bg-light p-2 w-full rounded-xl"
                                     value={answer}
                                     onChange={(event) => handleAlternativeChange(event, cardIndex, index)}
                                     style={{ overflow: 'hidden', resize: 'none' }}
@@ -470,34 +483,88 @@ function EditCards({editing, textareaRefs, handleQuestionChange, setCorrectAnswe
     )
 }
 
-function Header({selected, setSelected, clearCard}: HeaderProps) {
-    const editingCols = selected === 'cards' ? 'grid-cols-4' : 'grid-cols-4'
-    const editingColSpan = selected === 'cards' ? 'col-span-3' : 'col-span-3'
+function Header({ selected, setSelected, clearCard, editing, setEditing, text, setText }: HeaderProps) {
     const isText = selected === 'text'
+    const fileInputRef = useRef<HTMLInputElement | null>(null)
+  
+    async function upload(event: React.ChangeEvent<HTMLInputElement>) {
+        const file = event.target.files?.[0]
+        if (file) {
+            try {
+                const fileReader = new FileReader()
 
+                fileReader.onload = async (e) => {
+                    const arrayBuffer = e.target?.result
+
+                    if (arrayBuffer) {
+                        const uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)
+                        // @ts-expect-error
+                        // Expecting error here since pdfjsLib is not defined but imported at runtime
+                        const loadingTask = pdfjsLib.getDocument({ data: uint8Array })
+                        const pdf = await loadingTask.promise
+                        let pdfText = ''
+                        
+                        for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+                            const page = await pdf.getPage(pageNum)
+                            const textContent = await page.getTextContent()
+                            const pageText = textContent.items.map((item: any) => item.str).join('\n')
+                            pdfText += pageText
+                        }
+
+                        setEditing({...editing, texts: [...text, pdfText]})
+                        setText([...text, '\n\n', pdfText].join(''))
+
+                        if (fileInputRef.current) {
+                            fileInputRef.current.value = ''
+                        }
+                    }
+                }
+    
+                fileReader.onerror = (error) => {
+                    console.error('Error reading file:', error)
+                }
+    
+                fileReader.readAsArrayBuffer(file)
+            } catch (error) {
+                console.error('Error loading PDF:', error)
+            }
+        }
+    }
+  
     return (
-        <div className={`w-full flex space-between grid ${editingCols} p-4`}>
-            <h1 className={`text-xl ${editingColSpan}`}>Editing {selected}</h1>
-            <div className={`grid ${isText ? "grid-cols-3" : "grid-cols-2"} place-items-center gap-4`}>
-                {isText && <button 
-                    className="bg-gray-700 w-full h-full rounded-lg" 
-                    onClick={clearCard}
-                >
+      <div className="w-full p-4 flex flex-rows justify-between">
+            <Script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js" />
+            <h1 className="text-xl">Editing {selected}</h1>
+            <div className="space-x-2">
+                {isText && (
+                    <>
+                    <input
+                        type="file"
+                        accept=".pdf"
+                        ref={fileInputRef}
+                        style={{ display: 'none' }}
+                        onChange={upload}
+                    />
+                    <button
+                        className="bg-light rounded-lg p-1 px-2"
+                        onClick={() => fileInputRef.current?.click()}
+                    >
+                        Upload exam
+                    </button>
+                    </>
+                )}
+                {isText && (
+                    <button className="bg-light rounded-lg p-1 px-2" onClick={clearCard}>
                     Clear
-                </button>}
-                <button 
-                    className="bg-gray-700 w-full h-full rounded-lg" 
-                    onClick={() => setSelected('cards')}
-                >
+                    </button>
+                )}
+                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelected('cards')}>
                     Cards
                 </button>
-                <button 
-                    className="bg-gray-700 w-full h-full rounded-lg" 
-                    onClick={() => setSelected('text')}
-                >
+                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelected('text')}>
                     Text
                 </button>
             </div>
-        </div>
+      </div>
     )
-}
+  }

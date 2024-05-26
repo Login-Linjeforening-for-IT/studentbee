@@ -28,14 +28,14 @@ export default function Edit() {
     function CourseSelector() {
         return (
             <div className="w-full h-full absolute left-0 top-0 grid place-items-center bg-black bg-opacity-90" onClick={() => setDisplayCourseSelector(false)}>
-                <div className="w-[35vw] h-[45vh] bg-gray-800 rounded-xl p-8 overflow-auto">
+                <div className="w-[35vw] h-[45vh] bg-dark rounded-xl p-8 overflow-auto">
                     <h1 className="text-2xl text-center font-semibold mb-8">Edit course</h1>
                     <div className="w-full grid">
                         {courses.map((course) => (
                             <Link
                                 href={`/edit/${course.id}`}
                                 key={course.id}
-                                className="text-xl bg-gray-700 w-full mb-2 rounded-md p-2"
+                                className="text-xl bg-light w-full mb-2 rounded-md p-2"
                             >
                                 {course.id}
                             </Link>

@@ -91,9 +91,9 @@ function AddCourse() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            <div className="bg-gray-800 w-[35vw] rounded-xl grid place-items-center gap-4 p-5 px-10 max-h-[75vh] overflow-auto">
+            <div className="bg-dark w-[35vw] rounded-xl grid place-items-center gap-4 p-5 px-10 max-h-[75vh] overflow-auto">
                 <div className="grid grid-cols-12 w-full">
-                    {selected != 0 ? <button className="text-2xl bg-gray-700 rounded-md px-2" onClick={handleBack}>&lt;</button> : null}
+                    {selected != 0 ? <button className="text-2xl bg-dark rounded-md px-2" onClick={handleBack}>⬅️</button> : null}
                     <h1 className={`text-3xl font-semibold ${courseIDspan} text-center`}>Add course</h1>
                     <h1 className={`text-md text-red-500 ${courseIDspan} text-center`}>{error}</h1>
                     {selected != 0 ? <div/> : null}
@@ -105,7 +105,7 @@ function AddCourse() {
                         onChange={(e) => handleCourseNameChange(e.target.value.toUpperCase())} 
                         type="text"
                         placeholder="Course name"
-                        className="bg-gray-700 rounded-xl overflow-hidden px-2 col-span-6"
+                        className="bg-light rounded-xl overflow-hidden px-2 col-span-6"
                     />
                 </div>
                 <TextOrNormal course={course} setCourse={setCourse} selected={selected} setSelected={setSelected} />
@@ -179,7 +179,7 @@ function AddTextForCourse({course, setCourse}: AddTextForCourseProps) {
                 value={course.textUnreviewed} 
                 onChange={(e) => handleChange(e.target.value)} 
                 placeholder="Paste an exam here..." 
-                className="bg-gray-700 rounded-xl w-full p-2 min-h-[20vh]"
+                className="bg-light rounded-xl w-full p-2 min-h-[20vh]"
             />
         </div>
     )
@@ -220,7 +220,7 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
                     onChange={(e) => updateCardQuestion(e.target.value)}
                     type="text" 
                     placeholder={`Question about ${course.id}...`}
-                    className="col-span-6 bg-gray-700 h-[5vh] rounded-xl px-2"
+                    className="col-span-6 bg-light h-[5vh] rounded-xl px-2"
                 />
             </div>
             <div className="grid grid-cols-8 w-full mt-4">
@@ -297,7 +297,7 @@ function Alternative({course, setCourse, cardIndex, alternativeIndex, setAlterna
                         onChange={(e) => handleInput(e.target.value)} 
                         type="text"
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className="w-full bg-gray-700 h-[5vh] rounded-xl px-2 mr-4"
+                        className="w-full bg-light h-[5vh] rounded-xl px-2 mr-4"
                     />
                     <button
                         value={Number(course.unreviewed[cardIndex].correct === alternativeIndex)}

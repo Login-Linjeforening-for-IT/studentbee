@@ -29,7 +29,7 @@ export default async function Courses() {
 
 function Course({course, margin}: CourseProps) {
     return (
-        <Link href={`/course/${course.id}`} className={`w-full h-[5vh] bg-gray-700 ${margin ? 'mb-2' : ''} rounded-xl  flex items-center pl-4`}>
+        <Link href={`/course/${course.id}`} className={`w-full h-[5vh] bg-dark ${margin ? 'mb-2' : ''} rounded-xl  flex items-center pl-4`}>
             <h1>{course.id}</h1>
         </Link>
     )
