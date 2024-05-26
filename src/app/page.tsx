@@ -24,7 +24,7 @@ export default async function Home() {
                     {courses.map((course) => <Link
                         href={`/course/${course.id}`}
                         key={course.id}
-                        className="text-xl bg-extralight w-full mb-2 rounded-md p-2">
+                        className="text-xl bg-light w-full mb-2 rounded-md p-2">
                         {course.id}
                     </Link>)}
                 </div>
