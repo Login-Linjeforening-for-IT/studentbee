@@ -8,18 +8,18 @@ import { useEffect, useState } from "react"
 
 // Displays the login icon or the profile icon depending on the login status
 export default function RightIcon() {
-    const [size, setSize] = useState(45)
+    const [size, setSize] = useState(40)
     const [href, setHref] = useState('/login')
     const [icon, setIcon] = useState("/images/login.svg")
     const loggedIn = isLoggedIn()
 
     useEffect(() => {
         if (loggedIn) {
-            setSize(40)
+            setSize(35)
             setHref(`/profile/${loggedIn}`)
             setIcon("/images/profile.svg")
         } else {
-            setSize(45)
+            setSize(40)
             setHref('/login')
             setIcon("/images/login.svg")
         }
@@ -34,18 +34,18 @@ export default function RightIcon() {
 
 // Displays the register icon or the logout icon depending on the login status
 export function LeftIcon() {
-    const [size, setSize] = useState(50)
+    const [size, setSize] = useState(45)
     const [href, setHref] = useState('/register')
     const [icon, setIcon] = useState("/images/join.svg")
     const loggedIn = isLoggedIn()
 
     useEffect(() => {
         if (loggedIn) {
-            setSize(40)
+            setSize(35)
             setHref('/')
             setIcon("/images/logout.svg")
         } else {
-            setSize(50)
+            setSize(45)
             setHref('/register')
             setIcon("/images/join.svg")
         }
