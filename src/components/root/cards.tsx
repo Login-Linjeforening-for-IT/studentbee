@@ -112,6 +112,7 @@ export default function Cards({id, current, course}: CardsProps) {
             <div className={`w-full h-full rounded-xl bg-dark p-8 row-span-9 pb-8`}>
                 <div className="w-full grid grid-cols-12">
                     <h1 className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto col-span-11`}>
+                    {card.theme && <h1 className="text-lg text-gray-500">{card.theme}</h1>}
                     {card.question.split('\n').map((line, index) => (
                         <span key={index}>
                             {line}

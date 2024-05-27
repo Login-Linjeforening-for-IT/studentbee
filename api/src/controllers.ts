@@ -25,7 +25,8 @@ type Card = {
     question: string
     alternatives: string[]
     correct: number
-    help?: string
+    help: string
+    theme: string
 }
 
 dotenv.config()

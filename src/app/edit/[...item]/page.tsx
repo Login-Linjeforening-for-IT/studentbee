@@ -37,6 +37,7 @@ type EditCardsProps = {
     editing: Editing
     textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>
     handleQuestionChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number) => void
+    handleThemeChange: (event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) => void
     setCorrectAnswer: (index: number, cardIndex: number) => void
     handleAlternativeChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
     handleAction: (action: 'accept' | 'reject', cardIndex: number) => void
@@ -66,7 +67,8 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         question: "",
         alternatives: [""],
         correct: 0,
-        help: ""
+        help: "",
+        theme: ""
     }
     const [card, setCard] = useState<Card>(emptyCard)
 
@@ -163,6 +165,12 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         autoResizeTextarea(event.target)
     }
 
+    function handleThemeChange(event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) {
+        const tempCards = [...editing.cards]
+        tempCards[cardIndex] = {...tempCards[cardIndex], theme: event.target.value}
+        setEditing({...editing, cards: tempCards})
+    }
+
     function handleAlternativeChange(event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) {
         const tempCards = [...editing.cards]
         const tempAlternatives = [...tempCards[cardIndex].alternatives]
@@ -220,6 +228,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                                 editing={editing} 
                                 textareaRefs={textareaRefs} 
                                 handleQuestionChange={handleQuestionChange} 
+                                handleThemeChange={handleThemeChange}
                                 setCorrectAnswer={setCorrectAnswer} 
                                 handleAlternativeChange={handleAlternativeChange} 
                                 handleAction={handleAction}
@@ -265,7 +274,10 @@ export default function Edit({ params }: { params: { item: string[] } }) {
 function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlternativeIndex} : AddCardProps) {
     function updateQuestion (question: string) {
         setCard({...card, question})
-        setAlternativeIndex(0)
+    }
+
+    function updateTheme (theme: string) {
+        setCard({...card, theme})
     }
 
     function handleAlternativeClick(index: number) {
@@ -276,36 +288,47 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
         const tempAlternatives = [...card.alternatives]
         tempAlternatives.splice(index, 1)
         setCard({...card, alternatives: tempAlternatives})
-        setAlternativeIndex(alternativeIndex - 1)
+        setAlternativeIndex(alternativeIndex - 1 > 0 ? alternativeIndex - 1 : 0)
     }
 
     return (
-        <div className="w-full h-full overflow-auto noscroll">
-            <div className="grid grid-cols-12 w-full">
-                <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh] mb-2">Q:</h1>
-                <textarea
-                    value={card.question} 
-                    onChange={(e) => updateQuestion(e.target.value)}
-                    placeholder={`Add question about ${courseID}...`}
-                    className="col-span-11 bg-light h-[4vh] rounded-xl px-2 min-h-[20vh]"
-                />
-            </div>
-            <div className="grid grid-cols-12 w-full">
-                <div className="col-span-1" />
-                <div className="col-span-11">
-                    {card.alternatives.map((alternative, index) => (
+        <div className="w-full h-full overflow-auto noscroll p-1">
+            <h1 className="flex items-center justify-start text-lg h-[4vh]">Theme</h1>
+            <input
+                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh]"
+                value={card.theme}
+                type="text"
+                placeholder="Question theme"
+                onChange={(event) => updateTheme(event.target.value)}
+            />
+            <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Question</h1>
+            <textarea
+                value={card.question} 
+                onChange={(e) => updateQuestion(e.target.value)}
+                placeholder={`Add question about ${courseID}...`}
+                className="w-full bg-light h-[4vh] rounded-xl px-2 min-h-[20vh]"
+            />
+            <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Alternatives</h1>
+            <div className="w-full">
+                {card.alternatives.map((alternative, index) => {
+                    if (index == card.alternatives.length - 1 && !alternative) {
+                        return
+                    }
+
+                    return (
                         <div key={index} className="grid grid-cols-12">
+                            <h1 className="col-span-1">{index + 1}</h1>
                             <button
                                 onClick={() => handleAlternativeClick(index)} 
                                 key={alternative} 
-                                className="w-full text-left col-span-11"
+                                className="text-left col-span-10 flex flex-rows space-x-2"
                             >
-                                {alternative} {`${card.correct === index ? '(correct)' : '(wrong)'}`}
+                                <h1>{alternative}</h1><h1 className="text-superlight grid place-items-center">{`${card.correct === index ? '(correct)' : '(wrong)'}`}</h1>
                             </button>
                             <button onClick={() => removeAlternative(index)}>❌</button>
                         </div>
-                    ))}
-                </div>
+                    )    
+                })}
             </div>
             <Alternative
                 card={card}
@@ -432,11 +455,21 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
     }
 }
 
-function EditCards({editing, textareaRefs, handleQuestionChange, setCorrectAnswer, handleAlternativeChange, handleAction}: EditCardsProps) {
+function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChange, setCorrectAnswer, handleAlternativeChange, handleAction}: EditCardsProps) {
     return (
         <div className="w-full h-full overflow-auto noscroll">
             {editing.cards.map((card, cardIndex) => (
                 <div key={cardIndex} className="w-full">
+                    <h1 className="mb-2">Theme</h1>
+                    <input
+                        className="bg-extralight p-2 w-full rounded-xl"
+                        value={card.theme}
+                        type="text"
+                        placeholder="Question theme"
+                        onChange={(event) => handleThemeChange(event, cardIndex)}
+                        style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
+                    />
+                    <h1 className="mb-2">Question</h1>
                     <textarea
                         ref={(el) => { textareaRefs.current[cardIndex] = el }}
                         className="bg-extralight p-2 w-full rounded-xl"
@@ -444,8 +477,9 @@ function EditCards({editing, textareaRefs, handleQuestionChange, setCorrectAnswe
                         onChange={(event) => handleQuestionChange(event, cardIndex)}
                         style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
                     />
+                    <h1 className="mb-2">Alternatives</h1>
                     <div className="bg-normal rounded-xl">
-                        {card.alternatives.map((answer, index) => (
+                        {card.alternatives.map((alternative, index) => (
                             <div key={index} className="p-2 grid grid-col w-full">
                                 <button className="text-left" onClick={() => setCorrectAnswer(index, cardIndex)}>
                                     {index + 1}{card.correct === index ? "✅" : "❌"}. 
@@ -454,7 +488,7 @@ function EditCards({editing, textareaRefs, handleQuestionChange, setCorrectAnswe
                                     key={index}
                                     ref={(el) => { textareaRefs.current[cardIndex * card.alternatives.length + index] = el }}
                                     className="bg-light p-2 w-full rounded-xl"
-                                    value={answer}
+                                    value={alternative}
                                     onChange={(event) => handleAlternativeChange(event, cardIndex, index)}
                                     style={{ overflow: 'hidden', resize: 'none' }}
                                 />
