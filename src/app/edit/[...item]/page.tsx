@@ -106,9 +106,9 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         updateCourse({courseID: item, accepted, editing})
     }
 
-    function handleTextChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
-        setText(e.target.value)
-        setEditing({...editing, texts: e.target.value.split('\n\n')})
+    function handleTextChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+        setText(event.target.value)
+        setEditing({...editing, texts: event.target.value.split('\n\n')})
     }
 
     function addCard() {
@@ -302,7 +302,7 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
             <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Question</h1>
             <textarea
                 value={card.question} 
-                onChange={(e) => updateQuestion(e.target.value)}
+                onChange={(event) => updateQuestion(event.target.value)}
                 placeholder={`Add question about ${courseID}...`}
                 className="w-full bg-light h-[4vh] rounded-xl px-2 min-h-[20vh]"
             />
@@ -373,7 +373,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
                 <div className="w-full col-span-11 flex flex-cols-auto">
                     <textarea
                         value={card.alternatives[alternativeIndex]} 
-                        onChange={(e) => handleInput(e.target.value)} 
+                        onChange={(event) => handleInput(event.target.value)} 
                         placeholder={`Alternative ${alternativeIndex + 1}`}
                         className="min-h-[5vh] w-full bg-light h-[4vh] rounded-xl px-2 mr-4"
                     />
@@ -525,8 +525,8 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
             try {
                 const fileReader = new FileReader()
 
-                fileReader.onload = async (e) => {
-                    const arrayBuffer = e.target?.result
+                fileReader.onload = async (event) => {
+                    const arrayBuffer = event.target?.result
 
                     if (arrayBuffer) {
                         const uint8Array = new Uint8Array(arrayBuffer as ArrayBuffer)

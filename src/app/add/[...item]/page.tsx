@@ -101,7 +101,7 @@ function AddCourse() {
                     <h1 className={inputText}>Course ID:</h1>
                     <input 
                         value={course.id} 
-                        onChange={(e) => handleCourseNameChange(e.target.value.toUpperCase())} 
+                        onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())} 
                         type="text"
                         placeholder="Course name"
                         className="bg-light rounded-xl overflow-hidden px-2 col-span-6"
@@ -176,7 +176,7 @@ function AddTextForCourse({course, setCourse}: AddTextForCourseProps) {
             <h1 className="text-sm mb-4 text-gray-500">Paste a text block or previous exam here. Remove everything except the questions and alternatives. Mark the correct alternative if known. It will be manually parsed to cards later.</h1>
             <textarea
                 value={course.textUnreviewed} 
-                onChange={(e) => handleChange(e.target.value)} 
+                onChange={(event) => handleChange(event.target.value)} 
                 placeholder="Paste an exam here..." 
                 className="bg-light rounded-xl w-full p-2 min-h-[20vh]"
             />
@@ -216,7 +216,7 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
                 <h1 className="flex items-center justify-start text-xl col-span-2 h-[5vh]">Question:</h1>
                 <input 
                     value={course.unreviewed[cardIndex].question} 
-                    onChange={(e) => updateCardQuestion(e.target.value)}
+                    onChange={(event) => updateCardQuestion(event.target.value)}
                     type="text" 
                     placeholder={`Question about ${course.id}...`}
                     className="col-span-6 bg-light h-[5vh] rounded-xl px-2"
@@ -293,7 +293,7 @@ function Alternative({course, setCourse, cardIndex, alternativeIndex, setAlterna
                 <div className="w-full col-span-6 flex flex-cols-auto">
                     <input 
                         value={course.unreviewed[cardIndex].alternatives[alternativeIndex]} 
-                        onChange={(e) => handleInput(e.target.value)} 
+                        onChange={(event) => handleInput(event.target.value)} 
                         type="text"
                         placeholder={`Alternative ${alternativeIndex + 1}`}
                         className="w-full bg-light h-[5vh] rounded-xl px-2 mr-4"

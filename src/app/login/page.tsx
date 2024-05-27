@@ -30,7 +30,7 @@ export default function Login() {
                     <h1 className={inputText}>Username:</h1>
                     <input 
                         value={username} 
-                        onChange={(e) => setUsername(e.target.value)} 
+                        onChange={(event) => setUsername(event.target.value)} 
                         type="text" 
                         placeholder="Username" 
                         className={input}
@@ -42,7 +42,7 @@ export default function Login() {
                     {/* <h1 className={inputText}>Password:</h1>
                     <input 
                         value={password} 
-                        onChange={(e) => setPassword(e.target.value)} 
+                        onChange={(e) => setPassword(event.target.value)} 
                         type="password" 
                         placeholder="Password" 
                         className={input} 

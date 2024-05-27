@@ -37,7 +37,7 @@ export default function Register() {
                     <h1 className={inputText}>First name:</h1>
                     <input 
                         value={firstName} 
-                        onChange={(e) => setFirstName(e.target.value)} 
+                        onChange={(event) => setFirstName(event.target.value)} 
                         type="text" 
                         placeholder="First name" 
                         className={input} 
@@ -47,7 +47,7 @@ export default function Register() {
                     <h1 className={inputText}>Last name:</h1>
                     <input 
                         value={lastName} 
-                        onChange={(e) => setLastName(e.target.value)} 
+                        onChange={(event) => setLastName(event.target.value)} 
                         type="text" 
                         placeholder="Last name" 
                         className={input} 
@@ -57,7 +57,7 @@ export default function Register() {
                     <h1 className={inputText}>Mail:</h1>
                     <input 
                         value={mail} 
-                        onChange={(e) => setMail(e.target.value)} 
+                        onChange={(event) => setMail(event.target.value)} 
                         type="email" 
                         placeholder="Mail" 
                         className={input}
@@ -69,7 +69,7 @@ export default function Register() {
                     {/* <h1 className={inputText}>Password:</h1>
                     <input
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
+                        onChange={(e) => setPassword(event.target.value)}
                         type="password"
                         placeholder="Password"
                         className={input}
