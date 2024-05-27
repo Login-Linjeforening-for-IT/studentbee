@@ -232,10 +232,11 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                             />
                         ) : (
                             <div className="w-full h-full grid grid-cols-2 gap-4">
-                                <textarea 
-                                    value={text} 
+                                <textarea
+                                    value={text}
                                     onChange={handleTextChange}
-                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2" 
+                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2"
+                                    style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap' }}
                                 />
                                 <AddCard
                                     courseID={item}
