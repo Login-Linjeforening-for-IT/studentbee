@@ -127,7 +127,10 @@ export default function Edit({ params }: { params: { item: string[] } }) {
             return
         } 
 
-        setAccepted([...accepted, card])
+        setAccepted([...accepted, {
+            ...card,
+            alternatives: card.alternatives.filter((alternative) => alternative.length)
+        }])
         setCard(emptyCard)
         setAlternativeIndex(0)
     }
