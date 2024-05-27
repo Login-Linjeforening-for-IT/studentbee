@@ -60,8 +60,6 @@ function AddCourse() {
         question: "",
         alternatives: [""],
         correct: 0,
-        help: "",
-        theme: ""
     }
     const emptyCourse = {
         id: "",
@@ -202,7 +200,7 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
             return
         }
 
-        const tempCards = [...course.unreviewed, { question: "", alternatives: [], correct: 0, help: "", theme: ""}]
+        const tempCards = [...course.unreviewed, { question: "", alternatives: [], correct: 0}]
         setCourse({...course, unreviewed: tempCards})
         setCardIndex(cardIndex + 1)
         setAlternativeIndex(0)
