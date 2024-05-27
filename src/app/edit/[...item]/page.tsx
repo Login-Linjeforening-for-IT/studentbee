@@ -221,13 +221,13 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                     />
                     <div className="w-full h-[68vh] px-4 pb-4">
                         {selected === 'cards' ? (
-                            <EditCards 
-                                editing={editing} 
-                                textareaRefs={textareaRefs} 
-                                handleQuestionChange={handleQuestionChange} 
+                            <EditCards
+                                editing={editing}
+                                textareaRefs={textareaRefs}
+                                handleQuestionChange={handleQuestionChange}
                                 handleThemeChange={handleThemeChange}
-                                setCorrectAnswer={setCorrectAnswer} 
-                                handleAlternativeChange={handleAlternativeChange} 
+                                setCorrectAnswer={setCorrectAnswer}
+                                handleAlternativeChange={handleAlternativeChange}
                                 handleAction={handleAction}
                             />
                         ) : (
