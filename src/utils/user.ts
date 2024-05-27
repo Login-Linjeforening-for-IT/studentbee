@@ -123,7 +123,7 @@ export async function sendRegister(user: RegisterUser): Promise<true | string> {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({user, password: 'disabled'})
+            body: JSON.stringify({...user, password: 'disabled'})
         })
 
 
