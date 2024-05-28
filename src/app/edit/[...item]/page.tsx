@@ -137,12 +137,12 @@ export default function Edit({ params }: { params: { item: string[] } }) {
             return
         } 
 
+        setAlternativeIndex(0)
         setAccepted([...accepted, {
             ...card,
             alternatives: card.alternatives.filter((alternative) => alternative.length)
         }])
-        setCard(emptyCard)
-        setAlternativeIndex(0)
+        setCard({...emptyCard, source: card.source})
     }
 
     function handleAcceptedIndexClick(index: number) {
@@ -302,12 +302,6 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
 
     function handleAlternativeClick(index: number) {
         setAlternativeIndex(index)
-    }
-
-    function clearTheme() {
-        const updatedCard = {...card}
-        delete updatedCard.theme
-        setCard(updatedCard)
     }
 
     function removeAlternative(index: number) {
