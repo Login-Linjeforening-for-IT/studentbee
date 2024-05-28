@@ -166,7 +166,12 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                             <Image src="/images/thumbsdown.svg" alt="logo" height={20} width={20} />
                         </button>
                     </div>
-                    <button className="pb-4 text-bright" onClick={() => setShowComments(!showComments)}>{totalCommentsLength ? `View comments (${totalCommentsLength})` : "Add comment"} {showComments ? '▼' : '▲'}</button>
+                    <button 
+                        className="pb-4 text-bright" 
+                        onClick={() => setShowComments(!showComments)}
+                    >
+                        {totalCommentsLength ? `View comments (${totalCommentsLength})` : "Add comment"} {showComments ? '▼' : '▲'}
+                    </button>
                 </div>
             </div>
             <Buttons
@@ -174,7 +179,12 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 navigate={navigate}
                 flashColor={flashColor}
             />
-            {showComments && id && <Comments courseID={id} cardID={current || 0} comments={relevantComments} totalCommentsLength={totalCommentsLength} />}
+            {showComments && id && <Comments 
+                courseID={id} 
+                cardID={current || 0} 
+                comments={relevantComments} 
+                totalCommentsLength={totalCommentsLength} 
+            />}
         </div>
     )
 }
