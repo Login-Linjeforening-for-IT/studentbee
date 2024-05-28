@@ -10,7 +10,7 @@ export default function RootLayout({children}: {children: React.ReactNode}): JSX
 
     return (
         <html lang="en" className='h-[100vh] w-[100vw]'>
-            <body className='grid grid-rows-9 w-full h-full gap-8 p-8'>
+            <body className='grid grid-rows-9 w-full h-full gap-8 p-8 noscroll'>
                 <nav className='row-span-1 w-full rounded-xl overflow-auto'>
                     <Navbar />
                 </nav>

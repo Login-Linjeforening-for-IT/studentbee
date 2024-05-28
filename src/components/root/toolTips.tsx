@@ -1,5 +1,6 @@
 'use client'
 
+import getCookie from "@/utils/cookies"
 import { useEffect, useState } from "react"
 
 export default function ToolTips() {
@@ -8,6 +9,12 @@ export default function ToolTips() {
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
+            const typing = getCookie('typing')
+    
+            if (typing === 'true') {
+                return
+            }
+
             if (e.key === 'q' || e.key === 'Q') {
                 setDisplayTips(prevDisplayTips => !prevDisplayTips)
                 localStorage.setItem('tooltips', 'false')

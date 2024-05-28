@@ -1,8 +1,10 @@
 'use client'
 import shuffle from "@utils/shuffle"
-import { useState, useRef, SetStateAction, Dispatch } from "react"
+import { useState, useRef, SetStateAction, Dispatch, useEffect } from "react"
 import { animate200ms } from "@utils/navigation"
 import { useCardNavigation } from "@/hooks/cardNavigation"
+import Comments from "./comments"
+import { getTotalCommentsLength } from "@/utils/comments"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -19,6 +21,7 @@ type CardsProps = {
     id?: string
     current?: number
     course: Course | string
+    comments: CardComment[][]
 }
 
 type ButtonsProps = {
@@ -27,12 +30,15 @@ type ButtonsProps = {
     flashColor: string
 }
 
-export default function Cards({id, current, course}: CardsProps) {
+export default function Cards({id, current, course, comments}: CardsProps) {
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
+    const [showComments, setShowComments] = useState(false)
     const [attempted, setAttempted] = useState<number[]>([])
     const selectedRef = useRef(selected)
+    const relevantComments = comments[Number(id) || 0] || []
+    const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0);    
     selectedRef.current = selected
 
     const cards = typeof course === 'object' ? course.cards as Card[] : []
@@ -109,35 +115,39 @@ export default function Cards({id, current, course}: CardsProps) {
 
     return (
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
-            <div className={`w-full h-full rounded-xl bg-dark p-8 row-span-9 pb-8`}>
-                <div className="w-full grid grid-cols-12">
-                    <h1 className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto col-span-11`}>
-                    {card.theme && <h1 className="text-lg text-gray-500">{card.theme}</h1>}
-                    {card.question.split('\n').map((line, index) => (
-                        <span key={index}>
-                            {line}
-                            <br />
-                        </span>
-                    ))}    
-                    </h1>
-                    <h1 className="text-right text-gray-500">{(current || 0) + 1} / {cards.length}</h1>
+            <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8`}>
+                <div className="w-full h-full row-span-9 pb-8">
+                    <div className="w-full">
+                        <h1 className="text-right text-gray-500 float-right">{card.source} {(current || 0) + 1} / {cards.length}</h1>
+                        <h1 className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto`}>
+                        {card.theme && <h1 className="text-lg text-gray-500">{card.theme}</h1>}
+                        {card.question.split('\n').map((line, index) => (
+                            <span key={index}>
+                                {line}
+                                <br />
+                            </span>
+                        ))}
+                        </h1>
+                    </div>
+                    <Alternatives 
+                        alternatives={card.alternatives}
+                        selected={selected}
+                        animateAnswer={animateAnswer} 
+                        setAnimateAnswer={setAnimateAnswer} 
+                        checkAnswer={checkAnswer}
+                        attempted={attempted}
+                        setAttempted={setAttempted}
+                        correct={card.correct}
+                    />
                 </div>
-                <Alternatives 
-                    alternatives={card.alternatives}
-                    selected={selected}
-                    animateAnswer={animateAnswer} 
-                    setAnimateAnswer={setAnimateAnswer} 
-                    checkAnswer={checkAnswer}
-                    attempted={attempted}
-                    setAttempted={setAttempted}
-                    correct={card.correct}
-                />
+                <button className="text-center w-full text-bright float-right" onClick={() => setShowComments(!showComments)}>{totalCommentsLength ? `View comments (${totalCommentsLength})` : "Add comment"} ▼</button>
             </div>
-            <Buttons 
-                animateAnswer={animateAnswer} 
-                navigate={navigate} 
-                flashColor={flashColor} 
+            <Buttons
+                animateAnswer={animateAnswer}
+                navigate={navigate}
+                flashColor={flashColor}
             />
+            {showComments && id && <Comments courseID={id} cardID={current || 0} comments={relevantComments} totalCommentsLength={totalCommentsLength} />}
         </div>
     )
 }

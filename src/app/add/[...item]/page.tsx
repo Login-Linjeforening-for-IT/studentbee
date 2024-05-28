@@ -1,6 +1,7 @@
 'use client'
 
-import { addCourse, addCard, addText } from "@utils/fetchClient"
+import { setCookie } from "@/utils/cookies"
+import { addCourse } from "@utils/fetchClient"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useState } from "react"
 
@@ -60,6 +61,7 @@ function AddCourse() {
         question: "",
         alternatives: [""],
         correct: 0,
+        source: ""
     }
     const emptyCourse = {
         id: "",
@@ -101,7 +103,7 @@ function AddCourse() {
                     <h1 className={inputText}>Course ID:</h1>
                     <input 
                         value={course.id} 
-                        onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())} 
+                        onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())}
                         type="text"
                         placeholder="Course name"
                         className="bg-light rounded-xl overflow-hidden px-2 col-span-6"
@@ -176,7 +178,7 @@ function AddTextForCourse({course, setCourse}: AddTextForCourseProps) {
             <h1 className="text-sm mb-4 text-gray-500">Paste a text block or previous exam here. Remove everything except the questions and alternatives. Mark the correct alternative if known. It will be manually parsed to cards later.</h1>
             <textarea
                 value={course.textUnreviewed} 
-                onChange={(event) => handleChange(event.target.value)} 
+                onChange={(event) => handleChange(event.target.value)}
                 placeholder="Paste an exam here..." 
                 className="bg-light rounded-xl w-full p-2 min-h-[20vh]"
             />
@@ -200,7 +202,7 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
             return
         }
 
-        const tempCards = [...course.unreviewed, { question: "", alternatives: [], correct: 0}]
+        const tempCards = [...course.unreviewed, { question: "", alternatives: [], correct: 0, source: "" }]
         setCourse({...course, unreviewed: tempCards})
         setCardIndex(cardIndex + 1)
         setAlternativeIndex(0)

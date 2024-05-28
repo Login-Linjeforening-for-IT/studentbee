@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 // Main component of the program, holds the main page and the user can navigate
@@ -7,7 +8,10 @@ export default function Profile({ params }: { params: { id: string[] } }) {
 
     return (
         <div className="w-full h-full rounded-xl">
-            <h1 className='w-full h-full grid place-items-center text-2xl'>User: {id} (Profile coming soon)</h1>
+            <div className='w-full h-full grid place-items-center'>
+                <h1 className='text-2xl'>User: {id} (Profile coming soon)</h1>
+                <Link href='/' className='text-2xl text-blue-500 underline'>Home</Link>
+            </div>
         </div>
     )
 }

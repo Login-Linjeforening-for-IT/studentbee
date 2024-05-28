@@ -1,5 +1,6 @@
 'use client'
 
+import { setCookie } from "@/utils/cookies"
 import { sendRegister } from "@utils/user"
 import Link from "next/link"
 import { useState } from "react"
@@ -37,7 +38,7 @@ export default function Register() {
                     <h1 className={inputText}>First name:</h1>
                     <input 
                         value={firstName} 
-                        onChange={(event) => setFirstName(event.target.value)} 
+                        onChange={(event) => setFirstName(event.target.value)}
                         type="text" 
                         placeholder="First name" 
                         className={input} 
@@ -47,7 +48,7 @@ export default function Register() {
                     <h1 className={inputText}>Last name:</h1>
                     <input 
                         value={lastName} 
-                        onChange={(event) => setLastName(event.target.value)} 
+                        onChange={(event) => setLastName(event.target.value)}
                         type="text" 
                         placeholder="Last name" 
                         className={input} 
@@ -57,7 +58,7 @@ export default function Register() {
                     <h1 className={inputText}>Mail:</h1>
                     <input 
                         value={mail} 
-                        onChange={(event) => setMail(event.target.value)} 
+                        onChange={(event) => setMail(event.target.value)}
                         type="email" 
                         placeholder="Mail" 
                         className={input}

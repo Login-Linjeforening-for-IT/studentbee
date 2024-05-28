@@ -33,6 +33,7 @@ module.exports = {
                 'light': '#212121',
                 'extralight': '#323232',
                 'superlight': '#424242',
+                'bright': '#686868'
             },
         },
     },

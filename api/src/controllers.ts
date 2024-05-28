@@ -25,8 +25,27 @@ type Card = {
     question: string
     alternatives: string[]
     correct: number
+    source: string
     help?: string
     theme?: string
+}
+
+type ReplyProps = {
+    userID: string
+    username: string
+    courseID: string
+    cardID: number
+    commentID: number
+    content: string
+    parent?: number
+}
+
+type VoteProps = {
+    userID: string
+    courseID: string
+    cardID: number
+    commentID: number
+    vote: boolean
 }
 
 dotenv.config()
@@ -145,9 +164,59 @@ export async function getUserProfile(req: Request, res: Response) {
     }
 }
 
+// Fetches all comments for the given course
+export async function getComments(req: Request, res: Response) {
+    try {
+        const { courseID } = req.params
+        const commentsSnapshot = await db.collection('Comment')
+            .where('courseID', '==', courseID)
+            .get()
+
+        const comments = commentsSnapshot.docs.map((doc: any) => doc.data())
+
+        // Group comments by cardID and initialize replies array
+        const groupedComments: { [key: string]: any[] } = {}
+        const commentById: { [key: string]: any } = {}
+
+        comments.forEach(comment => {
+            comment.replies = []
+            commentById[comment.id] = comment // Assuming each comment has a unique id
+
+            const cardID = comment.cardID || 'no_cardID'
+            if (!groupedComments[cardID]) {
+                groupedComments[cardID] = []
+            }
+            groupedComments[cardID].push(comment)
+        })
+
+        // Nest replies under their parent comments
+        comments.forEach(comment => {
+            if (comment.parent) {
+                const parentComment = commentById[comment.parent]
+                if (parentComment) {
+                    parentComment.replies.push(comment)
+                }
+            }
+        })
+
+        // Filter out comments that are replies, to avoid duplicates in the top-level array
+        Object.keys(groupedComments).forEach(cardID => {
+            groupedComments[cardID] = groupedComments[cardID].filter(comment => !comment.parent)
+        })
+
+        // Convert grouped comments to 2D array
+        const commentsArray = Object.keys(groupedComments).map(cardID => groupedComments[cardID])
+
+        res.json(commentsArray)
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
 // Moves the approved cards from unreviewed to reviewed
 // id: number
-// userID: number
+// userID: string
 // courseID: number
 // {
 //     question: string
@@ -511,6 +580,108 @@ export async function postRegister(req: Request, res: Response) {
     }
 }
 
+// Posts a comment to the given course
+export async function postComment(req: Request, res: Response) {
+    try {
+        const { userID, username, courseID, cardID, content, parent } = req.body as ReplyProps
+
+        if (!userID || !username || !courseID || typeof cardID != 'number' || !content) {
+            return res.status(400).json({ error: 'Missing required field (userID, username, courseID, cardID, content)' })
+        }
+
+        const idDocRef = db.collection('Metadata').doc('commentIDCounter')
+
+        const nextID = await db.runTransaction(async (transaction) => {
+            const idDocSnapshot = await transaction.get(idDocRef)
+
+            if (!idDocSnapshot.exists) {
+                transaction.set(idDocRef, { nextID: 1 }) 
+                return 0
+            }
+
+            const currentID = idDocSnapshot.data()!.nextID
+            transaction.update(idDocRef, { nextID: currentID + 1 })
+            return currentID
+        })
+
+        const commentRef = db.collection('Comment').doc(nextID.toString())
+
+        const commentData = {
+            id: nextID,
+            courseID,
+            cardID,
+            content,
+            userID,
+            username,
+            time: new Date().toISOString(),
+            rating: 0,
+            voters: []
+        }
+
+        if (parent !== undefined) {
+            // @ts-expect-error
+            commentData['parent'] = parent
+        }
+
+        await commentRef.set(commentData)
+
+        // Respond with the ID of the newly created comment
+        res.status(201).json({ id: commentRef.id, nextID })
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
+// Upvotes the passed comment
+export async function postVote(req: Request, res: Response) {
+    try {
+        const { userID, courseID, cardID, commentID, vote } = req.body as VoteProps
+
+        if (!userID || !courseID || typeof cardID !== 'number' || !commentID || vote == null) {
+            return res.status(400).json({ error: 'Missing required field (courseID, cardID, commentID, vote)' })
+        }
+
+        const commentRef = db.collection('Comment').doc(commentID.toString())
+        const commentDoc = await commentRef.get()
+
+        if (!commentDoc.exists) {
+            return res.status(404).json({ error: 'Comment not found' })
+        }
+
+        const commentData = commentDoc.data()
+        if (!commentData) {
+            return res.status(404).json({ error: 'Comment has no data' })
+        }
+
+        const votes = commentData.votes || []
+        const existingVoteIndex = votes.findIndex((v: any) => v.userID === userID)
+        let newRating = commentData.rating || 0
+
+        if (existingVoteIndex >= 0) {
+            const existingVote = votes[existingVoteIndex].vote
+
+            if (existingVote === vote) {
+                votes.splice(existingVoteIndex, 1)
+                newRating += vote ? -1 : 1
+            } else {
+                votes[existingVoteIndex].vote = vote
+                newRating += vote ? 2 : -2
+            }
+        } else {
+            votes.push({ userID, vote })
+            newRating += vote ? 1 : -1
+        }
+
+        await commentRef.update({ votes, rating: newRating })
+
+        res.status(200).json({ id: commentRef.id, rating: newRating, votes })
+    } catch (err: unknown) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
 export async function putCourse(req: Request, res: Response) {
     try {
         const { courseID } = req.params
@@ -561,6 +732,36 @@ export async function putTime(req: Request, res: Response) {
         await courseRef.update({time})
 
         res.status(200).json({ id: courseRef.id })
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
+export async function deleteComment(req: Request, res: Response) {
+    try {
+        const { userID, commentID } = req.body
+
+        if (!userID || typeof commentID !== 'number') {
+            return res.status(400).json({ error: 'Comment ID is required' })
+        }
+
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // if (error) {
+        //     return res.status(401).json({ error })
+        // }
+
+        const commentRef = db.collection('Comment').doc(commentID.toString())
+        await commentRef.delete()
+
+        const repliesSnapshot = await db.collection('Comment').where('parent', '==', commentID).get()
+        const batch = db.batch()
+
+        repliesSnapshot.forEach(doc => {
+            batch.delete(doc.ref)
+        })
+
+        res.status(200).json({ id: commentRef.id })
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })

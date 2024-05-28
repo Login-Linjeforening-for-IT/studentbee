@@ -24,6 +24,7 @@ type CourseAsList = {
 type Card = {
     question: string
     alternatives: string[]
+    source: string
     correct: number
     help?: string
     theme?: string
@@ -85,9 +86,26 @@ type LoginResponse = {
 
 type ScoreBoardUser = {
     position: number
-    account_id: number
-    account_url: string
+    accountID: number
     name: string
     score: number
     time: number
+}
+
+type CardComment = {
+    id: number
+    courseID: string
+    cardID: number
+    userID: number
+    username: string
+    content: string
+    time: string
+    rating: number
+    replies?: CardComment[]
+    votes: Vote[]
+}
+
+type Vote = {
+    userID: number
+    vote: boolean
 }

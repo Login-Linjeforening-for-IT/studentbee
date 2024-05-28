@@ -1,5 +1,6 @@
 'use client'
 
+import { setCookie } from "@/utils/cookies"
 import { sendLogin } from "@utils/user"
 import Link from "next/link"
 import { useState } from "react"
@@ -30,7 +31,7 @@ export default function Login() {
                     <h1 className={inputText}>Username:</h1>
                     <input 
                         value={username} 
-                        onChange={(event) => setUsername(event.target.value)} 
+                        onChange={(event) => setUsername(event.target.value)}
                         type="text" 
                         placeholder="Username" 
                         className={input}

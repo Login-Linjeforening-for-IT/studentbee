@@ -20,7 +20,7 @@ export default function getCookie(name: string): object | string | undefined {
 }
 
 export function setCookie(name: string, value: string) {
-    localStorage.setItem(name, JSON.stringify(value))
+    localStorage.setItem(name, value)
 }
 
 export function removeCookie(name: string): void {

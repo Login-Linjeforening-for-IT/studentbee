@@ -1,5 +1,6 @@
 'use client'
 
+import { setCookie } from "@/utils/cookies"
 import { getCourse, updateCourse } from "@/utils/fetch"
 import Link from "next/link"
 import Script from "next/script"
@@ -38,6 +39,7 @@ type EditCardsProps = {
     textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>
     handleQuestionChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number) => void
     handleThemeChange: (event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) => void
+    handleSourceChange: (event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) => void
     setCorrectAnswer: (index: number, cardIndex: number) => void
     handleAlternativeChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
     handleAction: (action: 'accept' | 'reject', cardIndex: number) => void
@@ -63,7 +65,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     const editingSpan = selected === 'cards' ? 'col-span-2' : 'col-span-3'
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
-    const emptyCard: Card = { question: "", alternatives: [""], correct: 0 }
+    const emptyCard: Card = { question: "", alternatives: [""], correct: 0, source: "" }
     const [card, setCard] = useState<Card>(emptyCard)
 
     const item = params.item[0].toUpperCase()
@@ -101,6 +103,14 @@ export default function Edit({ params }: { params: { item: string[] } }) {
             })
         })
     }, [editing.cards, selected])
+
+    useEffect(() => {
+        const selected = localStorage.getItem('selected')
+        
+        if (selected) {
+            setSelected(selected as 'cards' | 'text')
+        }
+    }, [])
     
     function handleSubmit() {
         updateCourse({courseID: item, accepted, editing})
@@ -168,6 +178,12 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         setEditing({...editing, cards: tempCards})
     }
 
+    function handleSourceChange(event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) {
+        const tempCards = [...editing.cards]
+        tempCards[cardIndex] = {...tempCards[cardIndex], source: event.target.value}
+        setEditing({...editing, cards: tempCards})
+    }
+
     function handleAlternativeChange(event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) {
         const tempCards = [...editing.cards]
         const tempAlternatives = [...tempCards[cardIndex].alternatives]
@@ -212,7 +228,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                 <div className={`w-full h-full bg-dark ${editingSpan} rounded-xl flex flex-col`}>
                     <Header
                         selected={selected} 
-                        setSelected={setSelected} 
+                        setSelected={setSelected}
                         clearCard={clearCard} 
                         editing={editing}
                         setEditing={setEditing}
@@ -226,6 +242,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                                 textareaRefs={textareaRefs}
                                 handleQuestionChange={handleQuestionChange}
                                 handleThemeChange={handleThemeChange}
+                                handleSourceChange={handleSourceChange}
                                 setCorrectAnswer={setCorrectAnswer}
                                 handleAlternativeChange={handleAlternativeChange}
                                 handleAction={handleAction}
@@ -236,7 +253,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                                     value={text}
                                     onChange={handleTextChange}
                                     className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2"
-                                    style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap' }}
+                                    style={{ overflow: 'auto', resize: 'none', whiteSpace: 'pre-wrap' }}
                                 />
                                 <AddCard
                                     courseID={item}
@@ -270,6 +287,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
 }
 
 function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlternativeIndex} : AddCardProps) {
+    const inputRef = useRef<HTMLInputElement | null>(null)
     function updateQuestion (question: string) {
         setCard({...card, question})
     }
@@ -278,8 +296,18 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
         setCard({...card, theme})
     }
 
+    function updateSource (source: string) {
+        setCard({...card, source})
+    }
+
     function handleAlternativeClick(index: number) {
         setAlternativeIndex(index)
+    }
+
+    function clearTheme() {
+        const updatedCard = {...card}
+        delete updatedCard.theme
+        setCard(updatedCard)
     }
 
     function removeAlternative(index: number) {
@@ -289,14 +317,31 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
         setAlternativeIndex(alternativeIndex - 1 > 0 ? alternativeIndex - 1 : 0)
     }
 
+    function handleSubmit() {
+        addCard()
+        
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
+    }
+
     return (
         <div className="w-full h-full overflow-auto noscroll p-1">
+            <h1 className="flex items-center justify-start text-lg h-[4vh]">Source</h1>
+            <input
+                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh]"
+                value={card.source}
+                type="text"
+                placeholder="Exam or learning material source"
+                onChange={(event) => updateSource(event.target.value)}
+            />
             <h1 className="flex items-center justify-start text-lg h-[4vh]">Theme</h1>
             <input
+                ref={inputRef}
                 className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh]"
                 value={card.theme}
                 type="text"
-                placeholder="Question theme"
+                placeholder="Question theme (optional)"
                 onChange={(event) => updateTheme(event.target.value)}
             />
             <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Question</h1>
@@ -336,7 +381,7 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
             />
             <button 
                 className="w-full h-[4vh] text-lg place-self-center bg-orange-500 rounded-xl mt-2"
-                onClick={addCard}
+                onClick={handleSubmit}
             >Add card</button>
         </div>
     )
@@ -373,7 +418,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
                 <div className="w-full col-span-11 flex flex-cols-auto">
                     <textarea
                         value={card.alternatives[alternativeIndex]} 
-                        onChange={(event) => handleInput(event.target.value)} 
+                        onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
                         className="min-h-[5vh] w-full bg-light h-[4vh] rounded-xl px-2 mr-4"
                     />
@@ -453,17 +498,26 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
     }
 }
 
-function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChange, setCorrectAnswer, handleAlternativeChange, handleAction}: EditCardsProps) {
+function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChange, handleSourceChange, setCorrectAnswer, handleAlternativeChange, handleAction}: EditCardsProps) {
     return (
         <div className="w-full h-full overflow-auto noscroll">
             {editing.cards.map((card, cardIndex) => (
                 <div key={cardIndex} className="w-full">
+                    <h1 className="mb-2">Source</h1>
+                    <input
+                        className="bg-extralight p-2 w-full rounded-xl"
+                        value={card.source}
+                        type="text"
+                        placeholder="Exam or learning material source"
+                        onChange={(event) => handleSourceChange(event, cardIndex)}
+                        style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
+                    />
                     <h1 className="mb-2">Theme</h1>
                     <input
                         className="bg-extralight p-2 w-full rounded-xl"
                         value={card.theme}
                         type="text"
-                        placeholder="Question theme"
+                        placeholder="Question theme (optional)"
                         onChange={(event) => handleThemeChange(event, cardIndex)}
                         style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
                     />
@@ -521,6 +575,7 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
   
     async function upload(event: React.ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0]
+
         if (file) {
             try {
                 const fileReader = new FileReader()
@@ -562,6 +617,11 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
             }
         }
     }
+
+    function setSelectedAndRemember(selected: 'cards' | 'text') {
+        setSelected(selected)
+        localStorage.setItem('selected', selected)
+    }
   
     return (
       <div className="w-full p-4 flex flex-rows justify-between">
@@ -590,10 +650,10 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
                     Clear
                     </button>
                 )}
-                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelected('cards')}>
+                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelectedAndRemember('cards')}>
                     Cards
                 </button>
-                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelected('text')}>
+                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelectedAndRemember('text')}>
                     Text
                 </button>
             </div>
