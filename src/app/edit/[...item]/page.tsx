@@ -53,6 +53,7 @@ type HeaderProps = {
     setEditing: Dispatch<SetStateAction<Editing>>
     text: string
     setText: Dispatch<SetStateAction<string>>
+    hideText: () => void
 }
 
 export default function Edit({ params }: { params: { item: string[] } }) {
@@ -61,6 +62,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     const [editing, setEditing] = useState<Editing>({ cards: [], texts: [] })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [accepted, setAccepted] = useState<Card[]>([])
+    const [showText, setShowText] = useState(true)
     const [text, setText] = useState(editing.texts.join('\n\n'))
     const editingSpan = selected === 'cards' ? 'col-span-2' : 'col-span-3'
     const [alternativeIndex, setAlternativeIndex] = useState(0)
@@ -220,6 +222,10 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         setAlternativeIndex(0)
         setEditingIndex(-1)
     }
+
+    function hideText() {
+        setShowText(!showText)
+    }
  
     return (
         <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
@@ -232,6 +238,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                         clearCard={clearCard} 
                         editing={editing}
                         setEditing={setEditing}
+                        hideText={hideText}
                         text={text}
                         setText={setText}
                     />
@@ -248,13 +255,13 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                                 handleAction={handleAction}
                             />
                         ) : (
-                            <div className="w-full h-full grid grid-cols-2 gap-4">
-                                <textarea
+                            <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-4' : ''}`}>
+                                {showText && <textarea
                                     value={text}
                                     onChange={handleTextChange}
                                     className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2"
                                     style={{ overflow: 'auto', resize: 'none', whiteSpace: 'pre-wrap' }}
-                                />
+                                />}
                                 <AddCard
                                     courseID={item}
                                     card={card}
@@ -568,7 +575,7 @@ function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChan
     )
 }
 
-function Header({ selected, setSelected, clearCard, editing, setEditing, text, setText }: HeaderProps) {
+function Header({ selected, setSelected, clearCard, editing, setEditing, text, setText, hideText }: HeaderProps) {
     const isText = selected === 'text'
     const fileInputRef = useRef<HTMLInputElement | null>(null)
   
@@ -627,6 +634,9 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
             <Script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js" />
             <h1 className="text-xl">Editing {selected}</h1>
             <div className="space-x-2">
+                <button className="bg-light rounded-lg p-1 px-2" onClick={hideText}>
+                    Hide text
+                </button>
                 {isText && (
                     <>
                     <input
