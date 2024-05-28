@@ -80,6 +80,12 @@ export default function ToolTips() {
                         <Tips hotkey="2" info="Selects and submits alternative 2" />
                         <Tips hotkey="3" info="Selects and submits alternative 3" />
                         <Tips hotkey="4" info="Selects and submits alternative 4" />
+                        <Tips hotkey="5" info="Selects and submits alternative 5" />
+                        <Tips hotkey="6" info="Selects and submits alternative 6" />
+                        <Tips hotkey="7" info="Selects and submits alternative 7" />
+                        <Tips hotkey="8" info="Selects and submits alternative 8" />
+                        <Tips hotkey="9" info="Selects and submits alternative 9" />
+                        <Tips hotkey="0" info="Selects and submits alternative 10" />
                     </div>
                     <div className="w-full">
                         <Tips hotkey="ArrowUp" info="Selects the first or next alternative" />

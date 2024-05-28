@@ -282,6 +282,11 @@ function Alternative({course, setCourse, cardIndex, alternativeIndex, setAlterna
             return
         }
 
+        // Max 10 alternatives
+        if (alternativeIndex >= 9) {
+            return
+        }
+
         const tempCards = [...course.unreviewed]
         const tempAlternatives = [...tempCards[cardIndex].alternatives, ""]
         tempCards[cardIndex].alternatives = tempAlternatives

@@ -396,6 +396,11 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
             return
         }
 
+        // Max 10 alternatives
+        if (alternativeIndex >= 9) {
+            return
+        }
+
         card.alternatives.push("")
         setAlternativeIndex(alternativeIndex + 1)
     }

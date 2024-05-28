@@ -95,6 +95,36 @@ export default function handleCardsNavigation({
             checkAnswer(3, attempted, setAttempted)
             setSelected(-1)
             break
+        case '5': 
+            animate200ms({key: '4', setAnimateAnswer})
+            checkAnswer(4, attempted, setAttempted)
+            setSelected(-1)
+            break
+        case '6': 
+            animate200ms({key: '5', setAnimateAnswer})
+            checkAnswer(5, attempted, setAttempted)
+            setSelected(-1)
+            break
+        case '7': 
+            animate200ms({key: '6', setAnimateAnswer})
+            checkAnswer(6, attempted, setAttempted)
+            setSelected(-1)
+            break
+        case '8': 
+            animate200ms({key: '7', setAnimateAnswer})
+            checkAnswer(7, attempted, setAttempted)
+            setSelected(-1)
+            break
+        case '9': 
+            animate200ms({key: '8', setAnimateAnswer})
+            checkAnswer(8, attempted, setAttempted)
+            setSelected(-1)
+            break
+        case '0': 
+            animate200ms({key: '9', setAnimateAnswer})
+            checkAnswer(9, attempted, setAttempted)
+            setSelected(-1)
+            break
         case 'w':
         case 'W':
         case 'up': 
@@ -138,6 +168,12 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case '2': navigate("2"); break
         case '3': navigate("3"); break
         case '4': navigate("4"); break
+        case '5': navigate("5"); break
+        case '6': navigate("6"); break
+        case '7': navigate("7"); break
+        case '8': navigate("8"); break
+        case '9': navigate("9"); break
+        case '0': navigate("0"); break
         case 'Enter': navigate('next'); break
         case 'w':
         case 'ArrowUp': navigate('up'); break
