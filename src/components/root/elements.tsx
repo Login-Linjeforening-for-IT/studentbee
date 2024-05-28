@@ -63,6 +63,9 @@ export default async function Elements({id, current}: ElementsProps) {
 // Gets the x next questions (max = amount)
 function GetNextQuestions({cards, current, amount}: NextQuestionProps) {
     const relevant = cards.slice(current, (current || 0) + amount).slice(1)
+    if (!cards.length) {
+        return
+    }
 
     if (!relevant.length) {
         return <h1 className="text-2xl">Last question!</h1>

@@ -1,8 +1,9 @@
-import { deleteComment, postComment, sendVote } from "@/utils/comments"
+import { deleteComment, postComment } from "@/utils/comments"
 import getCookie from "@/utils/cookies"
+import { sendVote } from "@/utils/vote"
 import Image from "next/image"
 import Link from "next/link"
-import { Dispatch, SetStateAction, use, useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 type CommentsProps = {
     comments: CardComment[]
@@ -19,15 +20,9 @@ type ReplyProps = {
     setComments: Dispatch<SetStateAction<CardComment[]>>
 }
 
-type VoteProps = {
-    commentID: number
-    vote: boolean
-    isReply?: true
-}
-
 type RepliesProps = {
     replies: CardComment[]
-    vote: ({commentID, vote}: VoteProps) => void
+    vote: ({commentID, vote}: ClientVote) => void
     comment: CardComment
     comments: CardComment[]
     setComments: Dispatch<SetStateAction<CardComment[]>>
@@ -35,7 +30,7 @@ type RepliesProps = {
 
 type ReplyComponentProps = {
     reply: CardComment 
-    vote: ({commentID, vote}: VoteProps) => void
+    vote: ({commentID, vote}: ClientVote) => void
     comment: CardComment
     comments: CardComment[]
     setComments: Dispatch<SetStateAction<CardComment[]>>
@@ -44,6 +39,13 @@ type ReplyComponentProps = {
 type ClientVote = {
     commentID: number
     vote: boolean
+    isReply?: true
+}
+
+type VoteProps = {
+    commentID: number
+    vote: boolean
+    isReply?: boolean
 }
 
 export default function Comments({comments, courseID, cardID, totalCommentsLength}: CommentsProps) {
@@ -102,7 +104,6 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                 return
             }
 
-            // set the vote to the opposite
             const temp = [...clientComments]
             const index = temp.findIndex(comment => comment.id === commentID)
             temp[index] = {

@@ -65,7 +65,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     const editingSpan = selected === 'cards' ? 'col-span-2' : 'col-span-3'
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
-    const emptyCard: Card = { question: "", alternatives: [""], correct: 0, source: "" }
+    const emptyCard: Card = { question: "", alternatives: [""], correct: 0, source: "", rating: 0, votes: [] }
     const [card, setCard] = useState<Card>(emptyCard)
 
     const item = params.item[0].toUpperCase()

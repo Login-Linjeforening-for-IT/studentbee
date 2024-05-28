@@ -26,6 +26,8 @@ type Card = {
     alternatives: string[]
     correct: number
     source: string
+    rating: number
+    votes: number[]
     help?: string
     theme?: string
 }
@@ -45,6 +47,13 @@ type VoteProps = {
     courseID: string
     cardID: number
     commentID: number
+    vote: boolean
+}
+
+type PostCardVoteProps = {
+    courseID: string
+    userID: string
+    cardID: number
     vote: boolean
 }
 
@@ -91,26 +100,6 @@ export async function getCourses(_: Request, res: Response) {
         }))
 
         res.json(courses)
-    } catch (err) {
-        const error = err as Error
-        res.status(500).json({ error: error.message })
-    }
-}
-
-// Fetches the list of cards from the course with the given id
-export async function getReviewedCards(req: Request, res: Response) {
-    try {
-        const { courseID } = req.params
-
-        // Fetches the cards for the given course
-        const cardSnapshot = await db.collection('Card')
-            .where('courseID', '==', courseID)
-            .get()
-
-        // Returns the data
-        const cards = cardSnapshot.docs.map((doc: any) => ({id: doc.id,...doc.data()}))
-
-        res.json(cards)
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
@@ -208,72 +197,6 @@ export async function getComments(req: Request, res: Response) {
         const commentsArray = Object.keys(groupedComments).map(cardID => groupedComments[cardID])
 
         res.json(commentsArray)
-    } catch (err) {
-        const error = err as Error
-        res.status(500).json({ error: error.message })
-    }
-}
-
-// Moves the approved cards from unreviewed to reviewed
-// id: number
-// userID: string
-// courseID: number
-// {
-//     question: string
-//     alternatives: string[]
-//     correct: number
-// }
-//
-// or 
-//
-// courseID: number 
-// [{},{},{}]
-export async function postApproved(req: Request, res: Response) {
-    try {
-        const { id, userID, courseID, cards } = req.body
-
-        // Validate the required fields
-        if (!userID || !courseID || !cards || !Array.isArray(cards)) {
-            return res.status(400).json({ error: 'Missing or invalid required fields' })
-        }
-
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID: userID, verifyToken})
-        // if (error) {
-        //     return res.status(401).json({ error })
-        // }
-
-        // Batch move the cards
-        const batch = db.batch()
-
-        for (const card of cards) {
-            const { question, alternatives, correct } = card
-            if (!question || !alternatives || correct === undefined) {
-                return res.status(400).json({ error: 'Invalid card structure' })
-            }
-
-            // Find the document in CardUnreviewed collection
-            const snapshot = await db.collection('CardUnreviewed')
-                .where('id', '==', id)
-                .get()
-
-            snapshot.forEach((doc: any) => {
-                // Add the document to the Card collection
-                batch.set(db.collection('Card').doc(doc.id), {
-                    courseID,
-                    question,
-                    alternatives,
-                    correct
-                })
-
-                // Delete the document from CardUnreviewed collection
-                batch.delete(doc.ref)
-            })
-        }
-
-        // Commit the batch
-        await batch.commit()
-
-        res.status(200).json({ message: 'Cards moved to reviewed successfully' })
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
@@ -633,7 +556,7 @@ export async function postComment(req: Request, res: Response) {
     }
 }
 
-// Upvotes the passed comment
+// Upvotes or downvotes the passed comment
 export async function postVote(req: Request, res: Response) {
     try {
         const { userID, courseID, cardID, commentID, vote } = req.body as VoteProps
@@ -679,6 +602,67 @@ export async function postVote(req: Request, res: Response) {
     } catch (err: unknown) {
         const error = err as Error
         res.status(500).json({ error: error.message })
+    }
+}
+
+// Upvotes or downvotes the passed card
+export async function postCardVote(req: Request, res: Response) {
+    try {
+        const { courseID, userID, cardID, vote } = req.body as PostCardVoteProps
+
+        if (!courseID || !userID || typeof cardID !== 'number' || vote == null) {
+            return res.status(400).json({ error: 'Missing required field (courseID, userID, cardID, vote)' })
+        }
+
+        const courseRef = db.collection('Course').doc(courseID.toString())
+        const courseDoc = await courseRef.get()
+
+        if (!courseDoc.exists) {
+            return res.status(404).json({ error: 'Course not found' })
+        }
+
+        const courseData = courseDoc.data()
+
+        if (!courseData) {
+            return res.status(404).json({ error: 'Course has no data' })
+        }
+
+        if (!Array.isArray(courseData.cards) || !courseData.cards[cardID]) {
+            return res.status(404).json({ error: 'Card not found' })
+        }
+
+        const votes = courseData.cards[cardID].votes || []
+        const existingVoteIndex = votes.findIndex((v: any) => v.userID === userID)
+        let newRating = courseData.cards[cardID].rating || 0
+
+        if (existingVoteIndex >= 0) {
+            const existingVote = votes[existingVoteIndex].vote
+
+            if (existingVote === vote) {
+                votes.splice(existingVoteIndex, 1)
+                newRating += vote ? -1 : 1
+            } else {
+                votes[existingVoteIndex].vote = vote
+                newRating += vote ? 2 : -2
+            }
+        } else {
+            votes.push({ userID, vote })
+            newRating += vote ? 1 : -1
+        }
+
+        const updatedCards = [...courseData.cards]
+        updatedCards[cardID] = {
+            ...updatedCards[cardID],
+            votes,
+            rating: newRating
+        }
+
+        await courseRef.update({ cards: updatedCards })
+
+        res.status(200).json({ id: courseRef.id, rating: newRating, votes })
+    } catch (error: unknown) {
+        const err = error as Error
+        res.status(500).json({ error: err.message })
     }
 }
 

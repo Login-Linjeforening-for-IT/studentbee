@@ -8,13 +8,6 @@ type CommentProps = {
     parent?: number
 }
 
-type VoteProps = {
-    courseID: string
-    cardID: number
-    commentID: number
-    vote: boolean
-}
-
 export default async function getComments(CourseID: string): Promise<CardComment[][]> {
     const response = await fetch(`${API}/comments/${CourseID}`, {
         next: { revalidate: 10 },
@@ -84,40 +77,6 @@ export async function deleteComment({commentID}: {commentID: number}) {
             body: JSON.stringify({
                 userID: user.id,
                 commentID
-            })
-        })
-    
-        if (!response.ok) {
-            const data = await response.json()
-    
-            throw Error(data.error)
-        }
-    
-        return await response.json()
-    } catch (error) {
-        console.error(error)
-    }
-}
-
-export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
-    try {
-        const user = getCookie('user') as User
-
-        if (!user) {
-            throw Error('You must be logged in to vote')
-        }
-
-        const response = await fetch(`${API}/vote`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userID: user.id,
-                courseID,
-                cardID,
-                commentID,
-                vote
             })
         })
     

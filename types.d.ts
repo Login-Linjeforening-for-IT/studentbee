@@ -28,6 +28,8 @@ type Card = {
     correct: number
     help?: string
     theme?: string
+    rating: number
+    votes: Vote[]
 }
 
 type CardAsText = {

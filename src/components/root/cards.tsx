@@ -5,6 +5,8 @@ import { animate200ms } from "@utils/navigation"
 import { useCardNavigation } from "@/hooks/cardNavigation"
 import Comments from "./comments"
 import { getTotalCommentsLength } from "@/utils/comments"
+import Image from "next/image"
+import sendCardVote from "@/utils/vote"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -34,6 +36,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState(-1)
+    const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const [showComments, setShowComments] = useState(false)
     const [attempted, setAttempted] = useState<number[]>([])
     const selectedRef = useRef(selected)
@@ -99,10 +102,10 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     
     function maxHeight(questionLength: number, alternativeLength: number) {
         const table = [
-            { condition: (q: number, a: number) => q > 500 && a > 1200, height: "max-h-[18vh]" },
-            { condition: (q: number, a: number) => q > 500 && a > 800, height: "max-h-[22vh]" },
-            { condition: (q: number, a: number) => q > 500 && a > 400, height: "max-h-[26vh]" },
-            { condition: (q: number, _a: number) => q > 500, height: "max-h-[34vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 1200, height: "max-h-[10vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 800, height: "max-h-[14vh]" },
+            { condition: (q: number, a: number) => q > 500 && a > 400, height: "max-h-[16vh]" },
+            { condition: (q: number, _a: number) => q > 500, height: "max-h-[32vh]" },
             { condition: (_q: number, _a: number) => true, height: "max-h-[45vh]" }
         ]
     
@@ -113,13 +116,26 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         }
     }
 
+    function handleVote(vote: boolean) {
+        if (!id) {
+            return
+        }
+
+        if (clientVote === 1 && vote || clientVote === -1 && !vote) {
+            setClientVote(0)
+        } else {
+            setClientVote(vote ? 1 : -1)
+        }
+
+        sendCardVote({courseID: id, cardID: current || 0, vote})
+    }
     return (
         <div className="w-full h-full grid grid-rows-10 col-span-6 gap-8">
             <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8`}>
                 <div className="w-full h-full row-span-9 pb-8">
                     <div className="w-full">
                         <h1 className="text-right text-gray-500 float-right">{card.source} {(current || 0) + 1} / {cards.length}</h1>
-                        <h1 className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto`}>
+                        <div className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto`}>
                         {card.theme && <h1 className="text-lg text-gray-500">{card.theme}</h1>}
                         {card.question.split('\n').map((line, index) => (
                             <span key={index}>
@@ -127,7 +143,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                                 <br />
                             </span>
                         ))}
-                        </h1>
+                        </div>
                     </div>
                     <Alternatives 
                         alternatives={card.alternatives}
@@ -140,7 +156,18 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                         correct={card.correct}
                     />
                 </div>
-                <button className="text-center w-full text-bright float-right" onClick={() => setShowComments(!showComments)}>{totalCommentsLength ? `View comments (${totalCommentsLength})` : "Add comment"} ▼</button>
+                <div className="grid grid-cols-3">
+                    <div className="flex flex-rows space-x-2 mb-4">
+                        <h1 className="text-bright">{card.rating + clientVote > 0 ? '+' : ''}{card.rating + clientVote}</h1>
+                        <button onClick={() => handleVote(true)}>
+                            <Image src="/images/thumbsup.svg" alt="logo" height={20} width={20} />
+                        </button>
+                        <button onClick={() => handleVote(false)}>
+                            <Image src="/images/thumbsdown.svg" alt="logo" height={20} width={20} />
+                        </button>
+                    </div>
+                    <button className="pb-4 text-bright" onClick={() => setShowComments(!showComments)}>{totalCommentsLength ? `View comments (${totalCommentsLength})` : "Add comment"} ▼</button>
+                </div>
             </div>
             <Buttons
                 animateAnswer={animateAnswer}

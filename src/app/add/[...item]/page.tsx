@@ -1,6 +1,5 @@
 'use client'
 
-import { setCookie } from "@/utils/cookies"
 import { addCourse } from "@utils/fetchClient"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useState } from "react"
@@ -61,7 +60,9 @@ function AddCourse() {
         question: "",
         alternatives: [""],
         correct: 0,
-        source: ""
+        source: "",
+        rating: 0,
+        votes: []
     }
     const emptyCourse = {
         id: "",
@@ -202,7 +203,14 @@ function AddCardForCourse({course, setCourse, cardIndex, alternativeIndex, setCa
             return
         }
 
-        const tempCards = [...course.unreviewed, { question: "", alternatives: [], correct: 0, source: "" }]
+        const tempCards = [...course.unreviewed, { 
+            question: "", 
+            alternatives: [], 
+            correct: 0, 
+            source: "",
+            rating: 0,
+            votes: []
+        }]
         setCourse({...course, unreviewed: tempCards})
         setCardIndex(cardIndex + 1)
         setAlternativeIndex(0)
