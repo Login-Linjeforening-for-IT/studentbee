@@ -13,6 +13,7 @@ type Course = {
     cards: Card[]
     unreviewed: Card[]
     textUnreviewed: string[]
+    mark?: boolean
 }
 
 type CourseAsList = {

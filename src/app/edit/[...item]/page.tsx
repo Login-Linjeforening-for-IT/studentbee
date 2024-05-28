@@ -259,8 +259,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                                 {showText && <textarea
                                     value={text}
                                     onChange={handleTextChange}
-                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2"
-                                    style={{ overflow: 'auto', resize: 'none', whiteSpace: 'pre-wrap' }}
+                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 overflow-auto resize-none whitespace-pre-wrap"
                                 />}
                                 <AddCard
                                     courseID={item}
@@ -505,35 +504,34 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
 }
 
 function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChange, handleSourceChange, setCorrectAnswer, handleAlternativeChange, handleAction}: EditCardsProps) {
+    const inputStyle = "bg-extralight p-2 w-full rounded-xl overflow-hidden resize-none whitespace-pre-wrap"
+
     return (
         <div className="w-full h-full overflow-auto noscroll">
             {editing.cards.map((card, cardIndex) => (
                 <div key={cardIndex} className="w-full">
                     <h1 className="mb-2">Source</h1>
                     <input
-                        className="bg-extralight p-2 w-full rounded-xl"
+                        className={inputStyle}
                         value={card.source}
                         type="text"
                         placeholder="Exam or learning material source"
                         onChange={(event) => handleSourceChange(event, cardIndex)}
-                        style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
                     />
                     <h1 className="mb-2">Theme</h1>
                     <input
-                        className="bg-extralight p-2 w-full rounded-xl"
+                        className={inputStyle}
                         value={card.theme}
                         type="text"
                         placeholder="Question theme (optional)"
                         onChange={(event) => handleThemeChange(event, cardIndex)}
-                        style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
                     />
                     <h1 className="mb-2">Question</h1>
                     <textarea
                         ref={(el) => { textareaRefs.current[cardIndex] = el }}
-                        className="bg-extralight p-2 w-full rounded-xl"
+                        className={inputStyle}
                         value={card.question}
                         onChange={(event) => handleQuestionChange(event, cardIndex)}
-                        style={{ overflow: 'hidden', resize: 'none', whiteSpace: 'pre-wrap'}}
                     />
                     <h1 className="mb-2">Alternatives</h1>
                     <div className="bg-normal rounded-xl">
@@ -545,10 +543,9 @@ function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChan
                                 <textarea
                                     key={index}
                                     ref={(el) => { textareaRefs.current[cardIndex * card.alternatives.length + index] = el }}
-                                    className="bg-light p-2 w-full rounded-xl"
+                                    className="bg-light p-2 w-full rounded-xl overflow-hidden resize-none"
                                     value={alternative}
                                     onChange={(event) => handleAlternativeChange(event, cardIndex, index)}
-                                    style={{ overflow: 'hidden', resize: 'none' }}
                                 />
                             </div>
                         ))}

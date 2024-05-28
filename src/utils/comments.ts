@@ -99,9 +99,9 @@ export function getTotalCommentsLength(comments: CardComment[], cardID: number):
     
     for (const comment of comments) {
         if (comment.replies && comment.replies.length > 0 && comment.cardID === cardID) {
-            length += getTotalCommentsLength(comment.replies, cardID);
+            length += getTotalCommentsLength(comment.replies, cardID)
         }
     }
 
-    return length;
+    return length
 }

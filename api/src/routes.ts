@@ -10,12 +10,13 @@ import {
     postLogin,
     postCard,
     postCourse,
-    postText,
     postComment,
     postVote,
     postCardVote,
     putCourse,
+    putText,
     putTime,
+    putMarkCourse,
     deleteComment,
 } from './controllers'
 
@@ -29,11 +30,12 @@ router.get('/users/:userID', getUserProfile)
 router.get('/comments/:courseID', getComments)
 router.put('/course/:courseID', putCourse)
 router.put('/time', putTime)
+router.put('/text', putText)
+router.put('/mark', putMarkCourse)
 router.post('/register', postRegister)
 router.post('/login', postLogin)
 router.post('/upload_card', postCard)
 router.post('/upload_course', postCourse)
-router.post('/upload_text', postText)
 router.post('/comment', postComment)
 router.post('/vote', postVote)
 router.post('/vote/card', postCardVote)

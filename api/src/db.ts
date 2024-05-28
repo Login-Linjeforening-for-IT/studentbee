@@ -1,18 +1,18 @@
-// import admin from 'firebase-admin';
-// import { initializeApp } from "firebase/app";
-// import { getAuth } from "firebase/auth";
+// import admin from 'firebase-admin'
+// import { initializeApp } from "firebase/app"
+// import { getAuth } from "firebase/auth"
 // import dotenv from 'dotenv'
 
 // dotenv.config()
 
-// const serviceAccount = require(`../secrets/.secret2.json`);
+// const serviceAccount = require(`../secrets/.secret2.json`)
 
 // // Initialize Firebase Admin SDK for Firestore
 // admin.initializeApp({
 //   credential: admin.credential.cert(serviceAccount),
-// });
+// })
 
-// const db = admin.firestore();
+// const db = admin.firestore()
 
 // // Initialize Firebase App for Firebase Auth
 // const firebaseConfig = {
@@ -22,12 +22,12 @@
 //   storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
 //   messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
 //   appId: process.env.FIREBASE_APP_ID,
-// };
+// }
 
-// const app = initializeApp(firebaseConfig);
+// const app = initializeApp(firebaseConfig)
 
-// export const auth = getAuth(app);
-// export default db;
+// export const auth = getAuth(app)
+// export default db
 
 import admin from 'firebase-admin'
 

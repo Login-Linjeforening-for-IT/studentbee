@@ -40,7 +40,7 @@ export default async function Elements({id, current}: ElementsProps) {
             return (
                 <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
                     <h1 className="text-2xl">Info</h1>
-                    <div className="h-full w-full bg-red-200">
+                    <div className="h-full w-full">
                         {help}
                     </div>
                 </div>

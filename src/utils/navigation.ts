@@ -148,9 +148,9 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         return
     }
 
-    const activeElement = document.activeElement;
+    const activeElement = document.activeElement
     if (activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA') {
-        return;
+        return
     }
 
     switch (event.key) {

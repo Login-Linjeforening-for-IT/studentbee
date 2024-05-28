@@ -318,37 +318,6 @@ export async function postCard(req: Request, res: Response) {
     }
 }
 
-// Uploads the given cards to storage as a text string to be reviewed
-// userID: number (the id of the user who submitted the question)
-// courseID: number (the course the unreviewed question is for)
-// input: string
-export async function postText(req: Request, res: Response) {
-    try {
-        const { userID, courseID, text } = req.body as { userID: number, courseID: number, text: string }
-
-        if (!userID || !courseID || !text) {
-            return res.status(400).json({ error: 'userID, courseID and text are required' })
-        }
-
-        const error = checkToken({authorizationHeader: req.headers['authorization'], userID: userID, verifyToken})
-        if (error) {
-            return res.status(401).json({ error })
-        }
-
-        // Generate a new document reference with an auto-generated ID
-        const textRef = db.collection('CardUnreviewedText').doc()
-
-        // Save the text string to Firestore, including the courseID
-        await textRef.set({ userID, courseID, text })
-
-        // Return the generated ID as the response
-        res.status(201).json({ id: textRef.id })
-    } catch (err) {
-        const error = err as Error
-        res.status(500).json({ error: error.message })
-    }
-}
-
 // Uploads the given course to storage as a Course object
 export async function postCourse(req: Request, res: Response) {
     try {
@@ -699,6 +668,33 @@ export async function putCourse(req: Request, res: Response) {
     }
 }
 
+export async function putText(req: Request, res: Response) {
+    try {
+        const { userID, courseID, text } = req.body as { userID: number, courseID: string, text: string[] }
+        
+        if (!userID || !courseID || !text) {
+            return res.status(400).json({ error: 'userID, accepted, and editing are required' })
+        }
+
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // if (error) {
+        //     return res.status(401).json({ error })
+        // }
+
+        if (!courseID) {
+            return res.status(400).json({ error: 'Course ID is required.' })
+        }
+
+        const courseRef = db.collection('Course').doc(courseID)
+        await courseRef.update({ userID, textUnreviewed: text })
+
+        res.status(200).json({ id: courseRef.id })
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
 export async function putTime(req: Request, res: Response) {
     try {
         const { userID, time } = req.body as { userID: string, time: number }
@@ -719,6 +715,34 @@ export async function putTime(req: Request, res: Response) {
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
+    }
+}
+
+export async function putMarkCourse(req: Request, res: Response) {
+    try {
+        const { courseID, mark } = req.body as { courseID: string, mark: boolean }
+
+        
+        if (!courseID) {
+            return res.status(400).json({ error: 'Course ID is required.' })
+        }
+
+        if (typeof mark === undefined || mark === null) {
+            return res.status(400).json({ error: 'Mark is required.' })
+        }
+
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // if (error) {
+        //     return res.status(401).json({ error })
+        // }
+
+        const courseRef = db.collection('Course').doc(courseID)
+        await courseRef.update({mark})
+
+        res.status(200).json({ id: courseRef.id, mark })
+    } catch (error: unknown) {
+        const err = error as Error
+        res.status(500).json({ error: err.message })   
     }
 }
 
