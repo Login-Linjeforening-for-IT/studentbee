@@ -9,6 +9,7 @@ import Image from "next/image"
 import sendCardVote from "@/utils/vote"
 import Link from "next/link"
 import { sendMark } from "@/utils/fetchClient"
+import { Markdown } from "../editor/editor"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -85,14 +86,14 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 <div className="grid place-items-center">
                     <h1 className="text-2xl text-center mb-2">Course {course.id} has no content yet.</h1>
                     <Link
-                        className="bg-dark rounded-xl px-2 h-[5vh] w-[10vw] grid place-items-center mb-2 bg-orange-500"
+                        className="bg-dark rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-orange-500"
                         href={`/edit/${course.id}`}
                     >
                         Edit course
                     </Link>
                     <h1 className="text-2xl text-center mb-2">Mark course as learning based (no multiple choice)</h1>
                     <button 
-                        className="bg-orange-500 rounded-xl px-2 h-[5vh] w-[10vw]"
+                        className="bg-orange-500 rounded-xl px-2 h-[4vh] w-[10vw]"
                         onClick={markCourse}
                     >
                         Mark
@@ -150,6 +151,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
 
         sendCardVote({courseID: id, cardID: current || 0, vote})
     }
+
     return (
         <div className="w-full h-full grid grid-rows-10 gap-8">
             <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8`}>
@@ -158,12 +160,11 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                         <h1 className="text-right text-gray-500 float-right">{card.source} {(current || 0) + 1} / {cards.length}</h1>
                         <div className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto`}>
                         {card.theme && <h1 className="text-lg text-gray-500">{card.theme}</h1>}
-                        {card.question.split('\n').map((line, index) => (
-                            <span key={index}>
-                                {line}
-                                <br />
-                            </span>
-                        ))}
+                        <Markdown
+                            displayEditor={false} 
+                            handleDisplayEditor={() => {}} 
+                            markdown={card.question} 
+                        />
                         </div>
                     </div>
                     <Alternatives 

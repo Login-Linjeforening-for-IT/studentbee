@@ -1,5 +1,5 @@
 import React from "react"
-import Editor from "./editor"
+import { Editor } from "../editor/editor"
 import MarkAsMultipleChoice from "./markAsMultipleChoice"
 
 type LearningMaterialProps = {
@@ -18,7 +18,7 @@ export default function LearningMaterial({ courseID, text }: LearningMaterialPro
             <p className="text-md text-bright">
                 This course allows examination aids, and is not a multiple choice based exam.
             </p>
-            <Editor courseID={courseID} text={text} />
+            <Editor courseID={courseID} value={text} />
         </div>
     )
 }

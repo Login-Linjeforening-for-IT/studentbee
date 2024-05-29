@@ -1,6 +1,6 @@
 'use client'
 
-import { setCookie } from "@/utils/cookies"
+import { Editor } from "@/components/editor/editor"
 import { getCourse, updateCourse } from "@/utils/fetch"
 import Link from "next/link"
 import Script from "next/script"
@@ -37,7 +37,7 @@ type RejectedProps = {
 type EditCardsProps = {
     editing: Editing
     textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>
-    handleQuestionChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number) => void
+    handleQuestionChange: (text: string, cardIndex: number) => void
     handleThemeChange: (event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) => void
     handleSourceChange: (event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) => void
     setCorrectAnswer: (index: number, cardIndex: number) => void
@@ -167,11 +167,10 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         setRejected(tempCards)
     }
 
-    function handleQuestionChange(event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number) {
+    function handleQuestionChange(text: string, cardIndex: number) {
         const tempCards = [...editing.cards]
-        tempCards[cardIndex] = {...tempCards[cardIndex], question: event.target.value}
+        tempCards[cardIndex] = {...tempCards[cardIndex], question: text}
         setEditing({...editing, cards: tempCards})
-        autoResizeTextarea(event.target)
     }
 
     function handleThemeChange(event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) {
@@ -345,12 +344,16 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
                 onChange={(event) => updateTheme(event.target.value)}
             />
             <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Question</h1>
-            <textarea
-                value={card.question} 
-                onChange={(event) => updateQuestion(event.target.value)}
-                placeholder={`Add question about ${courseID}...`}
-                className="w-full bg-light h-[4vh] rounded-xl px-2 min-h-[20vh]"
-            />
+            <div className="bg-light rounded-xl p-2">
+                <Editor
+                    courseID={courseID}
+                    value={card.question.split('\n')} 
+                    customSaveLogic={true} 
+                    save={() => {}}
+                    onChange={updateQuestion}
+                    hideSaveButton={true}
+                />
+            </div>
             <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Alternatives</h1>
             <div className="w-full">
                 {card.alternatives.map((alternative, index) => {
@@ -518,7 +521,7 @@ function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChan
                         placeholder="Exam or learning material source"
                         onChange={(event) => handleSourceChange(event, cardIndex)}
                     />
-                    <h1 className="mb-2">Theme</h1>
+                    <h1 className="mb-2 mt-2">Theme</h1>
                     <input
                         className={inputStyle}
                         value={card.theme}
@@ -526,14 +529,18 @@ function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChan
                         placeholder="Question theme (optional)"
                         onChange={(event) => handleThemeChange(event, cardIndex)}
                     />
-                    <h1 className="mb-2">Question</h1>
-                    <textarea
-                        ref={(el) => { textareaRefs.current[cardIndex] = el }}
-                        className={inputStyle}
-                        value={card.question}
-                        onChange={(event) => handleQuestionChange(event, cardIndex)}
-                    />
-                    <h1 className="mb-2">Alternatives</h1>
+                    <h1 className="mb-2 mt-2">Question</h1>
+                    <div className="bg-extralight p-2 rounded-xl">
+                        <Editor
+                            courseID=""
+                            value={card.question.split('\n')} 
+                            customSaveLogic={true} 
+                            hideSaveButton={true}
+                            save={() => {}}
+                            onChange={(text: string) => handleQuestionChange(text, cardIndex)}
+                        />
+                    </div>
+                    <h1 className="mb-2 mt-2">Alternatives</h1>
                     <div className="bg-normal rounded-xl">
                         {card.alternatives.map((alternative, index) => (
                             <div key={index} className="p-2 grid grid-col w-full">
