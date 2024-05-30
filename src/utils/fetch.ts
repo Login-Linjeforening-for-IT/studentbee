@@ -9,21 +9,26 @@ type UpdateCourseProps = {
 
 // Fetches the scoreboard from the server
 export async function getScoreBoard() {
-    const response = await fetch(`${API}/scoreboard`, {
-        next: { revalidate: 10 },
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-
-    if (!response.ok) {
-        const data = await response.json()
-
-        throw Error(data.error)
+    try {
+        const response = await fetch(`${API}/scoreboard`, {
+            next: { revalidate: 10 },
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    
+        if (!response.ok) {
+            const data = await response.json()
+    
+            throw Error(data.error)
+        }
+    
+        return await response.json()
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message
     }
-
-    return await response.json()
 }
 
 // Fetches courses from server, different url based on location, therefore the 
