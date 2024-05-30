@@ -18,7 +18,7 @@ export default function LearningMaterial({ courseID, text }: LearningMaterialPro
             <p className="text-md text-bright">
                 This course allows examination aids, and is not a multiple choice based exam.
             </p>
-            <Editor courseID={courseID} value={text} />
+            <Editor courseID={courseID} value={text} className="min-h-[68vh]" />
         </div>
     )
 }

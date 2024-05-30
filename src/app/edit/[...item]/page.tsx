@@ -346,6 +346,7 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
             <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Question</h1>
             <div className="bg-light rounded-xl p-2">
                 <Editor
+                    placeholder="Enter question..."
                     courseID={courseID}
                     value={card.question.split('\n')} 
                     customSaveLogic={true} 
@@ -532,6 +533,7 @@ function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChan
                     <h1 className="mb-2 mt-2">Question</h1>
                     <div className="bg-extralight p-2 rounded-xl">
                         <Editor
+                            placeholder="Enter question..."
                             courseID=""
                             value={card.question.split('\n')} 
                             customSaveLogic={true} 

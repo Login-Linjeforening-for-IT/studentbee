@@ -70,7 +70,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
         })
 
         clientComments.push({
-            id: comments.length,
+            id: clientComments.length,
             courseID,
             cardID,
             userID: user.id || 0,
@@ -181,7 +181,8 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                     ))}
                 </div>
                 <Editor
-                    className="w-full bg-light p-2 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll"
+                    placeholder="Write a comment..."
+                    className="w-full bg-light p-4 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll"
                     courseID=""
                     value={content.split('\n')} 
                     customSaveLogic={true} 
@@ -246,14 +247,19 @@ function Reply({courseID, cardID, comment, comments, setComments}: ReplyProps) {
 
     return (
         <div className="grid grid-cols-12">
-            <div className="col-span-2" />
-            <textarea 
-                value={reply}
-                className="w-full h-[7.5vh] bg-light p-2 rounded-xl min-h-[7.5vh] max-h-[15vh] col-span-8" 
+            <div className="col-span-1" />
+            <Editor
+                className="w-full bg-light p-2 rounded-xl min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-4"
                 placeholder="Write a comment..."
-                onChange={(event) => setReply(event.target.value)}
+                courseID=""
+                value={reply.split('\n')} 
+                customSaveLogic={true} 
+                hideSaveButton={true}
+                save={() => {}}
+                onChange={setReply}
             />
-            <button className="col-span-2 justify-start" onClick={send}>Add comment</button>
+            <div className="col-span-10"/>
+            <button className="col-span-2 justify-end bg-light rounded-xl mt-2 h-[5vh]" onClick={send}>Add comment</button>
         </div>
     )
 }
@@ -279,6 +285,7 @@ function Replies({replies, vote, comment, comments, setComments}: RepliesProps) 
 function ReplyComponent({reply, vote, comment, comments, setComments}: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const user = getCookie('user') as User
+    const size = 20
 
     function handleDelete() {
         deleteComment({commentID: reply.id})
@@ -304,7 +311,7 @@ function ReplyComponent({reply, vote, comment, comments, setComments}: ReplyComp
 
     return (
         <div>
-            <div className="bg-normal rounded-xl p-2 mb-1">
+            <div className="bg-normal rounded-xl p-4 mb-1">
                 <div className="w-full grid grid-cols-2 text-bright">
                     <Link href={`/profile/${reply.username}`} className="text-lg text-bright underline">{reply.username}</Link>
                     <h1 className="text-right pr-2">{new Date(reply.time).toLocaleString()}</h1>
@@ -314,18 +321,17 @@ function ReplyComponent({reply, vote, comment, comments, setComments}: ReplyComp
                     handleDisplayEditor={() => {}} 
                     markdown={reply.content} 
                 />
-                <p className="text-md">{reply.content}</p>
             </div>
             <div className="w-full flex flex-rows space-x-2 mb-4">
                 <h1 className="text-bright">{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
                 <button onClick={() => handleVote({commentID: reply.id, current: true})}>
-                    <Image src="/images/thumbsup.svg" alt="logo" height={20} width={20} />
+                    <Image src="/images/thumbsup.svg" alt="logo" height={size} width={size} />
                 </button>
                 <button onClick={() => handleVote({commentID: reply.id, current: false})}>
-                    <Image src="/images/thumbsdown.svg" alt="logo" height={20} width={20} />
+                    <Image src="/images/thumbsdown.svg" alt="logo" height={size} width={size} />
                 </button>
                 {user.id === reply.userID && <button className="text-bright underline" onClick={handleDelete}>
-                    <Image className="" src="/images/trash.svg" alt="logo" height={19} width={19} />    
+                    <Image className="" src="/images/trash.svg" alt="logo" height={size - 1} width={size - 1} />    
                 </button>}
             </div>
         </div>

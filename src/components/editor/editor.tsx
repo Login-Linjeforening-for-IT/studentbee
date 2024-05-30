@@ -15,6 +15,7 @@ type EditorProps = {
     save?: () => void
     onChange?: Function
     className?: string
+    placeholder?: string
 }
 
 type EditorWithoutLogicProps = {
@@ -28,12 +29,14 @@ type EditorWithoutLogicProps = {
     textareaRef: React.RefObject<HTMLTextAreaElement>
     edited: boolean
     className?: string
+    placeholder?: string
 }
 
 type MarkdownProps = {
     displayEditor: boolean
     handleDisplayEditor: () => void
     markdown: string
+    className?: string
 }
 
 marked.use({
@@ -52,7 +55,7 @@ marked.use({
     }
 })
 
-export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className }: EditorProps) {
+export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className, placeholder }: EditorProps) {
     const [markdown, setMarkdown] = useState(value.join('\n'))
     const [displayEditor, setDisplayEditor] = useState(false)
     const [hideSave, setHideSave] = useState(false)
@@ -111,6 +114,7 @@ export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save,
 
     return <EditorWithoutLogic 
         className={className}
+        placeholder={placeholder}
         markdown={markdown} 
         handleMarkdownChange={handleMarkdownChange}
         handleSave={handleSave}
@@ -133,7 +137,8 @@ export function EditorWithoutLogic({
     hideSave, 
     textareaRef, 
     edited,
-    className
+    className,
+    placeholder
 }: EditorWithoutLogicProps) {
     return (
         <div className={`pt-2 ${className}`} onClick={() => textareaRef?.current?.focus()}>
@@ -147,7 +152,7 @@ export function EditorWithoutLogic({
                         className="w-full h-full rounded text-white bg-transparent focus:outline-none resize-none overflow-hidden"
                         value={markdown}
                         onChange={handleMarkdownChange}
-                        placeholder="Write your markdown here..."
+                        placeholder={placeholder || "Write your markdown here..."}
                         ref={textareaRef}
                     />}
                     <Markdown
@@ -164,10 +169,10 @@ export function EditorWithoutLogic({
     )
 }
 
-export function Markdown({displayEditor, handleDisplayEditor, markdown}: MarkdownProps) {
+export function Markdown({displayEditor, handleDisplayEditor, markdown, className}: MarkdownProps) {
     return (
         <div
-            className={`markdown-preview ${displayEditor && "pl-2 border-l-2 border-orange-500"} text-white h-full break-words`}
+            className={`markdown-preview ${displayEditor && "pl-2 border-l-2 border-orange-500"} text-white h-full break-words ${className}`}
             onClick={handleDisplayEditor}
             dangerouslySetInnerHTML={{ __html: marked(markdown) }}
         />
