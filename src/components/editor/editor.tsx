@@ -43,6 +43,9 @@ marked.use({
         image(href, title) {
             const width = 'width="300"'
             return `<img src="${href}" alt="${title}" ${width} />`
+        },
+        link(href, title, text) {
+            return `<a href="${href}" title="${title}" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">${text}</a>`
         }
     }
 })

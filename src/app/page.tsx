@@ -18,13 +18,13 @@ export default async function Home() {
 
     return (
         <div className="w-full h-full rounded-xl overflow-auto noscroll flex justify-center flex-col place-items-center">
-            <div className="w-[35vw] h-[45vh] bg-dark rounded-xl p-8 overflow-auto mb-8">
+            <div className="w-[35vw] h-[45vh] bg-dark rounded-xl p-8 overflow-auto mb-8 noscroll">
                 <h1 className="text-2xl text-center font-semibold mb-4">Select course</h1>
-                <div className="w-full h-[5vh] grid">
+                <div className="grid space-y-2">
                     {courses.map((course) => <Link
                         href={`/course/${course.id}`}
                         key={course.id}
-                        className="text-xl bg-light w-full mb-2 rounded-md p-2">
+                        className="text-xl bg-light w-full rounded-md p-2">
                         {course.id}
                     </Link>)}
                 </div>

@@ -45,7 +45,7 @@ export default function UserInfo() {
     }, [edit, left, middle, right, timeAsHumanReadable])
 
     return (
-        <div className='grid grid-cols-3 w-full h-full bg-dark col-span-8 rounded-xl'>
+        <div className='grid grid-cols-3 w-full h-full bg-dark col-span-6 rounded-xl'>
             <h1 className='grid place-items-center text-xl text-gray-400'>{left}</h1>
             <h1 className='grid place-items-center text-2xl'>{middle}</h1>
             <h1 className='grid place-items-center text-xl text-gray-400'>{right}</h1>

@@ -88,10 +88,10 @@ type LoginResponse = {
 }
 
 type ScoreBoardUser = {
-    position: number
-    accountID: number
-    name: string
+    id: number
     score: number
+    solved: number
+    username: string
     time: number
 }
 

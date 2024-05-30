@@ -77,7 +77,10 @@ export async function getScoreboard(_: Request, res: Response) {
         // Constructs the scoreboard
         const scoreboard = snapshot.docs.map((doc: any) => ({
             id: doc.id,
-            ...doc.data()
+            score: doc.data().score,
+            solved: doc.data().solved.length,
+            username: doc.data().username,
+            time: doc.data().time
         }))
 
         res.json(scoreboard)
