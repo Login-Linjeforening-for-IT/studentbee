@@ -15,7 +15,7 @@ export default async function Courses() {
             <div className="row-span-11 h-full">
                 <div className="flex flex-cols mb-2">
                     <h1 className="text-2xl mr-2">Courses</h1>
-                    <Link href='/add/course' className="text-2xl rounded-md mr-2">🆕</Link>
+                    <Link href='/add/course' className="text-2xl rounded-md mr-2">+</Link>
                     <Edit />
                 </div>
                 {courses.map((course, index) => 

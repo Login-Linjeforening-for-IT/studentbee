@@ -4,6 +4,7 @@ import { sendVote } from "@/utils/vote"
 import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useState } from "react"
+import { Editor, Markdown } from "../editor/editor"
 
 type CommentsProps = {
     comments: CardComment[]
@@ -52,6 +53,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
     const [content, setContent] = useState("")
     const [parent, setParent] = useState<number | undefined>()
     const [clientComments, setClientComments] = useState(comments)
+    const iconSize = 20
     const [voted, setVoted] = useState<ClientVote[]>([])
     const user = getCookie('user') as User
 
@@ -148,18 +150,22 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                                     <Link href={`/profile/${comment.username}`} className="text-lg text-bright underline">{comment.username}</Link>
                                     <h1 className="text-right">{new Date(comment.time).toLocaleString()}</h1>
                                 </div>
-                                <p className="text-md">{comment.content}</p>
+                                <Markdown
+                                    displayEditor={false} 
+                                    handleDisplayEditor={() => {}} 
+                                    markdown={comment.content} 
+                                />
                             </div>
                             <div className="w-full flex flex-rows space-x-2 mt-1">
                                 <h1 className="text-bright">{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
                                 <button onClick={() => vote({commentID: comment.id, vote: true})}>
-                                    <Image src="/images/thumbsup.svg" alt="logo" height={20} width={20} />
+                                    <Image src="/images/thumbsup.svg" alt="logo" height={iconSize} width={iconSize} />
                                 </button>
                                 <button onClick={() => vote({commentID: comment.id, vote: false})}>
-                                    <Image src="/images/thumbsdown.svg" alt="logo" height={20} width={20} />
+                                    <Image src="/images/thumbsdown.svg" alt="logo" height={iconSize} width={iconSize} />
                                 </button>
                                 {user.id === comment.userID && <button className="text-bright underline" onClick={() => handleDelete({commentID: comment.id})}>
-                                    <Image className="" src="/images/trash.svg" alt="logo" height={19} width={19} />    
+                                    <Image className="" src="/images/trash.svg" alt="logo" height={iconSize - 1} width={iconSize - 1} />    
                                 </button>}
                                 <button className="text-bright underline" onClick={() => setParent(parent ? undefined : comment.id)}>Reply</button>
                             </div>
@@ -174,13 +180,16 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                         </div>
                     ))}
                 </div>
-                <textarea 
-                    className="w-full h-[20vh] bg-light p-2 rounded-xl min-h-[15vh] max-h-[60vh]" 
-                    value={content}
-                    onChange={(event) => setContent(event.target.value)}
-                    placeholder="Write a comment..."
+                <Editor
+                    className="w-full bg-light p-2 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll"
+                    courseID=""
+                    value={content.split('\n')} 
+                    customSaveLogic={true} 
+                    hideSaveButton={true}
+                    save={() => {}}
+                    onChange={setContent}
                 />
-                <button className="h-[5vh] bg-light px-2 rounded-xl h-[5vh] float-right" onClick={sendComment}>Post comment</button>
+                <button className="h-[5vh] bg-light px-4 rounded-xl h-[5vh] float-right" onClick={sendComment}>Post comment</button>
             </div>
             {/* not sure what to use this space for */}
             <div className="col-span-2" />
@@ -300,6 +309,11 @@ function ReplyComponent({reply, vote, comment, comments, setComments}: ReplyComp
                     <Link href={`/profile/${reply.username}`} className="text-lg text-bright underline">{reply.username}</Link>
                     <h1 className="text-right pr-2">{new Date(reply.time).toLocaleString()}</h1>
                 </div>
+                <Markdown
+                    displayEditor={false} 
+                    handleDisplayEditor={() => {}} 
+                    markdown={reply.content} 
+                />
                 <p className="text-md">{reply.content}</p>
             </div>
             <div className="w-full flex flex-rows space-x-2 mb-4">

@@ -14,6 +14,7 @@ type EditorProps = {
     hideSaveButton?: true
     save?: () => void
     onChange?: Function
+    className?: string
 }
 
 type EditorWithoutLogicProps = {
@@ -26,6 +27,7 @@ type EditorWithoutLogicProps = {
     hideSave: boolean
     textareaRef: React.RefObject<HTMLTextAreaElement>
     edited: boolean
+    className?: string
 }
 
 type MarkdownProps = {
@@ -50,7 +52,7 @@ marked.use({
     }
 })
 
-export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange }: EditorProps) {
+export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className }: EditorProps) {
     const [markdown, setMarkdown] = useState(value.join('\n'))
     const [displayEditor, setDisplayEditor] = useState(false)
     const [hideSave, setHideSave] = useState(false)
@@ -108,6 +110,7 @@ export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save,
     }, [value])
 
     return <EditorWithoutLogic 
+        className={className}
         markdown={markdown} 
         handleMarkdownChange={handleMarkdownChange}
         handleSave={handleSave}
@@ -129,11 +132,12 @@ export function EditorWithoutLogic({
     hideSaveButton,
     hideSave, 
     textareaRef, 
-    edited 
+    edited,
+    className
 }: EditorWithoutLogicProps) {
     return (
-        <div className="pt-2">
-            <div>
+        <div className={`pt-2 ${className}`} onClick={() => textareaRef?.current?.focus()}>
+            <div className="">
                 {displayEditor && <div className="grid grid-cols-2">
                     <h1 className="text-lg text-bright">Markdown</h1>
                     <h1 className="text-lg pl-4 text-bright">Preview</h1>

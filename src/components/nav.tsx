@@ -6,12 +6,14 @@ import ToolTips from './root/toolTips'
 
 // Displays the header
 export default function Navbar() {
+    const size = 38
+
     return (
         <div className='grid grid-cols-8 h-full w-full gap-4'>
-            {<ToolTips />}
+            <ToolTips />
             {/* logo */}
             <Link href='/' className='grid place-items-center'>
-                <Image src={"/images/logo/logo.svg"} alt="logo" height={38} width={38} />
+                <Image src={"/images/logo/logo.svg"} alt="logo" height={size} width={size} />
             </Link>
             {/* Info for the user */}
             <UserInfo />
