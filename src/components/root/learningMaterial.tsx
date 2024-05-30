@@ -10,7 +10,7 @@ type LearningMaterialProps = {
 export default function LearningMaterial({ courseID, text }: LearningMaterialProps) {
 
     return (
-        <div className="col-span-8 bg-light rounded-xl p-4 h-full overflow-auto noscroll">
+        <div className="col-span-8 bg-light rounded-xl p-8 h-full overflow-auto noscroll">
             <div className="flex flex-cols justify-between">
                 <h1 className="text-2xl font-bold">Learning Material for {courseID}</h1>
                 <MarkAsMultipleChoice courseID={courseID} />

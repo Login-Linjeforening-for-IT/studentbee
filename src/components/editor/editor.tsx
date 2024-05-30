@@ -66,6 +66,7 @@ export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save,
             setMarkdown(event.target.value)
         }
 
+        setDisplayEditor(true)
         autoResize(event.target)
     }
 

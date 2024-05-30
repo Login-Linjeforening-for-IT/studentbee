@@ -638,9 +638,9 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
             <Script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js" />
             <h1 className="text-xl">Editing {selected}</h1>
             <div className="space-x-2">
-                <button className="bg-light rounded-lg p-1 px-2" onClick={hideText}>
-                    Hide text
-                </button>
+                {isText && <button className="bg-light rounded-lg p-1 px-2" onClick={hideText}>
+                    Hide input area
+                </button>}
                 {isText && (
                     <>
                     <input
