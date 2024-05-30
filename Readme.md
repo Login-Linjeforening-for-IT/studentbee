@@ -4,5 +4,6 @@ This website is a complete implementation of a card based learning website with 
 In theory this website could be put in production and work out of the box.
 
 ## Building
-To start the frontend run `docker compose up`. This will start the website on port 3000.
-No secrets or extra configuration is necesarry, just make sure that the port is availabe, and to start the image api if you want real images.
+To start the frontend run `docker compose up`. This will start the website on 
+port 3000, and the api on port 8080. The secrets required are detailed on the
+wiki (will be added here later).
