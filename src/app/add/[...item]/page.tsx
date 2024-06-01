@@ -21,7 +21,7 @@ function AddCourse() {
     const emptyCard: Card = {
         question: "",
         alternatives: [""],
-        correct: 0,
+        correct: [],
         source: "",
         rating: 0,
         votes: []

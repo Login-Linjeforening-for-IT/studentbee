@@ -55,7 +55,7 @@ marked.use({
     }
 })
 
-export function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className, placeholder }: EditorProps) {
+export default function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className, placeholder }: EditorProps) {
     const [markdown, setMarkdown] = useState(value.join('\n'))
     const [displayEditor, setDisplayEditor] = useState(false)
     const [hideSave, setHideSave] = useState(false)

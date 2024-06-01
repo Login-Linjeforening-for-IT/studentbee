@@ -5,7 +5,6 @@ import { useEffect, useState } from "react"
 
 export default function ToolTips() {
     const [displayTips, setDisplayTips] = useState(false)
-    const [autonext, setAutonext] = useState('off')
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
@@ -19,17 +18,10 @@ export default function ToolTips() {
                 setDisplayTips(prevDisplayTips => !prevDisplayTips)
                 localStorage.setItem('tooltips', 'false')
             }
-
-            if (e.key === 't' || e.key === 'T') {
-                const autonext = localStorage.getItem('autonext')
-                localStorage.setItem('autonext', autonext === 'true' ? 'false' : 'true')
-                setAutonext(autonext === 'true' ? 'off' : 'on')
-            }
         }
 
         window.addEventListener('keydown', handleKeyDown)
 
-        // Cleanup the event listener on component unmount
         return () => {
             window.removeEventListener('keydown', handleKeyDown)
         }
@@ -93,7 +85,6 @@ export default function ToolTips() {
                         <Tips hotkey="8" info="Selects and submits alternative 8" />
                         <Tips hotkey="9" info="Selects and submits alternative 9" />
                         <Tips hotkey="0" info="Selects and submits alternative 10" />
-                        <Tips hotkey="T" info={`Toggle autonext (currently ${autonext})`} />
                     </div>
                 </div>
             </div>

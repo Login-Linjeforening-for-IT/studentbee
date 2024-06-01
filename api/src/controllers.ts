@@ -14,6 +14,17 @@ type Course = {
     cards: Card[]
     unreviewed: Card[]
     textUnreviewed: string[]
+    filetree: Files
+}
+
+type Files = {
+    name: string
+    content: InnerFile[] | string[]
+}
+
+type InnerFile = {
+    name: string
+    content: string[]
 }
 
 type Editing = {
@@ -24,7 +35,7 @@ type Editing = {
 type Card = {
     question: string
     alternatives: string[]
-    correct: number
+    correct: number[]
     source: string
     rating: number
     votes: number[]
@@ -134,6 +145,33 @@ export async function getCourse(req: Request, res: Response) {
     }
 }
 
+// Fetches the file tree for the given course ID
+export async function getFileTree(req: Request, res: Response) {
+    try {
+        const { courseID } = req.params
+        
+        if (!courseID) {
+            return res.status(400).json({ error: 'Course ID is required.' })
+        }
+
+        const courseSnapshot = await db.collection('Course').doc(courseID).get()
+
+        if (!courseSnapshot.exists) {
+            return res.status(404).json({ error: 'Course not found' })
+        }
+
+        const course = courseSnapshot.data()
+        if (!course) {
+            return res.status(404).json({ error: 'Course has no data' })
+        }
+
+
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
 // Fetches the user profile for the given user
 export async function getUserProfile(req: Request, res: Response) {
     try {
@@ -206,6 +244,51 @@ export async function getComments(req: Request, res: Response) {
     }
 }
 
+export async function postFile(req: Request, res: Response) {
+    try {
+        const { courseID, content, parent } = req.body as { courseID: string, content: string, parent?: string }
+
+        if (!courseID || !content) {
+            return res.status(400).json({ error: 'Missing required field (courseID, content)' })
+        }
+
+        const idDocRef = db.collection('Metadata').doc('fileIDCounter')
+
+        const nextID = await db.runTransaction(async (transaction) => {
+            const idDocSnapshot = await transaction.get(idDocRef)
+
+            if (!idDocSnapshot.exists) {
+                transaction.set(idDocRef, { nextID: 1 }) 
+                return 0
+            }
+
+            const currentID = idDocSnapshot.data()!.nextID
+            transaction.update(idDocRef, { nextID: currentID + 1 })
+            return currentID
+        })
+
+        const fileRef = db.collection('Files').doc(nextID.toString())
+
+        const FileData = {
+            id: nextID,
+            content
+        }
+
+        if (parent !== undefined) {
+            // @ts-expect-error
+            commentData['parent'] = parent
+        }
+
+        await fileRef.set(FileData)
+
+        // Respond with the ID of the newly created comment
+        res.status(201).json({ id: fileRef.id, nextID })
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
 // Denies the given card from Firebase, and removes them from the storage
 // This is relevant when there are duplicate questions, or bad questions that
 // should not be reviewed
@@ -216,7 +299,7 @@ export async function getComments(req: Request, res: Response) {
 //     id: number
 //     question: string
 //     alternatives: string[]
-//     correct: number
+//     correct: number[]
 // }
 //
 // or 
@@ -279,7 +362,7 @@ export async function postDenied(req: Request, res: Response) {
 // {
 //     question: string
 //     alternatives: string[]
-//     correct: number
+//     correct: number[]
 // }
 export async function postCard(req: Request, res: Response) {
     try {
@@ -288,7 +371,7 @@ export async function postCard(req: Request, res: Response) {
             courseID: number
             question: string
             alternatives: string[]
-            correct: number
+            correct: number[]
         }
 
         // Validate the required fields

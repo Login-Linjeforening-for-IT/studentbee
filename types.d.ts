@@ -26,7 +26,7 @@ type Card = {
     question: string
     alternatives: string[]
     source: string
-    correct: number
+    correct: number[]
     help?: string
     theme?: string
     rating: number
@@ -111,4 +111,14 @@ type CardComment = {
 type Vote = {
     userID: number
     vote: boolean
+}
+
+type Files = {
+    name: string
+    content: InnerFile[] | string[]
+}
+
+type InnerFile = {
+    name: string
+    content: string[]
 }

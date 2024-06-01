@@ -7,14 +7,16 @@ type HandleNavigationProps = {
     current: number | undefined
     router: AppRouterInstance
     setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
-    setSelected: React.Dispatch<React.SetStateAction<number>>
-    checkAnswer: (input: number, attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => void
+    setSelected: React.Dispatch<React.SetStateAction<number[]>>
+    checkAnswer: (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>, next?: true) => void
     id: string | undefined
     card: Card
     cards: Card[]
-    selectedRef: MutableRefObject<number>
+    selectedRef: MutableRefObject<number[]>
     attempted: number[]
     setAttempted: React.Dispatch<React.SetStateAction<number[]>>
+    wait: boolean
+    setWait: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type HandleKeyDownProps = {
@@ -40,8 +42,19 @@ export default function handleCardsNavigation({
     cards, 
     selectedRef,
     attempted,
-    setAttempted
+    setAttempted,
+    wait,
+    setWait
 }: HandleNavigationProps) {
+        if (!card || current === undefined) {
+            return
+        }
+    
+        function handleKey(key: string) {
+            animate200ms({key, setAnimateAnswer})
+            checkAnswer([Number(key)], attempted, setAttempted)
+            setSelected((prev) => card.correct.length > 1 ? [...prev, Number(key)] : [Number(key)])
+        }
 
         switch (direction) {
         case 'back': 
@@ -51,7 +64,7 @@ export default function handleCardsNavigation({
             }
 
             animate200ms({key: 'back', setAnimateAnswer})
-            setSelected(-1)
+            setSelected([])
             break
         case 'skip': 
             if (current != undefined) {
@@ -60,83 +73,87 @@ export default function handleCardsNavigation({
             }
 
             animate200ms({key: 'skip', setAnimateAnswer})
-            setSelected(-1)
+            setSelected([])
             break
         case 'next':
-            const autonextTime = localStorage.getItem('autonextTime') 
-            
-            if (autonextTime) {
-                checkAnswer(Number(autonextTime), attempted, setAttempted)
-                localStorage.removeItem('autonextTime')
-                setSelected(-1)
+            checkAnswer(selectedRef.current, attempted, setAttempted, true)
+            animate200ms({key: 'next', setAnimateAnswer})
+
+            if (wait) {
+                setAttempted([...attempted, ...selectedRef.current]) 
+                setWait(false)
             }
 
-            checkAnswer(selectedRef.current, attempted, setAttempted)
-            animate200ms({key: 'next', setAnimateAnswer})
-            setSelected(-1)
             break
-        case '1': 
-            animate200ms({key: '0', setAnimateAnswer})
-            checkAnswer(0, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '2': 
-            animate200ms({key: '1', setAnimateAnswer})
-            checkAnswer(1, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '3':
-            animate200ms({key: '2', setAnimateAnswer})
-            checkAnswer(2, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '4': 
-            animate200ms({key: '3', setAnimateAnswer})
-            checkAnswer(3, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '5': 
-            animate200ms({key: '4', setAnimateAnswer})
-            checkAnswer(4, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '6': 
-            animate200ms({key: '5', setAnimateAnswer})
-            checkAnswer(5, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '7': 
-            animate200ms({key: '6', setAnimateAnswer})
-            checkAnswer(6, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '8': 
-            animate200ms({key: '7', setAnimateAnswer})
-            checkAnswer(7, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '9': 
-            animate200ms({key: '8', setAnimateAnswer})
-            checkAnswer(8, attempted, setAttempted)
-            setSelected(-1)
-            break
-        case '0': 
-            animate200ms({key: '9', setAnimateAnswer})
-            checkAnswer(9, attempted, setAttempted)
-            setSelected(-1)
-            break
+        case '1': handleKey('0'); break
+        case '2': handleKey('1'); break
+        case '3': handleKey('2'); break
+        case '4': handleKey('3'); break
+        case '5': handleKey('4'); break
+        case '6': handleKey('5'); break
+        case '7': handleKey('6'); break
+        case '8': handleKey('7'); break
+        case '9': handleKey('8'); break
+        case '0': handleKey('9'); break
         case 'w':
         case 'W':
         case 'up': 
-            setSelected((prev) => (prev === card.alternatives.length - 1 ? 0 : prev + 1))
+            setSelected((prev) => {
+                const newSelected = [...prev]
+                const newIndex = (prev[0] === card.alternatives.length - 1) ? 0 : prev[0] + 1
+
+                if (card.correct.length <= 1) {
+                    return [newIndex]
+                }
+
+                newSelected.unshift(newIndex)
+                return newSelected
+            })
             break
         case 'down': 
-            setSelected((prev) => (prev === 0 
-                    ? card.alternatives.length - 1 
-                    : prev - 1 >= 0 
-                        ? prev - 1 
-                        : card.alternatives.length - 1
-            ))
+            setSelected((prev) => {
+                const newSelected = [...prev]
+                const newIndex = (prev[0] === 0) ? card.alternatives.length - 1 : prev[0] - 1
+                
+                if (card.correct.length <= 1) {
+                    return [newIndex]
+                }
+                
+                newSelected.unshift(newIndex)
+                return newSelected
+            })
+            break
+        case 'shiftup':
+            setSelected((prev) => {
+                const newSelected = [...prev];
+                const newIndex = (prev[0] === card.alternatives.length - 1) ? 0 : prev[0] + 1
+                const previousIndex = (newIndex === 0) ? card.alternatives.length - 1 : newIndex - 1
+            
+                for (let i = newSelected.length - 1; i >= 0; i--) {
+                    if (newSelected[i] === previousIndex) {
+                        newSelected.splice(i, 1)
+                    }
+                }
+            
+                newSelected.unshift(newIndex)
+                return newSelected
+            })
+            break
+            case 'shiftdown':
+                setSelected((prev) => {
+                    const newSelected = [...prev]
+                    const newIndex = (prev[0] === 0) ? card.alternatives.length - 1 : prev[0] - 1     
+                    const previousIndex = (newIndex === card.alternatives.length - 1) ? 0 : newIndex + 1
+                    
+                    for (let i = newSelected.length - 1; i >= 0; i--) {
+                        if (newSelected[i] === previousIndex) {
+                            newSelected.splice(i, 1)
+                        }
+                    }
+
+                    newSelected.unshift(newIndex)
+                    return newSelected
+                })
             break
     }
 }
@@ -176,9 +193,21 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case '0': navigate("0"); break
         case 'Enter': navigate('next'); break
         case 'w':
-        case 'ArrowUp': navigate('up'); break
+        case 'ArrowUp': 
+            if (event.shiftKey) {
+                navigate('shiftup')
+            } else {
+                navigate('up')
+            }
+            break
         case 'W':
-        case 'ArrowDown': navigate('down'); break
+        case 'ArrowDown': 
+            if (event.shiftKey) {
+                navigate('shiftdown')
+            } else {
+                navigate('down')
+            }
+            break
     }
 }
 

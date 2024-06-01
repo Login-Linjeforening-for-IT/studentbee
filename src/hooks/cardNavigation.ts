@@ -10,10 +10,13 @@ type UseCardNavigationProps = {
     cards: Card[]
     setAnimate: Dispatch<SetStateAction<string>>
     setAnimateAnswer: Dispatch<SetStateAction<string>>
-    setSelected: Dispatch<SetStateAction<number>>
-    selectedRef: MutableRefObject<number>
+    setSelected: Dispatch<SetStateAction<number[]>>
+    selectedRef: MutableRefObject<number[]>
     attempted: number[]
     setAttempted: Dispatch<SetStateAction<number[]>>
+    wait: boolean
+    setWait: Dispatch<SetStateAction<boolean>>
+    remainGreen: number[]
 }
 
 export const useCardNavigation = ({
@@ -26,48 +29,34 @@ export const useCardNavigation = ({
     setSelected,
     selectedRef,
     attempted,
-    setAttempted
+    setAttempted,
+    wait,
+    setWait,
+    remainGreen
 }: UseCardNavigationProps) => {
     const router = useRouter()
     let startFocusTime = useRef<Date | undefined>(undefined)
     let lastUserInteraction = useRef<Date | undefined>(undefined)
 
     const checkAnswer = useCallback(
-        (input: number, attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => {
-            if (input === card.correct) {
+        (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>, next?: boolean) => {
+            if (card.correct.every(answer => input.includes(answer)) || card.correct.every(answer => attempted.includes(answer)) || (remainGreen[0] === card.correct[0] && card.correct.length <= 1)) {
                 if (current != undefined) {
-                    const next = current + 1 < cards.length ? current + 1 : -1
-                    const autonext = localStorage.getItem('autonext')
-                    const autonextTime = localStorage.getItem('autonextTime')
-
-                    // Skips automatically if allowed, otherwise gives visual 
-                    // input on first interaction and actually proceeds on the
-                    // second interaction. Reset when the user navigates away 
-                    if (autonext === 'true') {
+                    const nextCard = current + 1 < cards.length ? current + 1 : -1
+                    if (next && !wait) {
                         setAttempted([])
-                        router.push(`/course/${id}/${next}`)
+                        router.push(`/course/${id}/${nextCard}`)
                         setAnimate('correct')
-                        localStorage.removeItem('autonextTime')
-                        setTimeout(() => setAnimate('-1'), 400)
-                    } else if (autonextTime === card.correct.toString()) {
-                        setAttempted([])
-                        router.push(`/course/${id}/${next}`)
-                        setAnimate('correct')
-                        localStorage.removeItem('autonextTime')
-                    } else {
-                        localStorage.setItem('autonextTime', input.toString())
-                        setAnimate('correct')
+                    } else if (next) {
+                        attempted.push(...input)
                     }
-
                 }
             } else {
-                !attempted.includes(input) && attempted.push(input)
-                setAnimate('wrong')
-                setTimeout(() => setAnimate('-1'), 200)
-                localStorage.removeItem('autonextTime')
+                !(card.correct.length > 1) && attempted.push(...input)
+                !attempted.every(answer => input.includes(answer)) && attempted.push(...input)
             }
         },
-        [current, router, id, card, cards, setAnimate]
+        [current, router, id, card, cards, setAnimate, wait, remainGreen]
     )
 
     const navigate = useCallback((direction: string) => {
@@ -83,10 +72,12 @@ export const useCardNavigation = ({
                 cards,
                 selectedRef,
                 attempted,
-                setAttempted
+                setAttempted,
+                wait,
+                setWait
             })
         },
-        [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted]
+        [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted, wait, setWait]
     )
 
     useEffect(() => {

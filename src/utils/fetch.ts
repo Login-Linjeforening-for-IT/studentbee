@@ -161,3 +161,26 @@ export async function updateUserTime({time}: {time: number}) {
     }
 
 }
+
+export async function getFile(id: string, file: string) {
+    try {
+        const response = await fetch(`${API}/filetree/${id}/${file}`, {
+            next: { revalidate: 10 },
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    
+        if (!response.ok) {
+            const data = await response.json()
+    
+            throw Error(data.error)
+        }
+    
+        return await response.json()
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message
+    }
+}

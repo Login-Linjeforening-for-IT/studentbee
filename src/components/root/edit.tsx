@@ -53,7 +53,7 @@ export default function Edit() {
     return (
         <div>
             {displayCourseSelector && <CourseSelector />}
-            <button onClick={handleReview} className="text-xl rounded-md pt-1">♺</button>
+            <button onClick={handleReview} className="text-md rounded-md pt-[3.5px]">♺</button>
             {error && <h1 className="w-full h-full grid place-items-center">{error}</h1>}
         </div>
     )

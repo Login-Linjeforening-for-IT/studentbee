@@ -1,7 +1,6 @@
 'use client'
 import shuffle from "@utils/shuffle"
-import { useState, useRef, SetStateAction, Dispatch } from "react"
-import { animate200ms } from "@utils/navigation"
+import { useState, useRef, SetStateAction, Dispatch, useEffect, use } from "react"
 import { useCardNavigation } from "@/hooks/cardNavigation"
 import Comments from "./comments"
 import { getTotalCommentsLength } from "@/utils/comments"
@@ -10,16 +9,21 @@ import sendCardVote from "@/utils/vote"
 import Link from "next/link"
 import { sendMark } from "@/utils/fetchClient"
 import { Markdown } from "../editor/editor"
+import { usePathname } from "next/navigation"
+import Study from "./study"
 
 type AlternativesProps = {
     alternatives: string[]
-    selected: number
+    selected: number[]
+    setSelected: React.Dispatch<React.SetStateAction<number[]>>
     animateAnswer: string
-    setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
-    checkAnswer: (input: number, attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => void
+    checkAnswer: (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => void
     attempted: number[]
     setAttempted: React.Dispatch<React.SetStateAction<number[]>>
-    correct: number
+    correct: number[]
+    remainGreen: number[]
+    setRemainGreen: React.Dispatch<React.SetStateAction<number[]>>
+    wait: boolean
 }
 
 type CardsProps = {
@@ -36,19 +40,22 @@ type ButtonsProps = {
 }
 
 export default function Cards({id, current, course, comments}: CardsProps) {
+    const path = usePathname()
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
-    const [selected, setSelected] = useState(-1)
+    const [selected, setSelected] = useState<number[]>([-1])
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const [showComments, setShowComments] = useState(false)
     const [attempted, setAttempted] = useState<number[]>([])
     const selectedRef = useRef(selected)
     const relevantComments = comments[Number(id) || 0] || []
+    const [remainGreen, setRemainGreen] = useState<number[]>([])
     const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0)   
     selectedRef.current = selected
-
+    
     const cards = typeof course === 'object' ? course.cards as Card[] : []
     const card = cards[current || 0]
+    const [wait, setWait] = useState(card?.correct.length > 1 ? true : false)
     const flashColor = animate === "wrong" 
         ? "bg-red-800" 
         : animate === "correct" 
@@ -65,7 +72,10 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         setSelected,
         selectedRef,
         attempted,
-        setAttempted
+        setAttempted,
+        wait,
+        setWait,
+        remainGreen
     })
 
     function markCourse() {
@@ -104,19 +114,17 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     if (current === -1) {
+        const length = cards.length
+
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-2xl">Course {course.id} completed ({course.cards.length} cards).</h1>
+                <h1 className="text-2xl">Course {course.id} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
             </div>
         )
     }
 
     if (!card) {
-        return (
-            <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-2xl">Course {course.id} only has {course.cards.length} questions. You tried to access Q{current}.</h1>
-            </div>
-        )
+        window.location.href = `/course/${id}/0`
     }
 
     const alternativeLength = card.alternatives.reduce((acc, curr) => acc + curr.length, 0)
@@ -152,6 +160,18 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         sendCardVote({courseID: id, cardID: current || 0, vote})
     }
 
+    function showAnswers() {
+        setAttempted([...card.correct])
+        setRemainGreen([...card.correct])
+    }
+
+    useEffect(() => {
+        if (card.correct.length <= 1 && remainGreen.length) {
+            setWait(false)
+            setSelected(card.correct)
+        }
+    }, [remainGreen])
+
     return (
         <div className="w-full h-full grid grid-rows-10 gap-8">
             <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8`}>
@@ -159,6 +179,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                     <div className="w-full">
                         <h1 className="text-right text-gray-500 float-right">{card.source} {(current || 0) + 1} / {cards.length}</h1>
                         <div className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto`}>
+                        {card.correct.length > 1 && <h1 className="text-bright">Multiple choice - Select all correct answers</h1>}
                         {card.theme && <h1 className="text-lg text-gray-500">{card.theme}</h1>}
                         <Markdown
                             displayEditor={false} 
@@ -170,12 +191,15 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                     <Alternatives 
                         alternatives={card.alternatives}
                         selected={selected}
+                        setSelected={setSelected}
                         animateAnswer={animateAnswer} 
-                        setAnimateAnswer={setAnimateAnswer} 
                         checkAnswer={checkAnswer}
                         attempted={attempted}
                         setAttempted={setAttempted}
                         correct={card.correct}
+                        remainGreen={remainGreen}
+                        setRemainGreen={setRemainGreen}
+                        wait={wait}
                     />
                 </div>
                 <div className="grid grid-cols-3">
@@ -194,6 +218,9 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                     >
                         {totalCommentsLength ? `View comments (${totalCommentsLength})` : "Add comment"} {showComments ? '▼' : '▲'}
                     </button>
+                    {(wait || !(card.correct.length > 1)) && !remainGreen.every(answer => card.correct.includes(answer)) && <div>
+                        <button className="w-full text-end text-bright" onClick={showAnswers}>{card.correct.length > 1 ? "Show answers" : "Show answer"}</button>
+                    </div>}
                 </div>
             </div>
             <Buttons
@@ -238,27 +265,34 @@ function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
     )
 }
 
-function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, checkAnswer, attempted, setAttempted, correct}: AlternativesProps) {
-    const [remainGreen, setRemainGreen] = useState("-1")
-
+function Alternatives({alternatives, selected, animateAnswer, checkAnswer, attempted, setAttempted, correct, setSelected, remainGreen, setRemainGreen, wait}: AlternativesProps) {
     function getColor(index: number): string {
-        if (remainGreen === index.toString()) {
+        if (remainGreen.includes(index)) {
             return "bg-green-500"
         }
 
-        if (attempted.includes(index)) {
-            return "bg-red-800"
+        if (!wait) {
+            for (let i = 0; i < attempted.length; i++) {
+                if (correct.includes(index) && attempted.includes(index)) {
+                    return "bg-green-500"
+                }
+            }
+        }
+
+        if (!wait) {
+            if (attempted.includes(index) && !correct.includes(index)) {
+                return "bg-red-800"
+            }
         }
 
         if (animateAnswer === index.toString()) {
             if (animateAnswer === correct.toString()) {
-                setRemainGreen(index.toString())
+                !remainGreen.includes(index) && setRemainGreen([...remainGreen, index])
                 return "bg-green-500"
             }
-            return "bg-orange-500"
         }
 
-        if (selected === index) {
+        if (selected.includes(index)) {
             return "bg-extralight"
         }
         
@@ -272,9 +306,11 @@ function Alternatives({alternatives, selected, animateAnswer, setAnimateAnswer, 
                     <h1 className="text-md grid place-items-center">{index + 1}</h1>
                     <button 
                         onClick={() => {
-                            animate200ms({key: index.toString(), setAnimateAnswer})
-                            checkAnswer(index, attempted, setAttempted)
-                        }}
+                            checkAnswer([index], attempted, setAttempted)
+                            correct.length > 1 
+                                ? selected.includes(index) ? setSelected(selected.filter(alternative => alternative !== index)) : setSelected([...selected, index])
+                                : setSelected([index]); setAttempted(prev => [...prev, index])
+                            }}
                         className={`${getColor(index)} rounded-xl text-sm col-span-11 text-left p-2`}
                     >
                         {answer}

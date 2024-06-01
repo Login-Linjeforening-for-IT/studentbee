@@ -2,6 +2,7 @@
 
 import { Editor } from "@/components/editor/editor"
 import { getCourse, updateCourse } from "@/utils/fetch"
+import Image from "next/image"
 import Link from "next/link"
 import Script from "next/script"
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react"
@@ -56,6 +57,19 @@ type HeaderProps = {
     hideText: () => void
 }
 
+type ActionButtonsProps = {
+    handleAction: (action: 'accept' | 'reject', cardIndex: number) => void
+    cardIndex: number
+}
+
+type AlternativesProps = {
+    card: Card
+    setCorrectAnswer: (index: number, cardIndex: number) => void
+    handleAlternativeChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
+    cardIndex: number
+    textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>
+}
+
 export default function Edit({ params }: { params: { item: string[] } }) {
     const [selected, setSelected] = useState<'cards' | 'text'>('cards')
     const [rejected, setRejected] = useState<Card[]>([])
@@ -67,7 +81,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     const editingSpan = selected === 'cards' ? 'col-span-2' : 'col-span-3'
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
-    const emptyCard: Card = { question: "", alternatives: [""], correct: 0, source: "", rating: 0, votes: [] }
+    const emptyCard: Card = { question: "", alternatives: [""], correct: [], source: "", rating: 0, votes: [] }
     const [card, setCard] = useState<Card>(emptyCard)
 
     const item = params.item[0].toUpperCase()
@@ -201,7 +215,14 @@ export default function Edit({ params }: { params: { item: string[] } }) {
 
     function setCorrectAnswer(index: number, cardIndex: number) {
         const tempCards = [...editing.cards]
-        tempCards[cardIndex] = {...tempCards[cardIndex], correct: index}
+        const correct = tempCards[cardIndex].correct
+
+        if (correct.includes(index)) {
+            tempCards[cardIndex] = {...tempCards[cardIndex], correct: correct.filter((correctIndex) => correctIndex !== index)}
+        } else {
+            tempCards[cardIndex] = {...tempCards[cardIndex], correct: [...correct, index]}
+        }
+
         setEditing({...editing, cards: tempCards})
     }
 
@@ -229,7 +250,11 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     return (
         <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
             <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
-                <Rejected selected={selected} rejected={rejected} handleRejectedIndexClick={handleRejectedIndexClick} />
+                <Rejected 
+                    selected={selected} 
+                    rejected={rejected} 
+                    handleRejectedIndexClick={handleRejectedIndexClick}
+                />
                 <div className={`w-full h-full bg-dark ${editingSpan} rounded-xl flex flex-col`}>
                     <Header
                         selected={selected} 
@@ -324,6 +349,22 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
         }
     }
 
+    function addCorrect(index: number) {
+        if (typeof card.correct === 'number') {
+            setCard({...card, correct: [card.correct, index]})
+        } else {
+            setCard({...card, correct: [...card.correct, index]})
+        }
+    }
+
+    function removeCorrect(index: number) {
+        if (typeof card.correct === 'number') {
+            setCard({...card, correct: []})
+        } else {
+            setCard({...card, correct: card.correct.filter((correctIndex) => correctIndex !== index)})
+        }
+    }
+
     return (
         <div className="w-full h-full overflow-auto noscroll p-1">
             <h1 className="flex items-center justify-start text-lg h-[4vh]">Source</h1>
@@ -358,6 +399,8 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
             <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">Alternatives</h1>
             <div className="w-full">
                 {card.alternatives.map((alternative, index) => {
+                    const isCorrect = typeof card.correct === 'number' ? card.correct === index : card.correct.includes(index)
+
                     if (index == card.alternatives.length - 1 && !alternative) {
                         return
                     }
@@ -370,9 +413,22 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
                                 key={alternative} 
                                 className="text-left col-span-10 flex flex-rows space-x-2"
                             >
-                                <h1>{alternative}</h1><h1 className="text-superlight grid place-items-center">{`${card.correct === index ? '(correct)' : '(wrong)'}`}</h1>
+                                <h1>{alternative}</h1><h1 className="text-superlight grid place-items-center">{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
                             </button>
-                            <button onClick={() => removeAlternative(index)}>❌</button>
+                            <div className="grid grid-cols-2">
+                                {isCorrect ? 
+                                    <button className="text-xl text-bright" onClick={() => removeCorrect(index)}>
+                                        ☒
+                                    </button> 
+                                :
+                                    <button className="text-xl text-bright" onClick={() => addCorrect(index)}>
+                                        ☑
+                                    </button>    
+                                }
+                                <button className="" onClick={() => removeAlternative(index)}>
+                                    <Image src="/images/trash.svg" alt="logo" height={25} width={25} />    
+                                </button>
+                            </div>
                         </div>
                     )    
                 })}
@@ -415,29 +471,17 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
         setAlternativeIndex(alternativeIndex + 1)
     }
 
-    // Sets the selected alternative to be the correct one for the card
-    function handleSetCorrectAlternative() {
-        setCard({...card, correct: alternativeIndex})
-    }
-
     return (
         <div className="w-full mt-2">
             <div className="grid grid-cols-12 mb-2">
-                <h1 className="flex items-center justify-start text-lg col-span-1 h-[4vh]">{alternativeIndex + 1}:</h1>
-                <div className="w-full col-span-11 flex flex-cols-auto">
+                <h1 className="flex items-center justify-start text-lg h-[4vh]">{alternativeIndex + 1}:</h1>
+                <div className="w-full col-span-11">
                     <textarea
                         value={card.alternatives[alternativeIndex]} 
                         onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className="min-h-[5vh] w-full bg-light h-[4vh] rounded-xl px-2 mr-4"
+                        className="min-h-[5vh] w-full bg-light h-[5vh] rounded-xl px-2 mr-4"
                     />
-                    <button
-                        value={Number(card.correct === alternativeIndex)}
-                        className="h-full col-span-1 text-4xl col-span-1"
-                        onClick={handleSetCorrectAlternative}
-                    >
-                        ✅
-                    </button>
                 </div>
             </div>
             <button 
@@ -474,7 +518,9 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
                                 <h1 className="text-gray-500 text-right w-full">{card.alternatives.length}</h1>
                             </div>
                         </button>
-                        <button onClick={() => handleRemove(index)}>❌</button>
+                        <button className="grid pb-2 place-items-center" onClick={() => handleRemove(index)}>
+                            <Image src="/images/trash.svg" alt="logo" height={30} width={30} />    
+                        </button>
                     </div>
                 ))}
             </div>
@@ -509,6 +555,7 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
 
 function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChange, handleSourceChange, setCorrectAnswer, handleAlternativeChange, handleAction}: EditCardsProps) {
     const inputStyle = "bg-extralight p-2 w-full rounded-xl overflow-hidden resize-none whitespace-pre-wrap"
+    // const isCorrect = typeof card.correct === 'number' ? card.correct === alternativeIndex : card.correct.includes(alternativeIndex)
 
     return (
         <div className="w-full h-full overflow-auto noscroll">
@@ -542,39 +589,14 @@ function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChan
                             onChange={(text: string) => handleQuestionChange(text, cardIndex)}
                         />
                     </div>
-                    <h1 className="mb-2 mt-2">Alternatives</h1>
-                    <div className="bg-normal rounded-xl">
-                        {card.alternatives.map((alternative, index) => (
-                            <div key={index} className="p-2 grid grid-col w-full">
-                                <button className="text-left" onClick={() => setCorrectAnswer(index, cardIndex)}>
-                                    {index + 1}{card.correct === index ? "✅" : "❌"}. 
-                                </button>
-                                <textarea
-                                    key={index}
-                                    ref={(el) => { textareaRefs.current[cardIndex * card.alternatives.length + index] = el }}
-                                    className="bg-light p-2 w-full rounded-xl overflow-hidden resize-none"
-                                    value={alternative}
-                                    onChange={(event) => handleAlternativeChange(event, cardIndex, index)}
-                                />
-                            </div>
-                        ))}
-                    </div>
-                    <div className="w-full grid grid-cols-4 gap-8 h-[4vh] mt-5 mb-5">
-                        <div/>
-                            <button 
-                                className="bg-orange-500 w-full rounded-xl" 
-                                onClick={() => handleAction('reject', cardIndex)}
-                            >
-                                Reject
-                            </button>
-                            <button 
-                                className="bg-orange-500 w-full rounded-xl" 
-                                onClick={() => handleAction('accept', cardIndex)}
-                            >
-                                Accept
-                            </button>
-                        <div/>
-                    </div>
+                    <Alternatives 
+                        card={card} 
+                        setCorrectAnswer={setCorrectAnswer} 
+                        handleAlternativeChange={handleAlternativeChange} 
+                        cardIndex={cardIndex} 
+                        textareaRefs={textareaRefs} 
+                    />
+                    <ActionButtons handleAction={handleAction} cardIndex={cardIndex} />
                 </div>    
             ))}
         </div>
@@ -674,4 +696,54 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
             </div>
       </div>
     )
-  }
+}
+
+function ActionButtons({handleAction, cardIndex}: ActionButtonsProps) {
+    return (
+        <div className="w-full grid grid-cols-4 gap-8 h-[4vh] mt-5 mb-5">
+            <div/>
+                <button 
+                    className="bg-orange-500 w-full rounded-xl" 
+                    onClick={() => handleAction('reject', cardIndex)}
+                >
+                    Reject
+                </button>
+                <button 
+                    className="bg-orange-500 w-full rounded-xl" 
+                    onClick={() => handleAction('accept', cardIndex)}
+                >
+                    Accept
+                </button>
+            <div/>
+        </div>
+    )
+}
+
+function Alternatives({card, setCorrectAnswer, handleAlternativeChange, cardIndex, textareaRefs}: AlternativesProps) {
+    return (
+        <>
+            <h1 className="mb-2 mt-2">Alternatives</h1>
+            <div className="bg-normal rounded-xl">
+                {card.alternatives.map((alternative, index) => {
+                    const isCorrect = typeof card.correct === 'number' ? card.correct === index : card.correct.includes(index)
+
+                    return (
+                        <div key={index} className="p-2 grid grid-col w-full">
+                            <button className="grid grid-cols-2" onClick={() => setCorrectAnswer(index, cardIndex)}>
+                                <h1 className="text-start">{index + 1}.</h1>
+                                <h1 className={`text-end text-xl ${isCorrect ? "text-green-500" : "text-red-500"}`}>{isCorrect ? "☑︎" : "☒"}</h1>
+                            </button>
+                            <textarea
+                                key={index}
+                                ref={(el) => { textareaRefs.current[cardIndex * card.alternatives.length + index] = el }}
+                                className="bg-light p-2 w-full rounded-xl overflow-hidden resize-none"
+                                value={alternative}
+                                onChange={(event) => handleAlternativeChange(event, cardIndex, index)}
+                            />
+                        </div>
+                    )    
+                })}
+            </div>
+        </>
+    )
+}
