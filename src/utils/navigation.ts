@@ -1,6 +1,6 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import { Dispatch, MutableRefObject, SetStateAction } from "react"
-import getCookie from "./cookies"
+import getItem from "./localStorage"
 
 type HandleNavigationProps = {
     direction: string
@@ -159,12 +159,6 @@ export default function handleCardsNavigation({
 }
     
 export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
-    const typing = getCookie('typing')
-    
-    if (typing === 'true') {
-        return
-    }
-
     const activeElement = document.activeElement
     if (activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA') {
         return

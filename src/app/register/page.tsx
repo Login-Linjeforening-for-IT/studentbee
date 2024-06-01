@@ -1,6 +1,5 @@
 'use client'
 
-import { setCookie } from "@/utils/cookies"
 import { sendRegister } from "@utils/user"
 import Link from "next/link"
 import { useState } from "react"

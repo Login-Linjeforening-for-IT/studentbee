@@ -1,4 +1,4 @@
-export default function getCookie(name: string): object | string | undefined {
+export default function getItem(name: string): object | string | undefined {
     const item = localStorage.getItem(name)
 
     if (!item) {
@@ -19,10 +19,10 @@ export default function getCookie(name: string): object | string | undefined {
     }
 }
 
-export function setCookie(name: string, value: string) {
+export function setItem(name: string, value: string) {
     localStorage.setItem(name, value)
 }
 
-export function removeCookie(name: string): void {
+export function removeItem(name: string): void {
     localStorage.removeItem(name)
 }

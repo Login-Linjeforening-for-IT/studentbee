@@ -1,7 +1,7 @@
 'use client'
 
 import { getCourse } from "@/utils/fetch"
-import getCookie from "@utils/cookies"
+import getItem from "@utils/localStorage"
 import { useEffect, useState } from "react"
 
 export default function UserInfo() {
@@ -14,7 +14,7 @@ export default function UserInfo() {
     const [right, setRight] = useState('')
 
     useEffect(() => {
-        const newUser: User | undefined = getCookie('user') as User | undefined
+        const newUser: User | undefined = getItem('user') as User | undefined
         const pathnames = window.location.pathname.split('/')
         let course = pathnames[1] === 'course' || 'edit' ? pathnames[2] : window.location.pathname.split('/')[-1]
         

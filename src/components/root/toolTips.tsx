@@ -1,6 +1,6 @@
 'use client'
 
-import getCookie from "@/utils/cookies"
+import getItem from "@/utils/localStorage"
 import { useEffect, useState } from "react"
 
 export default function ToolTips() {
@@ -8,9 +8,8 @@ export default function ToolTips() {
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
-            const typing = getCookie('typing')
-    
-            if (typing === 'true') {
+            const activeElement = document.activeElement
+            if (activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA') {
                 return
             }
 

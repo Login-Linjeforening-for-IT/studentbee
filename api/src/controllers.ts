@@ -14,7 +14,7 @@ type Course = {
     cards: Card[]
     unreviewed: Card[]
     textUnreviewed: string[]
-    filetree: Files
+    files: Files
 }
 
 type Files = {
@@ -146,26 +146,51 @@ export async function getCourse(req: Request, res: Response) {
 }
 
 // Fetches the file tree for the given course ID
-export async function getFileTree(req: Request, res: Response) {
+export async function getFile(req: Request, res: Response) {
+    try {
+        const { fileID } = req.params
+        
+        const fileSnapShot = await db.collection('Files').doc(fileID).get()
+
+        if (!fileSnapShot.exists) {
+            return res.status(404).json({ error: 'File not found' })
+        }
+
+        const file = fileSnapShot.data()?.content
+
+        if (!file) {
+            return res.json("")
+        }
+
+        res.json(file)
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
+export async function getFiles(req: Request, res: Response) {
     try {
         const { courseID } = req.params
-        
+
         if (!courseID) {
-            return res.status(400).json({ error: 'Course ID is required.' })
+            return res.status(400).json({ error: 'Missing required field (courseID)' })
         }
 
-        const courseSnapshot = await db.collection('Course').doc(courseID).get()
+        const filesSnapshot = await db.collection('Files').where('courseID', '==', courseID).get()
 
-        if (!courseSnapshot.exists) {
-            return res.status(404).json({ error: 'Course not found' })
+        if (filesSnapshot.empty) {
+            res.json([])
         }
 
-        const course = courseSnapshot.data()
-        if (!course) {
-            return res.status(404).json({ error: 'Course has no data' })
-        }
+        const files = filesSnapshot.docs.map((doc: any) => {            
+            return {
+                id: doc.id,
+                name: doc.data().name
+            }
+        })
 
-
+        res.json(files)
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
@@ -204,13 +229,13 @@ export async function getComments(req: Request, res: Response) {
 
         const comments = commentsSnapshot.docs.map((doc: any) => doc.data())
 
-        // Group comments by cardID and initialize replies array
+        // Groups comments by cardID and initialize replies array
         const groupedComments: { [key: string]: any[] } = {}
         const commentById: { [key: string]: any } = {}
 
         comments.forEach(comment => {
             comment.replies = []
-            commentById[comment.id] = comment // Assuming each comment has a unique id
+            commentById[comment.id] = comment
 
             const cardID = comment.cardID || 'no_cardID'
             if (!groupedComments[cardID]) {
@@ -229,12 +254,12 @@ export async function getComments(req: Request, res: Response) {
             }
         })
 
-        // Filter out comments that are replies, to avoid duplicates in the top-level array
+        // Filters out comments that are replies, to avoid duplicates in the top-level array
         Object.keys(groupedComments).forEach(cardID => {
             groupedComments[cardID] = groupedComments[cardID].filter(comment => !comment.parent)
         })
 
-        // Convert grouped comments to 2D array
+        // Converts grouped comments to 2D array
         const commentsArray = Object.keys(groupedComments).map(cardID => groupedComments[cardID])
 
         res.json(commentsArray)
@@ -246,10 +271,10 @@ export async function getComments(req: Request, res: Response) {
 
 export async function postFile(req: Request, res: Response) {
     try {
-        const { courseID, content, parent } = req.body as { courseID: string, content: string, parent?: string }
+        const { courseID, name, parent } = req.body as { courseID: string, name: string, parent?: string }
 
-        if (!courseID || !content) {
-            return res.status(400).json({ error: 'Missing required field (courseID, content)' })
+        if (!courseID || !name) {
+            return res.status(400).json({ error: 'Missing required field (courseID, name)' })
         }
 
         const idDocRef = db.collection('Metadata').doc('fileIDCounter')
@@ -271,7 +296,8 @@ export async function postFile(req: Request, res: Response) {
 
         const FileData = {
             id: nextID,
-            content
+            courseID,
+            name
         }
 
         if (parent !== undefined) {
@@ -283,6 +309,25 @@ export async function postFile(req: Request, res: Response) {
 
         // Respond with the ID of the newly created comment
         res.status(201).json({ id: fileRef.id, nextID })
+    } catch (err) {
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
+export async function putFile(req: Request, res: Response) {
+    try {
+        const { courseID, fileID, content } = req.body as { courseID: string, fileID: string, content: string }
+
+        if (!courseID || !fileID || !content) {
+            return res.status(400).json({ error: 'Missing required field (courseID, fileID, content)' })
+        }
+
+        const fileRef = db.collection('Files').doc(fileID)
+        await fileRef.update({ content })
+
+        // Respond with the ID of the newly created comment
+        res.status(201).json({ id: fileRef.id })
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })

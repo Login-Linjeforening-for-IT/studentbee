@@ -1,5 +1,5 @@
 import { API } from "@parent/constants"
-import getCookie from "./cookies"
+import getItem from "./localStorage"
 
 type VoteProps = {
     courseID: string
@@ -16,7 +16,7 @@ type CardVoteProps = {
 
 export default async function sendCardVote({courseID, cardID, vote}: CardVoteProps) {
     try {
-        const user = getCookie('user') as User
+        const user = getItem('user') as User
 
         if (!user) {
             throw Error('You must be logged in to vote')
@@ -50,7 +50,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
 
 export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
     try {
-        const user = getCookie('user') as User
+        const user = getItem('user') as User
 
         if (!user) {
             throw Error('You must be logged in to vote')

@@ -1,6 +1,5 @@
 type CourseProps = {
     course: CourseAsList
-    margin: boolean
 }
 
 type Editing = {
@@ -121,4 +120,8 @@ type Files = {
 type InnerFile = {
     name: string
     content: string[]
+}
+
+type FileListProps = {
+    files: Files[]
 }

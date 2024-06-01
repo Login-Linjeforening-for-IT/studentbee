@@ -1,5 +1,5 @@
 import { API, BROWSER_API } from "@parent/constants"
-import getCookie from "./cookies"
+import getItem from "./localStorage"
 
 type UpdateCourseProps = {
     courseID: string
@@ -90,8 +90,8 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
 
 // Updates the passed course
 export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
-    const user: User | undefined = getCookie('user') as User | undefined  
-    const token = getCookie('token')
+    const user: User | undefined = getItem('user') as User | undefined  
+    const token = getItem('token')
 
     try {
         if (!user) {
@@ -127,8 +127,8 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
 
 // Updates the user's time spent on the page
 export async function updateUserTime({time}: {time: number}) {
-    const token = getCookie('token')
-    const user = getCookie('user') as User | undefined
+    const token = getItem('token')
+    const user = getItem('user') as User | undefined
 
     try {
         if (!user) {
@@ -162,9 +162,32 @@ export async function updateUserTime({time}: {time: number}) {
 
 }
 
-export async function getFile(id: string, file: string) {
+export async function getFile(fileID: string) {
     try {
-        const response = await fetch(`${API}/filetree/${id}/${file}`, {
+        const response = await fetch(`${API}/file/${fileID}`, {
+            next: { revalidate: 10 },
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    
+        if (!response.ok) {
+            const data = await response.json()
+    
+            throw Error(data.error)
+        }
+    
+        return await response.json()
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message
+    }
+}
+
+export async function getFiles(courseID: string) {
+    try {
+        const response = await fetch(`${API}/files/${courseID}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {

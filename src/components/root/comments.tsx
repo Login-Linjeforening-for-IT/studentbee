@@ -1,5 +1,5 @@
 import { deleteComment, postComment } from "@/utils/comments"
-import getCookie from "@/utils/cookies"
+import getItem from "@/utils/localStorage"
 import { sendVote } from "@/utils/vote"
 import Image from "next/image"
 import Link from "next/link"
@@ -55,7 +55,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
     const [clientComments, setClientComments] = useState(comments)
     const iconSize = 20
     const [voted, setVoted] = useState<ClientVote[]>([])
-    const user = getCookie('user') as User
+    const user = getItem('user') as User
 
     function sendComment() {
         if (!content.length) {
@@ -199,7 +199,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
 }
 
 function Reply({courseID, cardID, comment, comments, setComments}: ReplyProps) {
-    const user = getCookie('user') as User
+    const user = getItem('user') as User
     const [reply, setReply] = useState("")
 
     function send() {
@@ -284,7 +284,7 @@ function Replies({replies, vote, comment, comments, setComments}: RepliesProps) 
 
 function ReplyComponent({reply, vote, comment, comments, setComments}: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
-    const user = getCookie('user') as User
+    const user = getItem('user') as User
     const size = 20
 
     function handleDelete() {

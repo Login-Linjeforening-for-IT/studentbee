@@ -23,8 +23,7 @@ export default function CourseClient({ course, learningBased, id, current, comme
     const study = learningBased || isStudy
     
     return (
-        <div className="w-full h-full rounded-xl overflow-auto grid grid-cols-10 gap-8 noscroll">
-            <Courses />
+        <div className="w-full h-full rounded-xl overflow-auto grid grid-cols-8 gap-8 noscroll">
             {study && <Study courseID={id} value={fileContent} />}
             {!study && <div className={`w-full h-full col-span-6`}>
                 <Cards course={course} id={id} current={current} comments={comments} />

@@ -165,7 +165,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     return (
-        <div className="w-full h-full grid grid-rows-10 gap-8">
+        <div className="w-full h-full grid grid-rows-10 gap-8 col-span-6">
             <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8`}>
                 <div className="w-full h-full row-span-9 pb-8">
                     <div className="w-full">
@@ -294,20 +294,18 @@ function Alternatives({alternatives, selected, animateAnswer, checkAnswer, attem
     return (
         <div className='w-full'>
             {alternatives.map((answer, index) =>
-                <div key={index} className="grid grid-cols-12 mb-2">
-                    <h1 className="text-md grid place-items-center">{index + 1}</h1>
-                    <button 
-                        onClick={() => {
-                            checkAnswer([index], attempted, setAttempted)
-                            correct.length > 1 
-                                ? selected.includes(index) ? setSelected(selected.filter(alternative => alternative !== index)) : setSelected([...selected, index])
-                                : setSelected([index]); setAttempted(prev => [...prev, index])
-                            }}
-                        className={`${getColor(index)} rounded-xl text-sm col-span-11 text-left p-2`}
-                    >
-                        {answer}
-                    </button>
-                </div>
+                <button 
+                onClick={() => {
+                    checkAnswer([index], attempted, setAttempted)
+                    correct.length > 1 
+                    ? selected.includes(index) ? setSelected(selected.filter(alternative => alternative !== index)) : setSelected([...selected, index])
+                    : setSelected([index]); setAttempted(prev => [...prev, index])
+                }}
+                className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2`}
+            >
+                <h1 className="h-full pr-2 text-md grid place-items-center text-bright">{index + 1}</h1>
+                {answer}
+            </button>
             )}
         </div>
     )

@@ -1,5 +1,5 @@
 import { API } from "@parent/constants"
-import getCookie from "./cookies"
+import getItem from "./localStorage"
 
 type CommentProps = {
     courseID: string
@@ -28,7 +28,7 @@ export default async function getComments(CourseID: string): Promise<CardComment
 
 export async function postComment({courseID, cardID, content, parent}: CommentProps) {
     try {
-        const user = getCookie('user') as User
+        const user = getItem('user') as User
 
         if (!user) {
             throw Error('You must be logged in to comment')
@@ -63,7 +63,7 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
 
 export async function deleteComment({commentID}: {commentID: number}) {
     try {
-        const user = getCookie('user') as User
+        const user = getItem('user') as User
 
         if (!user) {
             throw Error('You must be logged in to delete a comment')

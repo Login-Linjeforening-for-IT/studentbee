@@ -1,7 +1,7 @@
 'use client'
 
 import { BROWSER_API } from "@parent/constants"
-import getCookie, { removeCookie, setCookie } from "./cookies"
+import getItem, { removeItem, setItem } from "./localStorage"
 
 // Function to login the user
 export async function sendLogin(user: LoginUser): Promise<true | string> {
@@ -27,9 +27,9 @@ export async function sendLogin(user: LoginUser): Promise<true | string> {
             time: result.time,
         }
 
-        setCookie('token', result.token)
-        setCookie('user', JSON.stringify(userResult))
-        window.location.reload()
+        setItem('token', result.token)
+        setItem('user', JSON.stringify(userResult))
+        // window.location.reload()
         return true
     } catch (error: unknown) {
         const err = error as Error
@@ -40,21 +40,21 @@ export async function sendLogin(user: LoginUser): Promise<true | string> {
 // Function to logout the user
 export async function sendLogout(): Promise<Boolean | string> {
     try {
-        const token = getCookie('token')
-        const user = getCookie('user')
+        const token = getItem('token')
+        const user = getItem('user')
 
         if (!token || !user) {
-            // Removes cookies and user from localstorage if the user wants to log out
-            removeCookie('token')
-            removeCookie('user')
+            // Removes user items from localstorage if the user wants to log out
+            removeItem('token')
+            // removeItem('user')
             window.location.href = '/login'
             return "Logged out successfully."
             
         }
 
-        // Removes cookies and user from localstorage if the user wants to log out
-        removeCookie('token')
-        removeCookie('user')
+        // Removes user items from localstorage if the user wants to log out
+        removeItem('token')
+        // removeItem('user')
         window.location.reload()
 
         // const response = await fetch(`${API}/login`, {
@@ -81,17 +81,17 @@ export async function sendLogout(): Promise<Boolean | string> {
 // Function to delete the user
 export async function sendDelete(): Promise<Boolean | string> {
     try {
-        const user = getCookie('user')
+        const user = getItem('user')
 
         if (!user) {
-            // Removes cookies and user from localstorage if the user wants to delete their account
-            removeCookie('user')
+            // Removes user items from localstorage if the user wants to delete their account
+            // removeItem('user')
             getRedirect('/')
             return "Deleted account."
         }
 
-        // Removes cookies and user from localstorage if the user wants to delete their account
-        removeCookie('user')
+        // Removes user items from localstorage if the user wants to delete their account
+        // removeItem('user')
 
         const response = await fetch(`${BROWSER_API}/account/delete`, {
             method: 'POST',
@@ -134,7 +134,7 @@ export async function sendRegister(user: RegisterUser): Promise<true | string> {
         }
 
         // Redirects to login page on successful registration
-        setCookie('redirect', '/login')
+        setItem('redirect', '/login')
         getRedirect()
 
         return true
@@ -146,8 +146,8 @@ export async function sendRegister(user: RegisterUser): Promise<true | string> {
 
 // Sends the time spent on the page to the server
 export async function sendTimeSpent(): Promise<true | string> {
-    const user: User | undefined = getCookie('user') as User | undefined
-    const token = getCookie('token')
+    const user: User | undefined = getItem('user') as User | undefined
+    const token = getItem('token')
 
     if (!user) {
         return 'Please log in to log your efforts.'
@@ -187,7 +187,7 @@ export default function isLoggedIn() {
         return false
     }
 
-    const user: User | undefined = getCookie('user') as User | undefined
+    const user: User | undefined = getItem('user') as User | undefined
 
     if (!user) {
         return false

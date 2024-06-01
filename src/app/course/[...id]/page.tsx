@@ -2,6 +2,7 @@ import React from 'react'
 import { getCourse, getFile } from '@/utils/fetch'
 import getComments from '@/utils/comments'
 import CourseClient from '@/components/course/courseClient'
+import CourseList from '@/components/root/courses'
 
 // Main component of the program, holds the main page and the user can navigate
 // to different pages from here
@@ -13,12 +14,19 @@ export default async function Course({ params }: { params: { id: string[] } }) {
     const comments = await getComments(id)
     const learningBased = typeof course === 'object' && course?.mark
 
-    return <CourseClient
-        course={course} 
-        learningBased={learningBased} 
-        id={id} 
-        current={current} 
-        comments={comments} 
-        fileContent={["hello world", "gubbern"]}
-    />
+    return (
+        <div className='grid grid-cols-10 gap-8 w-full h-full'>
+            <CourseList />
+            <div className='col-span-8'>
+                <CourseClient
+                    course={course} 
+                    learningBased={learningBased} 
+                    id={id} 
+                    current={current} 
+                    comments={comments} 
+                    fileContent={["hello world", "gubbern"]}
+                />
+            </div>
+        </div>
+    )
 }
