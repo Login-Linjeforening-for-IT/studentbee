@@ -11,6 +11,7 @@ type MarkProps = {
 type SendFileProps = {
     courseID: string
     name: string
+    parent?: string
 }
 
 // Adds a course with the given user id, course name and questions
@@ -137,7 +138,7 @@ export async function sendMark({courseID, mark}: MarkProps) {
     return await response.json()
 }
 
-export async function sendFile({courseID, name}: SendFileProps) {
+export async function sendFile({courseID, name, parent}: SendFileProps) {
     const user = getItem('user') as User
 
     if (!user) {
@@ -152,7 +153,8 @@ export async function sendFile({courseID, name}: SendFileProps) {
         body: JSON.stringify({
             userID: user.id,
             courseID,
-            name
+            name,
+            parent
         })
     })
 

@@ -1,7 +1,6 @@
 'use client'
 
 import React from 'react'
-import Courses from '@components/root/courses'
 import Cards from '@/components/root/cards'
 import Elements from '@/components/root/elements'
 import Study from '@/components/root/study'
@@ -19,7 +18,7 @@ type CourseClientProps = {
 // Client main page for extra functionality
 export default function CourseClient({ course, learningBased, id, current, comments, fileContent }: CourseClientProps) {
     const path = usePathname()
-    const isStudy = path.includes('study')
+    const isStudy = path.includes('study') || path.includes('files')
     const study = learningBased || isStudy
     
     return (

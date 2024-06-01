@@ -162,9 +162,9 @@ export async function updateUserTime({time}: {time: number}) {
 
 }
 
-export async function getFile(fileID: string) {
+export async function getFile(courseID: string, name: string) {
     try {
-        const response = await fetch(`${API}/file/${fileID}`, {
+        const response = await fetch(`${API}/file/${courseID}/${name}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {

@@ -148,9 +148,8 @@ export async function getCourse(req: Request, res: Response) {
 // Fetches the file tree for the given course ID
 export async function getFile(req: Request, res: Response) {
     try {
-        const { fileID } = req.params
-        
-        const fileSnapShot = await db.collection('Files').doc(fileID).get()
+        const { courseID, fileID } = req.params
+        const fileSnapShot = await db.collection('Files').doc(`${courseID}:${fileID}`).get()
 
         if (!fileSnapShot.exists) {
             return res.status(404).json({ error: 'File not found' })
@@ -180,17 +179,46 @@ export async function getFiles(req: Request, res: Response) {
         const filesSnapshot = await db.collection('Files').where('courseID', '==', courseID).get()
 
         if (filesSnapshot.empty) {
-            res.json([])
+            return res.status(404).json({ error: 'No files found for the given courseID' })
         }
 
-        const files = filesSnapshot.docs.map((doc: any) => {            
-            return {
-                id: doc.id,
-                name: doc.data().name
+        const files = filesSnapshot.docs.map((doc: any) => doc.data())
+
+        const groupedFiles: { [key: string]: any[] } = {}
+        const filesByName: { [key: string]: any } = {}
+
+        // Initialize files by name and group files
+        files.forEach(file => {
+            file.files = []
+            if (!file.files) file.files = []
+            filesByName[file.name] = file
+
+            const fileName = file.name || 'no_fileName'
+            if (!groupedFiles[fileName]) {
+                groupedFiles[fileName] = []
+            }
+            groupedFiles[fileName].push(file)
+        })
+
+        // Nest files under their parent file
+        files.forEach(file => {
+            if (file.parent) {
+                const parentFile = filesByName[file.parent]
+                if (parentFile) {
+                    parentFile.files.push(file)
+                }
             }
         })
 
-        res.json(files)
+        // Filter out files that are nested, to avoid duplicates in the top-level array
+        Object.keys(groupedFiles).forEach(fileName => {
+            groupedFiles[fileName] = groupedFiles[fileName].filter(file => !file.parent)
+        })
+
+        // Converts grouped files to 2D array
+        const filesArray = Object.keys(groupedFiles).map(fileName => groupedFiles[fileName])
+
+        res.json(filesArray)
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
@@ -277,38 +305,22 @@ export async function postFile(req: Request, res: Response) {
             return res.status(400).json({ error: 'Missing required field (courseID, name)' })
         }
 
-        const idDocRef = db.collection('Metadata').doc('fileIDCounter')
+        const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
 
-        const nextID = await db.runTransaction(async (transaction) => {
-            const idDocSnapshot = await transaction.get(idDocRef)
-
-            if (!idDocSnapshot.exists) {
-                transaction.set(idDocRef, { nextID: 1 }) 
-                return 0
-            }
-
-            const currentID = idDocSnapshot.data()!.nextID
-            transaction.update(idDocRef, { nextID: currentID + 1 })
-            return currentID
-        })
-
-        const fileRef = db.collection('Files').doc(nextID.toString())
-
-        const FileData = {
-            id: nextID,
+        const fileData = {
             courseID,
             name
         }
 
         if (parent !== undefined) {
             // @ts-expect-error
-            commentData['parent'] = parent
+            fileData['parent'] = parent
         }
 
-        await fileRef.set(FileData)
+        await fileRef.set(fileData)
 
         // Respond with the ID of the newly created comment
-        res.status(201).json({ id: fileRef.id, nextID })
+        res.status(201).json({ name })
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
@@ -317,13 +329,13 @@ export async function postFile(req: Request, res: Response) {
 
 export async function putFile(req: Request, res: Response) {
     try {
-        const { courseID, fileID, content } = req.body as { courseID: string, fileID: string, content: string }
+        const { courseID, name, content } = req.body as { courseID: string, name: string, content: string }
 
-        if (!courseID || !fileID || !content) {
-            return res.status(400).json({ error: 'Missing required field (courseID, fileID, content)' })
+        if (!courseID || !name || !content) {
+            return res.status(400).json({ error: 'Missing required field (courseID, name, content)' })
         }
 
-        const fileRef = db.collection('Files').doc(fileID)
+        const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
         await fileRef.update({ content })
 
         // Respond with the ID of the newly created comment

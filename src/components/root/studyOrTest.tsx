@@ -38,6 +38,7 @@ function Files() {
 
     function createFile() {
         sendFile({courseID: course, name: input})
+        setDisplayInputField(false)
 
         if (inputRef.current) {
             inputRef.current.value = ""
@@ -92,6 +93,8 @@ function Files() {
 }
 
 function FileList({files}: FileListProps) {
+    if (!files || !Array.isArray(files)) return (<div></div>)
+
     return (
         <div className="grid w-full">
             {files.map(file => <File key={file.name} file={file} />)}
@@ -100,11 +103,42 @@ function FileList({files}: FileListProps) {
 }
 
 function File({file}: FileProps) {
+    const path = usePathname()
+    const [displayInputField, setDisplayInputField] = useState(false)
+    const [input, setInput] = useState('')
+    const inputRef = useRef<HTMLInputElement | null>(null)
+    const course = path.split('/')[2] || ''
+
+    function handleDisplayInput() {
+        setDisplayInputField(!displayInputField)
+    }
+
+    function addFile() {
+        sendFile({courseID: course, name: input, parent: file.name})
+        setDisplayInputField(false)
+        if (inputRef.current) {
+            inputRef.current.value = ""
+        }
+    }
+
     return (
-        <button className="text-bright grid grid-cols-2" key={file.name}>
-            <h1 className="text-start pl-2 text-lg">/ {file.name}</h1>
-            <h1 className="text-end text-xl">+</h1>
+        <>
+        <button className="text-bright grid grid-cols-5" key={file.name}>
+            <Link href={`/course/${course}/files/${file.name}`} className="text-start pl-2 text-lg col-span-4">/ {file.name}</Link>
+            <h1 className="text-end text-xl" onClick={handleDisplayInput}>+</h1>
         </button>
+        {displayInputField && <div className="grid grid-cols-4 pl-2">
+            <input 
+                ref={inputRef}
+                className="bg-transparent col-span-3 border-b-2 border-bright text-bright" 
+                maxLength={20} 
+                type="text" 
+                value={input} 
+                onChange={(e) => setInput(e.target.value)} 
+            />
+            <button className="text-end text-bright" onClick={addFile}>Add</button>
+        </div>}
+        </>
     )
 }
 
@@ -116,8 +150,8 @@ function InnerCourses({courses}: CoursesProps) {
                 <Link href='/add/course' className="text-xl rounded-md mr-2">+</Link>
                 <Edit />
             </div>
-            {courses.map((course, index) => 
-                <Course key={index} course={course} /> 
+            {courses.map(course =>
+                <Course key={course.id} course={course} /> 
             )}
         </>
     )

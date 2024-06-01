@@ -10,7 +10,7 @@ export default async function Course({ params }: { params: { id: string[] } }) {
     const id = params.id[0]
     const current = Number(params.id[1] || 0)
     const course = await getCourse(id, 'server')
-    // const fileContent = await getFile(id, params.id[2])
+    const fileContent = await getFile(id, params.id[2])
     const comments = await getComments(id)
     const learningBased = typeof course === 'object' && course?.mark
 
@@ -24,7 +24,7 @@ export default async function Course({ params }: { params: { id: string[] } }) {
                     id={id} 
                     current={current} 
                     comments={comments} 
-                    fileContent={["hello world", "gubbern"]}
+                    fileContent={fileContent.split('\n')}
                 />
             </div>
         </div>
