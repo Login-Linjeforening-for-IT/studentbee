@@ -27,7 +27,7 @@ export default function CourseClient({ course, learningBased, id, current, comme
             {!study && <div className={`w-full h-full col-span-6`}>
                 <Cards course={course} id={id} current={current} comments={comments} />
             </div>}
-            {!study && <Elements id={id} current={current} />}
+            {!study && <Elements id={id} current={current} course={course} />}
         </div>
     )
 }

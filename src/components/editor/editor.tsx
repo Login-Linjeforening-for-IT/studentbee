@@ -16,6 +16,7 @@ type EditorProps = {
     onChange?: Function
     className?: string
     placeholder?: string
+    placeholderClassName?: string
 }
 
 type EditorWithoutLogicProps = {
@@ -30,6 +31,7 @@ type EditorWithoutLogicProps = {
     edited: boolean
     className?: string
     placeholder?: string
+    placeholderClassName?: string
 }
 
 type MarkdownProps = {
@@ -55,7 +57,7 @@ marked.use({
     }
 })
 
-export default function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className, placeholder }: EditorProps) {
+export default function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className, placeholder, placeholderClassName }: EditorProps) {
     const [markdown, setMarkdown] = useState(value.join('\n'))
     const [displayEditor, setDisplayEditor] = useState(false)
     const [hideSave, setHideSave] = useState(false)
@@ -124,6 +126,7 @@ export default function Editor({ courseID, value, customSaveLogic, hideSaveButto
         hideSave={hideSave}
         textareaRef={textareaRef}
         edited={edited}
+        placeholderClassName={placeholderClassName}
     />
 }
 
@@ -138,10 +141,11 @@ export function EditorWithoutLogic({
     textareaRef, 
     edited,
     className,
-    placeholder
+    placeholder,
+    placeholderClassName
 }: EditorWithoutLogicProps) {
     return (
-        <div className={`pt-2 ${className}`} onClick={() => textareaRef?.current?.focus()}>
+        <div className={`${className}`} onClick={() => textareaRef?.current?.focus()}>
             <div className="">
                 {displayEditor && <div className="grid grid-cols-2">
                     <h1 className="text-lg text-bright">Markdown</h1>
@@ -149,7 +153,7 @@ export function EditorWithoutLogic({
                 </div>}
                 <div className={`markdown-editor space-x-2 h-full ${displayEditor && "grid grid-cols-2"}`}>
                     {(displayEditor || !markdown.length) && <textarea
-                        className="w-full h-full rounded text-white bg-transparent focus:outline-none resize-none overflow-hidden"
+                        className={`w-full h-full rounded text-white bg-transparent focus:outline-none resize-none overflow-hidden ${placeholderClassName}`}
                         value={markdown}
                         onChange={handleMarkdownChange}
                         placeholder={placeholder || "Write your markdown here..."}

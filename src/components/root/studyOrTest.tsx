@@ -4,8 +4,11 @@ import Link from "next/link"
 import Edit from "./edit"
 import { usePathname } from "next/navigation"
 import { useEffect, useRef, useState } from "react"
-import { sendFile } from "@/utils/fetchClient"
+import { deleteFile, sendFile } from "@/utils/fetchClient"
 import { getFiles } from "@/utils/fetch"
+import getItem from "@/utils/localStorage"
+import Image from "next/image"
+import Trash from "../svg/trash"
 
 type CoursesProps = {
     courses: CourseAsList[]
@@ -13,14 +16,15 @@ type CoursesProps = {
 
 type FileProps = {
     file: Files
+    className?: string
 }
 
 export default function StudyOrTest({courses}: CoursesProps) {
     const path = usePathname()
-    const isStudy = path.includes('study')
+    const isStudy = path.includes('study') || path.includes('files') || getItem('leftnav') === 'study'
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full">
             {isStudy && <Files />}
             {!isStudy && <InnerCourses courses={courses} />}
         </div>
@@ -32,17 +36,24 @@ function Files() {
     const inputRef = useRef<HTMLInputElement | null>(null)
     const path = usePathname()
     const course = path.split('/')[2] || ''
-    const isStudy = path.includes('study')
     const [displayInputField, setDisplayInputField] = useState(false)
     const [input, setInput] = useState('')
 
     function createFile() {
+        if (!course || !input) {
+            return
+        }
+
         sendFile({courseID: course, name: input})
         setDisplayInputField(false)
 
         if (inputRef.current) {
             inputRef.current.value = ""
         }
+    }
+
+    function handleDelete() {
+        deleteFile({courseID: course, name: 'root'})
     }
 
     useEffect(() => {
@@ -72,9 +83,9 @@ function Files() {
     return (
         <div className="w-full grid grid-rows-auto">
             <Link href={`/course/${course}`} className="text-lg rounded-md mr-2 text-bright w-full">/ test</Link>
-            <div className="grid grid-cols-4">
-                <Link href={`/course/${course}/study`} className="text-lg rounded-md mr-2 text-bright w-full col-span-3">/ study</Link>
-                <button className="text-xl text-end text-bright" onClick={() => setDisplayInputField(!displayInputField)}>+</button>
+            <div className="flex flex-rows group">
+                <Link href={`/course/${course}/study`} className="text-lg rounded-md mr-2 text-bright w-full">/ study</Link>
+                <button className="text-xl opacity-0 group-hover:opacity-100 text-end text-bright" onClick={() => setDisplayInputField(!displayInputField)}>+</button>
             </div>
             {displayInputField && <div className="grid grid-cols-4">
                 <input 
@@ -93,7 +104,9 @@ function Files() {
 }
 
 function FileList({files}: FileListProps) {
-    if (!files || !Array.isArray(files)) return (<div></div>)
+    if (!files || !Array.isArray(files)) {
+        return <div />
+    }
 
     return (
         <div className="grid w-full">
@@ -102,7 +115,11 @@ function FileList({files}: FileListProps) {
     )
 }
 
-function File({file}: FileProps) {
+function File({file, className}: FileProps) {
+    if (file.name === 'root') {
+        return
+    }
+
     const path = usePathname()
     const [displayInputField, setDisplayInputField] = useState(false)
     const [input, setInput] = useState('')
@@ -121,24 +138,50 @@ function File({file}: FileProps) {
         }
     }
 
+    function handleDelete() {
+        deleteFile({courseID: course, name: file.name})
+    }
+
     return (
-        <>
-        <button className="text-bright grid grid-cols-5" key={file.name}>
-            <Link href={`/course/${course}/files/${file.name}`} className="text-start pl-2 text-lg col-span-4">/ {file.name}</Link>
-            <h1 className="text-end text-xl" onClick={handleDisplayInput}>+</h1>
-        </button>
-        {displayInputField && <div className="grid grid-cols-4 pl-2">
-            <input 
-                ref={inputRef}
-                className="bg-transparent col-span-3 border-b-2 border-bright text-bright" 
-                maxLength={20} 
-                type="text" 
-                value={input} 
-                onChange={(e) => setInput(e.target.value)} 
-            />
-            <button className="text-end text-bright" onClick={addFile}>Add</button>
-        </div>}
-        </>
+        <div className={className || "grid space-between"}>
+            <button className="text-bright grid grid-cols-5 group" key={file.name}>
+                <Link 
+                    href={`/course/${course}/files/${file.name}`} 
+                    className="text-start pl-4 text-lg col-span-4"
+                >
+                    / {file.name}
+                </Link>
+                <div className="flex flex-rows float-end justify-end">
+                    <h1
+                        className="text-end text-xl opacity-0 group-hover:opacity-100 hover:text-green-500" 
+                        onClick={handleDisplayInput}
+                    >
+                        +
+                    </h1>
+                    <h1 className="text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center" onClick={handleDelete}>
+                        <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full" />
+                    </h1>
+                </div>
+            </button>
+            {file.files.map((file) => <File 
+                className="pl-4 w-full grid space-between" 
+                key={file.name} 
+                file={file} />
+            )}
+            {displayInputField && <div className="grid grid-cols-4 pl-4">
+                <input 
+                    ref={inputRef}
+                    className={`bg-transparent col-span-3 border-b-2 border-bright text-bright`} 
+                    maxLength={20} 
+                    type="text" 
+                    value={input} 
+                    onChange={(e) => setInput(e.target.value)} 
+                />
+                <button className="text-end text-bright" onClick={addFile}>
+                    Add
+                </button>
+            </div>}
+        </div>
     )
 }
 
@@ -159,7 +202,10 @@ function InnerCourses({courses}: CoursesProps) {
 
 function Course({course}: CourseProps) {
     return (
-        <Link href={`/course/${course.id}`} className={`w-full h-[5vh] bg-light mb-2 rounded-xl flex items-center pl-4`}>
+        <Link 
+            href={`/course/${course.id}`} 
+            className={`w-full h-[5vh] bg-light mb-2 rounded-xl flex items-center pl-4`}
+        >
             <h1>{course.id}</h1>
         </Link>
     )

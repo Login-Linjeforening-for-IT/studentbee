@@ -14,12 +14,12 @@ export default function getItem(name: string): object | string | undefined {
             return parsedOnce
         }
     } catch (error: unknown) {
-        const err = error as Error
-        return err.message
+        return item
     }
 }
 
 export function setItem(name: string, value: string) {
+    console.log('set cookie', name, value)
     localStorage.setItem(name, value)
 }
 

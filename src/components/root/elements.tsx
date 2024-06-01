@@ -1,8 +1,7 @@
-import { getCourse } from "@/utils/fetch"
-
 type ElementsProps = {
     id?: string
     current?: number
+    course: Course | string
 }
 
 type NextQuestionProps = {
@@ -11,8 +10,7 @@ type NextQuestionProps = {
     amount: number
 }
 
-export default async function Elements({id, current}: ElementsProps) {
-    const course = await getCourse(id || 'PROG1001', 'server')
+export default function Elements({id, current, course}: ElementsProps) {
     const error = typeof course === 'string' && id ? course : 'No course selected'
 
     if (typeof course === 'string') {

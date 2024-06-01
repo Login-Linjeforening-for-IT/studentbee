@@ -114,12 +114,9 @@ type Vote = {
 
 type Files = {
     name: string
-    content: InnerFile[] | string[]
-}
-
-type InnerFile = {
-    name: string
-    content: string[]
+    content: string
+    files: Files[]
+    parent?: string
 }
 
 type FileListProps = {

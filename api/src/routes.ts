@@ -20,8 +20,9 @@ import {
     putText,
     putTime,
     putMarkCourse,
-    deleteComment,
     putFile,
+    deleteComment,
+    deleteFile,
 } from './controllers'
 
 const router = express.Router()
@@ -48,5 +49,6 @@ router.post('/comment', postComment)
 router.post('/vote', postVote)
 router.post('/vote/card', postCardVote)
 router.delete('/comment', deleteComment)
+router.delete('/file/:courseID/:fileID', deleteFile)
 
 export default router

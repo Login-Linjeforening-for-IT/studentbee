@@ -190,7 +190,6 @@ export async function getFiles(req: Request, res: Response) {
         // Initialize files by name and group files
         files.forEach(file => {
             file.files = []
-            if (!file.files) file.files = []
             filesByName[file.name] = file
 
             const fileName = file.name || 'no_fileName'
@@ -215,10 +214,13 @@ export async function getFiles(req: Request, res: Response) {
             groupedFiles[fileName] = groupedFiles[fileName].filter(file => !file.parent)
         })
 
-        // Converts grouped files to 2D array
-        const filesArray = Object.keys(groupedFiles).map(fileName => groupedFiles[fileName])
+        // Collect all top-level files into a single array
+        const topLevelFiles: Files[] = []
+        Object.keys(groupedFiles).forEach(fileName => {
+            topLevelFiles.push(...groupedFiles[fileName])
+        })
 
-        res.json(filesArray)
+        res.json(topLevelFiles)
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
@@ -916,6 +918,25 @@ export async function deleteComment(req: Request, res: Response) {
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
+    }
+}
+
+export async function deleteFile(req: Request, res: Response) {
+    try {
+        const { courseID, fileID } = req.params
+
+        if (!courseID || !fileID) {
+            return res.status(400).json({ error: 'Course ID and File ID are required' })
+        }
+
+        const fileRef = db.collection('Files').doc(`${courseID}:${fileID}`)
+        await fileRef.delete()
+
+        res.status(200).json({ id: fileRef.id })
+    } catch (error: unknown) {
+        const err = error as Error
+        res.status(500).json({ error: err.message })
+        
     }
 }
 

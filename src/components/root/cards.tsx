@@ -295,17 +295,18 @@ function Alternatives({alternatives, selected, animateAnswer, checkAnswer, attem
         <div className='w-full'>
             {alternatives.map((answer, index) =>
                 <button 
-                onClick={() => {
-                    checkAnswer([index], attempted, setAttempted)
-                    correct.length > 1 
-                    ? selected.includes(index) ? setSelected(selected.filter(alternative => alternative !== index)) : setSelected([...selected, index])
-                    : setSelected([index]); setAttempted(prev => [...prev, index])
-                }}
-                className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2`}
-            >
-                <h1 className="h-full pr-2 text-md grid place-items-center text-bright">{index + 1}</h1>
-                {answer}
-            </button>
+                    key={index}
+                    onClick={() => {
+                        checkAnswer([index], attempted, setAttempted)
+                        correct.length > 1 
+                        ? selected.includes(index) ? setSelected(selected.filter(alternative => alternative !== index)) : setSelected([...selected, index])
+                        : setSelected([index]); setAttempted(prev => [...prev, index])
+                    }}
+                    className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2`}
+                >
+                    <h1 className="h-full pr-2 text-md grid place-items-center text-bright">{index + 1}</h1>
+                    {answer}
+                </button>
             )}
         </div>
     )

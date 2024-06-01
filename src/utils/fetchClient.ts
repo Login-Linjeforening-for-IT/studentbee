@@ -14,6 +14,12 @@ type SendFileProps = {
     parent?: string
 }
 
+type UpdateFileProps = {
+    courseID: string
+    name: string
+    content: string
+}
+
 // Adds a course with the given user id, course name and questions
 export async function addCourse(course: Course): Promise<void | string> {
     const user: User | undefined = getItem('user') as User | undefined
@@ -155,6 +161,61 @@ export async function sendFile({courseID, name, parent}: SendFileProps) {
             courseID,
             name,
             parent
+        })
+    })
+
+    if (!response.ok) {
+        const data = await response.json()
+
+        throw Error(data.error)
+    }
+
+    return await response.json()
+}
+
+export async function updateFile({courseID, name, content}: UpdateFileProps) {
+    const user = getItem('user') as User
+
+    if (!user) {
+        throw Error('You must be logged in to upload a file')
+    }
+
+    const response = await fetch(`${BROWSER_API}/file`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userID: user.id,
+            courseID,
+            name,
+            content
+        })
+    })
+
+    if (!response.ok) {
+        const data = await response.json()
+
+        throw Error(data.error)
+    }
+
+    return await response.json()
+}
+
+export async function deleteFile({courseID, name}: SendFileProps) {
+    const user = getItem('user') as User
+
+    if (!user) {
+        throw Error('You must be logged in to delete a file')
+    }
+
+    const response = await fetch(`${BROWSER_API}/file/${courseID}/${name}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            userID: user.id
         })
     })
 
