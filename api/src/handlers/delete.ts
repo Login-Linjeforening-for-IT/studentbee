@@ -1,9 +1,19 @@
 import { Request, Response } from 'express'
 import db from '../db'
 
+type DeleteCommentProps = {
+    userID: number
+    commentID: number
+}
+
+type DeleteFileProps = {
+    courseID: string
+    fileID: string
+}
+
 export async function deleteComment(req: Request, res: Response) {
     try {
-        const { userID, commentID } = req.body
+        const { userID, commentID } = req.body as DeleteCommentProps
 
         if (!userID || typeof commentID !== 'number') {
             return res.status(400).json({ error: 'Comment ID is required' })
@@ -33,7 +43,7 @@ export async function deleteComment(req: Request, res: Response) {
 
 export async function deleteFile(req: Request, res: Response) {
     try {
-        const { courseID, fileID } = req.params
+        const { courseID, fileID } = req.params as DeleteFileProps
 
         if (!courseID || !fileID) {
             return res.status(400).json({ error: 'Course ID and File ID are required' })
