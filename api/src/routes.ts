@@ -1,29 +1,35 @@
 import express from 'express'
-import {
-    getScoreboard,
-    getCourses,
-    getCourse,
-    getFile,
-    getFiles,
-    getUserProfile,
-    getIndexHandler,
-    getComments,
-    postFile,
-    postRegister,
-    postLogin,
-    postCard,
-    postCourse,
-    postComment,
-    postVote,
-    postCardVote,
-    putCourse,
-    putText,
-    putTime,
-    putMarkCourse,
+import { 
+    getScoreboard, 
+    getCourses, 
+    getCourse, 
+    getFile, 
+    getFiles, 
+    getUserProfile, 
+    getIndexHandler, 
+    getComments 
+} from './handlers/get'
+import { 
+    postFile, 
+    postRegister, 
+    postLogin, 
+    postCard, 
+    postCourse, 
+    postComment, 
+    postVote, 
+    postCardVote 
+} from './handlers/post'
+import { 
+    putCourse, 
+    putText, 
+    putMarkCourse, 
     putFile,
+    putTime
+} from './handlers/put'
+import {
     deleteComment,
     deleteFile,
-} from './controllers'
+} from './handlers/delete'
 
 const router = express.Router()
 
