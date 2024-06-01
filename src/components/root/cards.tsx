@@ -40,7 +40,6 @@ type ButtonsProps = {
 }
 
 export default function Cards({id, current, course, comments}: CardsProps) {
-    const path = usePathname()
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState<number[]>([-1])
@@ -164,13 +163,6 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         setAttempted([...card.correct])
         setRemainGreen([...card.correct])
     }
-
-    useEffect(() => {
-        if (card.correct.length <= 1 && remainGreen.length) {
-            setWait(false)
-            setSelected(card.correct)
-        }
-    }, [remainGreen])
 
     return (
         <div className="w-full h-full grid grid-rows-10 gap-8">

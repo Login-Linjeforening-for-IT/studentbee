@@ -1,6 +1,6 @@
 'use client'
 
-import { Editor } from "@/components/editor/editor"
+import Editor from "@/components/editor/editor"
 import { getCourse, updateCourse } from "@/utils/fetch"
 import Image from "next/image"
 import Link from "next/link"

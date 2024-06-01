@@ -4,7 +4,7 @@ import { sendVote } from "@/utils/vote"
 import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useState } from "react"
-import { Editor, Markdown } from "../editor/editor"
+import Editor, { Markdown } from "../editor/editor"
 
 type CommentsProps = {
     comments: CardComment[]

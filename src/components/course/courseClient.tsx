@@ -20,15 +20,16 @@ type CourseClientProps = {
 export default function CourseClient({ course, learningBased, id, current, comments, fileContent }: CourseClientProps) {
     const path = usePathname()
     const isStudy = path.includes('study')
-
+    const study = learningBased || isStudy
+    
     return (
         <div className="w-full h-full rounded-xl overflow-auto grid grid-cols-10 gap-8 noscroll">
             <Courses />
-            {learningBased || isStudy && <Study courseID={id} value={fileContent} />}
-            {(!learningBased) && !isStudy && <div className={`w-full h-full col-span-6`}>
+            {study && <Study courseID={id} value={fileContent} />}
+            {!study && <div className={`w-full h-full col-span-6`}>
                 <Cards course={course} id={id} current={current} comments={comments} />
             </div>}
-            {!learningBased && !isStudy && <Elements id={id} current={current} />}
+            {!study && <Elements id={id} current={current} />}
         </div>
     )
 }
