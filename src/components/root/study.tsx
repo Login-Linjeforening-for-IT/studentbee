@@ -20,7 +20,6 @@ export default function Study({ courseID, value }: StudyProps) {
     }
 
     function save() {
-        console.log("called save func", courseID, content.join('\n'), name)
         updateFile({ courseID, content: content.join('\n'), name: name || 'root' })
     }
 
