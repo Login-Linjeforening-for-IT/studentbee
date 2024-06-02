@@ -25,6 +25,22 @@ type FileProps = {
     setDisplayInputField: Dispatch<SetStateAction<string>>
 }
 
+type FileListHeaderProps = {
+    course: string
+    displayInputField: string
+    setDisplayInputField: Dispatch<SetStateAction<string>>
+    input: string
+    setInput: Dispatch<SetStateAction<string>>
+    inputRef: MutableRefObject<HTMLInputElement | null>
+    createFile: () => void
+}
+
+type ButtonProps = {
+    text: string
+    href: string
+    target?: string
+}
+
 export default function StudyOrTest({courses}: CoursesProps) {
     const path = usePathname()
     const isStudy = path.includes('study') || path.includes('files') || getItem('leftnav') === 'study'
@@ -88,19 +104,27 @@ function Files() {
 
     return (
         <div className="w-full grid grid-rows-auto">
-            <Link 
-                href={`/course/${course}`} 
-                className="text-lg rounded-md mr-2 text-bright w-full"
-            >
-                / test
-            </Link>
+            <FileListHeader 
+                course={course} 
+                displayInputField={displayInputField} 
+                setDisplayInputField={setDisplayInputField} 
+                input={input} 
+                setInput={setInput} 
+                inputRef={inputRef}
+                createFile={createFile}
+            />
+            <FileList files={files} path={path} inputRef={inputRef} />
+        </div>
+    )
+}
+
+function FileListHeader({course, displayInputField, setDisplayInputField, input, setInput, inputRef, createFile}: FileListHeaderProps) {
+    return (
+        <>
+            <Button text='/ test' href={`/course/${course}`} />
+            {course === 'IDATG2204' && <Button text='/ sql-practice' href='https://sql-practice.com' target="_blank" />}
             <div className="flex flex-rows group">
-                <Link 
-                    href={`/course/${course}/study`} 
-                    className="text-lg rounded-md mr-2 text-bright w-full"
-                >
-                    / study
-                </Link>
+                <Button text='/ study' href={`/course/${course}/study`} />
                 <button 
                     className="text-xl opacity-0 group-hover:opacity-100 text-end text-bright" 
                     onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}
@@ -124,8 +148,19 @@ function Files() {
                     Add
                 </button>
             </div>}
-            <FileList files={files} path={path} inputRef={inputRef} />
-        </div>
+        </>
+    )
+}
+
+function Button({text, href, target}: ButtonProps) {
+    return (
+        <Link
+            href={href} 
+            className="text-lg rounded-md mr-2 text-bright w-full"
+            target={target}
+        >
+            {text}
+        </Link>
     )
 }
 
