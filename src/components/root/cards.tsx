@@ -1,44 +1,20 @@
 'use client'
 import shuffle from "@utils/shuffle"
-import { useState, useRef, SetStateAction, Dispatch, useEffect, use } from "react"
+import { useState, useRef } from "react"
 import { useCardNavigation } from "@/hooks/cardNavigation"
 import Comments from "./comments"
 import { getTotalCommentsLength } from "@/utils/comments"
-import Image from "next/image"
 import sendCardVote from "@/utils/vote"
 import Link from "next/link"
 import { sendMark } from "@/utils/fetchClient"
-import { Markdown } from "../editor/editor"
-import { usePathname } from "next/navigation"
-import Study from "./study"
-import ThumbsUp from "../svg/thumbsup"
-import ThumbsDown from "../svg/thumbsdown"
-
-type AlternativesProps = {
-    alternatives: string[]
-    selected: number[]
-    setSelected: React.Dispatch<React.SetStateAction<number[]>>
-    animateAnswer: string
-    checkAnswer: (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>) => void
-    attempted: number[]
-    setAttempted: React.Dispatch<React.SetStateAction<number[]>>
-    correct: number[]
-    remainGreen: number[]
-    setRemainGreen: React.Dispatch<React.SetStateAction<number[]>>
-    wait: boolean
-}
+import Buttons from "../card/buttons"
+import Question from "../card/question"
 
 type CardsProps = {
     id?: string
     current?: number
     course: Course | string
     comments: CardComment[][]
-}
-
-type ButtonsProps = {
-    animateAnswer: string
-    navigate: (direction: string) => void
-    flashColor: string
 }
 
 export default function Cards({id, current, course, comments}: CardsProps) {
@@ -128,25 +104,6 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         window.location.href = `/course/${id}/0`
     }
 
-    const alternativeLength = card.alternatives.reduce((acc, curr) => acc + curr.length, 0)
-    const questionLength = card.question.length
-    
-    function maxHeight(questionLength: number, alternativeLength: number) {
-        const table = [
-            { condition: (q: number, a: number) => q > 500 && a > 1200, height: "max-h-[10vh]" },
-            { condition: (q: number, a: number) => q > 500 && a > 800, height: "max-h-[14vh]" },
-            { condition: (q: number, a: number) => q > 500 && a > 400, height: "max-h-[16vh]" },
-            { condition: (q: number, _a: number) => q > 500, height: "max-h-[32vh]" },
-            { condition: (_q: number, _a: number) => true, height: "max-h-[45vh]" }
-        ]
-    
-        for (let entry of table) {
-            if (entry.condition(questionLength, alternativeLength)) {
-                return entry.height
-            }
-        }
-    }
-
     function handleVote(vote: boolean) {
         if (!id) {
             return
@@ -167,56 +124,27 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     return (
-        <div className="w-full h-full grid grid-rows-10 gap-8 col-span-6">
-            <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8`}>
-                <div className="w-full h-full row-span-9 pb-8">
-                    <div className="w-full">
-                        <h1 className="text-right text-gray-500 float-right">{card.source} {(current || 0) + 1} / {cards.length}</h1>
-                        <div className={`text-md mb-8 ${maxHeight(questionLength, alternativeLength)} overflow-auto`}>
-                        {card.correct.length > 1 && <h1 className="text-bright">Multiple choice - Select all correct answers</h1>}
-                        {card.theme && <h1 className="text-lg text-gray-500">{card.theme}</h1>}
-                        <Markdown
-                            displayEditor={false} 
-                            handleDisplayEditor={() => {}} 
-                            markdown={card.question} 
-                        />
-                        </div>
-                    </div>
-                    <Alternatives 
-                        alternatives={card.alternatives}
-                        selected={selected}
-                        setSelected={setSelected}
-                        animateAnswer={animateAnswer} 
-                        checkAnswer={checkAnswer}
-                        attempted={attempted}
-                        setAttempted={setAttempted}
-                        correct={card.correct}
-                        remainGreen={remainGreen}
-                        setRemainGreen={setRemainGreen}
-                        wait={wait}
-                    />
-                </div>
-                <div className="grid grid-cols-3">
-                    <div className="flex flex-rows space-x-2 mb-4">
-                        <h1 className="text-bright">{card.rating + clientVote > 0 ? '+' : ''}{card.rating + clientVote}</h1>
-                        <button className="w-[1.3vw]" onClick={() => handleVote(true)}>
-                            <ThumbsUp fill={`${clientVote === 1 ? "fill-green-500" : "fill-bright hover:fill-green-500"}`} className="w-full h-full pt-[0.2vh]" />
-                        </button>
-                        <button className="w-[1.3vw]" onClick={() => handleVote(false)}>
-                            <ThumbsDown fill={`${clientVote === -1 ? "fill-red-500" : "fill-bright hover:fill-red-500"}`} className="w-full h-full pt-[0.2vh]" />
-                        </button>
-                    </div>
-                    <button 
-                        className="pb-4 text-bright" 
-                        onClick={() => setShowComments(!showComments)}
-                    >
-                        {totalCommentsLength ? `View comments (${totalCommentsLength})` : "Add comment"} {showComments ? '▼' : '▲'}
-                    </button>
-                    {(wait || !(card.correct.length > 1)) && !remainGreen.every(answer => card.correct.includes(answer)) && <div>
-                        <button className="w-full text-end text-bright" onClick={showAnswers}>{card.correct.length > 1 ? "Show answers" : "Show answer"}</button>
-                    </div>}
-                </div>
-            </div>
+        <div className="w-full h-full max-h-full grid grid-rows-10 gap-8 col-span-6 overflow-hidden">
+            <Question
+                card={card} 
+                cards={cards} 
+                current={current} 
+                selected={selected} 
+                animateAnswer={animateAnswer} 
+                attempted={attempted} 
+                remainGreen={remainGreen}
+                wait={wait}
+                clientVote={clientVote}
+                showComments={showComments}
+                totalCommentsLength={totalCommentsLength}
+                checkAnswer={checkAnswer} 
+                handleVote={handleVote}
+                setSelected={setSelected} 
+                setAttempted={setAttempted} 
+                setRemainGreen={setRemainGreen}
+                setShowComments={setShowComments}
+                showAnswers={showAnswers}
+            />
             <Buttons
                 animateAnswer={animateAnswer}
                 navigate={navigate}
@@ -228,88 +156,6 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 comments={relevantComments} 
                 totalCommentsLength={totalCommentsLength} 
             />}
-        </div>
-    )
-}
-
-function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
-    const button = `text-xl rounded-xl grid place-items-center`
-
-    return (
-        <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
-            <button 
-                className={`${button} ${animateAnswer === 'back' ? "bg-light" : "bg-dark"}`}
-                onClick={() => navigate('back')}
-            >
-                back
-            </button>
-            <button 
-                className={`${button} ${animateAnswer === 'skip' ? "bg-light" : "bg-dark"}`}
-                onClick={() => navigate('skip')}
-            >
-                skip
-            </button>
-            <button 
-                className={`${button} ${flashColor}`}
-                onClick={() => navigate('next')}
-            >
-                next
-            </button>
-        </div>
-    )
-}
-
-function Alternatives({alternatives, selected, animateAnswer, checkAnswer, attempted, setAttempted, correct, setSelected, remainGreen, setRemainGreen, wait}: AlternativesProps) {
-    function getColor(index: number): string {
-        if (remainGreen.includes(index)) {
-            return "bg-green-500"
-        }
-
-        if (!wait) {
-            for (let i = 0; i < attempted.length; i++) {
-                if (correct.includes(index) && attempted.includes(index)) {
-                    return "bg-green-500"
-                }
-            }
-        }
-
-        if (!wait) {
-            if (attempted.includes(index) && !correct.includes(index)) {
-                return "bg-red-800"
-            }
-        }
-
-        if (animateAnswer === index.toString()) {
-            if (animateAnswer === correct.toString()) {
-                !remainGreen.includes(index) && setRemainGreen([...remainGreen, index])
-                return "bg-green-500"
-            }
-        }
-
-        if (selected.includes(index)) {
-            return "bg-extralight"
-        }
-        
-        return "bg-light"
-    }
-
-    return (
-        <div className='w-full'>
-            {alternatives.map((answer, index) =>
-                <button 
-                    key={index}
-                    onClick={() => {
-                        checkAnswer([index], attempted, setAttempted)
-                        correct.length > 1 
-                        ? selected.includes(index) ? setSelected(selected.filter(alternative => alternative !== index)) : setSelected([...selected, index])
-                        : setSelected([index]); setAttempted(prev => [...prev, index])
-                    }}
-                    className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
-                >
-                    <h1 className="h-full pr-2 text-md grid place-items-center text-bright">{index + 1}</h1>
-                    {answer}
-                </button>
-            )}
         </div>
     )
 }

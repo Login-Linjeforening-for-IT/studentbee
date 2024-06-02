@@ -49,7 +49,7 @@ export default function Elements({id, current, course}: ElementsProps) {
     }
 
     return (
-        <div className='w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden'>
+        <div className='w-full rounded-xl col-span-2 grid gap-8 overflow-hidden'>
             <Help />
             <div className="w-full h-full rounded-xl overflow-auto">
                 <GetNextQuestions cards={cards} current={current} amount={amount} />

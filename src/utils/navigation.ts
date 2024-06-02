@@ -6,17 +6,17 @@ type HandleNavigationProps = {
     direction: string
     current: number | undefined
     router: AppRouterInstance
-    setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
-    setSelected: React.Dispatch<React.SetStateAction<number[]>>
+    setAnimateAnswer: Dispatch<SetStateAction<string>>
+    setSelected: Dispatch<SetStateAction<number[]>>
     checkAnswer: (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>, next?: true) => void
     id: string | undefined
     card: Card
     cards: Card[]
     selectedRef: MutableRefObject<number[]>
     attempted: number[]
-    setAttempted: React.Dispatch<React.SetStateAction<number[]>>
+    setAttempted: Dispatch<SetStateAction<number[]>>
     wait: boolean
-    setWait: React.Dispatch<React.SetStateAction<boolean>>
+    setWait: Dispatch<SetStateAction<boolean>>
 }
 
 type HandleKeyDownProps = {
@@ -26,7 +26,7 @@ type HandleKeyDownProps = {
 
 type animate200msProps = {
     key: string
-    setAnimateAnswer: React.Dispatch<React.SetStateAction<string>>
+    setAnimateAnswer: Dispatch<SetStateAction<string>>
 }
 
 // Handles navigation for the cards component

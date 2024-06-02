@@ -15,10 +15,10 @@ export default async function Course({ params }: { params: { id: string[] } }) {
     const learningBased = typeof course === 'object' && course?.mark
 
     return (
-        <div className='grid grid-cols-10 gap-8 w-full h-full'>
+        <div className='grid grid-cols-10 gap-8 w-full h-full max-h-full'>
             <CourseList />
-            <div className='col-span-8'>
-                <CourseClient
+            <div className='col-span-8 max-h-full overflow-auto'>
+                <CourseClient 
                     course={course} 
                     learningBased={learningBased} 
                     id={id} 

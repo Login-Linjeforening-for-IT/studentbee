@@ -6,7 +6,7 @@ import { getCourse, updateCourse } from "@/utils/fetch"
 import Image from "next/image"
 import Link from "next/link"
 import Script from "next/script"
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react"
+import { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from "react"
 
 type AddCardProps = {
     courseID: string
@@ -38,12 +38,12 @@ type RejectedProps = {
 
 type EditCardsProps = {
     editing: Editing
-    textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>
+    textareaRefs: MutableRefObject<(HTMLTextAreaElement | null)[]>
     handleQuestionChange: (text: string, cardIndex: number) => void
-    handleThemeChange: (event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) => void
-    handleSourceChange: (event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) => void
+    handleThemeChange: (event: ChangeEvent<HTMLInputElement>, cardIndex: number) => void
+    handleSourceChange: (event: ChangeEvent<HTMLInputElement>, cardIndex: number) => void
     setCorrectAnswer: (index: number, cardIndex: number) => void
-    handleAlternativeChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
+    handleAlternativeChange: (event: ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
     handleAction: (action: 'accept' | 'reject', cardIndex: number) => void
 }
 
@@ -66,9 +66,9 @@ type ActionButtonsProps = {
 type AlternativesProps = {
     card: Card
     setCorrectAnswer: (index: number, cardIndex: number) => void
-    handleAlternativeChange: (event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
+    handleAlternativeChange: (event: ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
     cardIndex: number
-    textareaRefs: React.MutableRefObject<(HTMLTextAreaElement | null)[]>
+    textareaRefs: MutableRefObject<(HTMLTextAreaElement | null)[]>
 }
 
 export default function Edit({ params }: { params: { item: string[] } }) {
@@ -133,7 +133,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         updateCourse({courseID: item, accepted, editing})
     }
 
-    function handleTextChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    function handleTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
         setText(event.target.value)
         setEditing({...editing, texts: event.target.value.split('\n\n')})
     }
@@ -188,19 +188,19 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         setEditing({...editing, cards: tempCards})
     }
 
-    function handleThemeChange(event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) {
+    function handleThemeChange(event: ChangeEvent<HTMLInputElement>, cardIndex: number) {
         const tempCards = [...editing.cards]
         tempCards[cardIndex] = {...tempCards[cardIndex], theme: event.target.value}
         setEditing({...editing, cards: tempCards})
     }
 
-    function handleSourceChange(event: React.ChangeEvent<HTMLInputElement>, cardIndex: number) {
+    function handleSourceChange(event: ChangeEvent<HTMLInputElement>, cardIndex: number) {
         const tempCards = [...editing.cards]
         tempCards[cardIndex] = {...tempCards[cardIndex], source: event.target.value}
         setEditing({...editing, cards: tempCards})
     }
 
-    function handleAlternativeChange(event: React.ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) {
+    function handleAlternativeChange(event: ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) {
         const tempCards = [...editing.cards]
         const tempAlternatives = [...tempCards[cardIndex].alternatives]
         tempAlternatives[alternativeIndex] = event.target.value
@@ -608,7 +608,7 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
     const isText = selected === 'text'
     const fileInputRef = useRef<HTMLInputElement | null>(null)
   
-    async function upload(event: React.ChangeEvent<HTMLInputElement>) {
+    async function upload(event: ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0]
 
         if (file) {

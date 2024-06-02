@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from "react"
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from "react"
 import { marked } from "marked"
 import hljs from "highlight.js"
 import "highlight.js/styles/github-dark.css"
@@ -21,13 +21,13 @@ type EditorProps = {
 
 type EditorWithoutLogicProps = {
     markdown: string
-    handleMarkdownChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void
+    handleMarkdownChange: (event: ChangeEvent<HTMLTextAreaElement>) => void
     handleSave: () => void
     displayEditor: boolean
     hideSaveButton?: true
     handleDisplayEditor: () => void
     hideSave: boolean
-    textareaRef: React.RefObject<HTMLTextAreaElement>
+    textareaRef: RefObject<HTMLTextAreaElement>
     edited: boolean
     className?: string
     placeholder?: string
@@ -57,14 +57,24 @@ marked.use({
     }
 })
 
-export default function Editor({ courseID, value, customSaveLogic, hideSaveButton, save, onChange, className, placeholder, placeholderClassName }: EditorProps) {
+export default function Editor({ 
+    courseID, 
+    value, 
+    customSaveLogic, 
+    hideSaveButton, 
+    save, 
+    onChange, 
+    className, 
+    placeholder, 
+    placeholderClassName 
+}: EditorProps) {
     const [markdown, setMarkdown] = useState(value.join('\n'))
     const [displayEditor, setDisplayEditor] = useState(false)
     const [hideSave, setHideSave] = useState(false)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
     const edited = value.join('\n') !== markdown
 
-    function handleMarkdownChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+    function handleMarkdownChange(event: ChangeEvent<HTMLTextAreaElement>) {
         if (customSaveLogic && onChange) {
             if (!displayEditor) {
                 setDisplayEditor(true)
@@ -145,7 +155,10 @@ export function EditorWithoutLogic({
     placeholderClassName
 }: EditorWithoutLogicProps) {
     return (
-        <div className={`${className}`} onClick={() => textareaRef?.current?.focus()}>
+        <div
+            className={`${className}`} 
+            onClick={() => textareaRef?.current?.focus()}
+        >
             <div className="">
                 {displayEditor && <div className="grid grid-cols-2">
                     <h1 className="text-lg text-bright">Markdown</h1>
@@ -167,13 +180,23 @@ export function EditorWithoutLogic({
                 </div>
             </div>
             {edited && !hideSave && !hideSaveButton && <div className="mt-2">
-                <button className="text-md bg-orange-500 px-8 rounded-xl h-[4vh]" onClick={handleSave}>Save</button>
+                <button 
+                    className="text-md bg-orange-500 px-8 rounded-xl h-[4vh]" 
+                    onClick={handleSave}
+                >
+                    Save
+                </button>
             </div>}
         </div>
     )
 }
 
-export function Markdown({displayEditor, handleDisplayEditor, markdown, className}: MarkdownProps) {
+export function Markdown({
+    displayEditor, 
+    handleDisplayEditor, 
+    markdown, 
+    className
+}: MarkdownProps) {
     return (
         <div
             className={`markdown-preview ${displayEditor && "pl-2 border-l-2 border-orange-500"} text-white h-full break-words ${className}`}

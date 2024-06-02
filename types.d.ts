@@ -131,3 +131,9 @@ type FileListProps = {
     path: string
     inputRef: MutableRefObject<HTMLInputElement | null>
 }
+
+type ClientVote = {
+    commentID: number
+    vote: boolean
+    isReply?: true
+}
