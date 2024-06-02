@@ -1,6 +1,7 @@
 'use client'
 
 import Editor from "@/components/editor/editor"
+import Trash from "@/components/svg/trash"
 import { getCourse, updateCourse } from "@/utils/fetch"
 import Image from "next/image"
 import Link from "next/link"
@@ -426,7 +427,7 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
                                     </button>    
                                 }
                                 <button className="" onClick={() => removeAlternative(index)}>
-                                    <Image src="/images/trash.svg" alt="logo" height={25} width={25} />    
+                                    <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full pt-[0.3vh]" />
                                 </button>
                             </div>
                         </div>
@@ -518,8 +519,8 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
                                 <h1 className="text-gray-500 text-right w-full">{card.alternatives.length}</h1>
                             </div>
                         </button>
-                        <button className="grid pb-2 place-items-center" onClick={() => handleRemove(index)}>
-                            <Image src="/images/trash.svg" alt="logo" height={30} width={30} />    
+                        <button className="flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw]" onClick={() => handleRemove(index)}>
+                            <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full place-self-center" />
                         </button>
                     </div>
                 ))}

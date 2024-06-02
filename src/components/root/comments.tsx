@@ -1,10 +1,13 @@
 import { deleteComment, postComment } from "@/utils/comments"
 import getItem from "@/utils/localStorage"
 import { sendVote } from "@/utils/vote"
-import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useState } from "react"
 import Editor, { Markdown } from "../editor/editor"
+import Trash from "../svg/trash"
+import ThumbsUp from "../svg/thumbsup"
+import ThumbsDown from "../svg/thumbsdown"
+import voteColor from "../comments/voteColor"
 
 type CommentsProps = {
     comments: CardComment[]
@@ -53,7 +56,6 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
     const [content, setContent] = useState("")
     const [parent, setParent] = useState<number | undefined>()
     const [clientComments, setClientComments] = useState(comments)
-    const iconSize = 20
     const [voted, setVoted] = useState<ClientVote[]>([])
     const user = getItem('user') as User
 
@@ -101,6 +103,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                     ...temp[index],
                     rating: vote ? temp[index].rating - 1 : temp[index].rating + 1
                 }
+
                 setClientComments(temp)
                 setVoted(voted.filter(vote => vote.commentID !== commentID))
                 return
@@ -112,6 +115,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                 ...temp[index],
                 rating: vote ? temp[index].rating + 2 : temp[index].rating - 2
             }
+
             setClientComments(temp)
             setVoted(voted.map(inner => inner.commentID === commentID ? {commentID, vote} : inner))
             return
@@ -158,14 +162,14 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                             </div>
                             <div className="w-full flex flex-rows space-x-2 mt-1">
                                 <h1 className="text-bright">{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
-                                <button onClick={() => vote({commentID: comment.id, vote: true})}>
-                                    <Image src="/images/thumbsup.svg" alt="logo" height={iconSize} width={iconSize} />
+                                <button className="w-[1.3vw]" onClick={() => vote({commentID: comment.id, vote: true})}>
+                                    <ThumbsUp fill={voteColor(comment, 'up')} className="w-full h-full pt-[0.2vh]" />
                                 </button>
-                                <button onClick={() => vote({commentID: comment.id, vote: false})}>
-                                    <Image src="/images/thumbsdown.svg" alt="logo" height={iconSize} width={iconSize} />
+                                <button className="w-[1.3vw]" onClick={() => vote({commentID: comment.id, vote: false})}>
+                                    <ThumbsDown fill={voteColor(comment, 'down')} className="w-full h-full pt-[0.2vh]" />
                                 </button>
-                                {user.id === comment.userID && <button className="text-bright underline" onClick={() => handleDelete({commentID: comment.id})}>
-                                    <Image className="" src="/images/trash.svg" alt="logo" height={iconSize - 1} width={iconSize - 1} />    
+                                {user.id === comment.userID && <button className="text-bright underline w-[1.4vw]" onClick={() => handleDelete({commentID: comment.id})}>
+                                    <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full pt-[0.2vh]" />
                                 </button>}
                                 <button className="text-bright underline" onClick={() => setParent(parent ? undefined : comment.id)}>Reply</button>
                             </div>
@@ -285,7 +289,6 @@ function Replies({replies, vote, comment, comments, setComments}: RepliesProps) 
 function ReplyComponent({reply, vote, comment, comments, setComments}: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const user = getItem('user') as User
-    const size = 20
 
     function handleDelete() {
         deleteComment({commentID: reply.id})
@@ -324,14 +327,14 @@ function ReplyComponent({reply, vote, comment, comments, setComments}: ReplyComp
             </div>
             <div className="w-full flex flex-rows space-x-2 mb-4">
                 <h1 className="text-bright">{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
-                <button onClick={() => handleVote({commentID: reply.id, current: true})}>
-                    <Image src="/images/thumbsup.svg" alt="logo" height={size} width={size} />
+                <button className="w-[1.3vw]" onClick={() => handleVote({commentID: reply.id, current: true})}>
+                    <ThumbsUp fill={`${clientVote === 1 ? "fill-green-500" : "fill-bright hover:fill-green-500"}`} className="w-full h-full pt-[0.2vh]" />
                 </button>
-                <button onClick={() => handleVote({commentID: reply.id, current: false})}>
-                    <Image src="/images/thumbsdown.svg" alt="logo" height={size} width={size} />
+                <button className="w-[1.3vw]" onClick={() => handleVote({commentID: reply.id, current: false})}>
+                    <ThumbsDown fill={`${clientVote === -1 ? "fill-red-500" : "fill-bright hover:fill-red-500"}`} className="w-full h-full pt-[0.2vh]" />
                 </button>
-                {user.id === reply.userID && <button className="text-bright underline" onClick={handleDelete}>
-                    <Image className="" src="/images/trash.svg" alt="logo" height={size - 1} width={size - 1} />    
+                {user.id === reply.userID && <button className="text-bright underline w-[1.3vw]" onClick={handleDelete}>
+                    <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full pt-[0.2vh]" /> 
                 </button>}
             </div>
         </div>

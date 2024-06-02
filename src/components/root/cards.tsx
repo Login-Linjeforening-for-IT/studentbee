@@ -11,6 +11,8 @@ import { sendMark } from "@/utils/fetchClient"
 import { Markdown } from "../editor/editor"
 import { usePathname } from "next/navigation"
 import Study from "./study"
+import ThumbsUp from "../svg/thumbsup"
+import ThumbsDown from "../svg/thumbsdown"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -197,11 +199,11 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 <div className="grid grid-cols-3">
                     <div className="flex flex-rows space-x-2 mb-4">
                         <h1 className="text-bright">{card.rating + clientVote > 0 ? '+' : ''}{card.rating + clientVote}</h1>
-                        <button onClick={() => handleVote(true)}>
-                            <Image src="/images/thumbsup.svg" alt="logo" height={20} width={20} />
+                        <button className="w-[1.3vw]" onClick={() => handleVote(true)}>
+                            <ThumbsUp fill={`${clientVote === 1 ? "fill-green-500" : "fill-bright hover:fill-green-500"}`} className="w-full h-full pt-[0.2vh]" />
                         </button>
-                        <button onClick={() => handleVote(false)}>
-                            <Image src="/images/thumbsdown.svg" alt="logo" height={20} width={20} />
+                        <button className="w-[1.3vw]" onClick={() => handleVote(false)}>
+                            <ThumbsDown fill={`${clientVote === -1 ? "fill-red-500" : "fill-bright hover:fill-red-500"}`} className="w-full h-full pt-[0.2vh]" />
                         </button>
                     </div>
                     <button 
@@ -302,7 +304,7 @@ function Alternatives({alternatives, selected, animateAnswer, checkAnswer, attem
                         ? selected.includes(index) ? setSelected(selected.filter(alternative => alternative !== index)) : setSelected([...selected, index])
                         : setSelected([index]); setAttempted(prev => [...prev, index])
                     }}
-                    className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2`}
+                    className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
                 >
                     <h1 className="h-full pr-2 text-md grid place-items-center text-bright">{index + 1}</h1>
                     {answer}
