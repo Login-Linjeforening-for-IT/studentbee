@@ -53,8 +53,10 @@ export default function Edit() {
     return (
         <div>
             {displayCourseSelector && <CourseSelector />}
-            <button onClick={handleReview} className="text-md rounded-md pt-[3.5px]">♺</button>
-            {error && <h1 className="w-full h-full grid place-items-center">{error}</h1>}
+            <div className="flex flex-rows">
+                <button onClick={handleReview} className="text-md rounded-md pt-[3.5px]">♺</button>
+                {error && <h1 className="w-[7vw] grid place-items-center pt-1 pl-2 overflow-auto noscroll whitespace-nowrap text-red-500">{error}</h1>}
+            </div>
         </div>
     )
 }

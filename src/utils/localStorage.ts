@@ -1,4 +1,8 @@
 export default function getItem(name: string): object | string | undefined {
+    if (typeof window === "undefined" || !window.localStorage) {
+        return undefined
+    }
+
     const item = localStorage.getItem(name)
 
     if (!item) {
@@ -19,8 +23,9 @@ export default function getItem(name: string): object | string | undefined {
 }
 
 export function setItem(name: string, value: string) {
-    console.log('set cookie', name, value)
-    localStorage.setItem(name, value)
+    if (typeof window !== "undefined" && window.localStorage) {
+        localStorage.setItem(name, value);
+    }
 }
 
 export function removeItem(name: string): void {

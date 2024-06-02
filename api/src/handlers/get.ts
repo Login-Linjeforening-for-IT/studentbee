@@ -5,7 +5,7 @@ import cache from '../flow'
 type Files = {
     name: string
     content: string
-    files: any[]
+    files: Files[]
     parent?: string
 }
 
@@ -90,13 +90,13 @@ export async function getCourse(req: Request, res: Response) {
         const courseSnapshot = await db.collection('Course').doc(courseID).get()
         
         if (!courseSnapshot.exists) {
-            return res.status(404).json({ error: 'Course not found' })
+            return 'Course not found'
         }
 
         const course = courseSnapshot.data()
 
         if (!course) {
-            return res.status(404).json({ error: 'Course has no data' })
+            return 'Course has no data'
         }
 
         return course
@@ -119,13 +119,13 @@ export async function getFile(req: Request, res: Response) {
         const fileSnapShot = await db.collection('Files').doc(`${courseID}:${fileID}`).get()
 
         if (!fileSnapShot.exists) {
-            return res.status(404).json({ error: 'File not found' })
+            return 'File not found'
         }
 
         const file = fileSnapShot.data()?.content
 
         if (!file) {
-            return res.json("")
+           return ""
         }
 
         return file
@@ -147,7 +147,7 @@ export async function getFiles(req: Request, res: Response) {
         const filesSnapshot = await db.collection('Files').where('courseID', '==', courseID).get()
 
         if (filesSnapshot.empty) {
-            return res.status(404).json({ error: 'No files found for the given courseID' })
+            return []
         }
 
         const files = filesSnapshot.docs.map((doc: any) => doc.data())
@@ -209,7 +209,7 @@ export async function getUserProfile(req: Request, res: Response) {
         const userProfileDoc = await db.collection('User').doc(userID).get()
 
         if (!userProfileDoc.exists) {
-            return res.status(404).json({ error: 'User not found' })
+            return 'User not found'
         }
 
         return {
