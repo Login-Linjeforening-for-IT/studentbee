@@ -115,28 +115,15 @@ type Vote = {
 type Files = {
     name: string
     content: string
-    files: Files1[]
+    files: Files[]
     parent?: string
 }
 
-type Files1 = {
+type Files = {
     name: string
     content: string
-    files: Files2[]
-    parent: string
-}
-
-type Files2 = {
-    name: string
-    content: string
-    files: Files3[]
-    parent: string
-}
-
-type Files3 = {
-    name: string
-    content: string
-    parent: string
+    files: Files[]
+    parent?: string
 }
 
 type FileListProps = {

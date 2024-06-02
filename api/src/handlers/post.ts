@@ -55,28 +55,8 @@ type PostFileProps = {
 type Files = {
     name: string
     content: string
-    files: Files1[]
+    files: Files[]
     parent?: string
-}
-
-type Files1 = {
-    name: string
-    content: string
-    files: Files2[]
-    parent: string
-}
-
-type Files2 = {
-    name: string
-    content: string
-    files: Files3[]
-    parent: string
-}
-
-type Files3 = {
-    name: string
-    content: string
-    parent: string
 }
 
 export async function postFile(req: Request, res: Response) {
