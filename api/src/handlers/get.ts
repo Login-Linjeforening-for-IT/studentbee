@@ -103,7 +103,7 @@ export async function getCourse(req: Request, res: Response) {
     }
 
     try {
-        const course = await cache(`${courseID}`, fetchCourse)
+        const course = await cache(courseID, fetchCourse)
         res.json(course)
     } catch (err) {
         const error = err as Error

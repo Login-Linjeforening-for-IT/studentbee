@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import db from '../db'
-import cache from '../flow'
+import cache, { invalidateCache, updateCache } from '../flow'
 
 type Editing = {
     cards: Card[]
@@ -33,11 +33,6 @@ export async function putCourse(req: Request, res: Response) {
             return res.status(400).json({ error: 'userID, accepted, and editing are required' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
-        // if (error) {
-        //     return res.status(401).json({ error })
-        // }
-
         if (!courseID) {
             return res.status(400).json({ error: 'Course ID is required.' })
         }
@@ -50,16 +45,11 @@ export async function putCourse(req: Request, res: Response) {
             textUnreviewed: editing.texts
         })
 
-        // Updates cache
-        await cache(`${courseID}`, async () => {
-            const courseSnapshot = await db.collection('Course').doc(courseID).get()
-            const course = courseSnapshot.data()
-            return course || 'Course not found'
-        })
-
+        invalidateCache(courseID)
         res.status(200).json({ id: courseRef.id })
     } catch (err) {
         const error = err as Error
+        console.error('Error in putCourse:', error)
         res.status(500).json({ error: error.message })
     }
 }
@@ -74,19 +64,8 @@ export async function putFile(req: Request, res: Response) {
 
         const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
         await fileRef.update({ content })
-
-        // Updates cache
-        await cache(`${courseID}_files`, async () => {
-            const filesSnapshot = await db.collection('Files').where('courseID', '==', courseID).get()
-            if (filesSnapshot.empty) {
-                return []
-            }
-
-            const files = filesSnapshot.docs.map((doc: any) => doc.data())
-            return files
-        })
-
-        // Respond with the ID of the newly created comment
+        
+        invalidateCache(`${courseID}_files`)
         res.status(201).json({ id: fileRef.id })
     } catch (err) {
         const error = err as Error
@@ -114,13 +93,7 @@ export async function putText(req: Request, res: Response) {
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.update({ userID, textUnreviewed: text })
 
-        // Updates cache
-        await cache(`${courseID}`, async () => {
-            const courseSnapshot = await db.collection('Course').doc(courseID).get()
-            const course = courseSnapshot.data()
-            return course || 'Course not found'
-        })
-
+        invalidateCache(courseID)
         res.status(200).json({ id: courseRef.id })
     } catch (err) {
         const error = err as Error
@@ -144,15 +117,7 @@ export async function putTime(req: Request, res: Response) {
         const courseRef = db.collection('User').doc(userID)
         await courseRef.update({time})
 
-        // Updates cache
-        await cache(`user_${userID}`, async () => {
-            const userSnapshot = await db.collection('User').doc(userID).get()
-            return {
-                id: userSnapshot.id,
-                ...userSnapshot.data()
-            }
-        })
-
+        invalidateCache(`user_${userID}`)
         res.status(200).json({ id: courseRef.id })
     } catch (err) {
         const error = err as Error
@@ -181,13 +146,7 @@ export async function putMarkCourse(req: Request, res: Response) {
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.update({mark})
 
-        // Updates cache
-        await cache(`${courseID}`, async () => {
-            const courseSnapshot = await db.collection('Course').doc(courseID).get()
-            const course = courseSnapshot.data()
-            return course || 'Course not found'
-        })
-
+        invalidateCache(courseID)
         res.status(200).json({ id: courseRef.id, mark })
     } catch (error: unknown) {
         const err = error as Error

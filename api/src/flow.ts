@@ -51,6 +51,16 @@ export default async function cache(
     }
 }
 
+export function updateCache(cacheKey: string, data: any, ttl: number = CACHE_TTL) {
+    redisClient.set(cacheKey, safeStringify(data), {
+        EX: ttl,
+    })
+}
+
+export function invalidateCache(cacheKey: string) {
+    redisClient.del(cacheKey)
+}
+
 // Properly close the Redis client when the application exits
 process.on('exit', () => {
     redisClient.quit()
