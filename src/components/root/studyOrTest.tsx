@@ -70,7 +70,11 @@ function Files() {
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
             const activeElement = document.activeElement
-            if ((activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA') && e.key === 'Enter') {
+            if (
+                (activeElement?.tagName === 'INPUT' 
+                || activeElement?.tagName === 'TEXTAREA') 
+                && e.key === 'Enter'
+            ) {
                 createFile()
             }
         }
@@ -84,10 +88,25 @@ function Files() {
 
     return (
         <div className="w-full grid grid-rows-auto">
-            <Link href={`/course/${course}`} className="text-lg rounded-md mr-2 text-bright w-full">/ test</Link>
+            <Link 
+                href={`/course/${course}`} 
+                className="text-lg rounded-md mr-2 text-bright w-full"
+            >
+                / test
+            </Link>
             <div className="flex flex-rows group">
-                <Link href={`/course/${course}/study`} className="text-lg rounded-md mr-2 text-bright w-full">/ study</Link>
-                <button className="text-xl opacity-0 group-hover:opacity-100 text-end text-bright" onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}>+</button>
+                <Link 
+                    href={`/course/${course}/study`} 
+                    className="text-lg rounded-md mr-2 text-bright w-full"
+                >
+                    / study
+                </Link>
+                <button 
+                    className="text-xl opacity-0 group-hover:opacity-100 text-end text-bright" 
+                    onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}
+                >
+                    +
+                </button>
             </div>
             {displayInputField === 'root' && <div className="grid grid-cols-4">
                 <input 
@@ -98,7 +117,12 @@ function Files() {
                     value={input} 
                     onChange={(e) => setInput(e.target.value)} 
                 />
-                <button className="text-end text-bright" onClick={createFile}>Add</button>
+                <button 
+                    className="text-end text-bright" 
+                    onClick={createFile}
+                >
+                    Add
+                </button>
             </div>}
             <FileList files={files} path={path} inputRef={inputRef} />
         </div>
@@ -168,8 +192,14 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
                     >
                         +
                     </h1>
-                    <h1 className="text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center" onClick={handleDelete}>
-                        <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full" />
+                    <h1 
+                        className="text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center" 
+                        onClick={handleDelete}
+                    >
+                        <Trash 
+                            fill="fill-bright hover:fill-red-500" 
+                            className="w-full h-full" 
+                        />
                     </h1>
                 </div>
             </button>
@@ -206,7 +236,12 @@ function InnerCourses({courses}: CoursesProps) {
         <>
             <div className="flex flex-cols mb-2">
                 <h1 className="text-xl mr-2">Courses</h1>
-                <Link href='/add/course' className="text-xl rounded-md mr-2">+</Link>
+                <Link 
+                    href='/add/course' 
+                    className="text-xl rounded-md mr-2"
+                >
+                    +
+                </Link>
                 <Edit />
             </div>
             {courses.map(course =>
