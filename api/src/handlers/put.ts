@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import db from '../db'
-import cache, { invalidateCache, updateCache } from '../flow'
+import { invalidateCache } from '../flow'
 
 type Editing = {
     cards: Card[]
@@ -65,6 +65,7 @@ export async function putFile(req: Request, res: Response) {
         const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
         await fileRef.update({ content })
         
+        invalidateCache(`${courseID}:${name}`)
         invalidateCache(`${courseID}_files`)
         res.status(201).json({ id: fileRef.id })
     } catch (err) {
