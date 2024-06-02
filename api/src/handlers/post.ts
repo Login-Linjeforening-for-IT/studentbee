@@ -228,6 +228,14 @@ export async function postCourse(req: Request, res: Response) {
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.set(course)
 
+        const fileRef = db.collection('Files').doc(`${courseID}:root`)
+        await fileRef.set({
+            courseID,
+            name: 'root',
+            content: '',
+            files: []
+        })
+
         invalidateCache('courses')
         res.status(201).json({ id: courseRef.id })
     } catch (err) {
