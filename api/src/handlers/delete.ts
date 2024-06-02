@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import db from '../db'
+import cache from '../flow'
 
 type DeleteCommentProps = {
     userID: number
@@ -34,6 +35,16 @@ export async function deleteComment(req: Request, res: Response) {
             batch.delete(doc.ref)
         })
 
+        await batch.commit()
+
+        // Updates cache
+        await cache(`${userID}_comments`, async () => {
+            const commentsSnapshot = await db.collection('Comment').where('userID', '==', userID).get()
+            const comments = commentsSnapshot.docs.map((doc: any) => doc.data())
+            return comments
+        })
+
+
         res.status(200).json({ id: commentRef.id })
     } catch (err) {
         const error = err as Error
@@ -51,6 +62,17 @@ export async function deleteFile(req: Request, res: Response) {
 
         const fileRef = db.collection('Files').doc(`${courseID}:${fileID}`)
         await fileRef.delete()
+
+        // Updates cache
+        await cache(`${courseID}_files`, async () => {
+            const filesSnapshot = await db.collection('Files').where('courseID', '==', courseID).get()
+            if (filesSnapshot.empty) {
+                return []
+            }
+
+            const files = filesSnapshot.docs.map((doc: any) => doc.data())
+            return files
+        })
 
         res.status(200).json({ id: fileRef.id })
     } catch (error: unknown) {

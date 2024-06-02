@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import db from '../db'
 import { generateToken } from '../manager'
+import cache from '../flow'
 
 type Course = {
     id: string
@@ -81,6 +82,17 @@ export async function postFile(req: Request, res: Response) {
 
         await fileRef.set(fileData)
 
+        // Updates cache
+        await cache(`${courseID}_files`, async () => {
+            const filesSnapshot = await db.collection('Files').where('courseID', '==', courseID).get()
+            if (filesSnapshot.empty) {
+                return []
+            }
+
+            const files = filesSnapshot.docs.map((doc: any) => doc.data())
+            return files
+        })
+
         // Respond with the ID of the newly created comment
         res.status(201).json({ name })
     } catch (err) {
@@ -148,6 +160,17 @@ export async function postDenied(req: Request, res: Response) {
         // Commit the batch
         await batch.commit()
 
+        // Updates cache
+        await cache(`${courseID}_cards`, async () => {
+            const cardsSnapshot = await db.collection('CardUnreviewed').where('courseID', '==', courseID).get()
+            if (cardsSnapshot.empty) {
+                return []
+            }
+
+            const cards = cardsSnapshot.docs.map((doc: any) => doc.data())
+            return cards
+        })
+
         res.status(200).json({ message: 'Cards denied and removed successfully' })
     } catch (err) {
         const error = err as Error
@@ -196,6 +219,17 @@ export async function postCard(req: Request, res: Response) {
             correct: card.correct
         })
 
+        // Updates cache
+        await cache(`${card.courseID}_cards`, async () => {
+            const cardsSnapshot = await db.collection('CardUnreviewed').where('courseID', '==', card.courseID).get()
+            if (cardsSnapshot.empty) {
+                return []
+            }
+
+            const cards = cardsSnapshot.docs.map((doc: any) => doc.data())
+            return cards
+        })
+
         // Return the generated ID as the response
         res.status(201).json({ id: cardRef.id })
     } catch (err) {
@@ -225,6 +259,17 @@ export async function postCourse(req: Request, res: Response) {
 
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.set(course)
+
+        // Updates cache
+        await cache('courses', async () => {
+            const coursesSnapshot = await db.collection('Course').get()
+            return coursesSnapshot.docs.map((doc: any) => ({
+                id: doc.id,
+                cards: doc.data().cards,
+                count: doc.data().cards.length
+            }))
+        })
+
         res.status(201).json({ id: courseRef.id })
     } catch (err) {
         const error = err as Error
@@ -350,6 +395,21 @@ export async function postRegister(req: Request, res: Response) {
         // Save the user data to Firestore
         await userRef.set(user)
 
+        // Updates scoreboard cache
+        await cache('scoreboard', async () => {
+            const snapshot = await db.collection('User')
+                .orderBy('score', 'desc')
+                .limit(100)
+                .get()
+            return snapshot.docs.map((doc: any) => ({
+                id: doc.id,
+                score: doc.data().score,
+                solved: doc.data().solved.length,
+                username: doc.data().username,
+                time: doc.data().time
+            }))
+        })
+
         // Return the created user information
         res.status(201).json({ message: `Created user ${user.id}` })
     } catch (err) {
@@ -403,6 +463,45 @@ export async function postComment(req: Request, res: Response) {
 
         await commentRef.set(commentData)
 
+        // Updates cache
+        await cache(`${courseID}_comments`, async () => {
+            const commentsSnapshot = await db.collection('Comment')
+                .where('courseID', '==', courseID)
+                .get()
+
+            const comments = commentsSnapshot.docs.map((doc: any) => doc.data())
+
+            // Group and nest comments as done previously
+            const groupedComments: { [key: string]: any[] } = {}
+            const commentById: { [key: string]: any } = {}
+
+            comments.forEach(comment => {
+                comment.replies = []
+                commentById[comment.id] = comment
+
+                const cardID = comment.cardID || 'no_cardID'
+                if (!groupedComments[cardID]) {
+                    groupedComments[cardID] = []
+                }
+                groupedComments[cardID].push(comment)
+            })
+
+            comments.forEach(comment => {
+                if (comment.parent) {
+                    const parentComment = commentById[comment.parent]
+                    if (parentComment) {
+                        parentComment.replies.push(comment)
+                    }
+                }
+            })
+
+            Object.keys(groupedComments).forEach(cardID => {
+                groupedComments[cardID] = groupedComments[cardID].filter(comment => !comment.parent)
+            })
+
+            return Object.keys(groupedComments).map(cardID => groupedComments[cardID])
+        })
+
         // Respond with the ID of the newly created comment
         res.status(201).json({ id: commentRef.id, nextID })
     } catch (err) {
@@ -452,6 +551,45 @@ export async function postVote(req: Request, res: Response) {
         }
 
         await commentRef.update({ votes, rating: newRating })
+
+        // Updates cache
+        await cache(`${courseID}_comments`, async () => {
+            const commentsSnapshot = await db.collection('Comment')
+                .where('courseID', '==', courseID)
+                .get()
+
+            const comments = commentsSnapshot.docs.map((doc: any) => doc.data())
+
+            // Group and nest comments as done previously
+            const groupedComments: { [key: string]: any[] } = {}
+            const commentById: { [key: string]: any } = {}
+
+            comments.forEach(comment => {
+                comment.replies = []
+                commentById[comment.id] = comment
+
+                const cardID = comment.cardID || 'no_cardID'
+                if (!groupedComments[cardID]) {
+                    groupedComments[cardID] = []
+                }
+                groupedComments[cardID].push(comment)
+            })
+
+            comments.forEach(comment => {
+                if (comment.parent) {
+                    const parentComment = commentById[comment.parent]
+                    if (parentComment) {
+                        parentComment.replies.push(comment)
+                    }
+                }
+            })
+
+            Object.keys(groupedComments).forEach(cardID => {
+                groupedComments[cardID] = groupedComments[cardID].filter(comment => !comment.parent)
+            })
+
+            return Object.keys(groupedComments).map(cardID => groupedComments[cardID])
+        })
 
         res.status(200).json({ id: commentRef.id, rating: newRating, votes })
     } catch (err: unknown) {
@@ -513,6 +651,13 @@ export async function postCardVote(req: Request, res: Response) {
         }
 
         await courseRef.update({ cards: updatedCards })
+
+        // Updates cache
+        await cache(`${courseID}`, async () => {
+            const courseSnapshot = await db.collection('Course').doc(courseID).get()
+            const course = courseSnapshot.data()
+            return course || 'Course not found'
+        })
 
         res.status(200).json({ id: courseRef.id, rating: newRating, votes })
     } catch (error: unknown) {

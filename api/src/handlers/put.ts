@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import db from '../db'
+import cache from '../flow'
 
 type Editing = {
     cards: Card[]
@@ -49,6 +50,13 @@ export async function putCourse(req: Request, res: Response) {
             textUnreviewed: editing.texts
         })
 
+        // Updates cache
+        await cache(`${courseID}`, async () => {
+            const courseSnapshot = await db.collection('Course').doc(courseID).get()
+            const course = courseSnapshot.data()
+            return course || 'Course not found'
+        })
+
         res.status(200).json({ id: courseRef.id })
     } catch (err) {
         const error = err as Error
@@ -66,6 +74,17 @@ export async function putFile(req: Request, res: Response) {
 
         const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
         await fileRef.update({ content })
+
+        // Updates cache
+        await cache(`${courseID}_files`, async () => {
+            const filesSnapshot = await db.collection('Files').where('courseID', '==', courseID).get()
+            if (filesSnapshot.empty) {
+                return []
+            }
+
+            const files = filesSnapshot.docs.map((doc: any) => doc.data())
+            return files
+        })
 
         // Respond with the ID of the newly created comment
         res.status(201).json({ id: fileRef.id })
@@ -95,6 +114,13 @@ export async function putText(req: Request, res: Response) {
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.update({ userID, textUnreviewed: text })
 
+        // Updates cache
+        await cache(`${courseID}`, async () => {
+            const courseSnapshot = await db.collection('Course').doc(courseID).get()
+            const course = courseSnapshot.data()
+            return course || 'Course not found'
+        })
+
         res.status(200).json({ id: courseRef.id })
     } catch (err) {
         const error = err as Error
@@ -117,6 +143,15 @@ export async function putTime(req: Request, res: Response) {
 
         const courseRef = db.collection('User').doc(userID)
         await courseRef.update({time})
+
+        // Updates cache
+        await cache(`user_${userID}`, async () => {
+            const userSnapshot = await db.collection('User').doc(userID).get()
+            return {
+                id: userSnapshot.id,
+                ...userSnapshot.data()
+            }
+        })
 
         res.status(200).json({ id: courseRef.id })
     } catch (err) {
@@ -145,6 +180,13 @@ export async function putMarkCourse(req: Request, res: Response) {
 
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.update({mark})
+
+        // Updates cache
+        await cache(`${courseID}`, async () => {
+            const courseSnapshot = await db.collection('Course').doc(courseID).get()
+            const course = courseSnapshot.data()
+            return course || 'Course not found'
+        })
 
         res.status(200).json({ id: courseRef.id, mark })
     } catch (error: unknown) {

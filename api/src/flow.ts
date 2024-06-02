@@ -38,7 +38,7 @@ export default async function cache(
         } else {
             // If cache miss, fetches data from the source
             const data = await fetchFunction()
-            // Store the fetched data in cache with TTL
+            // Stores the fetched data in cache with TTL
             await redisClient.set(cacheKey, safeStringify(data), {
                 EX: ttl,
             })
@@ -57,14 +57,17 @@ process.on('exit', () => {
 })
 
 function safeStringify(obj: any, space?: number): string {
-    const seen = new WeakSet();
-    return JSON.stringify(obj, function(key, value) {
+    const seen = new WeakSet()
+
+    return JSON.stringify(obj, function(_, value) {
         if (typeof value === "object" && value !== null) {
             if (seen.has(value)) {
-                return;
+                return
             }
-            seen.add(value);
+
+            seen.add(value)
         }
-        return value;
-    }, space);
+
+        return value
+    }, space)
 }
