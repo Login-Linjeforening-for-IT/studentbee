@@ -1,8 +1,12 @@
 import { createClient } from 'redis'
 
+// Gets Redis connection details from environment variables
+const redisHost = process.env.REDIS_HOST || 'localhost'
+const redisPort = process.env.REDIS_PORT || 6379
+
 // Creates and configure Redis client
 const redisClient = createClient({
-    url: 'redis://127.0.0.1:6379'
+    url: `redis://${redisHost}:${redisPort}`
 })
 
 redisClient.on('error', (err) => console.error('Redis Client Error', err));

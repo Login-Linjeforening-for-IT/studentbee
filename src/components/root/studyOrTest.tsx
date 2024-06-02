@@ -3,7 +3,7 @@
 import Link from "next/link"
 import Edit from "./edit"
 import { usePathname } from "next/navigation"
-import { useEffect, useRef, useState } from "react"
+import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from "react"
 import { deleteFile, sendFile } from "@/utils/fetchClient"
 import { getFiles } from "@/utils/fetch"
 import getItem from "@/utils/localStorage"
@@ -17,6 +17,12 @@ type CoursesProps = {
 type FileProps = {
     file: Files
     className?: string
+    path: string
+    input: string
+    setInput: Dispatch<SetStateAction<string>>
+    inputRef: MutableRefObject<HTMLInputElement | null>
+    displayInputField: string
+    setDisplayInputField: Dispatch<SetStateAction<string>>
 }
 
 export default function StudyOrTest({courses}: CoursesProps) {
@@ -36,7 +42,7 @@ function Files() {
     const inputRef = useRef<HTMLInputElement | null>(null)
     const path = usePathname()
     const course = path.split('/')[2] || ''
-    const [displayInputField, setDisplayInputField] = useState(false)
+    const [displayInputField, setDisplayInputField] = useState('')
     const [input, setInput] = useState('')
 
     function createFile() {
@@ -45,15 +51,11 @@ function Files() {
         }
 
         sendFile({courseID: course, name: input})
-        setDisplayInputField(false)
+        setDisplayInputField('')
 
         if (inputRef.current) {
             inputRef.current.value = ""
         }
-    }
-
-    function handleDelete() {
-        deleteFile({courseID: course, name: 'root'})
     }
 
     useEffect(() => {
@@ -85,9 +87,9 @@ function Files() {
             <Link href={`/course/${course}`} className="text-lg rounded-md mr-2 text-bright w-full">/ test</Link>
             <div className="flex flex-rows group">
                 <Link href={`/course/${course}/study`} className="text-lg rounded-md mr-2 text-bright w-full">/ study</Link>
-                <button className="text-xl opacity-0 group-hover:opacity-100 text-end text-bright" onClick={() => setDisplayInputField(!displayInputField)}>+</button>
+                <button className="text-xl opacity-0 group-hover:opacity-100 text-end text-bright" onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}>+</button>
             </div>
-            {displayInputField && <div className="grid grid-cols-4">
+            {displayInputField === 'root' && <div className="grid grid-cols-4">
                 <input 
                     ref={inputRef}
                     className="bg-transparent col-span-3 border-b-2 border-bright text-bright" 
@@ -98,41 +100,49 @@ function Files() {
                 />
                 <button className="text-end text-bright" onClick={createFile}>Add</button>
             </div>}
-            <FileList files={files} />
+            <FileList files={files} path={path} inputRef={inputRef} />
         </div>
     )
 }
 
-function FileList({files}: FileListProps) {
+function FileList({files, path, inputRef}: FileListProps) {
+    const [input, setInput] = useState('')
+    const [displayInputField, setDisplayInputField] = useState('')
+
     if (!files || !Array.isArray(files)) {
         return <div />
     }
 
     return (
         <div className="grid w-full">
-            {files.map(file => <File key={file.name} file={file} />)}
+            {files.map(file => <File 
+                key={file.name} 
+                file={file} 
+                path={path} 
+                input={input} 
+                setInput={setInput}
+                inputRef={inputRef} 
+                displayInputField={displayInputField}
+                setDisplayInputField={setDisplayInputField}
+            />)}
         </div>
     )
 }
 
-function File({file, className}: FileProps) {
+function File({file, className, path, input, setInput, inputRef, displayInputField, setDisplayInputField}: FileProps) {
     if (file.name === 'root') {
         return
     }
 
-    const path = usePathname()
-    const [displayInputField, setDisplayInputField] = useState(false)
-    const [input, setInput] = useState('')
-    const inputRef = useRef<HTMLInputElement | null>(null)
     const course = path.split('/')[2] || ''
 
     function handleDisplayInput() {
-        setDisplayInputField(!displayInputField)
+        setDisplayInputField(displayInputField === file.name ? '' : file.name)
     }
 
     function addFile() {
         sendFile({courseID: course, name: input, parent: file.name})
-        setDisplayInputField(false)
+        setDisplayInputField('')
         if (inputRef.current) {
             inputRef.current.value = ""
         }
@@ -151,7 +161,7 @@ function File({file, className}: FileProps) {
                 >
                     / {file.name}
                 </Link>
-                <div className="flex flex-rows float-end justify-end">
+                <div className="flex flex-rows float-end justify-end space-x-1">
                     <h1
                         className="text-end text-xl opacity-0 group-hover:opacity-100 hover:text-green-500" 
                         onClick={handleDisplayInput}
@@ -166,9 +176,15 @@ function File({file, className}: FileProps) {
             {file.files.map((file) => <File 
                 className="pl-4 w-full grid space-between" 
                 key={file.name} 
-                file={file} />
-            )}
-            {displayInputField && <div className="grid grid-cols-4 pl-4">
+                file={file} 
+                path={path}
+                input={input}
+                setInput={setInput}
+                inputRef={inputRef}
+                displayInputField={displayInputField}
+                setDisplayInputField={setDisplayInputField}
+            /> )}
+            {displayInputField === file.name && <div className="grid grid-cols-4 pl-4">
                 <input 
                     ref={inputRef}
                     className={`bg-transparent col-span-3 border-b-2 border-bright text-bright`} 

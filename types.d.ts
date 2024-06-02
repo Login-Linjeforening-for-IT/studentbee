@@ -121,4 +121,6 @@ type Files = {
 
 type FileListProps = {
     files: Files[]
+    path: string
+    inputRef: MutableRefObject<HTMLInputElement | null>
 }
