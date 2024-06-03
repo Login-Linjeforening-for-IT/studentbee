@@ -16,6 +16,10 @@ export default function ToolTips() {
                 setDisplayTips(prevDisplayTips => !prevDisplayTips)
                 localStorage.setItem('tooltips', 'false')
             }
+
+            // if (e.key === 'n' && ) {
+            //     setDisplayTips(false)
+            // }
         }
 
         window.addEventListener('keydown', handleKeyDown)
@@ -63,6 +67,7 @@ export default function ToolTips() {
                         <Tips hotkey="W" info="Selects the first or next alternative" />
                         <Tips hotkey="A" info="Go to the previous question" />
                         <Tips hotkey="B" info="Go to the previous question" />
+                        <Tips hotkey="P" info="Go to the previous question" />
                         <Tips hotkey="S" info="Skip this question" />
                         <Tips hotkey="S" extraHotKey="Shift" info="Selects the last or previous alternative" />
                         <Tips hotkey="D" info="Submits the selected answer" />
@@ -70,7 +75,6 @@ export default function ToolTips() {
                         <Tips hotkey="ArrowDown" info="Selects the last or previous alternative" />
                         <Tips hotkey="ArrowLeft" info="Go to the previous question" />
                         <Tips hotkey="ArrowRight" info="Submit the selected answer" />
-                        <Tips hotkey="Enter" info="Submit the selected answer" />
                     </div>
                     <div className="w-full">
                         <Tips hotkey="1" info="Selects and submits alternative 1" />
@@ -83,6 +87,8 @@ export default function ToolTips() {
                         <Tips hotkey="8" info="Selects and submits alternative 8" />
                         <Tips hotkey="9" info="Selects and submits alternative 9" />
                         <Tips hotkey="0" info="Selects and submits alternative 10" />
+                        <Tips hotkey="Enter" info="Submit the selected answer" />
+                        <Tips hotkey="N" info="Submit the selected answer" />
                     </div>
                 </div>
             </div>

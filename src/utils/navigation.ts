@@ -68,7 +68,7 @@ export default function handleCardsNavigation({
         switch (direction) {
         case 'back': 
             if (current != undefined) {
-                const previous = current === 0 ? 1 : current + 1
+                const previous = current === 0 ? 1 : current
                 router.push(`/course/${id}/${previous}`)
             }
 
@@ -85,6 +85,7 @@ export default function handleCardsNavigation({
             setSelected([])
             break
         case 'next':
+
             checkAnswer(selectedRef.current, attempted, setAttempted, true)
             animate200ms({key: 'next', setAnimateAnswer})
 
@@ -92,6 +93,7 @@ export default function handleCardsNavigation({
                 setAttempted([...attempted, ...selectedRef.current]) 
                 setWait(false)
             }
+
 
             break
         case '1': handleKey('0'); break
@@ -176,11 +178,16 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
     switch (event.key) {
         case 'd':
         case 'D':
+        case 'n':
+        case 'N':
+        case 'Enter':
         case 'ArrowRight': navigate('next'); break
         case 'a':
         case 'A':
         case 'b':
         case 'B':
+        case 'p':
+        case 'P':
         case 'ArrowLeft': navigate('back'); break
         case 's': 
         case 'S': navigate('skip'); break
@@ -194,7 +201,6 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case '8': navigate("8"); break
         case '9': navigate("9"); break
         case '0': navigate("0"); break
-        case 'Enter': navigate('next'); break
         case 'w':
         case 'ArrowUp': 
             if (event.shiftKey) {

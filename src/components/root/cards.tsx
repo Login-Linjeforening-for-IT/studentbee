@@ -8,6 +8,7 @@ import Link from "next/link"
 import { sendMark } from "@/utils/fetchClient"
 import Buttons from "../card/buttons"
 import Question from "../card/question"
+import { useRouter } from "next/navigation"
 
 type CardsProps = {
     id?: string
@@ -17,6 +18,8 @@ type CardsProps = {
 }
 
 export default function Cards({id, current, course, comments}: CardsProps) {
+    
+    const router = useRouter()
     const [animate, setAnimate] = useState("-1")
     const [animateAnswer, setAnimateAnswer] = useState("-1")
     const [selected, setSelected] = useState<number[]>([-1])
@@ -30,8 +33,13 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
     const [indexMapping, setIndexMapping] = useState<number[]>([])
     selectedRef.current = selected
-
+    
     const cards = typeof course === 'object' ? course.cards as Card[] : []
+    if (current && current >= cards.length ) {
+        router.push(`/course/${id}/1`)
+        return
+    }
+
     const card = cards[current || 0]
     const [wait, setWait] = useState(card?.correct.length > 1 ? true : false)
     const flashColor = animate === "wrong" 
@@ -122,7 +130,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     if (!card) {
-        window.location.href = `/course/${id}/1`
+        router.push(`/course/${id}/1`)
     }
 
     function handleVote(vote: boolean) {
