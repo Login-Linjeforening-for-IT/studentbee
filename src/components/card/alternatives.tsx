@@ -16,6 +16,8 @@ type AlternativesProps = {
     remainGreen: number[]
     setRemainGreen: Dispatch<SetStateAction<number[]>>
     wait: boolean
+    indexMapping: number[]
+    shuffledAlternatives: string[]
 }
 
 export default function Alternatives({
@@ -29,25 +31,10 @@ export default function Alternatives({
     setSelected, 
     remainGreen, 
     setRemainGreen, 
-    wait
+    wait,
+    indexMapping,
+    shuffledAlternatives
 }: AlternativesProps) {
-    const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
-    const [indexMapping, setIndexMapping] = useState<number[]>([])
-
-    useEffect(() => {
-        // Shuffles alternatives and creates map
-        const shuffled = [...alternatives]
-        const mapping = shuffled.map((_, index) => index)
-        
-        for (let i = shuffled.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1))
-            ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
-            ;[mapping[i], mapping[j]] = [mapping[j], mapping[i]]
-        }
-        
-        setShuffledAlternatives(shuffled)
-        setIndexMapping(mapping)
-    }, [alternatives])
 
     function getColor(index: number): string {
         const originalIndex = indexMapping[index]

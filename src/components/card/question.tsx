@@ -15,6 +15,8 @@ type QuestionProps = {
     clientVote: 1 | 0 | -1
     showComments: boolean
     totalCommentsLength: number
+    indexMapping: number[]
+    shuffledAlternatives: string[]
     setAttempted: Dispatch<SetStateAction<number[]>>
     setSelected: Dispatch<SetStateAction<number[]>>
     setRemainGreen: Dispatch<SetStateAction<number[]>>
@@ -46,7 +48,9 @@ export default function Question({
     setAttempted, 
     setRemainGreen,
     setShowComments,
-    showAnswers
+    showAnswers,
+    indexMapping,
+    shuffledAlternatives
 }: QuestionProps) {
     return (
         <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8 pb-10`}>
@@ -81,6 +85,8 @@ export default function Question({
                     checkAnswer={checkAnswer}
                     setAttempted={setAttempted}
                     setRemainGreen={setRemainGreen}
+                    indexMapping={indexMapping}
+                    shuffledAlternatives={shuffledAlternatives}
                 />
             </div>
             <QuestionFooter

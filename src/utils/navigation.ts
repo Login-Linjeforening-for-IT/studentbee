@@ -17,6 +17,7 @@ type HandleNavigationProps = {
     setAttempted: Dispatch<SetStateAction<number[]>>
     wait: boolean
     setWait: Dispatch<SetStateAction<boolean>>
+    indexMapping: number[]
 }
 
 type HandleKeyDownProps = {
@@ -44,16 +45,25 @@ export default function handleCardsNavigation({
     attempted,
     setAttempted,
     wait,
-    setWait
+    setWait,
+    indexMapping
 }: HandleNavigationProps) {
         if (!card || current === undefined) {
             return
         }
     
-        function handleKey(key: string) {
-            animate200ms({key, setAnimateAnswer})
-            checkAnswer([Number(key)], attempted, setAttempted)
-            setSelected((prev) => card.correct.length > 1 ? [...prev, Number(key)] : [Number(key)])
+        function handleKey(key: string) {        
+            // Animates the answer
+            animate200ms({ key, setAnimateAnswer })
+        
+            // Gets the original index using indexMapping
+            const originalIndex = indexMapping[Number(key)]
+        
+            // Checks the answer using the original index
+            checkAnswer([originalIndex], attempted, setAttempted)
+        
+            // Updates the selected state with the original index
+            setSelected((prev) => card.correct.length > 1 ? [...prev, originalIndex] : [originalIndex])
         }
 
         switch (direction) {

@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useCardNavigation } from "@/hooks/cardNavigation"
 import Comments from "./comments"
 import { getTotalCommentsLength } from "@/utils/comments"
@@ -27,8 +27,10 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     const relevantComments = comments[Number(id) || 0] || []
     const [remainGreen, setRemainGreen] = useState<number[]>([])
     const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0)   
+    const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
+    const [indexMapping, setIndexMapping] = useState<number[]>([])
     selectedRef.current = selected
-    
+
     const cards = typeof course === 'object' ? course.cards as Card[] : []
     const card = cards[current || 0]
     const [wait, setWait] = useState(card?.correct.length > 1 ? true : false)
@@ -51,12 +53,28 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         setAttempted,
         wait,
         setWait,
-        remainGreen
+        remainGreen,
+        indexMapping
     })
 
     function markCourse() {
         sendMark({courseID: id || "PROG1001", mark: true})
     }
+
+    useEffect(() => {
+        // Shuffles alternatives and creates map
+        const shuffled = [...card.alternatives]
+        const mapping = shuffled.map((_, index) => index)
+        
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+            ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+            ;[mapping[i], mapping[j]] = [mapping[j], mapping[i]]
+        }
+        
+        setShuffledAlternatives(shuffled)
+        setIndexMapping(mapping)
+    }, [card.alternatives])
 
     if (typeof course === 'string') {
         return (
@@ -136,6 +154,8 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 clientVote={clientVote}
                 showComments={showComments}
                 totalCommentsLength={totalCommentsLength}
+                indexMapping={indexMapping}
+                shuffledAlternatives={shuffledAlternatives}
                 checkAnswer={checkAnswer} 
                 handleVote={handleVote}
                 setSelected={setSelected} 

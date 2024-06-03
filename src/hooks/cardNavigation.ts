@@ -17,6 +17,7 @@ type UseCardNavigationProps = {
     wait: boolean
     setWait: Dispatch<SetStateAction<boolean>>
     remainGreen: number[]
+    indexMapping: number[]
 }
 
 export const useCardNavigation = ({
@@ -32,7 +33,8 @@ export const useCardNavigation = ({
     setAttempted,
     wait,
     setWait,
-    remainGreen
+    remainGreen,
+    indexMapping
 }: UseCardNavigationProps) => {
     const router = useRouter()
     let startFocusTime = useRef<Date | undefined>(undefined)
@@ -48,12 +50,12 @@ export const useCardNavigation = ({
                         router.push(`/course/${id}/${nextCard}`)
                         setAnimate('correct')
                     } else if (next) {
-                        attempted.push(...input)
+                        setAttempted(prev => [...prev, ...input])
                     }
                 }
             } else {
-                !(card.correct.length > 1) && attempted.push(...input)
-                !attempted.every(answer => input.includes(answer)) && attempted.push(...input)
+                !(card.correct.length > 1) && setAttempted(prev => [...prev, ...input])
+                !attempted.every(answer => input.includes(answer)) && setAttempted(prev => [...prev, ...input])
             }
         },
         [current, router, id, card, cards, setAnimate, wait, remainGreen]
@@ -74,10 +76,11 @@ export const useCardNavigation = ({
                 attempted,
                 setAttempted,
                 wait,
-                setWait
+                setWait,
+                indexMapping
             })
         },
-        [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted, wait, setWait]
+        [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted, wait, setWait, indexMapping]
     )
 
     useEffect(() => {
