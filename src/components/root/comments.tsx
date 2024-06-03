@@ -1,13 +1,8 @@
 import { deleteComment, postComment } from "@/utils/comments"
 import getItem from "@/utils/localStorage"
 import { sendVote } from "@/utils/vote"
-import Link from "next/link"
-import { Dispatch, SetStateAction, useState } from "react"
-import Editor, { Markdown } from "../editor/editor"
-import Trash from "../svg/trash"
-import ThumbsUp from "../svg/thumbsup"
-import ThumbsDown from "../svg/thumbsdown"
-import voteColor from "../comments/voteColor"
+import { useState } from "react"
+import Editor from "../editor/editor"
 import Comment from "../comments/comment"
 
 type CommentsProps = {
@@ -46,7 +41,6 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
             id: clientComments.length,
             courseID,
             cardID,
-            userID: user.id || 0,
             username: "You",
             content,
             time: new Date().toISOString(),
@@ -60,7 +54,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
     function handleDelete({commentID}: {commentID: number}) {
         const updatedComments = clientComments.filter(comment => comment.id !== commentID)
         setClientComments(updatedComments)
-        deleteComment({commentID})
+        deleteComment({commentID, courseID})
     }
 
     function vote({commentID, vote, isReply}: VoteProps) {
@@ -116,7 +110,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
             {/* not sure what to use this space for */}
             <div className="col-span-2" />
             <div className="w-full col-span-6 overflow-auto noscroll px-1">
-                <h1 className="text-2xl mb-2">Comments ({totalCommentsLength})</h1>
+                <h1 className="text-xl mb-2">Comments ({totalCommentsLength})</h1>
                 <div className="mb-2 w-full">
                     {clientComments.map(comment => <Comment
                         key={comment.id}

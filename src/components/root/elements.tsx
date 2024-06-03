@@ -37,7 +37,7 @@ export default function Elements({id, current, course}: ElementsProps) {
         if (help) {
             return (
                 <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
-                    <h1 className="text-2xl">Info</h1>
+                    <h1 className="text-xl">Info</h1>
                     <div className="h-full w-full">
                         {help}
                     </div>
@@ -66,14 +66,14 @@ function GetNextQuestions({cards, current, amount}: NextQuestionProps) {
     }
 
     if (!relevant.length) {
-        return <h1 className="text-2xl">Last question!</h1>
+        return <h1 className="text-xl">Last question!</h1>
     }
 
     return (
         <div>
-            <h1 className="text-2xl mb-2">Upcoming</h1>
+            <h1 className="text-xl mb-2">Upcoming</h1>
             {relevant.map((card) => (
-                <div key={card.question} className={`w-full h-[5vh] bg-dark rounded-xl mb-2 flex items-center p-2 pl-4`}>
+                <div key={card.question} className={`w-full pt-3 pb-3 bg-dark rounded-xl mb-2 flex items-center p-2 pl-4`}>
                     <h1 className="text-sm">{card.question.slice(0, 30)}{card.question.length > 30 && '...'}</h1>
                 </div>
             ))}

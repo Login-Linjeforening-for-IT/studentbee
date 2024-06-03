@@ -1,6 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import ThumbsDown from "../svg/thumbsdown";
 import ThumbsUp from "../svg/thumbsup";
+import voteColor from "../comments/voteColor";
+import getItem from "@/utils/localStorage";
 
 type QuestionFooterProps = {
     card: Card
@@ -25,6 +27,14 @@ export default function QuestionFooter({
     wait, 
     remainGreen
 }: QuestionFooterProps) {
+    const [username, setUsername] = useState('')
+
+    useEffect(() => {
+        const user = getItem('user') as User | string | undefined
+        const username = user && typeof user === 'object' ? user.username : ''
+        setUsername(username)
+    }, []) 
+
     const showAnswer = (wait || !(card.correct.length > 1)) 
         && !remainGreen.every(answer => card.correct.includes(answer))
 
@@ -37,19 +47,13 @@ export default function QuestionFooter({
                 </h1>
                 <button className="w-[1.3vw]" onClick={() => handleVote(true)}>
                     <ThumbsUp 
-                        fill={`${clientVote === 1 
-                            ? "fill-green-500" 
-                            : "fill-bright hover:fill-green-500"}`
-                        } 
+                        fill={voteColor('up', card.votes, username, clientVote)} 
                         className="w-full h-full pt-[0.2vh]" 
                     />
                 </button>
                 <button className="w-[1.3vw]" onClick={() => handleVote(false)}>
                     <ThumbsDown 
-                        fill={`${clientVote === -1 
-                            ? "fill-red-500" 
-                            : "fill-bright hover:fill-red-500"}`
-                        } 
+                        fill={voteColor('down', card.votes, username, clientVote)} 
                         className="w-full h-full pt-[0.2vh]" 
                     />
                 </button>

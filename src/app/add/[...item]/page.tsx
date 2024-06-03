@@ -62,7 +62,12 @@ function AddCourse() {
         <div className="w-full h-full grid place-items-center">
             <div className="bg-dark w-[35vw] rounded-xl grid place-items-center gap-4 p-5 px-10 max-h-[75vh] overflow-auto">
                 <div className="grid grid-cols-12 w-full">
-                    {selected != 0 ? <button className="text-2xl bg-dark rounded-md px-2" onClick={handleBack}>⬅️</button> : null}
+                    {selected != 0 ? <button 
+                        className="text-xl bg-dark rounded-md px-2" 
+                        onClick={handleBack}
+                    >
+                        ⬅️
+                    </button> : null}
                     <h1 className={`text-3xl font-semibold ${courseIDspan} text-center`}>Add course</h1>
                     <h1 className={`text-md text-red-500 ${courseIDspan} text-center`}>{error}</h1>
                     {selected != 0 ? <div/> : null}
@@ -74,7 +79,8 @@ function AddCourse() {
                         onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())}
                         type="text"
                         placeholder="Course code"
-                        className="bg-light rounded-xl overflow-hidden px-2 col-span-6"
+                        className="bg-light rounded-xl overflow-hidden px-2 col-span-6 outline-none caret-orange-500"
+                        maxLength={10}
                     />
                 </div>
                 <Link

@@ -37,14 +37,14 @@ type CardAsText = {
 }
 
 type User = {
-    id: number
     name: string
     username: string
     time: number
+    score: number
+    solved: UserSolved[]
 }
 
 type LoggedInUser = {
-    id: number
     name: string
     username: string
     time: number
@@ -79,11 +79,12 @@ type LoginUser = {
 }
 
 type LoginResponse = {
-    id: number
     name: string
     username: string
     token: string
     time: number
+    score: number
+    solved: UserSolved[]
 }
 
 type ScoreBoardUser = {
@@ -98,7 +99,6 @@ type CardComment = {
     id: number
     courseID: string
     cardID: number
-    userID: number
     username: string
     content: string
     time: string
@@ -108,7 +108,7 @@ type CardComment = {
 }
 
 type Vote = {
-    userID: number
+    username: string
     vote: boolean
 }
 

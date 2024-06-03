@@ -59,7 +59,7 @@ export default function handleCardsNavigation({
         switch (direction) {
         case 'back': 
             if (current != undefined) {
-                const previous = current === 0 ? 0 : current - 1
+                const previous = current === 0 ? 0 : current
                 router.push(`/course/${id}/${previous}`)
             }
 
@@ -68,7 +68,7 @@ export default function handleCardsNavigation({
             break
         case 'skip': 
             if (current != undefined) {
-                const skip = (current + 1) % cards.length
+                const skip = (current + 2) % cards.length
                 router.push(`/course/${id}/${skip}`)
             }
 

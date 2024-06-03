@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import db from '../db'
-import cache from '../flow'
+import cache, { invalidateCache } from '../flow'
 
 type Files = {
     name: string
@@ -14,7 +14,7 @@ type CourseParam = {
 }
 
 type UserParam = {
-    userID: string
+    username: string
 }
 
 type GetFileProps = {
@@ -29,28 +29,28 @@ export async function getIndexHandler(_: Request, res: Response) {
     " first 100 users on the scoreboard\n/courses - Returns a list of all cou" +
     "rses\n/courses/:courseID/reviewed - Returns a list of all reviewed flash" + 
     "cards\n/courses/:courseID/cards - Returns all cards, reviewed " +
-    "or not\n/users/:userID - Returns all info for every user" })
+    "or not\n/user/:username - Returns all info for every user" })
 }
 
 // Fetches the first 100 users on the scoreboard from Firebase
 export async function getScoreboard(_: Request, res: Response) {
+
     async function fetchScoreboard() {
         // Fetches the users
         const snapshot = await db.collection('User')
         .orderBy('score', 'desc')
         .limit(100)
         .get()
-
+        
         // Constructs the scoreboard
         return snapshot.docs.map((doc: any) => ({
-            id: doc.id,
+            username: doc.id,
             score: doc.data().score,
             solved: doc.data().solved.length,
-            username: doc.data().username,
             time: doc.data().time
         }))
     }
-
+    
     try {
         const scoreboard = await cache('scoreboard', fetchScoreboard)
         res.json(scoreboard)
@@ -203,23 +203,32 @@ export async function getFiles(req: Request, res: Response) {
 
 // Fetches the user profile for the given user
 export async function getUserProfile(req: Request, res: Response) {
-    const { userID } = req.params as UserParam
-        
+    const { username } = req.params as UserParam
+
     async function fetchUserProfile() {
-        const userProfileDoc = await db.collection('User').doc(userID).get()
+        const userProfileDoc = await db.collection('User').doc(username).get()
 
         if (!userProfileDoc.exists) {
             return 'User not found'
         }
 
+        const data = userProfileDoc.data()
+
+        if (!data) {
+            return 'User has no data'
+        }
+
         return {
-            id: userProfileDoc.id,
-            ...userProfileDoc.data()
+            name: data.firstName + ' ' + data.lastName,
+            username,
+            score: data.score,
+            solved: data.solved,
+            time: data.time,
         }
     }
 
     try {
-        const userProfile = await cache(`user_${userID}`, fetchUserProfile)
+        const userProfile = await cache(`user_${username}`, fetchUserProfile)
         res.json(userProfile)
     } catch (err) {
         const error = err as Error

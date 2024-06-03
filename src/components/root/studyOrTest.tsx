@@ -48,7 +48,7 @@ export default function StudyOrTest({courses}: CoursesProps) {
     return (
         <div className="w-full">
             {isStudy && <Files />}
-            {!isStudy && <InnerCourses courses={courses} />}
+            {!isStudy && <InnerCourseList courses={courses} />}
         </div>
     )
 }
@@ -135,7 +135,7 @@ function FileListHeader({course, displayInputField, setDisplayInputField, input,
             {displayInputField === 'root' && <div className="grid grid-cols-4">
                 <input 
                     ref={inputRef}
-                    className="bg-transparent col-span-3 border-b-2 border-bright text-bright" 
+                    className="bg-transparent col-span-3 border-b-2 border-bright text-bright outline-none caret-orange-500" 
                     maxLength={20} 
                     type="text" 
                     value={input} 
@@ -252,7 +252,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
             {displayInputField === file.name && <div className="grid grid-cols-4 pl-4">
                 <input 
                     ref={inputRef}
-                    className={`bg-transparent col-span-3 border-b-2 border-bright text-bright`} 
+                    className={'bg-transparent col-span-3 border-b-2 border-bright text-bright outline-none caret-orange-500'} 
                     maxLength={20} 
                     type="text" 
                     value={input} 
@@ -266,7 +266,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
     )
 }
 
-function InnerCourses({courses}: CoursesProps) {
+function InnerCourseList({courses}: CoursesProps) {
     return (
         <>
             <div className="flex flex-cols mb-2">
@@ -290,7 +290,7 @@ function Course({course}: CourseProps) {
     return (
         <Link 
             href={`/course/${course.id}`} 
-            className={`w-full h-[5vh] bg-light mb-2 rounded-xl flex items-center pl-4`}
+            className={`w-full bg-light mb-2 rounded-xl flex items-center pl-4 pt-2 pb-2`}
         >
             <h1>{course.id}</h1>
         </Link>

@@ -26,7 +26,7 @@ export default function Study({ courseID, value }: StudyProps) {
     return (
         <div className="col-span-8 bg-dark rounded-xl p-8 h-full overflow-auto noscroll">
             <div className="flex flex-cols justify-between">
-                <h1 className="text-2xl font-bold">Learning Material for {courseID}</h1>
+                <h1 className="text-xl font-bold">Learning Material for {courseID}</h1>
                 <MarkAsMultipleChoice courseID={courseID} />
             </div>
             <p className="text-md text-bright">

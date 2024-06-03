@@ -23,7 +23,6 @@ type Card = {
 }
 
 type ReplyProps = {
-    userID: string
     username: string
     courseID: string
     cardID: number
@@ -33,7 +32,7 @@ type ReplyProps = {
 }
 
 type VoteProps = {
-    userID: string
+    username: string
     courseID: string
     cardID: number
     commentID: number
@@ -42,7 +41,7 @@ type VoteProps = {
 
 type PostCardVoteProps = {
     courseID: string
-    userID: string
+    username: string
     cardID: number
     vote: boolean
 }
@@ -94,7 +93,7 @@ export async function postFile(req: Request, res: Response) {
 // This is relevant when there are duplicate questions, or bad questions that
 // should not be reviewed
 // id: number
-// userID: number
+// username: string
 // courseID: number
 // {
 //     id: number
@@ -106,20 +105,20 @@ export async function postFile(req: Request, res: Response) {
 // or 
 // 
 // id: number
-// userID: number
+// username: string
 // courseID: number 
 // [{},{},{}]
 export async function postDenied(req: Request, res: Response) {
     try {
-        const { id, userID, courseID } = req.body
+        const { id, username, courseID } = req.body
         const cards = req.body.cards || req.body
 
         // Validate the required fields
-        if (!userID || !courseID || !cards) {
+        if (!username || !courseID || !cards) {
             return res.status(400).json({ error: 'Missing required fields' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID: userID, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -158,7 +157,7 @@ export async function postDenied(req: Request, res: Response) {
 }
 
 // Uploads the given cards to storage as a struct (a unreviewed card struct directly)
-// userID: number(the user id)
+// username: string
 // token: string (user token)
 // courseID: number (the course the unreviewed question is for)
 // {
@@ -169,7 +168,7 @@ export async function postDenied(req: Request, res: Response) {
 export async function postCard(req: Request, res: Response) {
     try {
         const card = req.body as {
-            userID: number
+            username: string
             courseID: string
             question: string
             alternatives: string[]
@@ -177,11 +176,11 @@ export async function postCard(req: Request, res: Response) {
         }
 
         // Validate the required fields
-        if (!card.userID || !card.courseID || !card.question || !card.alternatives || card.correct === undefined) {
+        if (!card.username || !card.courseID || !card.question || !card.alternatives || card.correct === undefined) {
             return res.status(400).json({ error: 'Missing required fields' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID: card.userID, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], username: card.username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -191,7 +190,7 @@ export async function postCard(req: Request, res: Response) {
 
         // Save the card data to Firestore, including the courseID
         await cardRef.set({
-            userID: card.userID,
+            username: card.username,
             courseID: card.courseID,
             question: card.question,
             alternatives: card.alternatives,
@@ -209,13 +208,13 @@ export async function postCard(req: Request, res: Response) {
 // Uploads the given course to storage as a Course object
 export async function postCourse(req: Request, res: Response) {
     try {
-        const { userID, course } = req.body as { userID: number, course: Course }
+        const { username, course } = req.body as { username: string, course: Course }
 
-        if (!userID || !course) {
-            return res.status(400).json({ error: 'userID and course are required' })
+        if (!username || !course) {
+            return res.status(400).json({ error: 'username and course are required' })
         }
         
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -266,13 +265,17 @@ export async function postLogin(req: Request, res: Response) {
         }
 
         // Fetch the user data from Firestore
-        const userSnapshot = await db.collection('User').where('username', '==', username).get()
-        if (userSnapshot.empty) {
+        const userDoc = await db.collection('User').doc(username).get()
+
+        if (!userDoc.exists) {
             return res.status(404).json({ error: 'User not found' })
         }
 
-        const userDoc = userSnapshot.docs[0]
         const userData = userDoc.data()
+
+        if (!userData) {
+            return res.status(404).json({ error: 'User has no data' })
+        }
 
         // Temporarily disabled till after exams
         // if (userData.password !== password) { 
@@ -284,11 +287,11 @@ export async function postLogin(req: Request, res: Response) {
 
         // Respond with user details and the generated token
         res.json({
-            id: userDoc.id,
             name: `${userData.firstName} ${userData.lastName}`,
             username,
             time: userData.time,
-            token
+            token,
+            solved: userData.solved
         })
     } catch (err) {
         const error = err as Error
@@ -313,43 +316,31 @@ export async function postRegister(req: Request, res: Response) {
             firstName: string
             lastName: string
         }
-
+        
         // Validate the required fields
         if (!username || !password || !firstName || !lastName) {
             return res.status(400).json({ error: 'Username, password, first name and last name are required.' })
         }
-
+        
         const userNameHasNtnu = username.includes('@ntnu.no') || username.includes('@stud.ntnu.no')
         if (!userNameHasNtnu) {
             return res.status(400).json({ error: 'Mail must be an NTNU email' })
         }
+        
+        const id = username.split('@')[0]
 
-        // Check if the username already exists
-        const existingUserSnapshot = await db.collection('User').where('username', '==', username.split('@')[0]).get()
-        if (!existingUserSnapshot.empty) {
-            return res.status(409).json({ error: 'Username already exists' })
+        // Checks if the user already exists
+        const userDoc = await db.collection('Users').doc(`${id}`).get()
+        if (userDoc.exists) {
+            return res.status(409).json({ error: 'User already exists' })
         }
 
-        // Get the next available numeric ID
-        const idDoc = db.collection('Metadata').doc('userIDCounter')
-        const idDocSnapshot = await idDoc.get()
-
-        if (!idDocSnapshot.exists) {
-            await idDoc.set({ nextID: 1 })
-        }
-
-        const nextID = idDocSnapshot.exists ? idDocSnapshot.data()!.nextID : 1
-
-        // Increment the counter for the next user
-        await idDoc.update({ nextID: nextID + 1 })
-
-        // Generate a new document reference with the incrementing numeric ID
-        const userRef = db.collection('User').doc(nextID.toString())
+        // Generates a document for the user
+        const userRef = db.collection('User').doc(id)
 
         // Create the user data object
         const user = {
-            id: nextID,
-            username: username.split('@')[0],
+            username: id,
             password,
             firstName,
             lastName,
@@ -363,7 +354,7 @@ export async function postRegister(req: Request, res: Response) {
         await userRef.set(user)
 
         invalidateCache('scoreboard')
-        res.status(201).json({ message: `Created user ${user.id}` })
+        res.status(201).json({ message: `Created user ${user.username}` })
     } catch (err) {
         const error = err as Error
         res.status(500).json({ error: error.message })
@@ -373,10 +364,10 @@ export async function postRegister(req: Request, res: Response) {
 // Posts a comment to the given course
 export async function postComment(req: Request, res: Response) {
     try {
-        const { userID, username, courseID, cardID, content, parent } = req.body as ReplyProps
+        const { username, courseID, cardID, content, parent } = req.body as ReplyProps
 
-        if (!userID || !username || !courseID || typeof cardID != 'number' || !content) {
-            return res.status(400).json({ error: 'Missing required field (userID, username, courseID, cardID, content)' })
+        if (!username || !username || !courseID || typeof cardID != 'number' || !content) {
+            return res.status(400).json({ error: 'Missing required field (username, username, courseID, cardID, content)' })
         }
 
         const idDocRef = db.collection('Metadata').doc('commentIDCounter')
@@ -401,11 +392,10 @@ export async function postComment(req: Request, res: Response) {
             courseID,
             cardID,
             content,
-            userID,
             username,
             time: new Date().toISOString(),
             rating: 0,
-            voters: []
+            votes: []
         }
 
         if (parent !== undefined) {
@@ -426,10 +416,10 @@ export async function postComment(req: Request, res: Response) {
 // Upvotes or downvotes the passed comment
 export async function postVote(req: Request, res: Response) {
     try {
-        const { userID, courseID, cardID, commentID, vote } = req.body as VoteProps
+        const { username, courseID, cardID, commentID, vote } = req.body as VoteProps
 
-        if (!userID || !courseID || typeof cardID !== 'number' || !commentID || vote == null) {
-            return res.status(400).json({ error: 'Missing required field (courseID, cardID, commentID, vote)' })
+        if (!username || !courseID || typeof cardID !== 'number' || !commentID || vote == null) {
+            return res.status(400).json({ error: 'Missing required field (username, courseID, cardID, commentID, vote)' })
         }
 
         const commentRef = db.collection('Comment').doc(commentID.toString())
@@ -445,7 +435,7 @@ export async function postVote(req: Request, res: Response) {
         }
 
         const votes = commentData.votes || []
-        const existingVoteIndex = votes.findIndex((v: any) => v.userID === userID)
+        const existingVoteIndex = votes.findIndex((v: any) => v.username === username)
         let newRating = commentData.rating || 0
 
         if (existingVoteIndex >= 0) {
@@ -459,7 +449,7 @@ export async function postVote(req: Request, res: Response) {
                 newRating += vote ? 2 : -2
             }
         } else {
-            votes.push({ userID, vote })
+            votes.push({ username, vote })
             newRating += vote ? 1 : -1
         }
 
@@ -476,10 +466,10 @@ export async function postVote(req: Request, res: Response) {
 // Upvotes or downvotes the passed card
 export async function postCardVote(req: Request, res: Response) {
     try {
-        const { courseID, userID, cardID, vote } = req.body as PostCardVoteProps
+        const { courseID, username, cardID, vote } = req.body as PostCardVoteProps
 
-        if (!courseID || !userID || typeof cardID !== 'number' || vote == null) {
-            return res.status(400).json({ error: 'Missing required field (courseID, userID, cardID, vote)' })
+        if (!courseID || !username || typeof cardID !== 'number' || vote == null) {
+            return res.status(400).json({ error: 'Missing required field (courseID, username, cardID, vote)' })
         }
 
         const courseRef = db.collection('Course').doc(courseID.toString())
@@ -500,7 +490,7 @@ export async function postCardVote(req: Request, res: Response) {
         }
 
         const votes = courseData.cards[cardID].votes || []
-        const existingVoteIndex = votes.findIndex((v: any) => v.userID === userID)
+        const existingVoteIndex = votes.findIndex((v: any) => v.username === username)
         let newRating = courseData.cards[cardID].rating || 0
 
         if (existingVoteIndex >= 0) {
@@ -514,7 +504,7 @@ export async function postCardVote(req: Request, res: Response) {
                 newRating += vote ? 2 : -2
             }
         } else {
-            votes.push({ userID, vote })
+            votes.push({ username, vote })
             newRating += vote ? 1 : -1
         }
 

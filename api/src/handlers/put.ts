@@ -27,10 +27,10 @@ type PutFileProps = {
 export async function putCourse(req: Request, res: Response) {
     try {
         const { courseID } = req.params
-        const { userID, accepted, editing } = req.body as { userID: number, accepted: Card[], editing: Editing }
+        const { username, accepted, editing } = req.body as { username: string, accepted: Card[], editing: Editing }
         
-        if (!userID || accepted === undefined || editing === undefined) {
-            return res.status(400).json({ error: 'userID, accepted, and editing are required' })
+        if (!username || accepted === undefined || editing === undefined) {
+            return res.status(400).json({ error: 'username, accepted, and editing are required' })
         }
 
         if (!courseID) {
@@ -39,7 +39,7 @@ export async function putCourse(req: Request, res: Response) {
 
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.update({
-            userID,
+            username,
             cards: accepted,
             unreviewed: editing.cards,
             textUnreviewed: editing.texts
@@ -76,13 +76,13 @@ export async function putFile(req: Request, res: Response) {
 
 export async function putText(req: Request, res: Response) {
     try {
-        const { userID, courseID, text } = req.body as { userID: number, courseID: string, text: string[] }
+        const { username, courseID, text } = req.body as { username: string, courseID: string, text: string[] }
         
-        if (!userID || !courseID || !text) {
-            return res.status(400).json({ error: 'userID, accepted, and editing are required' })
+        if (!username || !courseID || !text) {
+            return res.status(400).json({ error: 'username, accepted, and editing are required' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -92,7 +92,7 @@ export async function putText(req: Request, res: Response) {
         }
 
         const courseRef = db.collection('Course').doc(courseID)
-        await courseRef.update({ userID, textUnreviewed: text })
+        await courseRef.update({ username, textUnreviewed: text })
 
         invalidateCache(courseID)
         res.status(200).json({ id: courseRef.id })
@@ -104,21 +104,21 @@ export async function putText(req: Request, res: Response) {
 
 export async function putTime(req: Request, res: Response) {
     try {
-        const { userID, time } = req.body as { userID: string, time: number }
+        const { username, time } = req.body as { username: string, time: number }
         
-        if (!userID || typeof time !== 'number') {
-            return res.status(400).json({ error: 'userID, accepted, and editing are required' })
+        if (!username || typeof time !== 'number') {
+            return res.status(400).json({ error: 'username, accepted, and editing are required' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
 
-        const courseRef = db.collection('User').doc(userID)
+        const courseRef = db.collection('User').doc(username)
         await courseRef.update({time})
 
-        invalidateCache(`user_${userID}`)
+        invalidateCache(`user_${username}`)
         res.status(200).json({ id: courseRef.id })
     } catch (err) {
         const error = err as Error
@@ -139,7 +139,7 @@ export async function putMarkCourse(req: Request, res: Response) {
             return res.status(400).json({ error: 'Mark is required.' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }

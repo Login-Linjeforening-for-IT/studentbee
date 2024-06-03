@@ -28,7 +28,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userID: user.id,
+                username: user.username,
                 courseID,
                 cardID,
                 vote
@@ -62,7 +62,7 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userID: user.id,
+                username: user.username,
                 courseID,
                 cardID,
                 commentID,

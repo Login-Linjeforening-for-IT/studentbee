@@ -34,7 +34,7 @@ export async function addCourse(course: Course): Promise<void | string> {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    userID: user.id,
+                    username: user.username,
                     course
                 }),
             })
@@ -70,7 +70,7 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
             },
             body: JSON.stringify({
                 courseID,
-                userID: user.id,
+                username: user.username,
                 card
             }),
         })
@@ -100,7 +100,7 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                userID: user.id,
+                username: user.username,
                 courseID,
                 text
             }),
@@ -157,7 +157,7 @@ export async function sendFile({courseID, name, parent}: SendFileProps) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            userID: user.id,
+            username: user.username,
             courseID,
             name,
             parent
@@ -186,7 +186,7 @@ export async function updateFile({courseID, name, content}: UpdateFileProps) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            userID: user.id,
+            username: user.username,
             courseID,
             name,
             content
@@ -215,7 +215,7 @@ export async function deleteFile({courseID, name}: SendFileProps) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            userID: user.id
+            username: user.username
         })
     })
 

@@ -166,7 +166,7 @@ export function EditorWithoutLogic({
                 </div>}
                 <div className={`markdown-editor space-x-2 h-full ${displayEditor && "grid grid-cols-2"}`}>
                     {(displayEditor || !markdown.length) && <textarea
-                        className={`w-full h-full rounded text-white bg-transparent focus:outline-none resize-none overflow-hidden ${placeholderClassName}`}
+                        className={`w-full h-full rounded text-white bg-transparent focus:outline-none resize-none overflow-hidden outline-none caret-orange-500 ${placeholderClassName}`}
                         value={markdown}
                         onChange={handleMarkdownChange}
                         placeholder={placeholder || "Write your markdown here..."}

@@ -6,6 +6,7 @@ import Link from "next/link"
 import ThumbsUp from "../svg/thumbsup"
 import ThumbsDown from "../svg/thumbsdown"
 import Trash from "../svg/trash"
+import voteColor from "./voteColor"
 
 type ReplyProps = {
     courseID: string
@@ -61,7 +62,6 @@ export default function Reply({
                 id: comment.replies.length,
                 courseID,
                 cardID,
-                userID: user.id || 0,
                 username: "You",
                 content: reply,
                 time: new Date().toISOString(),
@@ -71,7 +71,6 @@ export default function Reply({
                 id: 0,
                 courseID,
                 cardID,
-                userID: user.id || 0,
                 username: "You",
                 content: reply,
                 time: new Date().toISOString(),
@@ -140,10 +139,11 @@ function ReplyComponent({
     setComments
 }: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
-    const user = getItem('user') as User
+    const user = getItem('user') as User | string | undefined
+    const username = typeof user === 'string' ? user : user ? user.username : ''
 
     function handleDelete() {
-        deleteComment({commentID: reply.id})
+        deleteComment({commentID: reply.id, courseID: comment.courseID})
 
         const temp = [...comments]
         const index = temp.indexOf(comment)
@@ -191,7 +191,7 @@ function ReplyComponent({
                     onClick={() => handleVote({commentID: reply.id, current: true})}
                 >
                     <ThumbsUp 
-                        fill={`${clientVote === 1 ? "fill-green-500" : "fill-bright hover:fill-green-500"}`} 
+                        fill={voteColor('up', reply.votes, username, clientVote)} 
                         className="w-full h-full pt-[0.2vh]"
                     />
                 </button>
@@ -200,11 +200,11 @@ function ReplyComponent({
                     onClick={() => handleVote({commentID: reply.id, current: false})}
                 >
                     <ThumbsDown 
-                        fill={`${clientVote === -1 ? "fill-red-500" : "fill-bright hover:fill-red-500"}`} 
+                        fill={voteColor('down', reply.votes, username, clientVote)} 
                         className="w-full h-full pt-[0.2vh]" 
                     />
                 </button>
-                {user.id === reply.userID && <button 
+                {username === reply.username && <button 
                     className="text-bright underline w-[1.3vw]" 
                     onClick={handleDelete}
                 >

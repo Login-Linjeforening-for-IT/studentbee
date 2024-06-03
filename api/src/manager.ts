@@ -11,8 +11,8 @@ if (!BACKEND_SECRET) {
 
 type HandleTokenProps = {
     authorizationHeader: string | undefined
-    userID: number
-    verifyToken: (token: string, userID: string) => boolean
+    username: string
+    verifyToken: (token: string, username: string) => boolean
 }
 
 // Generates a token for the given user ID
@@ -26,15 +26,15 @@ export function generateToken(id: string): string {
 }
 
 // Verifies that the passed token is valid for the given user
-export function verifyToken(token: string, userID: string): boolean {
+export function verifyToken(token: string, username: string): boolean {
     const tokenData = Buffer.from(token, 'base64').toString('ascii')
     const tokenParts = tokenData.split(':')
     if (tokenParts.length !== 3) return false
 
     const [id, timestamp, hash] = tokenParts
 
-    // Ensure the id in the token matches the provided userID
-    if (id !== userID) return false
+    // Ensure the id in the token matches the provided username
+    if (id !== username) return false
 
     const data = `${id}:${timestamp}:${BACKEND_SECRET}`
     const expectedHash = crypto.createHash('sha256').update(data).digest('hex')
@@ -43,7 +43,7 @@ export function verifyToken(token: string, userID: string): boolean {
 }
 
 // Checks the token and returns an error message if the token is invalid
-export function checkToken({authorizationHeader, userID, verifyToken}: HandleTokenProps): boolean | string  {
+export function checkToken({authorizationHeader, username, verifyToken}: HandleTokenProps): boolean | string  {
     if (!authorizationHeader) {
         return 'Authorization header missing'
     }
@@ -53,7 +53,7 @@ export function checkToken({authorizationHeader, userID, verifyToken}: HandleTok
         return 'Token missing from authorization header'
     }
 
-    if (!verifyToken(token, userID.toString())) {
+    if (!verifyToken(token, username)) {
         return 'Invalid token'
     }
 

@@ -11,7 +11,7 @@ export default function Register() {
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
 
-    const input = "bg-light rounded-xl overflow-hidden px-8 col-span-6"
+    const input = "bg-light rounded-xl overflow-hidden px-8 col-span-6 outline-none caret-orange-500"
     const inputParent = "grid grid-cols-8 w-full h-full space-between"
     const inputText = "text-xl flex items-center justify-start col-span-2"
 
@@ -79,7 +79,7 @@ export default function Register() {
                     href={error.length ? '/register' : '/login'}
                     className="grid w-full h-full bg-orange-500 rounded-xl" 
                     onClick={handleRegister}>
-                    <h1 className="text-2xl place-self-center">Create account</h1>
+                    <h1 className="text-xl place-self-center">Create account</h1>
                 </Link>
                 <div className={inputParent} /> 
         </div>  

@@ -105,7 +105,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                userID: user.id,
+                username: user.username,
                 accepted,
                 editing
             })
@@ -142,7 +142,7 @@ export async function updateUserTime({time}: {time: number}) {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                userID: user.id,
+                username: user.username,
                 time
             })
         })
@@ -205,5 +205,27 @@ export async function getFiles(courseID: string) {
     } catch (error: unknown) {
         const err = error as Error
         return err.message
+    }
+}
+
+export async function getUser(id: string): Promise<User | string> {
+    try {
+        const response = await fetch(`${BROWSER_API}/user/${id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (!response.ok) {
+            const data = await response.json()
+            throw new Error(data.error)
+        }
+    
+        const user: User = await response.json()
+        return user
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message   
     }
 }

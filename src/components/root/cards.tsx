@@ -62,7 +62,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     if (typeof course === 'string') {
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-2xl">{course}</h1>
+                <h1 className="text-xl">{course}</h1>
             </div>
         )
     }
@@ -71,14 +71,14 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         return (
             <div className="w-full h-full col-span-6 grid place-items-center">
                 <div className="grid place-items-center">
-                    <h1 className="text-2xl text-center mb-2">Course {course.id} has no content yet.</h1>
+                    <h1 className="text-xl text-center mb-2">Course {course.id} has no content yet.</h1>
                     <Link
                         className="bg-dark rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-orange-500"
                         href={`/edit/${course.id}`}
                     >
                         Edit course
                     </Link>
-                    <h1 className="text-2xl text-center mb-2">Mark course as learning based (no multiple choice)</h1>
+                    <h1 className="text-xl text-center mb-2">Mark course as learning based (no multiple choice)</h1>
                     <button 
                         className="bg-orange-500 rounded-xl px-2 h-[4vh] w-[10vw]"
                         onClick={markCourse}
@@ -95,13 +95,13 @@ export default function Cards({id, current, course, comments}: CardsProps) {
 
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-2xl">Course {course.id} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
+                <h1 className="text-xl">Course {course.id} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
             </div>
         )
     }
 
     if (!card) {
-        window.location.href = `/course/${id}/0`
+        window.location.href = `/course/${id}/1`
     }
 
     function handleVote(vote: boolean) {

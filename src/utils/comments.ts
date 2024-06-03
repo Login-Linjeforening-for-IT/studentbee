@@ -40,7 +40,6 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userID: user.id,
                 username: user.username,
                 courseID,
                 cardID,
@@ -61,7 +60,7 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
     }
 }
 
-export async function deleteComment({commentID}: {commentID: number}) {
+export async function deleteComment({commentID, courseID}: {commentID: number, courseID: string}) {
     try {
         const user = getItem('user') as User
 
@@ -75,7 +74,8 @@ export async function deleteComment({commentID}: {commentID: number}) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                userID: user.id,
+                courseID: courseID,
+                username: user.username,
                 commentID
             })
         })

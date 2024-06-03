@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
 import db from '../db'
-import cache, { invalidateCache } from '../flow'
+import { invalidateCache } from '../flow'
 
 type DeleteCommentProps = {
-    userID: number
+    courseID: string
+    username: string
     commentID: number
 }
 
@@ -14,13 +15,13 @@ type DeleteFileProps = {
 
 export async function deleteComment(req: Request, res: Response) {
     try {
-        const { userID, commentID } = req.body as DeleteCommentProps
+        const { courseID, username, commentID } = req.body as DeleteCommentProps
 
-        if (!userID || typeof commentID !== 'number') {
+        if (!username || typeof commentID !== 'number') {
             return res.status(400).json({ error: 'Comment ID is required' })
         }
 
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], userID, verifyToken})
+        // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
@@ -37,7 +38,7 @@ export async function deleteComment(req: Request, res: Response) {
 
         await batch.commit()
 
-        invalidateCache(`${userID}_comments`)
+        invalidateCache(`${courseID}_comments`)
         res.status(200).json({ id: commentRef.id })
     } catch (err) {
         const error = err as Error

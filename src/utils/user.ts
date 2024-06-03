@@ -21,10 +21,11 @@ export async function sendLogin(user: LoginUser): Promise<true | string> {
 
         const result: LoginResponse = await response.json()
         const userResult: User = {
-            id: result.id,
             name: result.name,
             username: result.username,
             time: result.time,
+            score: result.score,
+            solved: result.solved,
         }
 
         setItem('token', result.token)
@@ -54,6 +55,7 @@ export async function sendLogout(): Promise<Boolean | string> {
 
         // Removes user items from localstorage if the user wants to log out
         removeItem('token')
+        removeItem('user')
         // removeItem('user')
         window.location.reload()
 
@@ -154,14 +156,14 @@ export async function sendTimeSpent(): Promise<true | string> {
     }
 
     try {
-        const response = await fetch(`${BROWSER_API}/register`, {
+        const response = await fetch(`${BROWSER_API}/time`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                userID: user.id,
+                username: user.username,
                 time: user.time
             })
         })

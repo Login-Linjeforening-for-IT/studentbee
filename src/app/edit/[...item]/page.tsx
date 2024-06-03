@@ -3,10 +3,17 @@
 import Editor from "@/components/editor/editor"
 import Trash from "@/components/svg/trash"
 import { getCourse, updateCourse } from "@/utils/fetch"
-import Image from "next/image"
 import Link from "next/link"
 import Script from "next/script"
-import { ChangeEvent, Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState } from "react"
+import { 
+    ChangeEvent, 
+    Dispatch, 
+    MutableRefObject, 
+    SetStateAction, 
+    useEffect, 
+    useRef, 
+    useState
+} from "react"
 
 type AddCardProps = {
     courseID: string
@@ -43,7 +50,11 @@ type EditCardsProps = {
     handleThemeChange: (event: ChangeEvent<HTMLInputElement>, cardIndex: number) => void
     handleSourceChange: (event: ChangeEvent<HTMLInputElement>, cardIndex: number) => void
     setCorrectAnswer: (index: number, cardIndex: number) => void
-    handleAlternativeChange: (event: ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
+    handleAlternativeChange: (
+        event: ChangeEvent<HTMLTextAreaElement>, 
+        cardIndex: number, 
+        alternativeIndex: number
+    ) => void
     handleAction: (action: 'accept' | 'reject', cardIndex: number) => void
 }
 
@@ -200,7 +211,11 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         setEditing({...editing, cards: tempCards})
     }
 
-    function handleAlternativeChange(event: ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) {
+    function handleAlternativeChange(
+        event: ChangeEvent<HTMLTextAreaElement>, 
+        cardIndex: number, 
+        alternativeIndex: number
+    ) {
         const tempCards = [...editing.cards]
         const tempAlternatives = [...tempCards[cardIndex].alternatives]
         tempAlternatives[alternativeIndex] = event.target.value
@@ -219,7 +234,10 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         const correct = tempCards[cardIndex].correct
 
         if (correct.includes(index)) {
-            tempCards[cardIndex] = {...tempCards[cardIndex], correct: correct.filter((correctIndex) => correctIndex !== index)}
+            tempCards[cardIndex] = {
+                ...tempCards[cardIndex], 
+                correct: correct.filter((correctIndex) => correctIndex !== index)
+            }
         } else {
             tempCards[cardIndex] = {...tempCards[cardIndex], correct: [...correct, index]}
         }
@@ -284,7 +302,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                                 {showText && <textarea
                                     value={text}
                                     onChange={handleTextChange}
-                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 overflow-auto resize-none whitespace-pre-wrap"
+                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 overflow-auto resize-none whitespace-pre-wrap outline-none caret-orange-500"
                                 />}
                                 <AddCard
                                     courseID={item}
@@ -317,7 +335,14 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     )
 }
 
-function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlternativeIndex} : AddCardProps) {
+function AddCard({
+    courseID, 
+    card, 
+    setCard, 
+    addCard, 
+    alternativeIndex, 
+    setAlternativeIndex
+} : AddCardProps) {
     const inputRef = useRef<HTMLInputElement | null>(null)
     function updateQuestion (question: string) {
         setCard({...card, question})
@@ -370,7 +395,7 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
         <div className="w-full h-full overflow-auto noscroll p-1">
             <h1 className="flex items-center justify-start text-lg h-[4vh]">Source</h1>
             <input
-                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh]"
+                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-none caret-orange-500"
                 value={card.source}
                 type="text"
                 placeholder="Exam or learning material source"
@@ -379,7 +404,7 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
             <h1 className="flex items-center justify-start text-lg h-[4vh]">Theme</h1>
             <input
                 ref={inputRef}
-                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh]"
+                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-none caret-orange-500"
                 value={card.theme}
                 type="text"
                 placeholder="Question theme (optional)"
@@ -407,27 +432,28 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
                     }
 
                     return (
-                        <div key={index} className="grid grid-cols-12">
-                            <h1 className="col-span-1">{index + 1}</h1>
+                        <div key={index} className="flex flex-rows max-w-full w-full">
+                            <h1 className="w-10 text-superlight">{index + 1}</h1>
                             <button
                                 onClick={() => handleAlternativeClick(index)} 
                                 key={alternative} 
-                                className="text-left col-span-10 flex flex-rows space-x-2"
+                                className="text-left flex flex-rows space-x-2 w-full"
                             >
-                                <h1>{alternative}</h1><h1 className="text-superlight grid place-items-center">{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
+                                <h1>{alternative}</h1>
                             </button>
-                            <div className="grid grid-cols-2">
+                            <div className="flex flex-rows place-items-start gap-1">
+                                <h1 className="text-superlight float-right">{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
                                 {isCorrect ? 
-                                    <button className="text-xl text-bright" onClick={() => removeCorrect(index)}>
+                                    <button className="text-xl text-superlight hover:text-red-500" onClick={() => removeCorrect(index)}>
                                         ☒
                                     </button> 
                                 :
-                                    <button className="text-xl text-bright" onClick={() => addCorrect(index)}>
+                                    <button className="text-xl text-superlight hover:text-green-500" onClick={() => addCorrect(index)}>
                                         ☑
                                     </button>    
                                 }
-                                <button className="" onClick={() => removeAlternative(index)}>
-                                    <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full pt-[0.3vh]" />
+                                <button className="w-[20px]" onClick={() => removeAlternative(index)}>
+                                    <Trash fill="fill-superlight hover:fill-red-500" className="w-full h-full pt-[3.5px]" />
                                 </button>
                             </div>
                         </div>
@@ -449,11 +475,14 @@ function AddCard({courseID, card, setCard, addCard, alternativeIndex, setAlterna
 }
 
 function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: AlternativeProps) {
+    const inputRef = useRef<HTMLTextAreaElement | null>(null)
+
     // Updates the alternative in the course object
     function handleInput(input: string) {
         const tempAlternatives = [...card.alternatives]
         tempAlternatives[alternativeIndex] = input
         setCard({...card, alternatives: tempAlternatives})
+        autoResizeTextarea(inputRef.current as HTMLTextAreaElement)
     }
 
     // Adds a new alternative to the current card
@@ -472,23 +501,29 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
         setAlternativeIndex(alternativeIndex + 1)
     }
 
+    function autoResizeTextarea(textarea: HTMLTextAreaElement) {
+        textarea.style.height = 'auto'
+        textarea.style.height = `${textarea.scrollHeight}px`
+    }
+
     return (
-        <div className="w-full mt-2">
+        <div className="max-w-full mt-2">
             <div className="grid grid-cols-12 mb-2">
                 <h1 className="flex items-center justify-start text-lg h-[4vh]">{alternativeIndex + 1}:</h1>
-                <div className="w-full col-span-11">
+                <div className="w-full col-span-11 h-full">
                     <textarea
+                        ref={inputRef}
                         value={card.alternatives[alternativeIndex]} 
                         onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className="min-h-[5vh] w-full bg-light h-[5vh] rounded-xl px-2 mr-4"
+                        className="min-h-[5vh] w-full bg-light rounded-xl px-2 outline-none overflow-hidden resize-none whitespace-pre-wrap caret-orange-500"
                     />
                 </div>
             </div>
-            <button 
+            {alternativeIndex < 9 && <button 
                 className="w-full h-[4vh] bg-orange-500 rounded-lg text-xl"
                 onClick={handleAddAlternative}
-            >Add alternative</button>
+            >Add alternative</button>}
         </div>
     )
 }
@@ -501,10 +536,10 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
     }
 
     return (
-        <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
+        <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto noscroll">
             <div className="grid grid-cols-12">
                 <h1 className="text-xl mb-4 grid grid-row col-span-11">Accepted</h1>
-                <h1 className="text-gray-500">({accepted.length})</h1>
+                <h1 className="text-bright">({accepted.length})</h1>
             </div>
             <div>
                 {accepted.map((card: Card, index: number) => (
@@ -516,7 +551,7 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
                         >
                             <div className="grid grid-cols-12 w-full">
                                 <h1 className="w-full col-span-11">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
-                                <h1 className="text-gray-500 text-right w-full">{card.alternatives.length}</h1>
+                                <h1 className="text-bright text-right w-full">{card.alternatives.length}</h1>
                             </div>
                         </button>
                         <button className="flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw]" onClick={() => handleRemove(index)}>
@@ -535,7 +570,7 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
             <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
                 <div className="grid grid-cols-12">
                     <h1 className="text-xl mb-4 grid grid-row col-span-11">Rejected</h1>
-                    <h1 className="text-gray-500">({rejected.length})</h1>
+                    <h1 className="text-bright">({rejected.length})</h1>
                 </div>
                 <div>
                     {rejected.map((card: Card, index: number) => (
@@ -545,7 +580,7 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
                             className="w-full bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2"
                         >
                             <h1>{card.question.slice(0, 40)}...</h1>
-                            <h1 className="text-gray-500">{card.alternatives.length}</h1>
+                            <h1 className="text-bright">{card.alternatives.length}</h1>
                         </button>
                     ))}
                 </div>
@@ -554,9 +589,17 @@ function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps)
     }
 }
 
-function EditCards({editing, textareaRefs, handleQuestionChange, handleThemeChange, handleSourceChange, setCorrectAnswer, handleAlternativeChange, handleAction}: EditCardsProps) {
-    const inputStyle = "bg-extralight p-2 w-full rounded-xl overflow-hidden resize-none whitespace-pre-wrap"
-    // const isCorrect = typeof card.correct === 'number' ? card.correct === alternativeIndex : card.correct.includes(alternativeIndex)
+function EditCards({
+    editing, 
+    textareaRefs, 
+    handleQuestionChange, 
+    handleThemeChange, 
+    handleSourceChange, 
+    setCorrectAnswer, 
+    handleAlternativeChange, 
+    handleAction
+}: EditCardsProps) {
+    const inputStyle = "bg-extralight p-2 w-full rounded-xl overflow-hidden resize-none whitespace-pre-wrap outline-none caret-orange-500"
 
     return (
         <div className="w-full h-full overflow-auto noscroll">
@@ -737,7 +780,7 @@ function Alternatives({card, setCorrectAnswer, handleAlternativeChange, cardInde
                             <textarea
                                 key={index}
                                 ref={(el) => { textareaRefs.current[cardIndex * card.alternatives.length + index] = el }}
-                                className="bg-light p-2 w-full rounded-xl overflow-hidden resize-none"
+                                className="bg-light p-2 w-full rounded-xl outline-none overflow-hidden resize-none caret-orange-500"
                                 value={alternative}
                                 onChange={(event) => handleAlternativeChange(event, cardIndex, index)}
                             />

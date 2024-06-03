@@ -9,7 +9,7 @@ export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
-    const input = "bg-light rounded-xl overflow-hidden px-8 col-span-6"
+    const input = "bg-light rounded-xl overflow-hidden px-8 col-span-6 outline-none caret-orange-500"
     const inputParent = "grid grid-cols-8 w-full h-full space-between"
     const inputText = "text-xl flex items-center justify-start col-span-2"
     const rows = error.length ? "grid-rows-5 h-[35vh]" : "grid-rows-4 h-[30vh]"
@@ -51,7 +51,7 @@ export default function Login() {
                 </div>
                 <Link
                     href={error.length ? '/login' : `/profile/${username}`}
-                    className="grid w-full h-full bg-orange-500 rounded-xl text-2xl place-items-center" 
+                    className="grid w-full h-full bg-orange-500 rounded-xl text-xl place-items-center" 
                     onClick={handleClick}
                 >
                     Login

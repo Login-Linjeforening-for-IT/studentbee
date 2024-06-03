@@ -10,8 +10,8 @@ export default async function Home() {
     if (typeof courses === 'string') {
         return (
             <div className="w-full h-full grid grid grid-rows-12">
-                <h1 className="w-full grid place-items-center text-2xl">No courses</h1>
-                <Link href={`/add/course`} className="text-2xl rounded-xl px-2 bg-dark p-2 px-8 row-span-11 grid place-self-center">Add course</Link>
+                <h1 className="w-full grid place-items-center text-xl">No courses</h1>
+                <Link href={`/add/course`} className="text-xl rounded-xl px-2 bg-dark p-2 px-8 row-span-11 grid place-self-center">Add course</Link>
             </div>
         )
     }
@@ -19,7 +19,7 @@ export default async function Home() {
     return (
         <div className="w-full h-full rounded-xl overflow-auto noscroll flex justify-center flex-col place-items-center">
             <div className="w-[35vw] h-[45vh] bg-dark rounded-xl p-8 overflow-auto mb-8 noscroll">
-                <h1 className="text-2xl text-center font-semibold mb-4">Select course</h1>
+                <h1 className="text-xl text-center font-semibold mb-4">Select course</h1>
                 <div className="grid space-y-2">
                     {courses.map((course) => <Link
                         href={`/course/${course.id}`}

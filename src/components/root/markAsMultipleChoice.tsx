@@ -8,6 +8,6 @@ export default function MarkAsMultipleChoice({courseID}: {courseID: string}) {
     }
     
     return (
-        <button className="text-md bg-light px-2 rounded-xl" onClick={markCourse}>Convert to multiple choice</button>
+        <button className="text-md bg-light px-4 rounded-xl text-bright" onClick={markCourse}>Convert to multiple choice</button>
     )
 }

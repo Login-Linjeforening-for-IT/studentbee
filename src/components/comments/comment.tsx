@@ -5,7 +5,7 @@ import ThumbsDown from "../svg/thumbsdown"
 import voteColor from "./voteColor"
 import Reply, { Replies } from "./reply"
 import Trash from "../svg/trash"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 type CommentProps = {
     comment: CardComment
@@ -34,6 +34,18 @@ export default function Comment({
     comments, 
     handleDelete
 }: CommentProps) {
+    const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
+
+    function handleVote(direction: 'up' | 'down') {
+        if (clientVote === (direction === 'up' ? 1 : -1)) {
+            setClientVote(0)
+        } else {
+            setClientVote(direction === 'up' ? 1 : -1)
+        }
+
+        vote({commentID: comment.id, vote: direction === 'up' ? true : false})
+    }
+
     return (
         <div key={comment.id}>
             <div className="bg-normal rounded-xl p-4 mt-4 w-full">
@@ -49,13 +61,13 @@ export default function Comment({
             </div>
             <div className="w-full flex flex-rows space-x-2 mt-1">
                 <h1 className="text-bright">{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
-                <button className="w-[1.3vw]" onClick={() => vote({commentID: comment.id, vote: true})}>
-                    <ThumbsUp fill={voteColor(comment, 'up')} className="w-full h-full pt-[0.2vh]" />
+                <button className="w-[1.3vw]" onClick={() => handleVote('up')}>
+                    <ThumbsUp fill={voteColor('up', comment.votes, user.username, clientVote)} className="w-full h-full pt-[0.2vh]" />
                 </button>
-                <button className="w-[1.3vw]" onClick={() => vote({commentID: comment.id, vote: false})}>
-                    <ThumbsDown fill={voteColor(comment, 'down')} className="w-full h-full pt-[0.2vh]" />
+                <button className="w-[1.3vw]" onClick={() => handleVote('down')}>
+                    <ThumbsDown fill={voteColor('down', comment.votes, user.username, clientVote)} className="w-full h-full pt-[0.2vh]" />
                 </button>
-                {user.id === comment.userID && <button 
+                {user.username === comment.username && <button 
                     className="text-bright underline w-[1.4vw]" 
                     onClick={() => handleDelete({commentID: comment.id})}
                 >
