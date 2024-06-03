@@ -1,5 +1,4 @@
 'use client'
-import shuffle from "@utils/shuffle"
 import { useState, useRef } from "react"
 import { useCardNavigation } from "@/hooks/cardNavigation"
 import Comments from "./comments"
