@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react"
+import React, { useEffect, useState, Dispatch, SetStateAction } from "react"
 
 type AlternativesProps = {
     alternatives: string[]
@@ -31,33 +31,52 @@ export default function Alternatives({
     setRemainGreen, 
     wait
 }: AlternativesProps) {
+    const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
+    const [indexMapping, setIndexMapping] = useState<number[]>([])
+
+    useEffect(() => {
+        // Shuffles alternatives and creates map
+        const shuffled = [...alternatives]
+        const mapping = shuffled.map((_, index) => index)
+        
+        for (let i = shuffled.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1))
+            ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
+            ;[mapping[i], mapping[j]] = [mapping[j], mapping[i]]
+        }
+        
+        setShuffledAlternatives(shuffled)
+        setIndexMapping(mapping)
+    }, [alternatives])
+
     function getColor(index: number): string {
-        if (remainGreen.includes(index)) {
+        const originalIndex = indexMapping[index]
+        if (remainGreen.includes(originalIndex)) {
             return "bg-green-500"
         }
 
         if (!wait) {
             for (let i = 0; i < attempted.length; i++) {
-                if (correct.includes(index) && attempted.includes(index)) {
+                if (correct.includes(originalIndex) && attempted.includes(originalIndex)) {
                     return "bg-green-500"
                 }
             }
         }
 
         if (!wait) {
-            if (attempted.includes(index) && !correct.includes(index)) {
+            if (attempted.includes(originalIndex) && !correct.includes(originalIndex)) {
                 return "bg-red-800"
             }
         }
 
-        if (animateAnswer === index.toString()) {
+        if (animateAnswer === originalIndex.toString()) {
             if (animateAnswer === correct.toString()) {
-                !remainGreen.includes(index) && setRemainGreen([...remainGreen, index])
+                !remainGreen.includes(originalIndex) && setRemainGreen([...remainGreen, originalIndex])
                 return "bg-green-500"
             }
         }
 
-        if (selected.includes(index)) {
+        if (selected.includes(originalIndex)) {
             return "bg-extralight"
         }
         
@@ -66,16 +85,17 @@ export default function Alternatives({
 
     return (
         <div className='w-full'>
-            {alternatives.map((answer, index) =>
+            {shuffledAlternatives.map((answer, index) =>
                 <button 
                     key={index}
                     onClick={() => {
-                        checkAnswer([index], attempted, setAttempted)
+                        const originalIndex = indexMapping[index]
+                        checkAnswer([originalIndex], attempted, setAttempted)
                         correct.length > 1 
-                        ? selected.includes(index) 
-                            ? setSelected(selected.filter(alternative => alternative !== index)) 
-                            : setSelected([...selected, index])
-                        : setSelected([index]); setAttempted(prev => [...prev, index])
+                        ? selected.includes(originalIndex) 
+                            ? setSelected(selected.filter(alternative => alternative !== originalIndex)) 
+                            : setSelected([...selected, originalIndex])
+                        : setSelected([originalIndex]); setAttempted(prev => [...prev, originalIndex])
                     }}
                     className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
                 >
