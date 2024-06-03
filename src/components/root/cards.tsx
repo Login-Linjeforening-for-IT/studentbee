@@ -32,21 +32,10 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0)   
     const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
     const [indexMapping, setIndexMapping] = useState<number[]>([])
-    selectedRef.current = selected
-    
     const cards = typeof course === 'object' ? course.cards as Card[] : []
-    if (current && current >= cards.length ) {
-        router.push(`/course/${id}/1`)
-        return
-    }
-
     const card = cards[current || 0]
     const [wait, setWait] = useState(card?.correct.length > 1 ? true : false)
-    const flashColor = animate === "wrong" 
-        ? "bg-red-800" 
-        : animate === "correct" 
-            ? "bg-green-500" 
-            : "bg-dark"
+    selectedRef.current = selected
 
     const { navigate, checkAnswer } = useCardNavigation({
         current,
@@ -65,12 +54,19 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         indexMapping
     })
 
+    const flashColor = animate === "wrong" 
+        ? "bg-red-800" 
+        : animate === "correct" 
+            ? "bg-green-500" 
+            : "bg-dark"
+
+
     function markCourse() {
         sendMark({courseID: id || "PROG1001", mark: true})
     }
 
     useEffect(() => {
-        if (!card) {
+        if (!card?.alternatives) {
             return
         }
 
@@ -87,6 +83,11 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         setShuffledAlternatives(shuffled)
         setIndexMapping(mapping)
     }, [card?.alternatives])
+
+    if (current && current >= cards.length ) {
+        router.push(`/course/${id}/1`)
+        return
+    }
 
     if (typeof course === 'string') {
         return (
