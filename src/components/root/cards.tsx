@@ -62,6 +62,10 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     useEffect(() => {
+        if (!card) {
+            return
+        }
+
         // Shuffles alternatives and creates map
         const shuffled = [...card.alternatives]
         const mapping = shuffled.map((_, index) => index)
@@ -74,7 +78,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         
         setShuffledAlternatives(shuffled)
         setIndexMapping(mapping)
-    }, [card.alternatives])
+    }, [card?.alternatives])
 
     if (typeof course === 'string') {
         return (

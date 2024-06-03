@@ -44,7 +44,7 @@ export const useCardNavigation = ({
         (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>, next?: boolean) => {
             if (card.correct.every(answer => input.includes(answer)) || card.correct.every(answer => attempted.includes(answer)) || (remainGreen[0] === card.correct[0] && card.correct.length <= 1)) {
                 if (current != undefined) {
-                    const nextCard = current + 2 < cards.length ? current + 2 : -1
+                    const nextCard = current + 2 < cards.length ? current + 2 : 0
                     if (next && !wait) {
                         setAttempted([])
                         router.push(`/course/${id}/${nextCard}`)
