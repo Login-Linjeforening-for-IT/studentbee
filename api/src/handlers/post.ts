@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import db from '../db'
 import { generateToken } from '../manager'
-import cache, { invalidateCache } from '../flow'
+import { invalidateCache } from '../flow'
 
 type Course = {
     id: string

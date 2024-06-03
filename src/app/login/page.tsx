@@ -1,6 +1,5 @@
 'use client'
 
-import { setItem } from "@/utils/localStorage"
 import { sendLogin } from "@utils/user"
 import Link from "next/link"
 import { useState } from "react"

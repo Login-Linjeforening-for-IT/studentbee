@@ -74,7 +74,6 @@ export default function Question({
                     </div>
                 </div>
                 <Alternatives
-                    alternatives={card.alternatives}
                     selected={selected}
                     animateAnswer={animateAnswer} 
                     attempted={attempted}

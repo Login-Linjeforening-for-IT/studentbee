@@ -1,7 +1,6 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from "react"
+import React, { Dispatch, SetStateAction } from "react"
 
 type AlternativesProps = {
-    alternatives: string[]
     selected: number[]
     setSelected: Dispatch<SetStateAction<number[]>>
     animateAnswer: string
@@ -21,7 +20,6 @@ type AlternativesProps = {
 }
 
 export default function Alternatives({
-    alternatives, 
     selected, 
     animateAnswer, 
     checkAnswer, 

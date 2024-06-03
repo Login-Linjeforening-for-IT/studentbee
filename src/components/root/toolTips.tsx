@@ -1,6 +1,5 @@
 'use client'
 
-import getItem from "@/utils/localStorage"
 import { useEffect, useState } from "react"
 
 export default function ToolTips() {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
 import db from '../db'
-import cache, { invalidateCache } from '../flow'
+import cache from '../flow'
 
 type Files = {
     name: string

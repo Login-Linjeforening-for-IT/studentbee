@@ -7,7 +7,6 @@ import { Dispatch, MutableRefObject, SetStateAction, useEffect, useRef, useState
 import { deleteFile, sendFile } from "@/utils/fetchClient"
 import { getFiles } from "@/utils/fetch"
 import getItem from "@/utils/localStorage"
-import Image from "next/image"
 import Trash from "../svg/trash"
 
 type CoursesProps = {

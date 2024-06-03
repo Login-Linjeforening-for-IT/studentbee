@@ -1,5 +1,4 @@
 export default function ThumbsDown({className, fill}: {className?: string, fill: string}) {
-
     return (
         <div className={className}>
             <svg 

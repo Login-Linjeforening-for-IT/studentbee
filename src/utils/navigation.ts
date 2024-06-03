@@ -1,6 +1,5 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
 import { Dispatch, MutableRefObject, SetStateAction } from "react"
-import getItem from "./localStorage"
 
 type HandleNavigationProps = {
     direction: string

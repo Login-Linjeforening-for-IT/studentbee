@@ -1,8 +1,8 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import ThumbsDown from "../svg/thumbsdown";
-import ThumbsUp from "../svg/thumbsup";
-import voteColor from "../comments/voteColor";
-import getItem from "@/utils/localStorage";
+import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import ThumbsDown from "../svg/thumbsdown"
+import ThumbsUp from "../svg/thumbsup"
+import voteColor from "../comments/voteColor"
+import getItem from "@/utils/localStorage"
 
 type QuestionFooterProps = {
     card: Card
