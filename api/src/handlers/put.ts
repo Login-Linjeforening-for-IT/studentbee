@@ -1,4 +1,7 @@
+// Used for type specification when recieving requests
 import { Request, Response } from 'express'
+
+// Imports the database instance, necesarry to persist operations to the database
 import db from '../db'
 import { invalidateCache } from '../flow'
 

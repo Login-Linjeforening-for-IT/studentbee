@@ -1,8 +1,14 @@
 import { createClient } from 'redis'
+import dotenv from 'dotenv'
 
-// Gets Redis connection details from environment variables
-const redisHost = process.env.REDIS_HOST || 'localhost'
-const redisPort = process.env.REDIS_PORT || 6379
+dotenv.config()
+
+// Destructures the environment variables from the process environment
+const { REDIS_HOST, REDIS_PORT } = process.env
+
+// Uses the passed values, or defines default values for the Redis host and port
+const redisHost = REDIS_HOST || 'localhost'
+const redisPort = REDIS_PORT || 6379
 
 // Creates and configure Redis client
 const redisClient = createClient({

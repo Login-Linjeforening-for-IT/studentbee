@@ -8,8 +8,9 @@ import dotenv from 'dotenv'
 // Configures the environment variables
 dotenv.config()
 
-// Destructures the environment variables from the environment
+// Destructures the environment variables from the process environment
 const { 
+    // General environment variables
     PRODUCTION, 
     TYPE, 
     AUTH_URI, 
@@ -17,6 +18,7 @@ const {
     AUTH_CERT_URL, 
     UNIVERSE_DOMAIN,
 
+    // Service account development specific environment variables
     DEV_PROJECT_ID,
     DEV_PRIVATE_KEY_ID,
     DEV_PRIVATE_KEY,
@@ -24,6 +26,7 @@ const {
     DEV_CLIENT_ID,
     DEV_CLIENT_CERT_URL,
 
+    // Service account production specific environment variables
     PROD_PROJECT_ID,
     PROD_PRIVATE_KEY_ID,
     PROD_PRIVATE_KEY,
@@ -31,6 +34,11 @@ const {
     PROD_CLIENT_ID,
     PROD_CLIENT_CERT_URL
 } = process.env
+
+// Checks that all necessary environment variables are defined
+if (!TYPE || !AUTH_URI || !TOKEN_URI || !AUTH_CERT_URL || !UNIVERSE_DOMAIN) {
+    throw new Error('Missing essential environment variables.')
+}
 
 // Destructures the environment variables for the production service account
 const PROD = {
@@ -50,6 +58,30 @@ const DEV = {
     CLIENT_EMAIL: DEV_CLIENT_EMAIL,
     CLIENT_ID: DEV_CLIENT_ID,
     CLIENT_CERT_URL: DEV_CLIENT_CERT_URL
+}
+
+// Validate necessary environment variables for production
+if (PRODUCTION === 'true' && (
+    !PROD.PROJECT_ID 
+    || !PROD.PRIVATE_KEY_ID 
+    || !PROD.PRIVATE_KEY 
+    || !PROD.CLIENT_EMAIL 
+    || !PROD.CLIENT_ID 
+    || !PROD.CLIENT_CERT_URL
+)) {
+    throw new Error('Missing production environment variables.')
+}
+
+// Validate necessary environment variables for development
+if (PRODUCTION !== 'true' && (
+    !DEV.PROJECT_ID 
+    || !DEV.PRIVATE_KEY_ID 
+    || !DEV.PRIVATE_KEY 
+    || !DEV.CLIENT_EMAIL 
+    || !DEV.CLIENT_ID 
+    || !DEV.CLIENT_CERT_URL
+)) {
+    throw new Error('Missing development environment variables.')
 }
 
 // Determines which service account to use based on the production environment
