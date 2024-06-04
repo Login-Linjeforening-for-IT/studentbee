@@ -53,7 +53,7 @@ const DEV = {
 }
 
 // Determines which service account to use based on the production environment
-const SERVICE_ACCOUNT = PRODUCTION ? PROD : DEV
+const SERVICE_ACCOUNT = PRODUCTION === "true" ? PROD : DEV
 
 // Initializes the Firebase Admin SDK with the service account
 admin.initializeApp({
