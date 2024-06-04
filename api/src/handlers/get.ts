@@ -3,6 +3,8 @@ import { Request, Response } from 'express'
 
 // Imports the database instance, necesarry to persist operations to the database
 import db from '../db'
+
+// Imports cache from the flow module, used to cache data
 import cache from '../flow'
 
 /**
