@@ -59,18 +59,18 @@ export default function Question({
                     <h1 className="text-right text-bright float-right">
                         {card.source} {(current || 0) + 1} / {cards.length}
                     </h1>
-                    <div className={`text-md mb-8 overflow-auto`}>
-                    {card.correct.length > 1 && <h1 className="text-bright">
-                        Multiple choice - Select all correct answers
-                    </h1>}
-                    {card.theme && <h1 className="text-bright">
-                        {card.theme}
-                    </h1>}
-                    <Markdown
-                        displayEditor={false} 
-                        handleDisplayEditor={() => {}} 
-                        markdown={card.question} 
-                    />
+                    <div className={`text-md mb-2 overflow-auto`}>
+                        {card.correct.length > 1 && <h1 className="text-bright">
+                            Multiple choice - Select all correct answers
+                        </h1>}
+                        {card.theme && <h1 className="text-bright">
+                            {card.theme}
+                        </h1>}
+                        <Markdown
+                            displayEditor={false} 
+                            handleDisplayEditor={() => {}} 
+                            markdown={card.question} 
+                        />
                     </div>
                 </div>
                 <Alternatives
