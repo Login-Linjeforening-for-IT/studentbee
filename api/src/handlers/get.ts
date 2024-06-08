@@ -54,6 +54,15 @@ export async function getIndexHandler(_: Request, res: Response) {
 }
 
 /**
+ * Health check for the API
+ * @param _ Request, not used
+ * @param res Response, used to send the response to the user
+ */
+export async function getHealthHandler(_: Request, res: Response) {
+    res.json(200)
+}
+
+/**
  * Fetches the first 100 users on the scoreboard from Firebase
  * @param _ Request, not used
  * @param res Response, used to send the response to the user

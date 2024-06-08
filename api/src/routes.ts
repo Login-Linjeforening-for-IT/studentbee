@@ -10,7 +10,8 @@ import {
     getFiles, 
     getUserProfile, 
     getIndexHandler, 
-    getComments 
+    getComments,
+    getHealthHandler
 } from './handlers/get'
 
 // Imports all POST handlers from the handlers folder
@@ -45,6 +46,7 @@ const router = express.Router()
 
 // Defines all GET routes that are available on the API
 router.get('/', getIndexHandler)
+router.get('/health', getHealthHandler)
 router.get('/scoreboard', getScoreboard)
 router.get('/courses', getCourses)
 router.get('/course/:courseID', getCourse)
