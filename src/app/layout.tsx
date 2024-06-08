@@ -3,8 +3,8 @@ import './globals.css'
 import Navbar from '@components/nav'
 
 export const metadata = {
-  title: 'Exam',
-  description: 'The only electronics shopping website you will ever need.',
+    title: 'Exam',
+    description: 'The only electronics shopping website you will ever need.',
 }
 
 export default function RootLayout({children}: {children: ReactNode}): JSX.Element {
