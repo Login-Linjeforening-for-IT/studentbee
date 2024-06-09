@@ -159,7 +159,6 @@ export async function updateUserTime({time}: {time: number}) {
         const err = error as Error
         return err.message
     }
-
 }
 
 export async function getFile(courseID: string, name: string) {
