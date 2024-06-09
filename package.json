@@ -1,6 +1,6 @@
 {
   "name": "exam.login.no",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "dotenv": "^16.4.5",
     "highlight.js": "^11.9.0",
     "marked-highlight": "^2.1.1",
     "next": "^14.2.3",
@@ -21,7 +22,7 @@
   "devDependencies": {
     "@types/jsdom": "^21.1.6",
     "@types/marked": "^6.0.0",
-    "@types/node": "^20.3.1",
+    "@types/node": "^20.14.2",
     "@types/react": "^18.2.12",
     "@types/react-dom": "^18.2.5",
     "autoprefixer": "^10.4.14",
