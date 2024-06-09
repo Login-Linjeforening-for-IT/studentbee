@@ -1,4 +1,8 @@
+// @ts-check
+ 
 /** @type {import('next').NextConfig} */
-module.exports = {
-    output: 'standalone'
+const nextConfig = {
+    /* config options here */
 }
+   
+module.exports = nextConfig
