@@ -69,24 +69,16 @@ export default function ToolTips() {
                         <Tips hotkey="B" info="Go to the previous question" />
                         <Tips hotkey="P" info="Go to the previous question" />
                         <Tips hotkey="S" info="Skip this question" />
-                        <Tips hotkey="S" extraHotKey="Shift" info="Selects the last or previous alternative" />
+                        <Tips hotkey="S" extraHotKey="Shift" info="Selects the previous alternative" />
                         <Tips hotkey="D" info="Submits the selected answer" />
-                        <Tips hotkey="ArrowUp" info="Selects the first or next alternative" />
-                        <Tips hotkey="ArrowDown" info="Selects the last or previous alternative" />
-                        <Tips hotkey="ArrowLeft" info="Go to the previous question" />
-                        <Tips hotkey="ArrowRight" info="Submit the selected answer" />
                     </div>
                     <div className="w-full">
-                        <Tips hotkey="1" info="Selects and submits alternative 1" />
-                        <Tips hotkey="2" info="Selects and submits alternative 2" />
-                        <Tips hotkey="3" info="Selects and submits alternative 3" />
-                        <Tips hotkey="4" info="Selects and submits alternative 4" />
-                        <Tips hotkey="5" info="Selects and submits alternative 5" />
-                        <Tips hotkey="6" info="Selects and submits alternative 6" />
-                        <Tips hotkey="7" info="Selects and submits alternative 7" />
-                        <Tips hotkey="8" info="Selects and submits alternative 8" />
-                        <Tips hotkey="9" info="Selects and submits alternative 9" />
+                        <Tips hotkey="1-9" info="Selects and submits alternative 1-9" />
                         <Tips hotkey="0" info="Selects and submits alternative 10" />
+                        <Tips hotkey="ArrowUp" info="Selects the first or next alternative" />
+                        <Tips hotkey="ArrowDown" info="Selects the previous alternative" />
+                        <Tips hotkey="ArrowLeft" info="Go to the previous question" />
+                        <Tips hotkey="ArrowRight" info="Submit the selected answer" />
                         <Tips hotkey="Enter" info="Submit the selected answer" />
                         <Tips hotkey="N" info="Submit the selected answer" />
                     </div>

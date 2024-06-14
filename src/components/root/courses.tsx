@@ -11,7 +11,7 @@ export default async function CourseList() {
     }
 
     return (
-        <div className='w-full h-full rounded-xl col-span-3 sm:col-span-2 overflow-auto grid grid-rows-12 noscroll'>
+        <div className='w-full h-full rounded-xl overflow-auto grid grid-rows-12 noscroll'>
             <div className="row-span-11 bg-dark rounded-xl mb-4 pt-4 pb-4">
                 <div className="h-full px-4 overflow-auto noscroll">
                     <Header />

@@ -14,13 +14,11 @@ module.exports = {
             'md': '768px',
             'lg': '1024px',
             'xl': '1280px',
-            '2xl': '1536px',
-            '480px': '480px',
-            '740px': '740px',
-            '1160px': '1160px',
-            '1460px': '1460px',
-            '1860px': '1860px',
-            '2200px': '2200px',
+            '2xl': '1400px',
+        },
+        fontSize: {
+            '3xs': '0.6rem',
+            '2xs': '0.8rem',
         },
         extend: {
             backgroundImage: {
