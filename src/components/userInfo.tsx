@@ -47,10 +47,10 @@ export default function UserInfo() {
     }, [edit, left, middle, right, timeAsHumanReadable])
 
     return (
-        <div className='grid grid-cols-3 w-full h-full bg-dark col-span-6 rounded-xl'>
-            <h1 className='grid place-items-center text-xl text-bright'>{left}</h1>
+        <div className='hidden xs:grid grid-cols-1 sm:grid-cols-3 w-full h-full bg-dark col-span-1 sm:col-span-2 md:col-span-4 lg:col-span-6 rounded-xl'>
+            <h1 className='hidden sm:grid place-items-center text-xl text-bright'>{left}</h1>
             <h1 className='grid place-items-center text-xl'>{middle}</h1>
-            <h1 className='grid place-items-center text-xl text-bright'>{right}</h1>
+            <h1 className='hidden md:grid place-items-center text-xl text-bright'>{right}</h1>
         </div>
     )
 }

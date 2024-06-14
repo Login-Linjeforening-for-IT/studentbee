@@ -19,14 +19,14 @@ export default function Header() {
             <Link 
                 onClick={() => setItem('leftnav', 'test')} 
                 href={`/course/${course}`} 
-                className={`text-lg text-bright ${isStudy ? "bg-normal" : "bg-light"} rounded-lg px-2`}
+                className={`text-sm 2xl:text-lg text-bright ${isStudy ? "bg-normal" : "bg-light"} rounded-lg px-2 content-center`}
             >
                 ◉ Browse
             </Link>
             <Link 
                 onClick={() => setItem('leftnav', 'study')} 
                 href={`/course/${course}/study`} 
-                className={`text-lg text-bright ${isStudy ? "bg-light" : "bg-normal"} rounded-lg px-2`}
+                className={`text-sm 2xl:text-lg text-bright ${isStudy ? "bg-light" : "bg-normal"} rounded-lg px-2`}
             >
                 ✎ Study
             </Link>

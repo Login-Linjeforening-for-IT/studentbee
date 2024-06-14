@@ -12,7 +12,6 @@ type QuestionFooterProps = {
     setShowComments: Dispatch<SetStateAction<boolean>>
     totalCommentsLength: number
     showAnswers: () => void
-    wait: boolean
     remainGreen: number[]
 }
 
@@ -24,7 +23,6 @@ export default function QuestionFooter({
     setShowComments, 
     totalCommentsLength, 
     showAnswers, 
-    wait, 
     remainGreen
 }: QuestionFooterProps) {
     const [username, setUsername] = useState('')
@@ -35,8 +33,14 @@ export default function QuestionFooter({
         setUsername(username)
     }, []) 
 
-    const showAnswer = (wait || !(card.correct.length > 1)) 
-        && !remainGreen.every(answer => card.correct.includes(answer))
+    const showAnswer = card.correct.every(answer => remainGreen.includes(answer))
+    const revealText = card.correct.length > 1 
+        ? showAnswer 
+            ? "Hide answers" 
+            : "Show answers"
+        : showAnswer
+            ? "Hide answer"
+            : "Show answer"
 
     return (
         <div className="grid grid-cols-3 ">
@@ -67,14 +71,14 @@ export default function QuestionFooter({
                     : "Add comment"
                 } {showComments ? '▼' : '▲'}
             </button>
-            {showAnswer && <div>
+            <div>
                 <button 
                     className="w-full text-end text-bright" 
                     onClick={showAnswers}
                 >
-                    {card.correct.length > 1 ? "Show answers" : "Show answer"}
+                    {revealText}
                 </button>
-            </div>}
+            </div>
         </div>
     )
 }

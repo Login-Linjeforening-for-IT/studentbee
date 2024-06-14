@@ -93,7 +93,6 @@ export default function Question({
                 clientVote={clientVote} 
                 showComments={showComments} 
                 totalCommentsLength={totalCommentsLength}
-                wait={wait}
                 remainGreen={remainGreen}
                 handleVote={handleVote} 
                 setShowComments={setShowComments}
