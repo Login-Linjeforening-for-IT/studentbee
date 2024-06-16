@@ -9,7 +9,7 @@ import Sidebar, { SidebarButton } from './sidebar'
 export default function Navbar() {
 
     return (
-        <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 h-full w-full gap-4'>
+        <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 h-full w-full gap-4 overflow-hidden'>
             <Sidebar />
             <ToolTips />
             {/* logo */}

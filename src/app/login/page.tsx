@@ -8,10 +8,9 @@ export default function Login() {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
-    const input = "bg-light rounded-xl overflow-hidden px-8 col-span-6 outline-none caret-orange-500"
-    const inputParent = "grid grid-cols-8 w-full h-full space-between"
+    const input = "bg-light rounded-xl overflow-hidden px-8 pt-2 pb-2 col-span-6 outline-none caret-orange-500"
+    const inputParent = "grid grid-cols-8 w-full h-full space-between space-x-4"
     const inputText = "text-xl flex items-center justify-start col-span-2"
-    const rows = error.length ? "grid-rows-5 h-[35vh]" : "grid-rows-4 h-[30vh]"
 
     async function handleClick() {
         const result = await sendLogin({username, password})
@@ -23,7 +22,7 @@ export default function Login() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            <div className={`bg-dark w-[35vw] rounded-xl grid place-items-center ${rows} gap-4 p-5 px-10`}>
+            <div className="bg-dark rounded-xl grid place-items-center gap-4 p-5 px-10">
                 <h1 className=" text-3xl font-semibold">Login</h1>
                 {error.length ? <h1 className="text-red-500 text-xl">{error}</h1> : null}
                 <div className={inputParent}>
@@ -50,7 +49,7 @@ export default function Login() {
                 </div>
                 <Link
                     href={error.length ? '/login' : `/profile/${username}`}
-                    className="grid w-full h-full bg-orange-500 rounded-xl text-xl place-items-center" 
+                    className="grid w-full h-full bg-orange-500 rounded-xl text-xl place-items-center pt-2 pb-2" 
                     onClick={handleClick}
                 >
                     Login
