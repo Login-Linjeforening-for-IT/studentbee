@@ -30,7 +30,7 @@ export default function Register() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            <div className="bg-dark w-[35vw] h-[45vh] rounded-xl grid place-items-center grid grid-rows-6 gap-4 p-5 px-10">
+            <div className="bg-dark 2xs:w-[80vw] xs:w-[50vw] sm:w-[35vw] h-[45vh] rounded-xl grid place-items-center grid grid-rows-6 gap-4 p-5 px-10">
                 <h1 className="text-3xl font-semibold">Register</h1>
                 {error ? <h1 className="text-md text-red-500">{error}</h1> : null}
                 <div className={inputParent}>
