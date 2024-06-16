@@ -10,7 +10,7 @@ export default function ListHeader({userCount}: {userCount: number}): JSX.Elemen
     ) 
     
     return (
-        <div className="grid bg-red-200">
+        <div className="grid md:grid-cols-2 md:col-span-2">
             <HeaderItem className="hidden md:grid mr-4" />
             <HeaderItem className="md:ml-4" />
         </div>
@@ -19,7 +19,7 @@ export default function ListHeader({userCount}: {userCount: number}): JSX.Elemen
 
 function HeaderItem({className}: {className: string}) {
     return (
-        <div className={`grid bg-dark mb-4 h-[5vh] grid-cols-4 place-items-center rounded-xl ${className} font-semibold`}>
+        <div className={`grid bg-dark mb-4 pt-2 pb-2 grid-cols-4 place-items-center rounded-xl ${className} font-semibold`}>
             <h1>Place</h1>
             <h1>User</h1>
             <h1>Time</h1>

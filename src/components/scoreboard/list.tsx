@@ -15,7 +15,7 @@ export default async function List(): Promise<JSX.Element> {
     return (
         <div className={`grid ${cols} w-full`}>
             <ListHeader userCount={scoreboard.length}/>
-            <div className={`grid ${span}`}>
+            <div className={`grid ${span} md:grid-cols-2`}>
                 {scoreboard.map((user: ScoreBoardUser, index: number) => 
                     <ScoreBoardEntry key={user.username} user={user} index={index}  />
                 )}

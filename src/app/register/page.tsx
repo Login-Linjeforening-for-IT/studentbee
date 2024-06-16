@@ -30,13 +30,6 @@ export default function Register() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            {/* '2xs': '320px',
-            'xs': '480px',
-            'sm': '640px',
-            'md': '768px',
-            'lg': '1024px',
-            'xl': '1280px',
-            '2xl': '1400px', */}
             <div className="bg-dark rounded-xl grid place-items-center gap-4 p-5 px-10">
                 <h1 className="text-3xl font-semibold">Register</h1>
                 {error ? <h1 className="text-md text-red-500">{error}</h1> : null}
