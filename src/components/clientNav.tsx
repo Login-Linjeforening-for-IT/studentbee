@@ -23,7 +23,7 @@ export function RightIcon() {
     }, [loggedIn])
 
     return (
-        <Link href={href} className='grid place-self-center w-[35px] h-[35px] relative'>
+        <Link href={href} className='grid place-self-center w-[4vh] h-[4vh] relative'>
             <Image src={icon} alt="logo" fill={true} />
         </Link>
     )
@@ -52,7 +52,7 @@ export function MiddleIcon() {
     }
 
     return (
-        <Link href={href} className='grid place-self-center w-[35px] h-[35px] relative' onClick={handleClick}>
+        <Link href={href} className='grid place-self-center w-[4vh] h-[4vh] relative' onClick={handleClick}>
             <Image src={icon} alt="logo" fill={true} />
         </Link>
     )
@@ -64,7 +64,7 @@ export function LeftIcon() {
     const icon = "/images/scoreboard.svg"
 
     return (
-        <Link href={href} className='grid place-self-center w-[35px] h-[35px] relative'>
+        <Link href={href} className='grid place-self-center w-[3.5vh] h-[3.5vh] relative'>
             <Image src={icon} alt="logo" fill={true} />
         </Link>
     )

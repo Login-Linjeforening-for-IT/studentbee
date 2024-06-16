@@ -4,8 +4,8 @@ import CourseListClient from "./root/coursesClient"
 
 export default function Sidebar() {
     return (
-        <div className="sidebar absolute grid grid-rows-9 left-0 top-0 h-full w-[200px] bg-dark">
-            <div className="pl-[88px] pt-[26px]">
+        <div className="hidden sidebar absolute grid grid-rows-9 left-0 top-0 h-full w-[200px] bg-dark">
+            <div className="pl-[88px] pt-[28px]">
                 <SidebarButton />
             </div>
             <div className="row-span-8">
@@ -19,7 +19,7 @@ export function SidebarButton() {
     function handleClick() {
         const sidebar = document.querySelector('.sidebar')
         if (sidebar) {
-            sidebar.classList.toggle('grid')
+            sidebar.classList.toggle('block')
             sidebar.classList.toggle('hidden')
         }
     }

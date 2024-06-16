@@ -13,8 +13,8 @@ export default function Navbar() {
             <Sidebar />
             <ToolTips />
             {/* logo */}
-            <div className='pl-2 flex gap-2 lg:grid place-items-center lg:pl-0'>
-                <Link href='/' className='grid w-[40px] h-[40px] relative xs:justify-self-center self-center'>
+            <div className='pl-2 flex gap-2 mx-auto lg:pl-0'>
+                <Link href='/' className='grid w-[4vh] h-[4vh] relative self-center'>
                     <Image src={"/images/logo/logo.svg"} alt="logo" fill={true} />
                 </Link>
                 <SidebarButton />
