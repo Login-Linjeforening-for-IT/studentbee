@@ -9,11 +9,11 @@ import Sidebar, { SidebarButton } from './sidebar'
 export default function Navbar() {
 
     return (
-        <div className='grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 w-full gap-4 overflow-hidden'>
+        <div className='flex w-full gap-4 overflow-hidden'>
             <Sidebar />
             <ToolTips />
             {/* logo */}
-            <div className='pl-2 flex gap-2 mx-auto lg:pl-0'>
+            <div className='pl-2 flex gap-2 mx-auto'>
                 <Link href='/' className='grid w-[4vh] h-[4vh] relative self-center'>
                     <Image src={"/images/logo/logo.svg"} alt="logo" fill={true} />
                 </Link>
@@ -22,7 +22,7 @@ export default function Navbar() {
             {/* Info for the user */}
             <UserInfo />
             {/* account, login */}
-            <div className='grid grid-cols-3 justify-between w-full rounded-xl'>
+            <div className='grid grid-cols-3 justify-between rounded-xl gap-2 min-w-[15vh]'>
                 {/* Scoreboard */}
                 <LeftIcon />
                 {/* create account */}

@@ -13,7 +13,7 @@ export default function ToolTipsButton() {
     }
 
     return (
-        <button className="pt-6 w-full p-2 flex flex-rows" onClick={display}>
+        <button className="hidden lg:flex pt-6 w-full p-2 flex-rows" onClick={display}>
             <h1 className="text-lg px-2 bg-superlight rounded-lg grid place-items-center mr-2">Q</h1>
             <h1 className="text-lg grid place-items-center">Tooltips</h1>
         </button>

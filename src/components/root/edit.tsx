@@ -47,11 +47,11 @@ export default function Edit() {
     }
 
     if (typeof courses === 'string') {
-        return <h1 className="w-full h-full grid place-items-center">{courses}</h1>
+        return <h1 className="hidden lg:grid w-full h-full grid place-items-center">{courses}</h1>
     }
 
     return (
-        <div>
+        <div className="hidden lg:grid">
             {displayCourseSelector && <CourseSelector />}
             <div className="flex flex-rows">
                 <button onClick={handleReview} className="text-md rounded-md pt-[3.5px]">♺</button>
