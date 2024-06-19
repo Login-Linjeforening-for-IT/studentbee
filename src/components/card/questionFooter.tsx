@@ -34,13 +34,9 @@ export default function QuestionFooter({
     }, []) 
 
     const showAnswer = card.correct.every(answer => remainGreen.includes(answer))
-    const revealText = card.correct.length > 1 
-        ? showAnswer 
-            ? "Hide answers" 
-            : "Show answers"
-        : showAnswer
-            ? "Hide answer"
-            : "Show answer"
+    const revealText = showAnswer
+        ? "Hide" 
+        : "Reveal"
 
     return (
         <div className="grid grid-cols-3 ">
@@ -49,13 +45,13 @@ export default function QuestionFooter({
                     {card.rating + clientVote > 0 ? '+' : ''}
                     {card.rating + clientVote}
                 </h1>
-                <button className="w-[1.3vw]" onClick={() => handleVote(true)}>
+                <button className="w-[2.3vh]" onClick={() => handleVote(true)}>
                     <ThumbsUp 
                         fill={voteColor('up', card.votes, username, clientVote)} 
                         className="w-full h-full pt-[0.2vh]" 
                     />
                 </button>
-                <button className="w-[1.3vw]" onClick={() => handleVote(false)}>
+                <button className="w-[2.3vh]" onClick={() => handleVote(false)}>
                     <ThumbsDown 
                         fill={voteColor('down', card.votes, username, clientVote)} 
                         className="w-full h-full pt-[0.2vh]" 
@@ -63,13 +59,22 @@ export default function QuestionFooter({
                 </button>
             </div>
             <button 
-                className="pb-4 text-bright" 
+                className="pb-4 text-bright flex items-center justify-center w-full" 
                 onClick={() => setShowComments(!showComments)}
             >
-                {totalCommentsLength 
-                    ? `View comments (${totalCommentsLength})` 
-                    : "Add comment"
-                } {showComments ? '▼' : '▲'}
+                <h1 className="hidden xs:hidden sm:block mr-2">
+                    {totalCommentsLength 
+                        ? `View comments (${totalCommentsLength})` 
+                        : "Add comment"
+                    }
+                </h1>
+                <h1 className="hidden xs:block sm:hidden mr-2">
+                    {totalCommentsLength 
+                        ? `Chat (${totalCommentsLength})` 
+                        : "Comment"
+                    }
+                </h1>
+                {showComments ? '▼' : '▲'}
             </button>
             <div>
                 <button 

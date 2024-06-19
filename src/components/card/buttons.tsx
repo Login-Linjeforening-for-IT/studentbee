@@ -8,7 +8,7 @@ export default function Buttons({animateAnswer, navigate, flashColor}: ButtonsPr
     const button = `text-xl rounded-xl grid place-items-center`
 
     return (
-        <div className="w-full h-full rounded-xl grid grid-cols-3 gap-8">
+        <div className="w-full rounded-xl grid grid-cols-3 gap-8">
             <button 
                 className={`${button} ${animateAnswer === 'back' ? "bg-light" : "bg-dark"}`}
                 onClick={() => navigate('back')}
