@@ -34,7 +34,7 @@ export function SidebarButton() {
 
 function Burger() {
     return (
-        <div className='lg:hidden w-[50px] h-[45px] grid grid-rows-3 gap-2 p-2 self-center'>
+        <div className='md:hidden w-[50px] h-[45px] grid grid-rows-3 gap-2 p-2 self-center'>
             <div className='bg-white rounded-xl h-[3px] self-center' />
             <div className='bg-white rounded-xl h-[3px] self-center' />
             <div className='bg-white rounded-xl h-[3px] self-center' />

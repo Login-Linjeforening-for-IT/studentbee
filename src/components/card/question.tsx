@@ -55,7 +55,7 @@ export default function Question({
     return (
         <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8 pb-10`}>
             <div className="w-full h-full overflow-auto mb-2 noscroll">
-                <h1 className="text-right text-bright float-right bg-black">
+                <h1 className="text-right text-bright float-right">
                     {card.source} {(current || 0) + 1} / {cards.length}
                 </h1>
                 <div className={`text-md mb-2`}>
