@@ -17,8 +17,10 @@ export default async function Course({ params }: { params: { id: string[] } }) {
 
     return (
         <div className='grid grid-cols-10 gap-8 w-full h-full max-h-full'>
-            <CourseList />
-            <div className='col-span-8 max-h-full overflow-auto'>
+            <div className='hidden lg:grid col-span-3 sm:col-span-2'>
+                <CourseList />
+            </div>
+            <div className='col-span-10 lg:col-span-8 max-h-full overflow-auto'>
                 <CourseClient 
                     course={course} 
                     learningBased={learningBased} 

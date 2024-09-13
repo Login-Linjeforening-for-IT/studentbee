@@ -119,13 +119,6 @@ type Files = {
     parent?: string
 }
 
-type Files = {
-    name: string
-    content: string
-    files: Files[]
-    parent?: string
-}
-
 type FileListProps = {
     files: Files[]
     path: string

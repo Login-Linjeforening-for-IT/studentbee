@@ -18,17 +18,19 @@ export default function Header() {
         <div className="grid grid-cols-2 gap-4 pb-4">
             <Link 
                 onClick={() => setItem('leftnav', 'test')} 
-                href={`/course/${course}`} 
-                className={`text-lg text-bright ${isStudy ? "bg-normal" : "bg-light"} rounded-lg px-2`}
+                href={course ? `/course/${course}` : '/'} 
+                className={`${isStudy ? "bg-normal" : "bg-light"} rounded-lg px-2 content-center text-bright flex text-lg`}
             >
-                ◉ Browse
+                <h1 className="mr-2">◉</h1>
+                <h1 className="hidden xl:grid place-self-center">Browse</h1>
             </Link>
             <Link 
                 onClick={() => setItem('leftnav', 'study')} 
                 href={`/course/${course}/study`} 
-                className={`text-lg text-bright ${isStudy ? "bg-light" : "bg-normal"} rounded-lg px-2`}
+                className={`${isStudy ? "bg-light" : "bg-normal"} rounded-lg px-2 text-bright flex text-lg`}
             >
-                ✎ Study
+                <h1 className="mr-2">✎</h1>
+                <h1 className="hidden xl:grid place-self-center">Study</h1>
             </Link>
         </div>
     )

@@ -55,23 +55,21 @@ export default function Question({
     return (
         <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8 pb-10`}>
             <div className="w-full h-full overflow-auto mb-2 noscroll">
-                <div className="w-full">
-                    <h1 className="text-right text-bright float-right">
-                        {card.source} {(current || 0) + 1} / {cards.length}
-                    </h1>
-                    <div className={`text-md mb-2 overflow-auto`}>
-                        {card.correct.length > 1 && <h1 className="text-bright">
-                            Multiple choice - Select all correct answers
-                        </h1>}
-                        {card.theme && <h1 className="text-bright">
-                            {card.theme}
-                        </h1>}
-                        <Markdown
-                            displayEditor={false} 
-                            handleDisplayEditor={() => {}} 
-                            markdown={card.question} 
-                        />
-                    </div>
+                <h1 className="text-right text-bright float-right">
+                    {card.source} {(current || 0) + 1} / {cards.length}
+                </h1>
+                <div className={`text-md mb-2`}>
+                    {card.correct.length > 1 && <h1 className="text-bright">
+                        Multiple choice - Select all correct answers
+                    </h1>}
+                    {card.theme && <h1 className="text-bright">
+                        {card.theme}
+                    </h1>}
+                    <Markdown
+                        displayEditor={false} 
+                        handleDisplayEditor={() => {}} 
+                        markdown={card.question} 
+                    />
                 </div>
                 <Alternatives
                     selected={selected}
@@ -93,7 +91,6 @@ export default function Question({
                 clientVote={clientVote} 
                 showComments={showComments} 
                 totalCommentsLength={totalCommentsLength}
-                wait={wait}
                 remainGreen={remainGreen}
                 handleVote={handleVote} 
                 setShowComments={setShowComments}

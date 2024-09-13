@@ -3,22 +3,26 @@ import Link from 'next/link'
 import { RightIcon, MiddleIcon, LeftIcon } from './clientNav'
 import UserInfo from './userInfo'
 import ToolTips from './root/toolTips'
+import Sidebar, { SidebarButton } from './sidebar'
 
 // Displays the header
 export default function Navbar() {
-    const size = 38
 
     return (
-        <div className='grid grid-cols-8 h-full w-full gap-4'>
+        <div className='flex w-full gap-4 overflow-hidden'>
+            <Sidebar />
             <ToolTips />
             {/* logo */}
-            <Link href='/' className='grid place-items-center'>
-                <Image src={"/images/logo/logo.svg"} alt="logo" height={size} width={size} />
-            </Link>
+            <div className='pl-2 flex gap-2 mx-auto'>
+                <Link href='/' className='grid w-[4vh] h-[4vh] relative self-center'>
+                    <Image src={"/images/logo/logo.svg"} alt="logo" fill={true} />
+                </Link>
+                <SidebarButton />
+            </div>
             {/* Info for the user */}
             <UserInfo />
             {/* account, login */}
-            <div className='grid grid-cols-3 justify-between w-full rounded-xl'>
+            <div className='grid grid-cols-3 justify-between rounded-xl gap-2 min-w-[15vh]'>
                 {/* Scoreboard */}
                 <LeftIcon />
                 {/* create account */}

@@ -15,7 +15,7 @@ export default function Elements({id, current, course}: ElementsProps) {
 
     if (typeof course === 'string') {
         return (
-            <div className="w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden">
+            <div className="hidden xl:grid w-full h-full rounded-xl col-span-2 gap-8 overflow-hidden">
                 <h1 className="text-xl">{error}</h1>
             </div>
         )
@@ -23,7 +23,7 @@ export default function Elements({id, current, course}: ElementsProps) {
 
     if (current === -1) {
         return (
-            <div className="w-full h-full rounded-xl col-span-2 grid gap-8 overflow-hidden">
+            <div className="hidden xl:grid w-full h-full rounded-xl col-span-2 gap-8 overflow-hidden">
                 <h1 className="text-xl">Course complete.</h1>
             </div>
         )
@@ -36,7 +36,7 @@ export default function Elements({id, current, course}: ElementsProps) {
     function Help() {
         if (help) {
             return (
-                <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
+                <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto noscroll">
                     <h1 className="text-xl">Info</h1>
                     <div className="h-full w-full">
                         {help}
@@ -49,9 +49,9 @@ export default function Elements({id, current, course}: ElementsProps) {
     }
 
     return (
-        <div className='w-full rounded-xl col-span-2 grid gap-8 overflow-hidden'>
+        <div className='hidden xl:grid w-full rounded-xl col-span-2 gap-8 overflow-hidden'>
             <Help />
-            <div className="w-full h-full rounded-xl overflow-auto">
+            <div className="w-full h-full rounded-xl overflow-auto noscroll">
                 <GetNextQuestions cards={cards} current={current} amount={amount} />
             </div>
         </div>

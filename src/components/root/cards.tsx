@@ -149,8 +149,13 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     function showAnswers() {
-        setAttempted([...card.correct])
-        setRemainGreen([...card.correct])
+        if (JSON.stringify(remainGreen) === JSON.stringify(card.correct)) {
+            setAttempted([])
+            setRemainGreen([])
+        } else {
+            setAttempted([...card.correct])
+            setRemainGreen([...card.correct])
+        }
     }
 
     return (

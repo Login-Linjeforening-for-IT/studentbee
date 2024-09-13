@@ -47,16 +47,17 @@ export default function Edit() {
     }
 
     if (typeof courses === 'string') {
-        return <h1 className="w-full h-full grid place-items-center">{courses}</h1>
+        return <h1 className="hidden lg:grid w-full h-full grid place-items-center">{courses}</h1>
     }
 
     return (
-        <div>
+        <div className="hidden lg:grid">
             {displayCourseSelector && <CourseSelector />}
             <div className="flex flex-rows">
                 <button onClick={handleReview} className="text-md rounded-md pt-[3.5px]">♺</button>
-                {error && <h1 className="w-[7vw] grid place-items-center pt-1 pl-2 overflow-auto noscroll whitespace-nowrap text-red-500">{error}</h1>}
+            {   error && <h1 className="hidden 2xl:grid pl-2 pt-1 overflow-auto noscroll whitespace-nowrap text-red-500">{error}</h1>}
             </div>
+            {error && <h1 className="2xl:hidden -ml-[85px] overflow-auto noscroll whitespace-nowrap text-red-500">{error}</h1>}
         </div>
     )
 }

@@ -1,10 +1,23 @@
+'use client'
+
 import { getCourses } from "@utils/fetch"
 import ToolTipsButton from "./toolTipsButton"
 import Header from "./header"
 import StudyOrTest from "./studyOrTest"
+import { useEffect, useState } from "react"
 
-export default async function CourseList() {
-    const courses = await getCourses('server')
+export default function CourseListClient() {
+    const [courses, setCourses] = useState<CourseAsList[] | string>("Loading...")
+
+    useEffect(() => {
+        (async() => {
+            const response = await getCourses('server')
+
+            if (response) {
+                setCourses(response)
+            }
+        })()
+    }, [])
 
     if (typeof courses === 'string') {
         return <h1 className="w-full h-full grid place-items-center">{courses}</h1>

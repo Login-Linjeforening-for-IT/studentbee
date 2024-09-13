@@ -11,8 +11,8 @@ export default function Register() {
     const [password, setPassword] = useState("")
     const [error, setError] = useState("")
 
-    const input = "bg-light rounded-xl overflow-hidden px-8 col-span-6 outline-none caret-orange-500"
-    const inputParent = "grid grid-cols-8 w-full h-full space-between"
+    const input = "bg-light rounded-xl overflow-hidden px-8 pt-2 pb-2 col-span-6 outline-none caret-orange-500"
+    const inputParent = "grid grid-cols-8 w-full space-between space-x-4"
     const inputText = "text-xl flex items-center justify-start col-span-2"
 
     async function handleRegister() {
@@ -30,7 +30,7 @@ export default function Register() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            <div className="bg-dark w-[35vw] h-[45vh] rounded-xl grid place-items-center grid grid-rows-6 gap-4 p-5 px-10">
+            <div className="bg-dark rounded-xl grid place-items-center gap-4 p-5 px-10">
                 <h1 className="text-3xl font-semibold">Register</h1>
                 {error ? <h1 className="text-md text-red-500">{error}</h1> : null}
                 <div className={inputParent}>
@@ -77,7 +77,7 @@ export default function Register() {
                 </div>
                 <Link 
                     href={error.length ? '/register' : '/login'}
-                    className="grid w-full h-full bg-orange-500 rounded-xl" 
+                    className="grid w-full pt-2 pb-2 bg-orange-500 rounded-xl" 
                     onClick={handleRegister}>
                     <h1 className="text-xl place-self-center">Create account</h1>
                 </Link>

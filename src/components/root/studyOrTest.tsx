@@ -26,6 +26,7 @@ type FileProps = {
 
 type FileListHeaderProps = {
     course: string
+    studyable: boolean
     displayInputField: string
     setDisplayInputField: Dispatch<SetStateAction<string>>
     input: string
@@ -42,17 +43,25 @@ type ButtonProps = {
 
 export default function StudyOrTest({courses}: CoursesProps) {
     const path = usePathname()
-    const isStudy = path.includes('study') || path.includes('files') || getItem('leftnav') === 'study'
+    const [study, setStudy] = useState(true)
+    const [cardCount, setCardCount] = useState(0)
+
+    useEffect(() => {
+        setStudy(path.includes('study') || path.includes('files') || getItem('leftnav') === 'study')
+        const name = path.split('/')[2] || ''
+        const amountOfCards = courses.find(course => course.id === name)?.cards.length || 0
+        setCardCount(amountOfCards)
+    }, [path])
 
     return (
         <div className="w-full">
-            {isStudy && <Files />}
-            {!isStudy && <InnerCourseList courses={courses} />}
+            {study && <Files studyable={cardCount > 0} />}
+            {!study && <InnerCourseList courses={courses} />}
         </div>
     )
 }
 
-function Files() {
+function Files({studyable}: {studyable: boolean}) {
     const [files, setFiles] = useState<Files[]>([])
     const inputRef = useRef<HTMLInputElement | null>(null)
     const path = usePathname()
@@ -105,6 +114,7 @@ function Files() {
         <div className="w-full grid grid-rows-auto">
             <FileListHeader 
                 course={course} 
+                studyable={studyable}
                 displayInputField={displayInputField} 
                 setDisplayInputField={setDisplayInputField} 
                 input={input} 
@@ -117,10 +127,10 @@ function Files() {
     )
 }
 
-function FileListHeader({course, displayInputField, setDisplayInputField, input, setInput, inputRef, createFile}: FileListHeaderProps) {
+function FileListHeader({course, studyable, displayInputField, setDisplayInputField, input, setInput, inputRef, createFile}: FileListHeaderProps) {
     return (
         <>
-            <Button text='/ test' href={`/course/${course}`} />
+            {studyable && <Button text='/ test' href={`/course/${course}`} />}
             {course === 'IDATG2204' && <Button text='/ sql-practice' href='https://sql-practice.com' target="_blank" />}
             <div className="flex flex-rows group">
                 <Button text='/ study' href={`/course/${course}/study`} />
@@ -272,7 +282,7 @@ function InnerCourseList({courses}: CoursesProps) {
                 <h1 className="text-xl mr-2">Courses</h1>
                 <Link 
                     href='/add/course' 
-                    className="text-xl rounded-md mr-2"
+                    className="hidden lg:grid text-xl rounded-md mr-2"
                 >
                     +
                 </Link>
