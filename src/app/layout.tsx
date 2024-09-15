@@ -4,7 +4,7 @@ import Navbar from '@components/nav'
 
 export const metadata = {
     title: 'Exam',
-    description: 'The only electronics shopping website you will ever need.',
+    description: 'Practice for your exams with multiple-choice questions.',
 }
 
 export default function RootLayout({children}: {children: ReactNode}): JSX.Element {
