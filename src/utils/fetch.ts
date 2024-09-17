@@ -146,13 +146,13 @@ export async function updateUserTime({time}: {time: number}) {
                 time
             })
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const result = await response.json()
         return result
     } catch (error: unknown) {
@@ -170,7 +170,7 @@ export async function getFile(courseID: string, name: string) {
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
     

@@ -146,40 +146,6 @@ export async function sendRegister(user: RegisterUser): Promise<true | string> {
     }
 }
 
-// Sends the time spent on the page to the server
-export async function sendTimeSpent(): Promise<true | string> {
-    const user: User | undefined = getItem('user') as User | undefined
-    const token = getItem('token')
-
-    if (!user) {
-        return 'Please log in to log your efforts.'
-    }
-
-    try {
-        const response = await fetch(`${BROWSER_API}/time`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                username: user.username,
-                time: user.time
-            })
-        })
-
-        if (!response.ok) {
-            const data = await response.json()
-            throw Error(data.error)
-        }
-
-        return true
-    } catch (error: unknown) {
-        const err = error as Error
-        return err.message
-    }
-}
-
 // Checks if the user has a user object and is therefore likely to be logged in
 // Note that this only checks what icons to display, and it will still be
 // properly checked if the user clicks this icon or navigates to a page that
