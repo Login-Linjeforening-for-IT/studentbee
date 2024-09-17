@@ -21,7 +21,7 @@ export function focusCheck({startFocusTime, lastUserInteraction}: FocusCheckProp
     }
 }
 
-// handler for window focus event to update the last user interaction time
+// Handler for window focus event to update the last user interaction time
 export function windowFocused({lastUserInteraction, startFocusTime}: WindowFocusedProps) {
     lastUserInteraction.current = new Date()
     if (startFocusTime.current == undefined) {
