@@ -143,7 +143,7 @@ export async function updateUserTime({time}: {time: number}) {
             },
             body: JSON.stringify({
                 username: user.username,
-                time
+                time: user.time += time 
             })
         })
 
