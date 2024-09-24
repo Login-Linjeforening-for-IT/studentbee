@@ -2,6 +2,7 @@ import { useEffect, useCallback, useRef, Dispatch, SetStateAction, MutableRefObj
 import { useRouter } from 'next/navigation'
 import handleCardsNavigation, { handleKeyDown } from "@utils/navigation"
 import { focusCheck, windowFocused, windowUnfocused } from "@utils/focus"
+import { addScore } from '@/utils/score'
 
 type UseCardNavigationProps = {
     current: number | undefined
@@ -49,6 +50,7 @@ export const useCardNavigation = ({
                         setAttempted([])
                         router.push(`/course/${id}/${nextCard}`)
                         setAnimate('correct')
+                        addScore()
                     } else if (next) {
                         setAttempted(prev => [...prev, ...input])
                     }

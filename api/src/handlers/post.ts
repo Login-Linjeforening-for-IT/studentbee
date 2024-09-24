@@ -391,6 +391,7 @@ export async function postLogin(req: Request, res: Response) {
             username,
             time: userData.time,
             token,
+            score: userData.score,
             solved: userData.solved
         })
     } catch (err) {
