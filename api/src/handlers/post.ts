@@ -92,7 +92,7 @@ type Files = {
  * @param req Request object
  * @param res Response object
  */
-export async function postFile(req: Request, res: Response) {
+export async function postFile(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -232,7 +232,7 @@ export async function postDenied(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCard(req: Request, res: Response) {
+export async function postCard(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -285,7 +285,7 @@ export async function postCard(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCourse(req: Request, res: Response) {
+export async function postCourse(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -347,7 +347,7 @@ export async function postCourse(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postLogin(req: Request, res: Response) {
+export async function postLogin(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -414,7 +414,7 @@ export async function postLogin(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postRegister(req: Request, res: Response) {
+export async function postRegister(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -483,7 +483,7 @@ export async function postRegister(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postComment(req: Request, res: Response) {
+export async function postComment(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -558,7 +558,7 @@ export async function postComment(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postVote(req: Request, res: Response) {
+export async function postVote(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -630,7 +630,7 @@ export async function postVote(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCardVote(req: Request, res: Response) {
+export async function postCardVote(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body

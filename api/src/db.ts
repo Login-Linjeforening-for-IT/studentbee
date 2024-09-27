@@ -60,7 +60,7 @@ const DEV = {
     CLIENT_CERT_URL: DEV_CLIENT_CERT_URL
 }
 
-// Validate necessary environment variables for production
+// Validates prod env variables
 if (PRODUCTION === 'true' && (
     !PROD.PROJECT_ID 
     || !PROD.PRIVATE_KEY_ID 
@@ -72,7 +72,7 @@ if (PRODUCTION === 'true' && (
     throw new Error('Missing production environment variables.')
 }
 
-// Validate necessary environment variables for development
+// Validates dev env variables
 if (PRODUCTION !== 'true' && (
     !DEV.PROJECT_ID 
     || !DEV.PRIVATE_KEY_ID 

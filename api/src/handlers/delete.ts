@@ -31,7 +31,7 @@ type DeleteFileProps = {
  * @param res Response object
  * @returns Status code bsaed on the outcome of the operation
  */
-export async function deleteComment(req: Request, res: Response) {
+export async function deleteComment(req: Request, res: Response): Promise<any> {
     try {
         // Destructures relevant variables from the request body 
         const { courseID, username, commentID } = req.body as DeleteCommentProps
@@ -69,7 +69,7 @@ export async function deleteComment(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function deleteFile(req: Request, res: Response) {
+export async function deleteFile(req: Request, res: Response): Promise<any> {
     try {
         // Destructures the courseID and fileID from the request parameters
         const { courseID, fileID } = req.params as DeleteFileProps

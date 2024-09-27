@@ -132,7 +132,7 @@ export async function getCourses(_: Request, res: Response) {
     async function fetchCourses() {
         // Fetches the courses from the 'Course' collection in the database
         const coursesSnapshot = await db.collection('Course').get()
-
+        
         // Returns the courses with the cards and card count
         return coursesSnapshot.docs.map((doc: any) => ({
             id: doc.id,
@@ -479,7 +479,7 @@ export function getLogin(_: Request, res: Response) {
  * @param req Request
  * @param res Response
  */
-export async function getCallback(req: Request, res: Response) {
+export async function getCallback(req: Request, res: Response): Promise<any> {
     const { code } = req.query
 
     if (!code) {

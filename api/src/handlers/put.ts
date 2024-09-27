@@ -44,7 +44,7 @@ type PutFileProps = {
  * @param res Response objecet
  * @returns Status code based on the outcome of the operation
  */
-export async function putCourse(req: Request, res: Response) {
+export async function putCourse(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures the courseID from the request parameters
@@ -90,7 +90,7 @@ export async function putCourse(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putFile(req: Request, res: Response) {
+export async function putFile(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -124,7 +124,7 @@ export async function putFile(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putText(req: Request, res: Response) {
+export async function putText(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -168,7 +168,7 @@ export async function putText(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putTime(req: Request, res: Response) {
+export async function putTime(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -206,7 +206,7 @@ export async function putTime(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putMarkCourse(req: Request, res: Response) {
+export async function putMarkCourse(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
