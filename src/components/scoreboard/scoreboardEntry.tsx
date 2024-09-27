@@ -17,7 +17,7 @@ export default function ScoreBoardEntry({user, index}: ScoreBoardEntryProps): JS
     return (
         <div className={`grid grid-cols-4 place-items-center ${backgroundColor} pt-2 pb-2 mb-4 ${index < 4 ? 'font-semibold text-white':''} ${index % 2 === 0 ? 'md:mr-4' : 'md:ml-4'} rounded-xl`}>
             <h1>{index + 1}</h1>
-            <h1>{user.username}</h1>
+            <h1>{user.name}</h1>
             <h1>{user.time}</h1>
             <h1>{user.score}</h1>
         </div>

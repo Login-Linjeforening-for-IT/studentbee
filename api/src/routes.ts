@@ -11,7 +11,9 @@ import {
     getUserProfile, 
     getIndexHandler, 
     getComments,
-    getHealthHandler
+    getHealthHandler,
+    getCallback,
+    getLogin
 } from './handlers/get'
 
 // Imports all POST handlers from the handlers folder
@@ -52,8 +54,10 @@ router.get('/courses', getCourses)
 router.get('/course/:courseID', getCourse)
 router.get('/files/:courseID', getFiles)
 router.get('/file/:courseID/:fileID', getFile)
-router.get('/user/:username', getUserProfile)
+router.get('/user/:id', getUserProfile)
 router.get('/comments/:courseID', getComments)
+router.get('/login', getLogin)
+router.get('/callback', getCallback)
 
 // Defines all PUT routes that are available on the API
 router.put('/course/:courseID', putCourse)
@@ -62,7 +66,7 @@ router.put('/text', putText)
 router.put('/mark', putMarkCourse)
 router.put('/file', putFile)
 
-// Defines all POST routes that are available on the API
+// // Defines all POST routes that are available on the API
 router.post('/file', postFile)
 router.post('/register', postRegister)
 router.post('/login', postLogin)
@@ -72,7 +76,7 @@ router.post('/comment', postComment)
 router.post('/vote', postVote)
 router.post('/vote/card', postCardVote)
 
-// Defines all DELETE routes that are available on the API
+// // Defines all DELETE routes that are available on the API
 router.delete('/comment', deleteComment)
 router.delete('/file/:courseID/:fileID', deleteFile)
 

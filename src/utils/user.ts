@@ -1,42 +1,7 @@
 'use client'
 
 import { BROWSER_API } from "@parent/constants"
-import getItem, { removeItem, setItem } from "./localStorage"
-
-// Function to login the user
-export async function sendLogin(user: LoginUser): Promise<true | string> {
-    try {
-        const response = await fetch(`${BROWSER_API}/login`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({...user, password: 'disabled'})
-        })
-
-        if (!response.ok) {
-            const data = await response.json()
-            throw new Error(data.error)
-        }
-
-        const result: LoginResponse = await response.json()
-        const userResult: User = {
-            name: result.name,
-            username: result.username,
-            time: result.time,
-            score: result.score,
-            solved: result.solved,
-        }
-
-        setItem('token', result.token)
-        setItem('user', JSON.stringify(userResult))
-        // window.location.reload()
-        return true
-    } catch (error: unknown) {
-        const err = error as Error
-        return err.message
-    }
-}
+import getItem, { removeItem } from "./localStorage"
 
 // Function to logout the user
 export async function sendLogout(): Promise<Boolean | string> {
@@ -55,7 +20,7 @@ export async function sendLogout(): Promise<Boolean | string> {
 
         // Removes user items from localstorage if the user wants to log out
         removeItem('token')
-        removeItem('user')
+        removeItem('name')
         // removeItem('user')
         window.location.reload()
 
@@ -116,36 +81,6 @@ export async function sendDelete(): Promise<Boolean | string> {
     }
 }
 
-// Function to register the user
-export async function sendRegister(user: RegisterUser): Promise<true | string> {
-
-    try {
-        const response = await fetch(`${BROWSER_API}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({...user, password: 'disabled'})
-        })
-
-
-        if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
-        }
-
-        // Redirects to login page on successful registration
-        setItem('redirect', '/login')
-        getRedirect()
-
-        return true
-    } catch (error: unknown) {
-        const err = error as Error
-        return err.message
-    }
-}
-
 // Checks if the user has a user object and is therefore likely to be logged in
 // Note that this only checks what icons to display, and it will still be
 // properly checked if the user clicks this icon or navigates to a page that
@@ -161,7 +96,7 @@ export default function isLoggedIn() {
         return false
     }
 
-    return user.username
+    return user.email
 }
 
 // Redirects the user to the page they were trying to access after successful login or register
