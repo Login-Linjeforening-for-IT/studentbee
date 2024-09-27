@@ -6,22 +6,13 @@ import getItem, { removeItem } from "./localStorage"
 // Function to logout the user
 export async function sendLogout(): Promise<Boolean | string> {
     try {
-        const token = getItem('token')
-        const user = getItem('user')
-
-        if (!token || !user) {
-            // Removes user items from localstorage if the user wants to log out
-            removeItem('token')
-            // removeItem('user')
-            window.location.href = '/login'
-            return "Logged out successfully."
-            
-        }
-
         // Removes user items from localstorage if the user wants to log out
         removeItem('token')
         removeItem('name')
-        // removeItem('user')
+        removeItem('id')
+        removeItem('groups')
+        removeItem('redirect')
+        removeItem('email')
         window.location.reload()
 
         // const response = await fetch(`${API}/login`, {
@@ -39,7 +30,8 @@ export async function sendLogout(): Promise<Boolean | string> {
         //     throw Error(data.error)
         // }
 
-        return true
+        window.location.href = '/login'
+        return "Logged out successfully."
     } catch (error) {
         return `Failed to log out: ${error}`
     }
@@ -96,7 +88,7 @@ export default function isLoggedIn() {
         return false
     }
 
-    return user.email
+    return user.username.split('@')[0]
 }
 
 // Redirects the user to the page they were trying to access after successful login or register

@@ -41,19 +41,13 @@ type User = {
     id: string
     name: string
     groups: string
-    email: string
-    access_token: string
+    username: string
+    token: string
 
     // From Firebase
     // time: number
     // score: number
     // solved: UserSolved[]
-}
-
-type LoggedInUser = {
-    name: string
-    username: string
-    time: number
 }
 
 type UserPage = {
@@ -75,7 +69,7 @@ type ScoreBoardUser = {
     id: number
     score: number
     solved: number
-    username: string
+    name: string
     time: number
 }
 

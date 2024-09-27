@@ -4,12 +4,17 @@ export default function getItem(name: string): object | string | undefined {
     }
 
     if (name === 'user') {
+        const token = localStorage.getItem('token')
+        if (!token || token === "null") {
+            return undefined
+        }
+
         return {
             id: localStorage.getItem('id'),
             name: localStorage.getItem('name'),
             groups: localStorage.getItem('groups'),
-            email: localStorage.getItem('email'),
-            access_token: localStorage.getItem('access_token')
+            username: localStorage.getItem('email'),
+            token: localStorage.getItem('token')
         }
     }
 

@@ -14,7 +14,7 @@ type MiddleIconProps = {
 // Displays the login icon or the profile icon depending on the login status
 export function RightIcon() {
     const [href, setHref] = useState('/login')
-    const [icon, setIcon] = useState("/images/login.svg")
+    const [icon, setIcon] = useState("/images/join.svg")
     const loggedIn = isLoggedIn()
 
     function handleClick() {
@@ -27,7 +27,7 @@ export function RightIcon() {
             setIcon("/images/profile.svg")
         } else {
             setHref(`${BROWSER_API}/login`)
-            setIcon("/images/login.svg")
+            setIcon("/images/join.svg")
         }
     }, [loggedIn])
 
@@ -44,14 +44,12 @@ export function RightIcon() {
 
 // Displays the register icon or the logout icon depending on the login status
 export function MiddleIcon({ setActive }: MiddleIconProps) {
-    const [href, setHref] = useState<string>('/')
-    const [icon, setIcon] = useState<string>("/images/join.svg")
+    const href = '/'
+    const icon = "/images/logout.svg"
     const loggedIn = isLoggedIn()
 
     useEffect(() => {
         if (loggedIn) {
-            setHref('/')
-            setIcon("/images/logout.svg")
             setActive(true)
         } else {
             setActive(false)

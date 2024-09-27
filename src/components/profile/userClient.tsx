@@ -18,7 +18,7 @@ export default function Self({user}: UserProps) {
             <div className='max-w-[15vw]'>
                 <div className='grid grid-cols-2'>
                     <h1 className='text-xl'>Email</h1>
-                    <h1 className='text-xl text-end'>{user.email}</h1>
+                    <h1 className='text-xl text-end'>{user.username}</h1>
                 </div>
                 {/* <div className='grid grid-cols-2'>
                     <h1 className='text-xl'>Score</h1>

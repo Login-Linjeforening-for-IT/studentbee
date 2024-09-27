@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function UserInfo() {
-    const [user, setUser] = useState<LoggedInUser>({ name: 'Loading...', username: "Loading...", time: 0 })
+    // const [user, setUser] = useState<User>({ name: 'Loading...', username: "Loading...", time: 0 })
+    const [user, setUser] = useState<User>({ name: 'Loading...', username: "Loading..." } as User)
     const [edit, setEdit] = useState('')
     const path = usePathname()
-    const timeAsHumanReadable = user.time !== 0 ? `${(user.time / 60).toFixed(0)}min ${user.time % 60}s` : ''
+    // const timeAsHumanReadable = user.time !== 0 ? `${(user.time / 60).toFixed(0)}min ${user.time % 60}s` : ''
+    const timeAsHumanReadable = "0"
 
     const [left, setLeft] = useState('')
     const [middle, setMiddle] = useState('')
