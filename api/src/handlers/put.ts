@@ -206,7 +206,7 @@ export async function putTime(req: Request, res: Response): Promise<any> {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putScore(req: Request, res: Response) {
+export async function putScore(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body

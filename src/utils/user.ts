@@ -37,42 +37,6 @@ export async function sendLogout(): Promise<Boolean | string> {
     }
 }
 
-// Function to delete the user
-export async function sendDelete(): Promise<Boolean | string> {
-    try {
-        const user = getItem('user')
-
-        if (!user) {
-            // Removes user items from localstorage if the user wants to delete their account
-            // removeItem('user')
-            getRedirect('/')
-            return "Deleted account."
-        }
-
-        // Removes user items from localstorage if the user wants to delete their account
-        // removeItem('user')
-
-        const response = await fetch(`${BROWSER_API}/account/delete`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(user)
-        })
-
-        if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
-        }
-
-        getRedirect('/')
-        return true
-    } catch (error) {
-        return `Failed to delete account: ${error}`
-    }
-}
-
 // Checks if the user has a user object and is therefore likely to be logged in
 // Note that this only checks what icons to display, and it will still be
 // properly checked if the user clicks this icon or navigates to a page that
@@ -102,5 +66,30 @@ export function getRedirect(alternative?: string): void {
 
     if (alternative) {
         window.location.href = alternative
+    }
+}
+
+// Function to register the user
+export async function sendRegister(user: RegisterUser): Promise<true | string> {
+    try {
+        const response = await fetch(`${BROWSER_API}/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(user)
+        })
+
+
+        if (!response.ok) {
+            const data = await response.json()
+
+            throw Error(data.error)
+        }
+
+        return true
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message
     }
 }

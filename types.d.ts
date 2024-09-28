@@ -45,9 +45,9 @@ type User = {
     token: string
 
     // From Firebase
-    // time: number
-    // score: number
-    // solved: UserSolved[]
+    time: number
+    score: number
+    solved: UserSolved[]
 }
 
 type UserPage = {
@@ -107,4 +107,10 @@ type ClientVote = {
     commentID: number
     vote: boolean
     isReply?: true
+}
+
+type RegisterUser = {
+    id: string
+    name: string
+    username: string
 }

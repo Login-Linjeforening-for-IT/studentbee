@@ -14,7 +14,10 @@ export default function getItem(name: string): object | string | undefined {
             name: localStorage.getItem('name'),
             groups: localStorage.getItem('groups'),
             username: localStorage.getItem('email'),
-            token: localStorage.getItem('token')
+            token: localStorage.getItem('token'),
+            time: localStorage.getItem('time'),
+            score: localStorage.getItem('score'),
+            solved: localStorage.getItem('solved')
         }
     }
 
