@@ -140,7 +140,10 @@ function ReplyComponent({
 }: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const user = getItem('user') as User | string | undefined
-    const username = typeof user === 'string' ? user : user ? user.username : ''
+    const username = typeof user === 'string' ? user : user ? user.username.split('@')[0] : ''
+    const reply_author = reply.username.split('@')[0]
+    const author = reply_author === username ? 'You' : reply_author
+    const reply_user = reply.username.split('@')[0]
 
     function handleDelete() {
         deleteComment({commentID: reply.id, courseID: comment.courseID})
@@ -169,10 +172,10 @@ function ReplyComponent({
             <div className="bg-normal rounded-xl p-4 mb-1">
                 <div className="w-full grid grid-cols-2 text-bright">
                     <Link 
-                        href={`/profile/${reply.username}`} 
+                        href={`/profile/${reply_user}`} 
                         className="text-lg text-bright underline"
                     >
-                        {reply.username}
+                        {author}
                     </Link>
                     <h1 className="text-right pr-2">
                         {new Date(reply.time).toLocaleString()}
@@ -204,7 +207,7 @@ function ReplyComponent({
                         className="w-full h-full pt-[0.2vh]" 
                     />
                 </button>
-                {username === reply.username && <button 
+                {username === reply_user && <button 
                     className="text-bright underline w-[1.3vw]" 
                     onClick={handleDelete}
                 >

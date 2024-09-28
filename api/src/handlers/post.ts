@@ -490,8 +490,8 @@ export async function postComment(req: Request, res: Response): Promise<any> {
         const { username, courseID, cardID, content, parent } = req.body as ReplyProps
 
         // Validate the required fields
-        if (!username || !username || !courseID || typeof cardID != 'number' || !content) {
-            return res.status(400).json({ error: 'Missing required field (username, username, courseID, cardID, content)' })
+        if (!username || !courseID || typeof cardID != 'number' || !content) {
+            return res.status(400).json({ error: 'Missing required field (username, courseID, cardID, content)' })
         }
 
         // Generates a new document reference with an auto-generated ID
