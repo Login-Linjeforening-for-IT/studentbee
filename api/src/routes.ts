@@ -34,7 +34,8 @@ import {
     putText, 
     putMarkCourse, 
     putFile,
-    putTime
+    putTime,
+    putScore
 } from './handlers/put'
 
 // Imports all DELETE handlers from the handlers folder
@@ -62,6 +63,7 @@ router.get('/callback', getCallback)
 // Defines all PUT routes that are available on the API
 router.put('/course/:courseID', putCourse)
 router.put('/time', putTime)
+router.put('/score', putScore)
 router.put('/text', putText)
 router.put('/mark', putMarkCourse)
 router.put('/file', putFile)

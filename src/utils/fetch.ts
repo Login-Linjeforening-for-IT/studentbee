@@ -1,5 +1,5 @@
 import { API, BROWSER_API } from "@parent/constants"
-import getItem from "./localStorage"
+import getItem, { setItem } from "./localStorage"
 
 type UpdateCourseProps = {
     courseID: string
@@ -97,7 +97,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
         if (!user) {
             throw Error('User not logged in')
         }
-
+        
         const response = await fetch(`${BROWSER_API}/course/${courseID}`, {
             method: 'PUT',
             headers: {
@@ -128,7 +128,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
 // Updates the user's time spent on the page
 export async function updateUserTime({time}: {time: number}) {
     const token = getItem('token')
-    const user = getItem('user') as User | undefined
+    let user = getItem('user') as User | undefined
 
     try {
         if (!user) {
@@ -143,10 +143,13 @@ export async function updateUserTime({time}: {time: number}) {
             },
             body: JSON.stringify({
                 username: user.username,
-                time
+                time: user.time += time 
             })
         })
 
+        user.time += time;
+        setItem('user',JSON.stringify(user))
+    
         if (!response.ok) {
             const data = await response.json()
 

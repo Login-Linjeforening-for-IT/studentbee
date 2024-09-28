@@ -201,6 +201,39 @@ export async function putTime(req: Request, res: Response): Promise<any> {
 }
 
 /**
+ * Updates user socre in the database
+ * @param req Request object
+ * @param res Response object
+ * @returns Status code based on the outcome of the operation
+ */
+export async function putScore(req: Request, res: Response) {
+    // Wrapped in a try-catch block to handle potential errors gracefully
+    try {
+        // Destructures relevant variables from the request body
+        const { username, score } = req.body as { username: string, score: number }
+        
+        // Checks if required variables are defined, or otherwise returns a 400 status code
+        if (!username || typeof score !== 'number') {
+            return res.status(400).json({ error: 'username, accepted, and editing are required' })
+        }
+
+        // Finds the course in the database and updates it with the new data
+        const courseRef = db.collection('User').doc(username)
+        await courseRef.update({score})
+
+        // Invalidates the cache to ensure that the data served is up to date
+        invalidateCache(`user_${username}`)
+
+        // Returns a 200 status code with the id of the updated course
+        res.status(200).json({ id: courseRef.id })
+    } catch (err) {
+        // Returns a 500 status code with the error message if an error occured
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
+/**
  * Updates the mark of a course in the database
  * @param req Request object
  * @param res Response object
