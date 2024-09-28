@@ -6,10 +6,16 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 
 export default function UserInfo() {
-    const [user, setUser] = useState<LoggedInUser>({ name: 'Loading...', username: "Loading...", time: 0 })
+    const [user, setUser] = useState<User>({ 
+        name: 'Loading...', 
+        username: "Loading...", 
+        time: 0
+    } as User)
     const [edit, setEdit] = useState('')
     const path = usePathname()
-    const timeAsHumanReadable = user.time !== 0 ? `${Math.floor(user.time / 60000)}min ${Math.floor(user.time / 1000 % 60)}s` : ''
+    const timeAsHumanReadable = user.time !== 0 
+        ? `${Math.floor(user.time / 60000)}min ${Math.floor(user.time / 1000 % 60)}s` 
+        : ''
 
     const [left, setLeft] = useState('')
     const [middle, setMiddle] = useState('')
@@ -35,7 +41,12 @@ export default function UserInfo() {
                     setRight(`${courseByID.cards.length} cards`)
                 }
             })()
-        } else if (!path.includes('edit') && ((left != user.username || user.username === 'Loading...') || middle != course || right != timeAsHumanReadable)) {            
+        } else if (!path.includes('edit') && ((
+            left != user.username 
+            || user.username === 'Loading...')
+            || middle != course
+            || right != timeAsHumanReadable
+        )) {            
             if (course) {
                 setMiddle(course.toUpperCase())
             } else {

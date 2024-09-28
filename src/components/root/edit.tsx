@@ -54,10 +54,23 @@ export default function Edit() {
         <div className="hidden lg:grid">
             {displayCourseSelector && <CourseSelector />}
             <div className="flex flex-rows">
-                <button onClick={handleReview} className="text-md rounded-md pt-[3.5px]">♺</button>
-            {   error && <h1 className="hidden 2xl:grid pl-2 pt-1 overflow-auto noscroll whitespace-nowrap text-red-500">{error}</h1>}
+                <button onClick={handleReview} className="text-md rounded-md pt-[1px]">♺</button>
             </div>
-            {error && <h1 className="2xl:hidden -ml-[85px] overflow-auto noscroll whitespace-nowrap text-red-500">{error}</h1>}
+            {error && <Error text={error} />}
+        </div>
+    )
+}
+
+function Error({text}: { text: string }) {
+    const path = location.href
+
+    if (!path.includes('course')) {
+        return null
+    }
+
+    return (
+        <div className="absolute bg-dark bottom-8 right-8 min-h-50 p-4 max-w-[17.6vw] rounded-xl max-h-[19.5vh] overflow-auto">
+            <h1 className="text-red-500">{text}</h1>
         </div>
     )
 }

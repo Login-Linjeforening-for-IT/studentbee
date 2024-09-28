@@ -37,23 +37,22 @@ type CardAsText = {
 }
 
 type User = {
+    // From Authentik
+    id: string
     name: string
+    groups: string
     username: string
+    token: string
+
+    // From Firebase
     time: number
     score: number
     solved: UserSolved[]
 }
 
-type LoggedInUser = {
-    name: string
-    username: string
-    time: number
-}
-
 type UserPage = {
     id: number
     username: string
-    password: string
     position: number
     name: string
     score: number
@@ -66,32 +65,11 @@ type UserSolved = {
     cards: number[]
 }
 
-type RegisterUser = {
-    username: string
-    password: string
-    firstName: string
-    lastName: string
-}
-
-type LoginUser = {
-    username: string
-    password: string
-}
-
-type LoginResponse = {
-    name: string
-    username: string
-    token: string
-    time: number
-    score: number
-    solved: UserSolved[]
-}
-
 type ScoreBoardUser = {
     id: number
     score: number
     solved: number
-    username: string
+    name: string
     time: number
 }
 
@@ -129,4 +107,10 @@ type ClientVote = {
     commentID: number
     vote: boolean
     isReply?: true
+}
+
+type RegisterUser = {
+    id: string
+    name: string
+    username: string
 }

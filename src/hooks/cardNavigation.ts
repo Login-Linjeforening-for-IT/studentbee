@@ -1,8 +1,15 @@
-import { useEffect, useCallback, useRef, Dispatch, SetStateAction, MutableRefObject } from 'react'
 import { useRouter } from 'next/navigation'
 import handleCardsNavigation, { handleKeyDown } from "@utils/navigation"
 import { focusCheck, windowFocused, windowUnfocused } from "@utils/focus"
-import { addScore } from '@/utils/score'
+import addScore from '@/utils/score'
+import { 
+    useEffect, 
+    useCallback, 
+    useRef, 
+    Dispatch, 
+    SetStateAction, 
+    MutableRefObject 
+} from 'react'
 
 type UseCardNavigationProps = {
     current: number | undefined

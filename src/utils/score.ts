@@ -1,8 +1,7 @@
-import { BROWSER_API } from "@parent/constants";
+import { BROWSER_API } from "@parent/constants"
 import getItem, { setItem } from "./localStorage"
-import { stringify } from "querystring";
 
-export async function addScore(){
+export default async function addScore(){
     
     const token = getItem('token') 
     let user = getItem('user') as User | undefined

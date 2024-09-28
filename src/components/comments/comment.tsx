@@ -35,6 +35,9 @@ export default function Comment({
     handleDelete
 }: CommentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
+    const comment_user = comment.username.split('@')[0]
+    const username = user.username.split('@')[0]
+    const author = comment_user === username ? 'You' : comment_user
 
     function handleVote(direction: 'up' | 'down') {
         if (clientVote === (direction === 'up' ? 1 : -1)) {
@@ -50,7 +53,7 @@ export default function Comment({
         <div key={comment.id}>
             <div className="bg-normal rounded-xl p-4 mt-4 w-full">
                 <div className="w-full grid grid-cols-2 text-bright mb-2">
-                    <Link href={`/profile/${comment.username}`} className="text-lg text-bright underline">{comment.username}</Link>
+                    <Link href={`/profile/${comment_user}`} className="text-lg text-bright underline">{author}</Link>
                     <h1 className="text-right">{new Date(comment.time).toLocaleString()}</h1>
                 </div>
                 <Markdown
@@ -62,12 +65,12 @@ export default function Comment({
             <div className="w-full flex flex-rows space-x-2 mt-1">
                 <h1 className="text-bright">{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
                 <button className="w-[1.3vw]" onClick={() => handleVote('up')}>
-                    <ThumbsUp fill={voteColor('up', comment.votes, user.username, clientVote)} className="w-full h-full pt-[0.2vh]" />
+                    <ThumbsUp fill={voteColor('up', comment.votes, username, clientVote)} className="w-full h-full pt-[0.2vh]" />
                 </button>
                 <button className="w-[1.3vw]" onClick={() => handleVote('down')}>
-                    <ThumbsDown fill={voteColor('down', comment.votes, user.username, clientVote)} className="w-full h-full pt-[0.2vh]" />
+                    <ThumbsDown fill={voteColor('down', comment.votes, username, clientVote)} className="w-full h-full pt-[0.2vh]" />
                 </button>
-                {user.username === comment.username && <button 
+                {username === comment_user && <button 
                     className="text-bright underline w-[1.4vw]" 
                     onClick={() => handleDelete({commentID: comment.id})}
                 >

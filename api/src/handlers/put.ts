@@ -44,7 +44,7 @@ type PutFileProps = {
  * @param res Response objecet
  * @returns Status code based on the outcome of the operation
  */
-export async function putCourse(req: Request, res: Response) {
+export async function putCourse(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures the courseID from the request parameters
@@ -90,7 +90,7 @@ export async function putCourse(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putFile(req: Request, res: Response) {
+export async function putFile(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -124,7 +124,7 @@ export async function putFile(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putText(req: Request, res: Response) {
+export async function putText(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -168,7 +168,7 @@ export async function putText(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putTime(req: Request, res: Response) {
+export async function putTime(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -179,21 +179,20 @@ export async function putTime(req: Request, res: Response) {
             return res.status(400).json({ error: 'username, accepted, and editing are required' })
         }
 
-        // Finds the course in the database and updates it with the new data
         // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
 
-        // Finds the course in the database and updates it with the new data
-        const courseRef = db.collection('User').doc(username)
-        await courseRef.update({time})
+        // Finds the user in the database and updates it with the new data
+        const userRef = db.collection('User').doc(username)
+        await userRef.update({time})
 
         // Invalidates the cache to ensure that the data served is up to date
         invalidateCache(`user_${username}`)
 
         // Returns a 200 status code with the id of the updated course
-        res.status(200).json({ id: courseRef.id })
+        res.status(200).json({ id: userRef.id })
     } catch (err) {
         // Returns a 500 status code with the error message if an error occured
         const error = err as Error
@@ -207,7 +206,7 @@ export async function putTime(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putScore(req: Request, res: Response) {
+export async function putScore(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -240,7 +239,7 @@ export async function putScore(req: Request, res: Response) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putMarkCourse(req: Request, res: Response) {
+export async function putMarkCourse(req: Request, res: Response): Promise<any> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body

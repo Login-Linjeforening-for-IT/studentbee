@@ -210,9 +210,9 @@ export async function getFiles(courseID: string) {
     }
 }
 
-export async function getUser(id: string): Promise<User | string> {
+export async function getUser(username: string): Promise<User | string> {
     try {
-        const response = await fetch(`${BROWSER_API}/user/${id}`, {
+        const response = await fetch(`${BROWSER_API}/user/${username}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'

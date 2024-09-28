@@ -1,13 +1,12 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { RightIcon, MiddleIcon, LeftIcon } from './clientNav'
 import UserInfo from './userInfo'
 import ToolTips from './root/toolTips'
 import Sidebar, { SidebarButton } from './sidebar'
+import { RightSide } from './clientNav'
 
 // Displays the header
 export default function Navbar() {
-
     return (
         <div className='flex w-full gap-4 overflow-hidden'>
             <Sidebar />
@@ -22,14 +21,7 @@ export default function Navbar() {
             {/* Info for the user */}
             <UserInfo />
             {/* account, login */}
-            <div className='grid grid-cols-3 justify-between rounded-xl gap-2 min-w-[15vh]'>
-                {/* Scoreboard */}
-                <LeftIcon />
-                {/* create account */}
-                <MiddleIcon />
-                {/* login */}
-                <RightIcon />
-            </div>
+            <RightSide />
         </div>
     )
 }
