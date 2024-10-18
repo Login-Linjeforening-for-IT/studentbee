@@ -17,20 +17,20 @@ export default async function Home() {
     }
 
     return (
-        <div className="w-full h-full rounded-xl overflow-auto noscroll flex justify-center flex-col place-items-center">
-            <div className="2xs:w-[80vw] xs:w-[50vw] sm:w-[35vw] h-[45vh] bg-dark rounded-xl p-8 overflow-auto mb-8 noscroll">
+        <div className="w-full h-full rounded-xl overflow-auto noscroll flex md:justify-center flex-col place-items-center">
+            <div className="2xs:w-[80vw] xs:w-[50vw] sm:w-[35vw] max-h-[60vh] md:h-[45vh] bg-dark rounded-xl p-4 md:p-8 overflow-auto mb-8 noscroll">
                 <h1 className="text-xl text-center font-semibold mb-4">Select course</h1>
                 <div className="grid space-y-2">
                     {courses.map((course) => <Link
                         href={`/course/${course.id}`}
                         key={course.id}
-                        className="text-sm md:text-xl bg-light w-full rounded-md p-2"
+                        className="text-2xs md:text-xl bg-light w-full rounded-md p-1 pl-2 md:p-2 h-[28px] md:h-auto"
                     >
                         {course.id}
                     </Link>)}
                 </div>
             </div>
-            <Link href="/add/course" className='bg-dark h-[5vh] 2xs:w-[80vw] xs:w-[50vw] sm:w-[35vw] grid place-items-center rounded-xl px-8 text-xs md:text-lg'>Add course</Link>
+            <Link href="/add/course" className='bg-dark h-[5vh] 2xs:w-[80vw] xs:w-[50vw] sm:w-[35vw] grid place-items-center rounded-xl px-8 text-2xs md:text-lg'>Add course</Link>
         </div>
     )
 }

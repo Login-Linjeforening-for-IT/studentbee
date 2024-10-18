@@ -6,6 +6,7 @@ import isLoggedIn from "@utils/user"
 import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
+import { Burger } from "./sidebar"
 
 type MiddleIconProps = {
     setActive: Dispatch<SetStateAction<boolean>>
@@ -87,16 +88,17 @@ export function LeftIcon() {
 
 export function RightSide() {
     const [active, setActive] = useState(true)
-    const cols = active ? 'grid-cols-3' : 'grid-cols-2'
+    const cols = active ? 'md:grid-cols-3' : 'md:grid-cols-2'
 
     return (
-        <div className={`grid ${cols} justify-between rounded-xl gap-2 min-w-[15vh]`}>
+        <div className={`grid ${cols} justify-between rounded-xl gap-2 min-w-[15vh] grid-cols-3`}>
             {/* Scoreboard */}
             <LeftIcon />
             {/* create account */}
             {active && <MiddleIcon setActive={setActive} />}
             {/* login */}
             <RightIcon />
+            <Burger />
         </div>
     )
 }
