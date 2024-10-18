@@ -2,13 +2,10 @@
 
 import CourseListClient from "./root/coursesClient"
 
-export default function Sidebar() {
+export default function Menu() {
     return (
-        <div className="hidden sidebar absolute grid grid-rows-9 left-0 top-0 h-full w-[200px] bg-dark">
-            <div className="grid grid-cols-2 grid-rows-2 place-items-center pt-7">
-                <div/>
-                <SidebarButton />
-            </div>
+        <div className="hidden menu absolute grid grid-rows-9 left-0 top-0 h-full w-full bg-normal">
+            <div />
             <div className="row-span-8">
                 <CourseListClient />
             </div>
@@ -16,25 +13,17 @@ export default function Sidebar() {
     )
 }
 
-export function SidebarButton() {
+export function Burger() {
     function handleClick() {
-        const sidebar = document.querySelector('.sidebar')
-        if (sidebar) {
-            sidebar.classList.toggle('block')
-            sidebar.classList.toggle('hidden')
+        const menu = document.querySelector('.menu')
+
+        if (menu) {
+            menu.classList.toggle('hidden')
         }
     }
 
     return (
-        <button className="z-200" onClick={handleClick}>
-            <Burger />
-        </button>
-    )
-}
-
-function Burger() {
-    return (
-        <div className='md:hidden w-[50px] h-[45px] grid grid-rows-3 gap-2 p-2 self-center'>
+        <div className='md:hidden grid place-self-center w-[4vh] h-[4vh] relative' onClick={handleClick}>
             <div className='bg-white rounded-xl h-[3px] self-center' />
             <div className='bg-white rounded-xl h-[3px] self-center' />
             <div className='bg-white rounded-xl h-[3px] self-center' />
