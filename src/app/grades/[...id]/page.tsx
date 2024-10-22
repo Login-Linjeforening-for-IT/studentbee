@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import Graph from "@/components/grades/graph"
+import Graph from "@components/grades/graph"
 
 
 export default function Grades({ params }: { params: { id: string[] } }): JSX.Element {
