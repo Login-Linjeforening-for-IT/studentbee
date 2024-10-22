@@ -9,6 +9,7 @@ import cache from '../flow'
 
 // Imports dotenv package to access environment variables
 import dotenv from 'dotenv'
+import config from "../../package.json"
 
 /**
  * Files type, used for type specification when handling files
@@ -536,4 +537,8 @@ export async function getCallback(req: Request, res: Response): Promise<any> {
         console.error('Error during OAuth2 flow:', error.message)
         return res.status(500).send('Authentication failed')
     }
+}
+
+export function getVersion(_: Request, res: Response): any {
+    return res.json(config.version)
 }
