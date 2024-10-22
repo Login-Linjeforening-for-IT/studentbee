@@ -88,6 +88,34 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
     }
 }
 
+
+// Fetches the requested grades from the server.
+// ID - Course ID
+export async function getGrades(id: string, location: 'server' | 'client'): Promise<Course | string> {
+    const url = location === 'server' ? API : BROWSER_API
+    try {
+        const response = await fetch(`http://localhost:8080/api/grades/${id.toUpperCase()}`, {
+            next: { revalidate: 10 },
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+    
+        if (!response.ok) {
+            const data = await response.json()
+    
+            throw Error(data.error)
+        }
+    
+        const course = await response.json()
+        return course
+    } catch (error) {
+        const err = error as Error
+        return err.message
+    }
+}
+
 // Updates the passed course
 export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
     const user: User | undefined = getItem('user') as User | undefined  

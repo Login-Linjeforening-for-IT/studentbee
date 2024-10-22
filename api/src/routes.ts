@@ -5,7 +5,8 @@ import express from 'express'
 import { 
     getScoreboard, 
     getCourses, 
-    getCourse, 
+    getCourse,
+    getGrades, 
     getFile, 
     getFiles, 
     getUserProfile, 
@@ -53,6 +54,7 @@ router.get('/health', getHealthHandler)
 router.get('/scoreboard', getScoreboard)
 router.get('/courses', getCourses)
 router.get('/course/:courseID', getCourse)
+router.get('/grades/:courseID', getGrades)
 router.get('/files/:courseID', getFiles)
 router.get('/file/:courseID/:fileID', getFile)
 router.get('/user/:id', getUserProfile)
