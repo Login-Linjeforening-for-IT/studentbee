@@ -58,7 +58,7 @@ export default function UserInfo() {
     }, [edit, left, middle, right, timeAsHumanReadable])
 
     return (
-        <div className='grid-cols-1 sm:grid-cols-3 w-full sm:bg-dark rounded-xl items-center'>
+        <div className='grid grid-cols-1 sm:grid-cols-3 w-full sm:bg-dark rounded-xl items-center'>
             <h1 className='hidden md:grid place-items-center text-xl text-bright'>{left}</h1>
             <h1 className='hidden sm:grid absolute left-1/2 transform -translate-x-1/2 text-xl self-center pt-2'>{middle}</h1>
             {/* ghost div since middle is absolute to act as the middle grid column */}
