@@ -1,66 +1,17 @@
-import { getGrades } from "@/utils/fetch"
 import { useEffect, useState } from "react"
 
+type GradeProps = {
+    graphType: string
+    grades: {[key: string]: number}
+}
 
-export default function Graph({ graphType, course}: { graphType: string, course: string }) {
+export default function Graph({ graphType, grades}: GradeProps) {
     
     const SVGWidth = 600
     const SVGHeight = 400
-    
-    const [grades, setGrades] = useState({})
-    const [selectedYear, setSelectedYear] = useState("2023")
 
-    useEffect(() => {
-        async function fetchGrades() {
-            try {
-                const fetchedGrades = await getGrades(course, 'client')
-                if (JSON.stringify(fetchedGrades) !== JSON.stringify(grades)) {
-                    setGrades(fetchedGrades);
-                }
-            } catch (error) {
-                console.error("Error fetching grades:", error)
-            }
-        }
-
-        fetchGrades()
-
-    }, [])
-
-    console.log(JSON.stringify(grades))
-
-    const [isBusy, setBusy] = useState(true)
-    const [data, setData] = useState<[string, number][]>([
-        ["A", 3],
-        ["B", 13],
-        ["C", 24],
-        ["D", 18],
-        ["E", 12],
-        ["F", 31]
-    ]);
-
-    useEffect(() => {
-        setBusy(true)
-        if(graphType=="grade"){
-            setData([
-                ["A", 3],
-                ["B", 13],
-                ["C", 24],
-                ["D", 18],
-                ["E", 12],
-                ["F", 31]
-            ])
-        }else if(graphType=="failRate"){
-            setData([
-                ["2020", 29],
-                ["2021", 31],
-                ["2022", 36],
-                ["2023", 25],
-                ["2024", 20],
-                ["2025", 16]
-            ])
-        }
-        setBusy(false)
-    }, [graphType]);
+    const gradesKeys = Object.keys(grades) 
+    const gradesValues = Object.values(grades)
 
     const x0 = 50
     const xAxisLength = SVGWidth - x0 * 2
@@ -70,22 +21,19 @@ export default function Graph({ graphType, course}: { graphType: string, course:
 
     const xAxisY = y0 + yAxisLength
 
-    let dataYMax = data.reduce(
-        (currentMax, [_, dataY]) => Math.max(currentMax, dataY),
-        -Infinity
-    )
-    dataYMax = Math.ceil(dataYMax / 10) * 10
+     
+    const dataYMax = Math.ceil( Math.max(...gradesValues) / 10) * 10
 
     const numYTicks = dataYMax / 5
 
-    const barPlotWidth = xAxisLength / data.length
+    const barPlotWidth = xAxisLength / gradesKeys.length
 
 
 
     const gradeGraph = () => {
         return (
             <g>
-            {data.map(([grade, dataY], index) => {
+            {gradesValues.map((dataY, index) => {
             const x = x0 + index * barPlotWidth
             
             const y = SVGHeight - (y0 + yAxisLength * (dataY / dataYMax))
@@ -123,9 +71,11 @@ export default function Graph({ graphType, course}: { graphType: string, course:
                     x={x + barPlotWidth / 2}
                     y={xAxisY + 16}
                     textAnchor="middle"
-                    fill="white">
+                    fill="white"
+                    className="capitalize">
                     
-                    {grade}
+
+                    {gradesKeys[index]}
                 </text>
             </g>
             )
@@ -140,7 +90,7 @@ export default function Graph({ graphType, course}: { graphType: string, course:
 
         return (
             <g>
-            {data.map(([year, dataY], index) => {
+            {gradesValues.map((dataY, index) => {
 
                 const lastX = index==0 ? x0 : x
                 x = x0 + index * barPlotWidth
@@ -164,9 +114,11 @@ export default function Graph({ graphType, course}: { graphType: string, course:
                             x={x + barPlotWidth / 2}
                             y={xAxisY + 16}
                             textAnchor="middle"
-                            fill="white">
+                            fill="white"
+                            className="capitalize">
                             
-                            {year}
+
+                            {gradesKeys[index]}
                         </text>
                     </g>
                 )
@@ -218,10 +170,8 @@ export default function Graph({ graphType, course}: { graphType: string, course:
         </text>
 
         {/* Plots */}
-        {!isBusy && graphType==="grades" && gradeGraph()}
-        {!isBusy && graphType==="failRate" && failRateGraph()}
+        {graphType==="grades" && gradeGraph()}
+        {graphType==="failRate" && failRateGraph()}
         </svg>
     )
-
-    return (<h1>Test</h1>)
 }
