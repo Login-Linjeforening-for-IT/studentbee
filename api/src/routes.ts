@@ -14,7 +14,8 @@ import {
     getComments,
     getHealthHandler,
     getCallback,
-    getLogin
+    getLogin,
+    getVersion
 } from './handlers/get'
 
 // Imports all POST handlers from the handlers folder
@@ -62,6 +63,7 @@ router.get('/user/:id', getUserProfile)
 router.get('/comments/:courseID', getComments)
 router.get('/login', getLogin)
 router.get('/callback', getCallback)
+router.get('/version', getVersion)
 
 // Defines all PUT routes that are available on the API
 router.put('/course/:courseID', putCourse) 

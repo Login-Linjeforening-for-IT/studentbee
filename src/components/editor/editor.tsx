@@ -45,7 +45,6 @@ marked.use({
     renderer: {
         code(code, lang) {
             const language = hljs.getLanguage(typeof lang === 'string' ? lang : "plaintext") ? lang || "plaintext" : "plaintext"
-            return ''
             return `<pre class="inline-block rounded-xl overflow-auto whitespace-pre-wrap break-words"><code class="hljs ${language}">${hljs.highlight(code, { language }).value}</code></pre>`
         },
         image(href, title) {
@@ -56,7 +55,6 @@ marked.use({
             return `<a href="${href}" title="${title}" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">${text}</a>`
         },
         codespan(text) {
-            return ''
             return `<code class="break-all bg-extralight p-0.3 rounded-sm">${text}</code>`
         }
     }
