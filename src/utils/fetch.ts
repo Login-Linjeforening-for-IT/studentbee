@@ -94,7 +94,7 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
 export async function getGrades(id: string, location: 'server' | 'client'): Promise<Course | string> {
     const url = location === 'server' ? API : BROWSER_API
     try {
-        const response = await fetch(`http://localhost:8080/api/grades/${id.toUpperCase()}`, {
+        const response = await fetch(`${url}/grades/${id.toUpperCase()}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {

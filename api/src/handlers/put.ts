@@ -119,6 +119,49 @@ export async function putFile(req: Request, res: Response): Promise<any> {
 }
 
 /**
+ * Function used to update grades in the database
+ * @param req Request object
+ * @param res Response objecet
+ * @returns Status code based on the outcome of the operation
+ */
+export async function putGrades(req: Request, res: Response): Promise<any> {
+    // Wrapped in a try-catch block to handle potential errors gracefully
+    try {
+        // Destructures the courseID from the request parameters
+        const { courseID } = req.params
+
+        // Destructures relevant variables from the request body
+        const { grades } = req.body as { grades: object }
+        
+        // Checks if required variables are defined, or otherwise returns a 400 status code
+        if (grades === undefined) {
+            return res.status(400).json({ error: 'grades are required' })
+        }
+
+        // Checks if the courseID is defined, or otherwise returns a 400 status code
+        if (!courseID) {
+            return res.status(400).json({ error: 'Course ID is required.' })
+        }
+
+        // Finds the course in the database and updates it with the grade data
+        const gradesRef = db.collection('Grade').doc(courseID)
+        await gradesRef.update({
+            grades
+        })
+
+        // Invalidates the cache to ensure that the data served is up to date
+        invalidateCache(courseID)
+
+        // Returns a 200 status code with the id of the updated course
+        res.status(200).json({ id: gradesRef.id })
+    } catch (err) {
+        // Returns a 500 status code with the error message if an error occured
+        const error = err as Error
+        res.status(500).json({ error: error.message })
+    }
+}
+
+/**
  * // Updates unreviewed course text in the database
  * @param req Request object
  * @param res Response object

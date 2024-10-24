@@ -32,6 +32,7 @@ import {
 // Imports all PUT handlers from the handlers folder
 import { 
     putCourse, 
+    putGrades,
     putText, 
     putMarkCourse, 
     putFile,
@@ -63,7 +64,8 @@ router.get('/login', getLogin)
 router.get('/callback', getCallback)
 
 // Defines all PUT routes that are available on the API
-router.put('/course/:courseID', putCourse)
+router.put('/course/:courseID', putCourse) 
+router.put('/grades/:courseID', putGrades)
 router.put('/time', putTime)
 router.put('/score', putScore)
 router.put('/text', putText)
