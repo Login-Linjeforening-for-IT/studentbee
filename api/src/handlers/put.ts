@@ -131,11 +131,11 @@ export async function putGrades(req: Request, res: Response): Promise<any> {
         const { courseID } = req.params
 
         // Destructures relevant variables from the request body
-        const { grades } = req.body as { grades: object }
+        const { year, grades } = req.body as { grades: object }
         
         // Checks if required variables are defined, or otherwise returns a 400 status code
-        if (grades === undefined) {
-            return res.status(400).json({ error: 'grades are required' })
+        if (year === undefined || grades === undefined) {
+            return res.status(400).json({ error: 'grades and year are required' })
         }
 
         // Checks if the courseID is defined, or otherwise returns a 400 status code
@@ -146,7 +146,7 @@ export async function putGrades(req: Request, res: Response): Promise<any> {
         // Finds the course in the database and updates it with the grade data
         const gradesRef = db.collection('Grade').doc(courseID)
         await gradesRef.update({
-            grades
+            [year] : grades
         })
 
         // Invalidates the cache to ensure that the data served is up to date

@@ -9,12 +9,11 @@ export default function AddGrades({ params }: { params: { id: string[] } }) {
     const [gradeType, setGradeType] = useState("letterGrades")
     const [grades, setGrades] = useState({})
     const [year, setYear] = useState("")
-    const [apiResponse, setApiResponse] = useState()
 
 
     async function handleAddCourse() {
         // console.log(grades)
-        // await addGrades(courseID, grades)
+        // await addGrades(courseID, year, grades)
     }
 
     useEffect(() => {
@@ -30,6 +29,12 @@ export default function AddGrades({ params }: { params: { id: string[] } }) {
                         <p className="px-4">|</p>
                         <button className="underline" type="button" onClick={() => setGradeType("binaryGrades")}>Pass / Fail</button>
                     </div>
+                    <label>Year: 
+                            <input 
+                                type="number"
+                                className="m-2 bg-normal [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
+                                onChange={e => setYear(e.target.value)}/> 
+                    </label>
                     {Object.keys(grades).map((data) => (
                         <label className="capitalize">{data}: 
                             <input 
