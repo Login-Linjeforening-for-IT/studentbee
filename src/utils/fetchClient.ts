@@ -119,7 +119,7 @@ export async function addGrades(courseID: string, grades: Object) {
         }
     }   
     
-    return 'Please log in to add a card'
+    return 'Please log in to add grades'
 }
 
 // Adds a textinput to the course with the given user id
