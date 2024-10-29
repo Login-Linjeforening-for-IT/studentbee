@@ -91,7 +91,7 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
 
 // Fetches the requested grades from the server.
 // ID - Course ID
-export async function getGrades(id: string, location: 'server' | 'client'): Promise<string> {
+export async function getGrades(id: string, location: 'server' | 'client'): Promise<Object | string> {
     const url = location === 'server' ? API : BROWSER_API
     try {
         const response = await fetch(`${url}/grades/${id.toUpperCase()}`, {
