@@ -131,7 +131,7 @@ export async function putGrades(req: Request, res: Response): Promise<any> {
         const { courseID } = req.params
 
         // Destructures relevant variables from the request body
-        const { year, grades } = req.body as { grades: object }
+        const { year, grades } = req.body as { year: number, grades: object }
         
         // Checks if required variables are defined, or otherwise returns a 400 status code
         if (year === undefined || grades === undefined) {
