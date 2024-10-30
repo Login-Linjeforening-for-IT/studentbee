@@ -65,13 +65,13 @@ export default function Question({
                     {card.correct.length > 1 && <h1 className="text-bright">
                         Multiple choice - Select all correct answers
                     </h1>}
-                    {card.correct.length > 1 && <h1 className="text-right float-right">
+                    {card.correct.length > 1 && <h1 className="text-right text-bright underline float-right">
                         <a href={`../../grades/${courseID}`}>Exam statistics</a>
                     </h1>}
                     {card.theme && <h1 className="text-bright">
                         {card.theme}
                     </h1>}
-                    {card.correct.length <= 1 && <h1 className="text-right float-right">
+                    {card.correct.length <= 1 && <h1 className="text-right text-bright underline float-right">
                         <Link href={`../../grades/${courseID}`}>Exam statistics</Link>
                     </h1>}
                     
