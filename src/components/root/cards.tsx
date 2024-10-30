@@ -174,6 +174,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 totalCommentsLength={totalCommentsLength}
                 indexMapping={indexMapping}
                 shuffledAlternatives={shuffledAlternatives}
+                courseID={course.id}
                 checkAnswer={checkAnswer} 
                 handleVote={handleVote}
                 setSelected={setSelected} 

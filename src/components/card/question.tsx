@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction } from "react"
 import { Markdown } from "../editor/editor"
 import Alternatives from "./alternatives"
 import QuestionFooter from "./questionFooter"
+import Link from "next/link"
 
 type QuestionProps = {
     card: Card
@@ -17,6 +18,7 @@ type QuestionProps = {
     totalCommentsLength: number
     indexMapping: number[]
     shuffledAlternatives: string[]
+    courseID: string
     setAttempted: Dispatch<SetStateAction<number[]>>
     setSelected: Dispatch<SetStateAction<number[]>>
     setRemainGreen: Dispatch<SetStateAction<number[]>>
@@ -42,6 +44,7 @@ export default function Question({
     showComments, 
     totalCommentsLength, 
     wait, 
+    courseID,
     checkAnswer, 
     handleVote, 
     setSelected, 
@@ -62,9 +65,16 @@ export default function Question({
                     {card.correct.length > 1 && <h1 className="text-bright">
                         Multiple choice - Select all correct answers
                     </h1>}
+                    {card.correct.length > 1 && <h1 className="text-right float-right">
+                        <a href={`../../grades/${courseID}`}>Exam statistics</a>
+                    </h1>}
                     {card.theme && <h1 className="text-bright">
                         {card.theme}
                     </h1>}
+                    {card.correct.length <= 1 && <h1 className="text-right float-right">
+                        <Link href={`../../grades/${courseID}`}>Exam statistics</Link>
+                    </h1>}
+                    
                     <Markdown
                         displayEditor={false} 
                         handleDisplayEditor={() => {}} 

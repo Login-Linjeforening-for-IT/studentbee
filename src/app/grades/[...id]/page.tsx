@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react"
 import { getGrades } from "@/utils/fetch"
 import Graph from "@components/grades/graph"
+import Link from "next/link"
 
 export default function Grades({ params }: { params: { id: string[] } }): JSX.Element {
 
@@ -85,6 +86,9 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
 
                     {isLoading ? null : <Graph graphType={graphType} grades={grades} />}
                 </>)}
+                <Link href={`../../addGrades/${course}`}>
+                    <button className="mt-2 p-2 w-full bg-orange-500 rounded-xl text-xl h-[5vh] place-items-center"> Add statistics</button>
+                </Link>
             </div>
         </main>
     )
