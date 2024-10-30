@@ -3,17 +3,23 @@
 import { addGrades } from "@utils/fetchClient"
 import { useState, useEffect } from "react"
 
+type Grades = {
+    [key: string]: number
+};
+
 export default function AddGrades({ params }: { params: { id: string[] } }) {
     
     const courseID = params.id[0]
     const [gradeType, setGradeType] = useState("letterGrades")
-    const [grades, setGrades] = useState({})
+    const [grades, setGrades] = useState<Grades>({})
     const [year, setYear] = useState("")
+    const [response, setResponse] = useState("")
 
-
-    async function handleAddCourse() {
-        // console.log(grades)
-        // await addGrades(courseID, year, grades)
+    async function handleAddGrades() {
+        const res = await addGrades(courseID, year, grades)
+        res.id == courseID ? setResponse("Grades added to " + res.id) : setResponse("Error")
+        setYear('')
+        gradeType == "letterGrades" ? setGrades({ a:0, b:0, c:0, d:0, e:0, f:0 }) : setGrades({ pass:0, fail:0 }) 
     }
 
     useEffect(() => {
@@ -32,6 +38,7 @@ export default function AddGrades({ params }: { params: { id: string[] } }) {
                     <label>Year: 
                             <input 
                                 type="number"
+                                value={year || ''}
                                 className="m-2 bg-normal [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                                 onChange={e => setYear(e.target.value)}/> 
                     </label>
@@ -39,14 +46,16 @@ export default function AddGrades({ params }: { params: { id: string[] } }) {
                         <label className="capitalize">{data}: 
                             <input 
                                 type="number"
+                                value={grades[data] || ''}
                                 className="m-2 bg-normal [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" 
                                 onChange={e => setGrades(prevGrades => ({ ...prevGrades, [data]: Number(e.target.value) }))}/> 
                         </label>
                     ))}
                 </div>
+                <p>{response}</p>
                 <button 
                     className="grid w-full bg-orange-500 rounded-xl text-xl h-[5vh] place-items-center" 
-                    onClick={handleAddCourse}
+                    onClick={handleAddGrades}
                     >
                     Add grades
                     </button>

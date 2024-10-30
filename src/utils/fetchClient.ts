@@ -88,26 +88,26 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
 }
 
 // Add grades statistics
-export async function addGrades(courseID: string, grades: Object) {
+export async function addGrades(courseID: string, year:string, grades: Object) {
     const user: User | undefined = getItem('user') as User | undefined
     const token = getItem('token')
 
     if (user) {
         try {
-            const response = await fetch(`${BROWSER_API}/addGrades/${courseID}`, {
+            const response = await fetch(`${BROWSER_API}/grades/${courseID}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
+                    year,
                     grades
                 })
             })
         
             if (!response.ok) {
                 const data = await response.json()
-        
                 throw Error(data.error)
             }
         

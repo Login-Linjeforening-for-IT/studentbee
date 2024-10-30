@@ -131,7 +131,7 @@ export async function putGrades(req: Request, res: Response): Promise<any> {
         const { courseID } = req.params
 
         // Destructures relevant variables from the request body
-        const { year, grades } = req.body as { year: number, grades: object }
+        const { year, grades } = req.body as { year: string, grades: object }
         
         // Checks if required variables are defined, or otherwise returns a 400 status code
         if (year === undefined || grades === undefined) {
@@ -143,11 +143,11 @@ export async function putGrades(req: Request, res: Response): Promise<any> {
             return res.status(400).json({ error: 'Course ID is required.' })
         }
 
-        // Finds the course in the database and updates it with the grade data
+        // Finds or create the course in the database and updates it with the grade data
         const gradesRef = db.collection('Grade').doc(courseID)
-        await gradesRef.update({
+        await gradesRef.set({
             [year] : grades
-        })
+        },{ merge: true })
 
         // Invalidates the cache to ensure that the data served is up to date
         invalidateCache(courseID)
