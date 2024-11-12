@@ -60,7 +60,8 @@ export default function Elements({id, current, course}: ElementsProps) {
 }
 
 // Gets all the courese questions
-function GetQuestions({cards, current, id}: QuestionsProps) {
+function GetQuestions({cards, current, id}: QuestionsProps) { 
+    const relevant = cards.slice((current||0) > 4 ? (current||0)-5 : 0, (current||0)+6)
     const router = useRouter()
 
     if (!cards.length) {
@@ -70,7 +71,7 @@ function GetQuestions({cards, current, id}: QuestionsProps) {
     return (
         <div className='p-2'>
             <h1 className="text-xl mb-2">Questions</h1>
-            {cards.map((card, index) => {
+            {relevant.map((card, index) => {
                 const outline = current==index ? "outline-gray-500" : "outline-none"
                 return(
                 <button onClick={() => router.push(`/course/${id}/${index+1}`)} key={card.question} className={`w-full pt-3 pb-3 bg-dark rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2 pl-4`}>
