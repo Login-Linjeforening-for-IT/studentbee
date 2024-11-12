@@ -419,18 +419,17 @@ export async function postRegister(req: Request, res: Response): Promise<any> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
-        const { username, password, firstName, lastName } = req.body as {
+        const { id, name, username } = req.body as {
+            id: string
+            name: string
             username: string
-            password: string
-            firstName: string
-            lastName: string
         }
         
         // Validate the required fields
-        if (!username || !password || !firstName || !lastName) {
-            return res.status(400).json({ error: 'Username, password, first name and last name are required.' })
+        if (!name || !username) {
+            return res.status(400).json({ error: 'id, name and username are required.' })
         }
-        
+
         // Checks if the username is an NTNU email
         const userNameHasNtnu = username.includes('@ntnu.no') || username.includes('@stud.ntnu.no')
         if (!userNameHasNtnu) {
@@ -438,7 +437,7 @@ export async function postRegister(req: Request, res: Response): Promise<any> {
         }
         
         // Extracts the id from the username
-        const id = username.split('@')[0]
+        const shortUsername = username.split('@')[0]
 
         // Checks if the user already exists
         const userDoc = await db.collection('Users').doc(`${id}`).get()
@@ -449,19 +448,17 @@ export async function postRegister(req: Request, res: Response): Promise<any> {
         // Generates a document for the user
         const userRef = db.collection('User').doc(id)
 
-        // Create the user data object
+        // Creates the user data object
         const user = {
-            username: id,
-            password,
-            firstName,
-            lastName,
+            id,
+            username: shortUsername,
             position: 0,
             score: 0,
             time: 0,
             solved: []
         }
 
-        // Save the user data to Firestore
+        // Saves the user data to Firestore
         await userRef.set(user)
 
         // Invalidates the cached socreboard to ensure that the new user is 

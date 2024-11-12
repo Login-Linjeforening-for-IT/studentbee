@@ -15,21 +15,6 @@ export async function sendLogout(): Promise<Boolean | string> {
         removeItem('email')
         window.location.reload()
 
-        // const response = await fetch(`${API}/login`, {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': token
-        //     },
-        //     body: JSON.stringify(user)
-        // })
-
-        // if (!response.ok) {
-        //     const data = await response.json()
-
-        //     throw Error(data.error)
-        // }
-
         window.location.href = '/login'
         return "Logged out successfully."
     } catch (error) {
@@ -79,7 +64,6 @@ export async function sendRegister(user: RegisterUser): Promise<true | string> {
             },
             body: JSON.stringify(user)
         })
-
 
         if (!response.ok) {
             const data = await response.json()
