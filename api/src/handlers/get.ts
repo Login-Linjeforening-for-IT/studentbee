@@ -247,7 +247,7 @@ export async function getGrades(req: Request, res: Response) {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Fetches the grades from cache or database and sends it as a response
-        const grades = await cache(courseID, fetchGrades)
+        const grades = await cache(`${courseID}_grades`, fetchGrades)
         res.json(grades)
     } catch (err) {
         // Returns a 500 status code with the error message if an error occured
