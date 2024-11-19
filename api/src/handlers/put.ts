@@ -150,7 +150,7 @@ export async function putGrades(req: Request, res: Response): Promise<any> {
         },{ merge: true })
 
         // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(courseID)
+        invalidateCache(`${courseID}_grades`)
 
         // Returns a 200 status code with the id of the updated course
         res.status(200).json({ id: gradesRef.id })
