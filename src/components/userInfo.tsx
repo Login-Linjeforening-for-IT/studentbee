@@ -22,6 +22,7 @@ export default function UserInfo() {
     const [right, setRight] = useState('')
 
     useEffect(() => {
+        console.log("debug");
         const newUser: User | undefined = getItem('user') as User | undefined
         const pathnames = path.split('/')
         let course = pathnames[1] === 'course' || 'edit' ? pathnames[2] : path.split('/')[-1]
@@ -55,7 +56,7 @@ export default function UserInfo() {
             
             setRight(timeAsHumanReadable)
         }
-    }, [edit, left, middle, right, timeAsHumanReadable])
+    }, [edit, left, middle, right, timeAsHumanReadable, path])
 
     return (
         <div className='grid grid-cols-1 sm:grid-cols-3 w-full sm:bg-dark rounded-xl items-center'>
