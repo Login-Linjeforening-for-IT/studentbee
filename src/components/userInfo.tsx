@@ -22,7 +22,6 @@ export default function UserInfo() {
     const [right, setRight] = useState('')
 
     useEffect(() => {
-        console.log("debug");
         const newUser: User | undefined = getItem('user') as User | undefined
         const pathnames = path.split('/')
         let course = pathnames[1] === 'course' || 'edit' ? pathnames[2] : path.split('/')[-1]
