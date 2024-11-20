@@ -57,6 +57,9 @@ export default function Question({
 }: QuestionProps) {
     return (
         <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8 pb-10`}>
+            <h1 className="text-right text-bright underline float-right">
+                        <Link href={`../../grades/${courseID}`}>Exam statistics</Link>
+            </h1>
             <div className="w-full h-full overflow-auto mb-2 noscroll">
                 <h1 className="text-right text-bright float-right">
                     {card.source} {(current || 0) + 1} / {cards.length}
@@ -65,14 +68,8 @@ export default function Question({
                     {card.correct.length > 1 && <h1 className="text-bright">
                         Multiple choice - Select all correct answers
                     </h1>}
-                    {card.correct.length > 1 && <h1 className="text-right text-bright underline float-right">
-                        <Link href={`../../grades/${courseID}`}>Exam statistics</Link>
-                    </h1>}
                     {card.theme && <h1 className="text-bright">
                         {card.theme}
-                    </h1>}
-                    {card.correct.length <= 1 && <h1 className="text-right text-bright underline float-right">
-                        <Link href={`../../grades/${courseID}`}>Exam statistics</Link>
                     </h1>}
                     
                     <Markdown
