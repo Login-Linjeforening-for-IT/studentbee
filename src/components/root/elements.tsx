@@ -75,8 +75,11 @@ function GetQuestions({cards, current, id}: QuestionsProps) {
                 const index = (current||0) > 5 ? (current||0)-6+i+1 : i+1
                 const outline = current==index-1 ? "outline-gray-500" : "outline-none"
                 return(
-                <button onClick={() => router.push(`/course/${id}/${index}`)} key={card.question} className={`w-full pt-3 pb-3 bg-dark rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2 pl-4`}>
-                    <h1 className="text-sm">{card.question.slice(0, 30)}{card.question.length > 30 && '...'}</h1>
+                <button onClick={() => router.push(`/course/${id}/${index}`)} key={card.question} className={`w-full pt-3 pb-3 bg-dark rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2`}>
+                    <div className="grid grid-cols-12 w-full">
+                        <h1 className="text-sm text-left w-full col-span-11">{card.question.slice(0, 20)}{card.question.length > 20 && '...'}</h1>
+                        <h1 className="text-bright text-right w-full">{index}</h1>
+                    </div>
                 </button>)
             })}
         </div>
