@@ -160,7 +160,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
 
     return (
         <div className="w-full h-full max-h-full grid grid-rows-10 gap-8 col-span-6 overflow-hidden">
-            <Question
+            {id && <Question
                 card={card} 
                 cards={cards} 
                 current={current} 
@@ -174,7 +174,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 totalCommentsLength={totalCommentsLength}
                 indexMapping={indexMapping}
                 shuffledAlternatives={shuffledAlternatives}
-                courseID={course.id}
+                courseID={id}
                 checkAnswer={checkAnswer} 
                 handleVote={handleVote}
                 setSelected={setSelected} 
@@ -182,7 +182,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 setRemainGreen={setRemainGreen}
                 setShowComments={setShowComments}
                 showAnswers={showAnswers}
-            />
+            />}
             <Buttons
                 animateAnswer={animateAnswer}
                 navigate={navigate}
