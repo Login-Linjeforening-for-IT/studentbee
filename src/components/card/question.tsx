@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from "react"
 import { Markdown } from "../editor/editor"
 import Alternatives from "./alternatives"
 import QuestionFooter from "./questionFooter"
-import Link from "next/link"
 
 type QuestionProps = {
     card: Card
@@ -58,15 +57,9 @@ export default function Question({
     return (
         <div className={`w-full h-full row-span-9 bg-dark rounded-xl p-8 pb-10`}>
             <div className="w-full h-full overflow-auto mb-2 noscroll">
-                <div className="flex flex-row justify-between ">
-                    <div className="flex flex-col order-last mb-2">
-                        <h1 className="text-right text-bright underline float-right">
-                                    <Link href={`../../grades/${courseID}`}>Exam statistics</Link>
-                        </h1>
-                        <h1 className="text-right text-bright float-right">
-                            {card.source} {(current || 0) + 1} / {cards.length}
-                        </h1>
-                    </div>
+                    <h1 className="text-right text-bright float-right">
+                        {card.source} {(current || 0) + 1} / {cards.length}
+                    </h1>
                     <div className={`text-md`}>
                         {card.correct.length > 1 && <h1 className="text-bright">
                             Multiple choice - Select all correct answers
@@ -81,7 +74,6 @@ export default function Question({
                             markdown={card.question} 
                         />
                     </div>
-                </div>
                 <Alternatives
                     selected={selected}
                     animateAnswer={animateAnswer} 

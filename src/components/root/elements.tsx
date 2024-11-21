@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 type ElementsProps = {
@@ -50,7 +51,12 @@ export default function Elements({id, current, course}: ElementsProps) {
     }
 
     return (
-        <div className='hidden xl:grid w-full rounded-xl col-span-2 gap-8 overflow-hidden'>
+        <div className='hidden xl:inline-flex flex-col w-full rounded-xl col-span-2 overflow-hidden'>
+            <Link 
+                href={`../../grades/${id}`}
+                className={`bg-dark h-8 rounded-lg p-2 mb-2 flex items-center justify-center text-lg`}>
+                Exam statistics
+            </Link>
             <Help />
             <div className="w-full h-full rounded-xl overflow-auto noscroll">
                 <GetQuestions cards={cards} current={current} id={id} />
@@ -61,7 +67,7 @@ export default function Elements({id, current, course}: ElementsProps) {
 
 // Gets all the courese questions
 function GetQuestions({cards, current, id}: QuestionsProps) {
-    const relevant = cards.slice((current||0) > 5 ? (current||0)-6 : 0, (current||0)+6);
+    const relevant = cards.slice((current||0) > 4 ? (current||0)-5 : 0, (current||0)+5);
     const router = useRouter()
 
     if (!cards.length) {
@@ -72,7 +78,7 @@ function GetQuestions({cards, current, id}: QuestionsProps) {
         <div className='p-2'>
             <h1 className="text-xl mb-2">Questions</h1>
             {relevant.map((card, i) => {
-                const index = (current||0) > 5 ? (current||0)-6+i+1 : i+1
+                const index = (current||0) > 4 ? (current||0)-5+i+1 : i+1
                 const outline = current==index-1 ? "outline-gray-500" : "outline-none"
                 return(
                 <button onClick={() => router.push(`/course/${id}/${index}`)} key={card.question} className={`w-full pt-3 pb-3 bg-dark rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2`}>
