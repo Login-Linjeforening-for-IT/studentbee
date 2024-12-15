@@ -8,7 +8,6 @@ import Script from "next/script"
 import { 
     ChangeEvent, 
     Dispatch, 
-    MutableRefObject, 
     SetStateAction, 
     useEffect, 
     useRef, 
@@ -32,24 +31,10 @@ type AlternativeProps = {
 }
 
 type AcceptedProps = {
+    card: Card
     accepted: Card[]
     setAccepted: Dispatch<SetStateAction<Card[]>>
     handleAcceptedIndexClick: (index: number) => void
-}
-
-type EditCardsProps = {
-    editing: Editing
-    textareaRefs: MutableRefObject<(HTMLTextAreaElement | null)[]>
-    handleQuestionChange: (text: string, cardIndex: number) => void
-    handleThemeChange: (event: ChangeEvent<HTMLInputElement>, cardIndex: number) => void
-    handleSourceChange: (event: ChangeEvent<HTMLInputElement>, cardIndex: number) => void
-    setCorrectAnswer: (index: number, cardIndex: number) => void
-    handleAlternativeChange: (
-        event: ChangeEvent<HTMLTextAreaElement>, 
-        cardIndex: number, 
-        alternativeIndex: number
-    ) => void
-    handleAction: (action: 'accept' | 'reject', cardIndex: number) => void
 }
 
 type HeaderProps = {
@@ -59,19 +44,6 @@ type HeaderProps = {
     text: string
     setText: Dispatch<SetStateAction<string>>
     hideText: () => void
-}
-
-type ActionButtonsProps = {
-    handleAction: (action: 'accept' | 'reject', cardIndex: number) => void
-    cardIndex: number
-}
-
-type AlternativesProps = {
-    card: Card
-    setCorrectAnswer: (index: number, cardIndex: number) => void
-    handleAlternativeChange: (event: ChangeEvent<HTMLTextAreaElement>, cardIndex: number, alternativeIndex: number) => void
-    cardIndex: number
-    textareaRefs: MutableRefObject<(HTMLTextAreaElement | null)[]>
 }
 
 export default function Edit({ params }: { params: { item: string[] } }) {
@@ -84,7 +56,6 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
     const emptyCard: Card = { question: "", alternatives: [""], correct: [], source: "", rating: 0, votes: [] }
     const [card, setCard] = useState<Card>(emptyCard)
-
     const item = params.item[0].toUpperCase()
 
     useEffect(() => {
@@ -160,65 +131,9 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         setEditingIndex(index)
     }
 
-    function handleQuestionChange(text: string, cardIndex: number) {
-        const tempCards = [...editing.cards]
-        tempCards[cardIndex] = {...tempCards[cardIndex], question: text}
-        setEditing({...editing, cards: tempCards})
-    }
-
-    function handleThemeChange(event: ChangeEvent<HTMLInputElement>, cardIndex: number) {
-        const tempCards = [...editing.cards]
-        tempCards[cardIndex] = {...tempCards[cardIndex], theme: event.target.value}
-        setEditing({...editing, cards: tempCards})
-    }
-
-    function handleSourceChange(event: ChangeEvent<HTMLInputElement>, cardIndex: number) {
-        const tempCards = [...editing.cards]
-        tempCards[cardIndex] = {...tempCards[cardIndex], source: event.target.value}
-        setEditing({...editing, cards: tempCards})
-    }
-
-    function handleAlternativeChange(
-        event: ChangeEvent<HTMLTextAreaElement>, 
-        cardIndex: number, 
-        alternativeIndex: number
-    ) {
-        const tempCards = [...editing.cards]
-        const tempAlternatives = [...tempCards[cardIndex].alternatives]
-        tempAlternatives[alternativeIndex] = event.target.value
-        tempCards[cardIndex] = {...tempCards[cardIndex], alternatives: tempAlternatives}
-        setEditing({...editing, cards: tempCards})
-        autoResizeTextarea(event.target)
-    }
-
     function autoResizeTextarea(textarea: HTMLTextAreaElement) {
         textarea.style.height = 'auto'
         textarea.style.height = `${textarea.scrollHeight}px`
-    }
-
-    function setCorrectAnswer(index: number, cardIndex: number) {
-        const tempCards = [...editing.cards]
-        const correct = tempCards[cardIndex].correct
-
-        if (correct.includes(index)) {
-            tempCards[cardIndex] = {
-                ...tempCards[cardIndex], 
-                correct: correct.filter((correctIndex) => correctIndex !== index)
-            }
-        } else {
-            tempCards[cardIndex] = {...tempCards[cardIndex], correct: [...correct, index]}
-        }
-
-        setEditing({...editing, cards: tempCards})
-    }
-
-    function handleAction(action: 'accept' | 'reject', cardIndex: number) {
-        const tempCards = [...editing.cards]
-        const card = tempCards.splice(cardIndex, 1)[0]
-        if (action === 'accept') {
-            setAccepted([...accepted, card])
-        }
-        setEditing({...editing, cards: tempCards})
     }
 
     function clearCard() {
@@ -243,7 +158,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                         text={text}
                         setText={setText}
                     />
-                    <div className="w-full h-[68vh] px-4 pb-4">
+                    <div className="w-full h-[68vh] px-4">
                         <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-4' : ''}`}>
                             {showText && <textarea
                                 value={text}
@@ -262,6 +177,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                     </div>
                 </div>
                 <Accepted 
+                    card={card}
                     accepted={accepted} 
                     setAccepted={setAccepted}
                     handleAcceptedIndexClick={handleAcceptedIndexClick}
@@ -473,13 +389,14 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
     )
 }
 
-function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedProps) {
+function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexClick}: AcceptedProps) {
+    
     function handleRemove(index: number) {
         const tempAccepted = [...accepted]
         tempAccepted.splice(index, 1)
         setAccepted(tempAccepted)
     }
-
+    
     return (
         <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto noscroll">
             <div className="grid grid-cols-12">
@@ -487,83 +404,30 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
                 <h1 className="text-bright">({accepted.length})</h1>
             </div>
             <div>
-                {accepted.map((card: Card, index: number) => (
-                    <div key={index} className="grid grid-cols-12 gap-2">
-                        <button
-                            key={card.question}
-                            onClick={() => handleAcceptedIndexClick(index)} 
-                            className="w-full bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left"
-                        >
-                            <div className="grid grid-cols-12 w-full">
-                                <h1 className="w-full text-bright">{index + 1}</h1>
-                                <h1 className="w-full col-span-10">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
-                                <h1 className="text-bright text-right w-full">{card.alternatives.length}</h1>
-                            </div>
-                        </button>
-                        <button className="flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw]" onClick={() => handleRemove(index)}>
-                            <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full place-self-center" />
-                        </button>
-                    </div>
-                ))}
+                {accepted.map((card: Card, index: number) => {
+                    const outline = editCard.question === accepted[index].question
+                        ? 'outline-gray-500' : 'outline-none'
+
+                    return (
+                        <div key={index} className="grid grid-cols-12 gap-2">
+                            <button
+                                key={card.question}
+                                onClick={() => handleAcceptedIndexClick(index)} 
+                                className={`w-full outline outline-1 ${outline} hover:outline-white bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
+                            >
+                                <div className="grid grid-cols-12 w-full">
+                                    <h1 className="w-full text-bright">{index + 1}</h1>
+                                    <h1 className="w-full col-span-10">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
+                                    <h1 className="text-bright text-right w-full">{card.alternatives.length}</h1>
+                                </div>
+                            </button>
+                            <button className="flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw]" onClick={() => handleRemove(index)}>
+                                <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full place-self-center" />
+                            </button>
+                        </div>
+                    )
+                })}
             </div>
-        </div>
-    )
-}
-
-function EditCards({
-    editing, 
-    textareaRefs, 
-    handleQuestionChange, 
-    handleThemeChange, 
-    handleSourceChange, 
-    setCorrectAnswer, 
-    handleAlternativeChange, 
-    handleAction
-}: EditCardsProps) {
-    const inputStyle = "bg-extralight p-2 w-full rounded-xl overflow-hidden resize-none whitespace-pre-wrap outline-none caret-orange-500"
-
-    return (
-        <div className="w-full h-full overflow-auto noscroll">
-            {editing.cards.map((card, cardIndex) => (
-                <div key={cardIndex} className="w-full">
-                    <h1 className="mb-2">Source</h1>
-                    <input
-                        className={inputStyle}
-                        value={card.source}
-                        type="text"
-                        placeholder="Exam or learning material source"
-                        onChange={(event) => handleSourceChange(event, cardIndex)}
-                    />
-                    <h1 className="mb-2 mt-2">Theme</h1>
-                    <input
-                        className={inputStyle}
-                        value={card.theme}
-                        type="text"
-                        placeholder="Question theme (optional)"
-                        onChange={(event) => handleThemeChange(event, cardIndex)}
-                    />
-                    <h1 className="mb-2 mt-2">Question</h1>
-                    <div className="bg-extralight p-2 rounded-xl">
-                        <Editor
-                            placeholder="Enter question..."
-                            courseID=""
-                            value={card.question.split('\n')} 
-                            customSaveLogic={true} 
-                            hideSaveButton={true}
-                            save={() => {}}
-                            onChange={(text: string) => handleQuestionChange(text, cardIndex)}
-                        />
-                    </div>
-                    <Alternatives 
-                        card={card} 
-                        setCorrectAnswer={setCorrectAnswer} 
-                        handleAlternativeChange={handleAlternativeChange} 
-                        cardIndex={cardIndex} 
-                        textareaRefs={textareaRefs} 
-                    />
-                    <ActionButtons handleAction={handleAction} cardIndex={cardIndex} />
-                </div>    
-            ))}
         </div>
     )
 }
@@ -644,55 +508,5 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
                 </button>
             </div>
       </div>
-    )
-}
-
-function ActionButtons({handleAction, cardIndex}: ActionButtonsProps) {
-    return (
-        <div className="w-full grid grid-cols-4 gap-8 h-[4vh] mt-5 mb-5">
-            <div/>
-                <button 
-                    className="bg-orange-500 w-full rounded-xl" 
-                    onClick={() => handleAction('reject', cardIndex)}
-                >
-                    Reject
-                </button>
-                <button 
-                    className="bg-orange-500 w-full rounded-xl" 
-                    onClick={() => handleAction('accept', cardIndex)}
-                >
-                    Accept
-                </button>
-            <div/>
-        </div>
-    )
-}
-
-function Alternatives({card, setCorrectAnswer, handleAlternativeChange, cardIndex, textareaRefs}: AlternativesProps) {
-    return (
-        <>
-            <h1 className="mb-2 mt-2">Alternatives</h1>
-            <div className="bg-normal rounded-xl">
-                {card.alternatives.map((alternative, index) => {
-                    const isCorrect = typeof card.correct === 'number' ? card.correct === index : card.correct.includes(index)
-
-                    return (
-                        <div key={index} className="p-2 grid grid-col w-full">
-                            <button className="grid grid-cols-2" onClick={() => setCorrectAnswer(index, cardIndex)}>
-                                <h1 className="text-start">{index + 1}.</h1>
-                                <h1 className={`text-end text-xl ${isCorrect ? "text-green-500" : "text-red-500"}`}>{isCorrect ? "☑︎" : "☒"}</h1>
-                            </button>
-                            <textarea
-                                key={index}
-                                ref={(el) => { textareaRefs.current[cardIndex * card.alternatives.length + index] = el }}
-                                className="bg-light p-2 w-full rounded-xl outline-none overflow-hidden resize-none caret-orange-500"
-                                value={alternative}
-                                onChange={(event) => handleAlternativeChange(event, cardIndex, index)}
-                            />
-                        </div>
-                    )    
-                })}
-            </div>
-        </>
     )
 }
