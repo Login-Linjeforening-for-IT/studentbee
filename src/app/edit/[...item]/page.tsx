@@ -37,12 +37,6 @@ type AcceptedProps = {
     handleAcceptedIndexClick: (index: number) => void
 }
 
-type RejectedProps = {
-    selected: 'cards' | 'text'
-    rejected: Card[]
-    handleRejectedIndexClick: (index: number) => void
-}
-
 type EditCardsProps = {
     editing: Editing
     textareaRefs: MutableRefObject<(HTMLTextAreaElement | null)[]>
@@ -59,8 +53,6 @@ type EditCardsProps = {
 }
 
 type HeaderProps = {
-    selected: 'cards' | 'text',
-    setSelected: Dispatch<SetStateAction<'cards' | 'text'>>
     clearCard: () => void
     editing: Editing
     setEditing: Dispatch<SetStateAction<Editing>>
@@ -83,14 +75,11 @@ type AlternativesProps = {
 }
 
 export default function Edit({ params }: { params: { item: string[] } }) {
-    const [selected, setSelected] = useState<'cards' | 'text'>('cards')
-    const [rejected, setRejected] = useState<Card[]>([])
     const [editing, setEditing] = useState<Editing>({ cards: [], texts: [] })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [accepted, setAccepted] = useState<Card[]>([])
     const [showText, setShowText] = useState(true)
     const [text, setText] = useState(editing.texts.join('\n\n'))
-    const editingSpan = selected === 'cards' ? 'col-span-2' : 'col-span-3'
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
     const emptyCard: Card = { question: "", alternatives: [""], correct: [], source: "", rating: 0, votes: [] }
@@ -130,15 +119,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                 }
             })
         })
-    }, [editing.cards, selected])
-
-    useEffect(() => {
-        const selected = localStorage.getItem('selected')
-        
-        if (selected) {
-            setSelected(selected as 'cards' | 'text')
-        }
-    }, [])
+    }, [editing.cards])
     
     function handleSubmit() {
         updateCourse({courseID: item, accepted, editing})
@@ -174,23 +155,9 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     }
 
     function handleAcceptedIndexClick(index: number) {
-        if (selected === 'text') {
-            setCard(accepted[index])
-            setAlternativeIndex(accepted[index].alternatives.length - 1)
-            setEditingIndex(index)
-        } else {
-            const tempCards = [...accepted]
-            const card = tempCards.splice(index, 1)[0]
-            setEditing({...editing, cards: [...editing.cards, card]})
-            setAccepted(tempCards)
-        }
-    }
-
-    function handleRejectedIndexClick(index: number) {
-        const tempCards = [...rejected]
-        const card = tempCards.splice(index, 1)[0]
-        setEditing({...editing, cards: [...editing.cards, card]})
-        setRejected(tempCards)
+        setCard(accepted[index])
+        setAlternativeIndex(accepted[index].alternatives.length - 1)
+        setEditingIndex(index)
     }
 
     function handleQuestionChange(text: string, cardIndex: number) {
@@ -250,8 +217,6 @@ export default function Edit({ params }: { params: { item: string[] } }) {
         const card = tempCards.splice(cardIndex, 1)[0]
         if (action === 'accept') {
             setAccepted([...accepted, card])
-        } else {
-            setRejected([...rejected, card])
         }
         setEditing({...editing, cards: tempCards})
     }
@@ -269,15 +234,8 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     return (
         <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
             <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
-                <Rejected 
-                    selected={selected} 
-                    rejected={rejected} 
-                    handleRejectedIndexClick={handleRejectedIndexClick}
-                />
-                <div className={`w-full h-full bg-dark ${editingSpan} rounded-xl flex flex-col`}>
+                <div className={`w-full h-full bg-dark col-span-3 rounded-xl flex flex-col`}>
                     <Header
-                        selected={selected} 
-                        setSelected={setSelected}
                         clearCard={clearCard} 
                         editing={editing}
                         setEditing={setEditing}
@@ -286,35 +244,22 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                         setText={setText}
                     />
                     <div className="w-full h-[68vh] px-4 pb-4">
-                        {selected === 'cards' ? (
-                            <EditCards
-                                editing={editing}
-                                textareaRefs={textareaRefs}
-                                handleQuestionChange={handleQuestionChange}
-                                handleThemeChange={handleThemeChange}
-                                handleSourceChange={handleSourceChange}
-                                setCorrectAnswer={setCorrectAnswer}
-                                handleAlternativeChange={handleAlternativeChange}
-                                handleAction={handleAction}
+                        <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-4' : ''}`}>
+                            {showText && <textarea
+                                value={text}
+                                onChange={handleTextChange}
+                                className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 overflow-auto resize-none whitespace-pre-wrap outline-none caret-orange-500"
+                            />}
+                            <AddCard
+                                courseID={item}
+                                card={card}
+                                setCard={setCard}
+                                addCard={addCard}
+                                alternativeIndex={alternativeIndex}
+                                setAlternativeIndex={setAlternativeIndex}
                             />
-                        ) : (
-                            <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-4' : ''}`}>
-                                {showText && <textarea
-                                    value={text}
-                                    onChange={handleTextChange}
-                                    className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 overflow-auto resize-none whitespace-pre-wrap outline-none caret-orange-500"
-                                />}
-                                <AddCard
-                                    courseID={item}
-                                    card={card}
-                                    setCard={setCard}
-                                    addCard={addCard}
-                                    alternativeIndex={alternativeIndex}
-                                    setAlternativeIndex={setAlternativeIndex}
-                                />
-                            </div>
-                        )}
                         </div>
+                    </div>
                 </div>
                 <Accepted 
                     accepted={accepted} 
@@ -550,7 +495,8 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
                             className="w-full bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left"
                         >
                             <div className="grid grid-cols-12 w-full">
-                                <h1 className="w-full col-span-11">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
+                                <h1 className="w-full text-bright">{index + 1}</h1>
+                                <h1 className="w-full col-span-10">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
                                 <h1 className="text-bright text-right w-full">{card.alternatives.length}</h1>
                             </div>
                         </button>
@@ -562,31 +508,6 @@ function Accepted({accepted, setAccepted, handleAcceptedIndexClick}: AcceptedPro
             </div>
         </div>
     )
-}
-
-function Rejected({selected, rejected, handleRejectedIndexClick}: RejectedProps) {
-    if (selected === 'cards') {
-        return (
-            <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto">
-                <div className="grid grid-cols-12">
-                    <h1 className="text-xl mb-4 grid grid-row col-span-11">Rejected</h1>
-                    <h1 className="text-bright">({rejected.length})</h1>
-                </div>
-                <div>
-                    {rejected.map((card: Card, index: number) => (
-                        <button
-                            key={card.question}
-                            onClick={() => handleRejectedIndexClick(index)} 
-                            className="w-full bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2"
-                        >
-                            <h1>{card.question.slice(0, 40)}...</h1>
-                            <h1 className="text-bright">{card.alternatives.length}</h1>
-                        </button>
-                    ))}
-                </div>
-            </div>
-        )
-    }
 }
 
 function EditCards({
@@ -647,8 +568,7 @@ function EditCards({
     )
 }
 
-function Header({ selected, setSelected, clearCard, editing, setEditing, text, setText, hideText }: HeaderProps) {
-    const isText = selected === 'text'
+function Header({ clearCard, editing, setEditing, text, setText, hideText }: HeaderProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null)
   
     async function upload(event: ChangeEvent<HTMLInputElement>) {
@@ -695,22 +615,16 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
             }
         }
     }
-
-    function setSelectedAndRemember(selected: 'cards' | 'text') {
-        setSelected(selected)
-        localStorage.setItem('selected', selected)
-    }
   
     return (
       <div className="w-full p-4 flex flex-rows justify-between">
             <Script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js" />
-            <h1 className="text-xl">Editing {selected}</h1>
+            <h1 className="text-xl">Editing course</h1>
             <div className="space-x-2">
-                {isText && <button className="bg-light rounded-lg p-1 px-2" onClick={hideText}>
+                <button className="bg-light rounded-lg p-1 px-2" onClick={hideText}>
                     Hide input area
-                </button>}
-                {isText && (
-                    <>
+                </button>
+                <>
                     <input
                         type="file"
                         accept=".pdf"
@@ -724,18 +638,9 @@ function Header({ selected, setSelected, clearCard, editing, setEditing, text, s
                     >
                         Upload exam
                     </button>
-                    </>
-                )}
-                {isText && (
-                    <button className="bg-light rounded-lg p-1 px-2" onClick={clearCard}>
+                </>
+                <button className="bg-light rounded-lg p-1 px-2" onClick={clearCard}>
                     Clear
-                    </button>
-                )}
-                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelectedAndRemember('cards')}>
-                    Cards
-                </button>
-                <button className="bg-light rounded-lg p-1 px-2" onClick={() => setSelectedAndRemember('text')}>
-                    Text
                 </button>
             </div>
       </div>
