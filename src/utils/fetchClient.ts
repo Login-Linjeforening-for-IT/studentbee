@@ -35,7 +35,7 @@ export async function addCourse(course: Course): Promise<void | string> {
                 },
                 body: JSON.stringify({
                     username: user.username,
-                    course
+                    course: {...course, id: course.id.trim()}
                 }),
             })
         
