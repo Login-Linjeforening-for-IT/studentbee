@@ -60,7 +60,7 @@ export default function Question({
                     <h1 className="text-right text-bright float-right">
                         {card.source} {(current || 0) + 1} / {cards.length}
                     </h1>
-                    <div className={`text-md`}>
+                    <div className={`text-md mb-4`}>
                         {card.correct.length > 1 && <h1 className="text-bright">
                             Multiple choice - Select all correct answers
                         </h1>}
