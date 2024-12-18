@@ -209,54 +209,6 @@ export async function getCourse(req: Request, res: Response) {
 }
 
 /**
- * Fetches grads by id
- * @param req Request
- * @param res Response
- */
-export async function getGrades(req: Request, res: Response) {
-    // Destructures the courseID from the request parameters
-    const { courseID } = req.params as GradesParam
-
-    /**
-     * Internal asynchronous function to fetch the grades from Firebase
-     * @returns Grades from the database if found, or otherwise a string indicating the error
-     */
-
-    async function fetchGrades() {
-        // Fetches the grades from the 'Grade' collection database
-        const gradeSnapshot = await db.collection('Grade').doc(courseID).get()
-        
-        // Returns the grades if found, or otherwise a string indicating the error
-        if (!gradeSnapshot.exists) {
-            return 'Grade not found'
-        }
-
-        // Assigns the data to grades if it exists
-        const grades = gradeSnapshot.data()
-
-        // Checks if grades has any value, othwerwise returns a string 
-        // indicating that the grades does not have any data
-        if (!grades) {
-            return 'Grade has no data'
-        }
-
-        // Returns the grades
-        return grades
-    }
-
-    // Wrapped in a try-catch block to handle potential errors gracefully
-    try {
-        // Fetches the grades from cache or database and sends it as a response
-        const grades = await cache(`${courseID}_grades`, fetchGrades)
-        res.json(grades)
-    } catch (err) {
-        // Returns a 500 status code with the error message if an error occured
-        const error = err as Error
-        res.status(500).json({ error: error.message })
-    }
-}
-
-/**
  * Fetches the file tree for the given course ID
  * @param req Request
  * @param res Response

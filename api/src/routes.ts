@@ -6,7 +6,6 @@ import {
     getScoreboard, 
     getCourses, 
     getCourse,
-    getGrades, 
     getFile, 
     getFiles, 
     getUserProfile, 
@@ -33,7 +32,6 @@ import {
 // Imports all PUT handlers from the handlers folder
 import { 
     putCourse, 
-    putGrades,
     putText, 
     putMarkCourse, 
     putFile,
@@ -56,7 +54,6 @@ router.get('/health', getHealthHandler)
 router.get('/scoreboard', getScoreboard)
 router.get('/courses', getCourses)
 router.get('/course/:courseID', getCourse)
-router.get('/grades/:courseID', getGrades)
 router.get('/files/:courseID', getFiles)
 router.get('/file/:courseID/:fileID', getFile)
 router.get('/user/:id', getUserProfile)
@@ -67,7 +64,6 @@ router.get('/version', getVersion)
 
 // Defines all PUT routes that are available on the API
 router.put('/course/:courseID', putCourse) 
-router.put('/grades/:courseID', putGrades)
 router.put('/time', putTime)
 router.put('/score', putScore)
 router.put('/text', putText)
