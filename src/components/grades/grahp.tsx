@@ -1,7 +1,32 @@
+import {
+	Chart as ChartJS,
+	CategoryScale,
+	LinearScale,
+	LineElement,
+	PointElement,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+} from 'chart.js';
+import { Bar, Line } from 'react-chartjs-2';
+
+ChartJS.register(
+	CategoryScale,
+	LinearScale,
+	LineElement,
+	PointElement,
+	BarElement,
+	Title,
+	Tooltip,
+	Legend,
+);
+
 type GradeProp = Record<string, number>
 
 type GradesProps = {
 	sYear: number
+	years: number[]
 	grades: Record<number, GradeProp>
 }
 
@@ -9,100 +34,222 @@ type BarGraphProps = {
 	grade: GradeProp
 	totalCandidatesAlp: number
 	totalCandidatesBin: number
+	options: object
 }
 
-export default function Graphs({ grades, sYear }: GradesProps) {
+type LineGraphProps = {
+	grades: Record<number, GradeProp>
+	years: number[]
+	failRatioOptions: object
+	avgGradeOptions: object
+}
 
-		const totalCandidatesAlp = grades[sYear].A + grades[sYear].B + grades[sYear].C + grades[sYear].D + grades[sYear].F
-		const totalCandidatesBin = grades[sYear].G + grades[sYear].H
-		
-		return (
-			<div className="">
-				{(totalCandidatesAlp !=0 || totalCandidatesBin !=0) && 
-				<BarGraph grade={
-					grades[sYear]}
+export default function Graphs({ grades, years, sYear }: GradesProps) {
+
+	const totalCandidatesAlp = grades[sYear].A + grades[sYear].B + grades[sYear].C + grades[sYear].D + grades[sYear].E + grades[sYear].F
+	const totalCandidatesBin = grades[sYear].G + grades[sYear].H
+
+	const options = {
+		responsive: true,
+		plugins: {
+			legend: {
+				onClick: function(event, legendItem) {},
+				labels: {
+					boxWidth: 0,
+				}
+			},
+			title: {
+				display: false,
+			}
+		},
+		scales: {
+			x: {
+				border: {
+					display: false
+				},
+			  	grid: {
+					display: false,
+					drawOnChartArea: false, 
+			  	},
+			},
+			y: {
+				suggestedMin: 0,
+				border: {
+					display: false
+				},
+				grid: {
+					display: false,
+					drawOnChartArea: false, 
+			  	},
+			},
+		}
+	}
+
+	const failRatioOptions = {
+		...options,
+		scales: {
+			...options.scales,
+			y: {
+				...options.scales.y,
+				grid: {
+					color: 'rgb(60,60,60)',
+					display: true,
+					drawOnChartArea: true
+				},
+			},
+		}
+	}
+
+	const avgGradeOptions = {
+		...options,
+		scales: {
+			...options.scales,
+			y: {
+				...failRatioOptions.scales.y,
+				ticks: {
+					stepSize: 1,
+					callback: function(value) {
+						const letters = ['F', 'E', 'D', 'C', 'B', 'A'];
+						return letters[value];
+					}
+				},
+			}
+		}
+	}
+	
+	return (
+		<div className='w-[400px]'>
+    		{ (totalCandidatesAlp !== 0 || totalCandidatesBin !== 0) && (
+
+				<BarGraph 
+					grade={grades[sYear]}
 					totalCandidatesAlp={totalCandidatesAlp}
-					totalCandidatesBin={totalCandidatesBin} />}
-			</div>
-		)
-		
+					totalCandidatesBin={totalCandidatesBin}
+					options={options}
+				/>
+			
+			)}
+
+			<LineGraph 
+				grades={grades}
+				years={[...years].reverse()}
+				avgGradeOptions={avgGradeOptions}
+				failRatioOptions={failRatioOptions}
+			/>
+				
+    	</div>	
+	)
 }
 
-function BarGraph({ grade, totalCandidatesAlp, totalCandidatesBin }: BarGraphProps) {
-	const gradeAlpData = [
-		{ label: "A", value: grade.A, color: "rgba(122, 189, 126, 0.5)" },
-		{ label: "B", value: grade.B, color: "rgba(140, 212, 126, 0.5)" },
-		{ label: "C", value: grade.C, color: "rgba(248, 214, 109, 0.5)" },
-		{ label: "D", value: grade.D, color: "rgba(255, 181, 76, 0.5)" },
-		{ label: "F", value: grade.F, color: "rgba(255, 105, 97, 0.5)" },
-	]
+function BarGraph({ grade, totalCandidatesAlp, totalCandidatesBin, options }: BarGraphProps) {
 
-	const gradeBinData = [
-		{ label: "Pass", value: grade.G, color: "rgba(122, 189, 126, 0.5)"  },
-		{ label: "Fail", value: grade.H, color: "rgba(255, 105, 97, 0.5)" },
-	]
+	  const data = {
+		labels: ['A','B','C','D','E','F'],
+		datasets: [
+		  {
+			label: 'Grades',
+			data: [Math.round(grade.A/totalCandidatesAlp*100),Math.round(grade.B/totalCandidatesAlp*100),Math.round(grade.C/totalCandidatesAlp*100),Math.round(grade.D/totalCandidatesAlp*100),Math.round(grade.E/totalCandidatesAlp*100),Math.round(grade.F/totalCandidatesAlp*100)],
+			backgroundColor: ['rgba(122, 189, 126, 0.5)','rgba(140, 212, 126, 0.5)','rgba(248, 214, 109, 0.5)','rgba(255, 181, 76, 0.5)','rgba(255, 105, 97, 0.5)','rgba(195, 57, 60, 0.5)'], 
+		  },
+		],
+	  }
 
-	// Maximum value for scaling
-	const maxValueAlp = Math.max(...gradeAlpData.map((data) => data.value))
-	const maxValueBin = Math.max(...gradeBinData.map((data) => data.value))
-
-		
+	  const dataBin = {
+		labels: ['Pass','Fail'],
+		datasets: [
+		  {
+			label: "",
+			data: [Math.round(grade.G/totalCandidatesBin*100),Math.round(grade.H/totalCandidatesBin*100)],
+			backgroundColor: ['rgba(122, 189, 126, 0.5)','rgba(255, 105, 97, 0.5)'],
+		  },
+		],
+	}
 
 	return (
-		<div className="w-full mt-20 flex justify-between space-x-10">
-			{/* Alpabet Grades */}
-			<div className="flex justify-between space-x-4">
-				{totalCandidatesAlp != 0 &&
-					gradeAlpData.map((data) => {
-						const barHeight = (data.value / maxValueAlp) * 250
-						const textPos = barHeight < 24?"mt-[-30px]":""
-						return (
-							<div key={data.label} className="flex flex-col items-center">
-								<div
-									className="w-16"
-									style={{
-										height: `${barHeight}px`,
-										backgroundColor: data.color,
-										marginTop: `${250 - barHeight}px`,
-									}}
-								>
-									<p className={`text-center ${textPos}`}>
-										{Math.round((data.value / totalCandidatesAlp) * 100)}
-									</p>
-								</div>
-								<div className="mt-2 text-sm">{data.label}</div>
-							</div>
-						)
-					})
-				}
-			</div>
+
+		<>
+			{ totalCandidatesAlp != 0 &&
+				<Bar
+					id='1'
+					options={options}
+					data={data}
+				/>			
+			}
 			
-			{/* Binary Grades / Pass Fail */}
-			<div className="flex justify-between space-x-4">
-				{totalCandidatesBin != 0 &&
-					gradeBinData.map((data) => {
-						const barHeight = (data.value / maxValueBin) * 250
-						const textPos = barHeight < 24?"mt-[-30px]":""
-						return (
-							<div key={data.label} className="flex flex-col items-center">
-								<div
-									className="w-16"
-									style={{
-										height: `${barHeight}px`,
-										backgroundColor: data.color, 
-										marginTop: `${250 - barHeight}px`,
-									}}
-								>
-									<p className={`text-center ${textPos}`}>
-										{Math.round((data.value / totalCandidatesBin) * 100)}
-									</p>
-								</div>
-								<div className="mt-2 text-sm">{data.label}</div>
-							</div>
-						)
-					})
-				}
-			</div>
-		</div>
+			{ totalCandidatesBin != 0 && totalCandidatesAlp == 0 &&
+				<Bar
+					id='2'
+					options={options}
+					data={dataBin}
+				/>
+			}
+		</>
+	)
+}
+
+function LineGraph({ grades, years, failRatioOptions, avgGradeOptions }: LineGraphProps) {
+
+	let totalCandidates = []
+	for(let i=0; i < years.length; i++){
+		const totalCandidatesAlp = grades[years[i]].A + grades[years[i]].B + grades[years[i]].C + grades[years[i]].D + grades[years[i]].E + grades[years[i]].F
+		const totalCandidatesBin = grades[years[i]].G + grades[years[i]].H
+		totalCandidates.push([totalCandidatesAlp,totalCandidatesBin])
+	} 
+
+	let failRatio = []
+	for(let i=0; i < years.length; i++){
+		if(totalCandidates[i][0]) 		failRatio.push(Math.round(grades[years[i]].F/totalCandidates[i][0]*100))
+		else if(totalCandidates[i][1])	failRatio.push(Math.round(grades[years[i]].H/totalCandidates[i][1]*100))
+		else 							failRatio.push(NaN)
+	} 
+
+	let avgGrade = []
+	for(let i=0; i < years.length; i++){
+		if(totalCandidates[i][0]) 	avgGrade.push((grades[years[i]].A*5+grades[years[i]].B*4+grades[years[i]].C*3+grades[years[i]].D*2+grades[years[i]].E*1+grades[years[i]].F*0)/totalCandidates[i][0])
+		else 						avgGrade.push(NaN)
+	} 
+
+	const dataFailRatio = {
+		labels: years,
+		datasets: [
+			{
+				label: 'Fail percentage',
+				data: failRatio,
+				borderColor: 'rgba(255, 105, 97, 1)',
+				backgroundColor: 'rgba(255, 105, 97, 1)',
+				spanGaps: true,
+				tension: 0.4,
+			},
+		],
+	}
+
+	const dataAvgGrade = {
+		labels: years,
+		datasets: [
+			{
+				label: 'Average',
+				data: avgGrade,
+				borderColor: 'rgba(240, 134, 64, 1)',
+				backgroundColor: 'rgba(240, 134, 64, 1)',
+				spanGaps: true,
+				tension: 0.4,
+			},
+		],
+	} 
+
+	return (
+		<>	
+			<Line
+				id='3'
+				options={failRatioOptions}
+				data={dataFailRatio}
+			/>
+	
+			<Line
+				id='4'
+				options={avgGradeOptions}
+				data={dataAvgGrade}
+			/>			
+		</>
 	)
 }

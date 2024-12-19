@@ -83,7 +83,7 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
                     </select>
                 </label>}
 
-                {!isLoading && selectedYear!="" && grades && <Graphs grades={grades} sYear={parseInt(selectedYear)} />}
+                {!isLoading && selectedYear!="" && grades && <Graphs grades={grades} years={years} sYear={parseInt(selectedYear)} />}
 
             </div>
         </main>
