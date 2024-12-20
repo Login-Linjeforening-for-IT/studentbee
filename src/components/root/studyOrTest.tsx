@@ -282,9 +282,9 @@ function InnerCourseList({courses}: CoursesProps) {
                 <h1 className="text-xl mr-2">Courses</h1>
                 <Link 
                     href='/add/course' 
-                    className="hidden lg:grid text-xl rounded-md mr-2"
+                    className="hidden lg:grid text-xl rounded-md mr-2 bg-light px-2"
                 >
-                    +
+                    Add
                 </Link>
                 <Edit />
             </div>

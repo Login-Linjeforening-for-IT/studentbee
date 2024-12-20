@@ -35,7 +35,7 @@ export async function addCourse(course: Course): Promise<void | string> {
                 },
                 body: JSON.stringify({
                     username: user.username,
-                    course
+                    course: {...course, id: course.id.trim()}
                 }),
             })
         
@@ -85,41 +85,6 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
     }
 
     return 'Please log in to add a card'
-}
-
-// Add grades statistics
-export async function addGrades(courseID: string, year:string, grades: Object) {
-    const user: User | undefined = getItem('user') as User | undefined
-    const token = getItem('token')
-
-    if (user) {
-        try {
-            const response = await fetch(`${BROWSER_API}/grades/${courseID}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    year,
-                    grades
-                })
-            })
-        
-            if (!response.ok) {
-                const data = await response.json()
-                throw Error(data.error)
-            }
-        
-            const result = await response.json()
-            return result
-        } catch (error: unknown) {
-            const err = error as Error
-            return err.message
-        }
-    }   
-    
-    return 'Please log in to add grades'
 }
 
 // Adds a textinput to the course with the given user id

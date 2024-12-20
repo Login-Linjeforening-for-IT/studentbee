@@ -2,93 +2,86 @@
 
 import { useEffect, useState } from "react"
 import { getGrades } from "@/utils/fetch"
-import Graph from "@components/grades/graph"
+import Graphs from "@components/grades/grahp"
+import Slider from "@components/grades/slider"
 import Link from "next/link"
 
 export default function Grades({ params }: { params: { id: string[] } }): JSX.Element {
 
     const course = params.id[0]
-    const [graphType, setGraphType] = useState("grades")
-    const [selectedYear, setSelectedYear] = useState("0")
-    const [years, setYears] = useState([] as string[])
-    const [data, setData] = useState({} as {[key: string]: any})
-    const [grades, setGrades] = useState({})
-    const [isLoading, setIsLoading] = useState(true)
+    const [selectedYear, setSelectedYear] = useState<null | number>(null)
+    const [years, setYears] = useState<number[] | null>(null)
+    const [data, setData] = useState<any | null>(null)
+    const [grades, setGrades] = useState()
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [error, setError] = useState<null | string>(null)
 
     useEffect(() => {
+        setIsLoading(true) 
         async function fetchGrades() {
-            const fetchedGrades = await getGrades(course, 'client') as {[key: string]: any}
-            if(typeof fetchedGrades !== 'string'){
+            const fetchedGrades = await getGrades(course)
+            if (typeof(fetchedGrades) != "string") {
                 setData(fetchedGrades)
-                setGraphType("grades")
-                setYears(Object.keys(fetchedGrades).sort().reverse() as [])
+                setError(null)
+            } else {
+                setError('No grades found')
+                throw new Error('No grades found')
             }
+            setIsLoading(false) 
         }
+        
         fetchGrades()
     }, [course])
 
-
     useEffect(() => {
-        if (years.length == 0) return
-
-        if(selectedYear == "0" || selectedYear == undefined )
-            setSelectedYear(years[0])
-        if(data[selectedYear] != undefined)
-            setGrades(data[selectedYear])      
-    }, [years,selectedYear, data])
-
-
-    useEffect(() => {
-        setIsLoading(true)        
-        if(graphType == "grades" && selectedYear != "0" && selectedYear != undefined){
-                setGrades(data[selectedYear])
-        }else if(graphType == "failRate"){
-            let failRate = {} as {[key: string]: number}
-                
-            years.reverse().forEach((year) => {
-                if(Object.values(data[year]).length == 6){ 
-                    failRate[year] = data[year]["f"]
+        if(data){
+            
+            const availableYears = [];
+            for (let i = 1; i < data.length; i++) {
+                if (availableYears.indexOf(data[i].Årstall) === -1) {
+                    availableYears.push(data[i].Årstall);
                 }
-                if(Object.values(data[year]).length == 2){ 
-                    failRate[year] = data[year]["fail"]
+            }
+            setYears(availableYears.reverse())
+            setSelectedYear(availableYears[0])
+
+            const transformedData = {} as any;
+            for (let i = 0; i < availableYears.length; i++) {
+                const year = availableYears[i];
+    
+                if (!transformedData[year]) {
+                    transformedData[year] = { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0, H: 0 };
                 }
-            })
-            setGrades(failRate)
+    
+                for (let j = 0; j < data.length; j++) {
+                    const item = data[j];
+    
+                    if (item.Årstall === year) {
+                        const grade = item.Karakter;
+                        const totalCandidates = parseInt(item["Antall kandidater totalt"], 10);
+    
+                        if (transformedData[year][grade] !== undefined) {
+                            transformedData[year][grade] += totalCandidates;
+                        }
+                    }
+                }
+            }
+    
+            setGrades(transformedData);
         }
-        setIsLoading(false)
-    }, [graphType])
+    }, [data]);
     
     return (
         <main className="grid place-items-center h-full]">
             <div className="w-full h-full grid place-items-center">
                 <h1 className="grid place-items-center text-4xl font-bold mb-8">Grades - {course}</h1>
-                
-                {Object.keys(grades).length === 0 ? <p>No data available</p> : (<>
-                
-                    <div className="flex flex-row pb-2">
-                        <button className="underline" type="button" onClick={() => {setGraphType("grades"); setIsLoading(true)}}>Grades</button>
-                        <p className="px-4">|</p>
-                        <button className="underline" type="button" onClick={() => {setGraphType("failRate"); setIsLoading(true)}}>Fail rate</button>
-                    </div>
+                { error && <p>{error}</p> }
+                { !error && isLoading && <p>Loading...</p>}
 
-                    {graphType == "grades" && (
-                        <label> Select year: 
-                            <select
-                                className="bg-normal pl-2"
-                                value={selectedYear}
-                                onChange={e => setSelectedYear(e.target.value)}>
-                                {years.map((year) => (
-                                    <option value={year}>{year}</option>
-                                ))}
-                            </select>
-                        </label>
-                    )}
+                {!isLoading && selectedYear && years && grades && <Graphs grades={grades} years={years} sYear={selectedYear} />}
 
-                    {isLoading ? null : <Graph graphType={graphType} grades={grades} />}
-                </>)}
-                <Link href={`../../addGrades/${course}`}>
-                    <button className="mt-2 p-2 w-full bg-orange-500 rounded-xl text-xl h-[5vh] place-items-center"> Add statistics</button>
-                </Link>
+                {!isLoading && selectedYear && years && <Slider years={[...years].reverse()} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>}
+
             </div>
         </main>
     )
