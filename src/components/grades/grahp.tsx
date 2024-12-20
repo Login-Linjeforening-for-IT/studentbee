@@ -40,6 +40,7 @@ type BarGraphProps = {
 type LineGraphProps = {
 	grades: Record<number, GradeProp>
 	years: number[]
+	selectedYear: number
 	failRatioOptions: object
 	avgGradeOptions: object
 }
@@ -53,7 +54,7 @@ export default function Graphs({ grades, years, sYear }: GradesProps) {
 		responsive: true,
 		plugins: {
 			legend: {
-				onClick: function(event, legendItem) {},
+				onClick: function(event:any, legendItem:any) {},
 				labels: {
 					boxWidth: 0,
 				}
@@ -108,7 +109,7 @@ export default function Graphs({ grades, years, sYear }: GradesProps) {
 				...failRatioOptions.scales.y,
 				ticks: {
 					stepSize: 1,
-					callback: function(value) {
+					callback: function(value:number) {
 						const letters = ['F', 'E', 'D', 'C', 'B', 'A'];
 						return letters[value];
 					}
@@ -133,6 +134,7 @@ export default function Graphs({ grades, years, sYear }: GradesProps) {
 			<LineGraph 
 				grades={grades}
 				years={[...years].reverse()}
+				selectedYear={sYear}
 				avgGradeOptions={avgGradeOptions}
 				failRatioOptions={failRatioOptions}
 			/>
@@ -158,7 +160,7 @@ function BarGraph({ grade, totalCandidatesAlp, totalCandidatesBin, options }: Ba
 		labels: ['Pass','Fail'],
 		datasets: [
 		  {
-			label: "",
+			label: 'Grades',
 			data: [Math.round(grade.G/totalCandidatesBin*100),Math.round(grade.H/totalCandidatesBin*100)],
 			backgroundColor: ['rgba(122, 189, 126, 0.5)','rgba(255, 105, 97, 0.5)'],
 		  },
@@ -187,7 +189,7 @@ function BarGraph({ grade, totalCandidatesAlp, totalCandidatesBin, options }: Ba
 	)
 }
 
-function LineGraph({ grades, years, failRatioOptions, avgGradeOptions }: LineGraphProps) {
+function LineGraph({ grades, years, selectedYear, failRatioOptions, avgGradeOptions }: LineGraphProps) {
 
 	let totalCandidates = []
 	for(let i=0; i < years.length; i++){
@@ -219,6 +221,15 @@ function LineGraph({ grades, years, failRatioOptions, avgGradeOptions }: LineGra
 				backgroundColor: 'rgba(255, 105, 97, 1)',
 				spanGaps: true,
 				tension: 0.4,
+				pointRadius: (context:any) => {
+					const label = context.chart.data.labels[context.dataIndex]
+					return label == selectedYear ? 9 : 5
+				},
+				pointBorderColor: (context:any) => {
+					const label = context.chart.data.labels[context.dataIndex]
+					return label == selectedYear ? "#181818" : "rgba(0,0,0,0)"
+				},
+				pointBorderWidth: 3
 			},
 		],
 	}
@@ -233,6 +244,15 @@ function LineGraph({ grades, years, failRatioOptions, avgGradeOptions }: LineGra
 				backgroundColor: 'rgba(240, 134, 64, 1)',
 				spanGaps: true,
 				tension: 0.4,
+				pointRadius: (context:any) => {
+					const label = context.chart.data.labels[context.dataIndex]
+					return label == selectedYear ? 9 : 5
+				},
+				pointBorderColor: (context:any) => {
+					const label = context.chart.data.labels[context.dataIndex]
+					return label == selectedYear ? "#181818" : "rgba(0,0,0,0)"
+				},
+				pointBorderWidth: 3
 			},
 		],
 	} 

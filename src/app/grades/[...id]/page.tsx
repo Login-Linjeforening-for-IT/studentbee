@@ -3,24 +3,28 @@
 import { useEffect, useState } from "react"
 import { getGrades } from "@/utils/fetch"
 import Graphs from "@components/grades/grahp"
+import Slider from "@components/grades/slider"
 import Link from "next/link"
 
 export default function Grades({ params }: { params: { id: string[] } }): JSX.Element {
 
     const course = params.id[0]
-    const [selectedYear, setSelectedYear] = useState<string>("")
-    const [years, setYears] = useState<any[]>([])
-    const [data, setData] = useState<any>(null)
+    const [selectedYear, setSelectedYear] = useState<null | number>(null)
+    const [years, setYears] = useState<number[] | null>(null)
+    const [data, setData] = useState<any | null>(null)
     const [grades, setGrades] = useState()
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [error, setError] = useState<null | string>(null)
 
     useEffect(() => {
         setIsLoading(true) 
         async function fetchGrades() {
             const fetchedGrades = await getGrades(course)
-            if (fetchedGrades) {
+            if (typeof(fetchedGrades) != "string") {
                 setData(fetchedGrades)
+                setError(null)
             } else {
+                setError('No grades found')
                 throw new Error('No grades found')
             }
             setIsLoading(false) 
@@ -30,7 +34,7 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
     }, [course])
 
     useEffect(() => {
-        if(data!=null){
+        if(data){
             
             const availableYears = [];
             for (let i = 1; i < data.length; i++) {
@@ -71,19 +75,12 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
         <main className="grid place-items-center h-full]">
             <div className="w-full h-full grid place-items-center">
                 <h1 className="grid place-items-center text-4xl font-bold mb-8">Grades - {course}</h1>
-            
-                {!isLoading && <label> Select year: 
-                    <select
-                        className="bg-normal pl-2"
-                        value={selectedYear}
-                        onChange={e => setSelectedYear(e.target.value)}>
-                        {years.map((year) => (
-                            <option value={year}>{year}</option>
-                        ))}
-                    </select>
-                </label>}
+                { error && <p>{error}</p> }
+                { !error && isLoading && <p>Loading...</p>}
 
-                {!isLoading && selectedYear!="" && grades && <Graphs grades={grades} years={years} sYear={parseInt(selectedYear)} />}
+                {!isLoading && selectedYear && years && grades && <Graphs grades={grades} years={years} sYear={selectedYear} />}
+
+                {!isLoading && selectedYear && years && <Slider years={[...years].reverse()} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>}
 
             </div>
         </main>

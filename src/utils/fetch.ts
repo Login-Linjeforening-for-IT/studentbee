@@ -95,29 +95,30 @@ export async function getGrades(id: string): Promise<Object | string> {
     
     const courseID = `${id.toUpperCase()}-1`
 
-    const queryBody = {"tabell_id":308,"api_versjon":1,"statuslinje":"J","begrensning":"1000","kodetekst":"J","desimal_separator":".",
-        "groupBy":["Institusjonskode", "Årstall","Emnekode","Karakter",],
+    const queryBody = {"tabell_id":308,"api_versjon":1,"statuslinje":"J","begrensning":"100","kodetekst":"J","desimal_separator":".",
+        "groupBy":["Institusjonskode", "Årstall","Emnekode","Karakter"],
         "sortBy":["Årstall","Karakter"],
         "filter":[
-           {
-              "variabel": "Institusjonskode",
-              "selection": {
-                 "filter": "item",
-                 "values": [
-                    "1150"
-                 ]
-              }
-           },
-           {
-              "variabel": "Emnekode",
-              "selection": {
-                 "filter": "item",
-                 "values": [
-                    courseID
-                 ]
-              }
-           }
-        ]} ;
+            {
+                "variabel": "Emnekode",
+                "selection": {
+                   "filter": "item",
+                   "values": [
+                      courseID
+                   ]
+                }
+            },
+            {
+                "variabel": "Institusjonskode",
+                "selection": {
+                    "filter": "item",
+                    "values": [
+                        "1150"
+                    ]
+                }
+            }
+        ]
+    }
 
     try {
         const response = await fetch('https://dbh-data.dataporten-api.no/Tabeller/hentJSONTabellData', {
