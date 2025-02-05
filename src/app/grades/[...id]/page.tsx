@@ -1,10 +1,11 @@
 'use client'
 
 import { useEffect, useState } from "react"
+import { useRouter } from 'next/navigation'
 import { getGrades } from "@/utils/fetch"
 import Graphs from "@components/grades/grahp"
 import Slider from "@components/grades/slider"
-import Link from "next/link"
+import Search from "@/components/svg/search"
 
 export default function Grades({ params }: { params: { id: string[] } }): JSX.Element {
 
@@ -16,6 +17,9 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [error, setError] = useState<null | string>(null)
 
+    const [input, setInput] = useState<string>(course)  
+    const router = useRouter()
+    
     useEffect(() => {
         setIsLoading(true) 
         async function fetchGrades() {
@@ -74,13 +78,26 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
     return (
         <main className="grid place-items-center h-full]">
             <div className="w-full h-full grid place-items-center">
-                <h1 className="grid place-items-center text-4xl font-bold mb-8">Grades - {course}</h1>
-                { error && <p>{error}</p> }
-                { !error && isLoading && <p>Loading...</p>}
+                <div className='relative flex flex-row items-center w-[15rem] h-[2rem] mb-[2rem]'>
+                    <input 
+                        placeholder='Search' 
+                        value={input} 
+                        onChange={(e)=>setInput(e.target.value)} 
+                        onKeyDown={(e)=>{if(e.key=='Enter')router.push(input)}} 
+                        className='absolute w-full h-full bg-dark rounded-md border-[1px] border-[rgb(44,44,44)] px-2 py-1 focus:outline-none focus:outline-white focus:outline-offset-1 '>
+                    </input>
+                    <button onClick={()=>{router.push(input)}} className='absolute h-[1.5rem] w-[1.5rem] right-1'><Search fill='fill-white' className='w-full h-full'/></button>
+                </div>
 
-                {!isLoading && selectedYear && years && grades && <Graphs grades={grades} years={years} sYear={selectedYear} />}
+                { error && <p className="pt-8">{error}</p> }
+                { !error && isLoading && <p className="pt-8">Loading...</p>}
 
-                {!isLoading && selectedYear && years && <Slider years={[...years].reverse()} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>}
+                {!isLoading && selectedYear && years && grades && 
+                <div className='w-full max-w-[18rem] xs:max-w-[20rem]'>
+                    <Graphs grades={grades} years={years} sYear={selectedYear} />
+                    <Slider years={[...years].reverse()} selectedYear={selectedYear} setSelectedYear={setSelectedYear}/>
+                </div>
+                }
 
             </div>
         </main>

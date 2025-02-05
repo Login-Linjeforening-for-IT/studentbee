@@ -119,7 +119,7 @@ export default function Graphs({ grades, years, sYear }: GradesProps) {
 	}
 	
 	return (
-		<div className='w-[400px]'>
+		<>
     		{ (totalCandidatesAlp !== 0 || totalCandidatesBin !== 0) && (
 
 				<BarGraph 
@@ -139,7 +139,7 @@ export default function Graphs({ grades, years, sYear }: GradesProps) {
 				failRatioOptions={failRatioOptions}
 			/>
 				
-    	</div>	
+    	</>	
 	)
 }
 
