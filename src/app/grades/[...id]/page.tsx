@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, use, type JSX } from "react";
 import { useRouter } from 'next/navigation'
 import { getGrades } from "@/utils/fetch"
 import Graphs from "@components/grades/grahp"
 import Slider from "@components/grades/slider"
 import Search from "@/components/svg/search"
 
-export default function Grades({ params }: { params: { id: string[] } }): JSX.Element {
+export default function Grades(props: { params: Promise<{ id: string[] }> }): JSX.Element {
+    const params = use(props.params);
 
     const course = params.id[0]
     const [selectedYear, setSelectedYear] = useState<null | number>(null)
@@ -17,9 +18,9 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [error, setError] = useState<null | string>(null)
 
-    const [input, setInput] = useState<string>(course)  
+    const [input, setInput] = useState<string>(course)
     const router = useRouter()
-    
+
     useEffect(() => {
         setIsLoading(true) 
         async function fetchGrades() {
@@ -74,7 +75,7 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
             setGrades(transformedData);
         }
     }, [data]);
-    
+
     return (
         <main className="grid place-items-center h-full]">
             <div className="w-full h-full grid place-items-center">
@@ -84,7 +85,7 @@ export default function Grades({ params }: { params: { id: string[] } }): JSX.El
                         value={input} 
                         onChange={(e)=>setInput(e.target.value)} 
                         onKeyDown={(e)=>{if(e.key=='Enter')router.push(input)}} 
-                        className='absolute w-full h-full bg-dark rounded-md border-[1px] border-[rgb(44,44,44)] px-2 py-1 focus:outline-none focus:outline-white focus:outline-offset-1 '>
+                        className='absolute w-full h-full bg-dark rounded-md border-[1px] border-[rgb(44,44,44)] px-2 py-1 focus:outline-hidden focus:outline-white focus:outline-offset-1 '>
                     </input>
                     <button onClick={()=>{router.push(input)}} className='absolute h-[1.5rem] w-[1.5rem] right-1'><Search fill='fill-white' className='w-full h-full'/></button>
                 </div>

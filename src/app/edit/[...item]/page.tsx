@@ -5,14 +5,7 @@ import Trash from "@/components/svg/trash"
 import { getCourse, updateCourse } from "@/utils/fetch"
 import Link from "next/link"
 import Script from "next/script"
-import { 
-    ChangeEvent, 
-    Dispatch, 
-    SetStateAction, 
-    useEffect, 
-    useRef, 
-    useState
-} from "react"
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState, use } from "react";
 
 type AddCardProps = {
     courseID: string
@@ -46,7 +39,8 @@ type HeaderProps = {
     hideText: () => void
 }
 
-export default function Edit({ params }: { params: { item: string[] } }) {
+export default function Edit(props: { params: Promise<{ item: string[] }> }) {
+    const params = use(props.params);
     const [editing, setEditing] = useState<Editing>({ cards: [], texts: [] })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [accepted, setAccepted] = useState<Card[]>([])
@@ -91,7 +85,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
             })
         })
     }, [editing.cards])
-    
+
     function handleSubmit() {
         updateCourse({courseID: item, accepted, editing})
     }
@@ -145,7 +139,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
     function hideText() {
         setShowText(!showText)
     }
- 
+
     return (
         <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
             <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
@@ -163,7 +157,7 @@ export default function Edit({ params }: { params: { item: string[] } }) {
                             {showText && <textarea
                                 value={text}
                                 onChange={handleTextChange}
-                                className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 overflow-auto resize-none whitespace-pre-wrap outline-none caret-orange-500"
+                                className="w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 overflow-auto resize-none whitespace-pre-wrap outline-hidden caret-orange-500"
                             />}
                             <AddCard
                                 courseID={item}
@@ -256,7 +250,7 @@ function AddCard({
         <div className="w-full h-full overflow-auto noscroll p-1">
             <h1 className="flex items-center justify-start text-lg h-[4vh]">Source</h1>
             <input
-                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-none caret-orange-500"
+                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500"
                 value={card.source}
                 type="text"
                 placeholder="Exam or learning material source"
@@ -265,7 +259,7 @@ function AddCard({
             <h1 className="flex items-center justify-start text-lg h-[4vh]">Theme</h1>
             <input
                 ref={inputRef}
-                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-none caret-orange-500"
+                className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500"
                 value={card.theme}
                 type="text"
                 placeholder="Question theme (optional)"
@@ -377,7 +371,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
                         value={card.alternatives[alternativeIndex]} 
                         onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className="min-h-[5vh] w-full bg-light rounded-xl px-2 outline-none overflow-hidden resize-none whitespace-pre-wrap caret-orange-500"
+                        className="min-h-[5vh] w-full bg-light rounded-xl px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500"
                     />
                 </div>
             </div>
@@ -406,7 +400,7 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
             <div>
                 {accepted.map((card: Card, index: number) => {
                     const outline = editCard.question === accepted[index].question
-                        ? 'outline-gray-500' : 'outline-none'
+                        ? 'outline-gray-500' : 'outline-hidden'
 
                     return (
                         <div key={index} className="grid grid-cols-12 gap-2">

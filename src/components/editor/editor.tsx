@@ -27,7 +27,7 @@ type EditorWithoutLogicProps = {
     hideSaveButton?: true
     handleDisplayEditor: () => void
     hideSave: boolean
-    textareaRef: RefObject<HTMLTextAreaElement>
+    textareaRef: RefObject<HTMLTextAreaElement | null>
     edited: boolean
     className?: string
     placeholder?: string
@@ -55,7 +55,7 @@ marked.use({
             return `<a href="${href}" title="${title}" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">${text}</a>`
         },
         codespan(text) {
-            return `<code class="break-all bg-extralight p-0.3 rounded-sm">${text}</code>`
+            return `<code class="break-all bg-extralight p-0.3 rounded-xs">${text}</code>`
         }
     }
 })
@@ -169,7 +169,7 @@ export function EditorWithoutLogic({
                 </div>}
                 <div className={`markdown-editor space-x-2 h-full ${displayEditor && "grid grid-cols-2"}`}>
                     {(displayEditor || !markdown.length) && <textarea
-                        className={`w-full h-full rounded text-white bg-transparent focus:outline-none resize-none overflow-hidden outline-none caret-orange-500 ${placeholderClassName}`}
+                        className={`w-full h-full rounded-sm text-white bg-transparent focus:outline-hidden resize-none overflow-hidden outline-hidden caret-orange-500 ${placeholderClassName}`}
                         value={markdown}
                         onChange={handleMarkdownChange}
                         placeholder={placeholder || "Write your markdown here..."}

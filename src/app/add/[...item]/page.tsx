@@ -2,9 +2,10 @@
 
 import { addCourse } from "@utils/fetchClient"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, use } from "react";
 
-export default function Add({ params }: { params: { item: string[] } }) {
+export default function Add(props: { params: Promise<{ item: string[] }> }) {
+    const params = use(props.params);
     const item = params.item[0].toUpperCase()
 
     if (!item) {
@@ -13,7 +14,7 @@ export default function Add({ params }: { params: { item: string[] } }) {
         )
     }
 
-    return <AddCourse /> 
+    return <AddCourse />
 }
 
 function AddCourse() {
@@ -79,7 +80,7 @@ function AddCourse() {
                         onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())}
                         type="text"
                         placeholder="Course code"
-                        className="bg-light rounded-xl overflow-hidden px-2 col-span-6 outline-none caret-orange-500"
+                        className="bg-light rounded-xl overflow-hidden px-2 col-span-6 outline-hidden caret-orange-500"
                         maxLength={10}
                     />
                 </div>

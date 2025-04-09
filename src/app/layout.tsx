@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { ReactNode, type JSX } from 'react';
 import './globals.css'
 import Navbar from '@components/nav'
 
@@ -10,8 +10,8 @@ export const metadata = {
 export default function RootLayout({children}: {children: ReactNode}): JSX.Element {
 
     return (
-        <html lang="en" className='h-[100vh] w-[100vw]'>
-            <body className='grid grid-rows-12 w-full h-full p-8 noscroll'>
+        <html lang="en" className='h-[100vh] w-[100vw] dark'>
+            <body className='bg-normal grid grid-rows-12 w-full h-full p-8 noscroll'>
                 <nav className='row-span-1 w-full rounded-xl overflow-auto'>
                     <Navbar />
                 </nav>

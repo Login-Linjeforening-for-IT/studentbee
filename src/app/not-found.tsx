@@ -1,6 +1,7 @@
-'use client'
-
+'use client';
 import Line from '../components/line'
+
+import type { JSX } from "react";
 
 // Handles invalid pages
 export default function Custom404 (): JSX.Element {

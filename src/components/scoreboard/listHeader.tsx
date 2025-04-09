@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 export default function ListHeader({userCount}: {userCount: number}): JSX.Element {
 
     if (userCount < 2) return (

@@ -29,7 +29,7 @@ export default function Slider({ years, selectedYear, setSelectedYear }: SliderP
             value={selectedYear??undefined}
             onChange={handleChange}
             step={1}
-            className="w-full h-2 bg-[rgb(60,60,60)] rounded-lg outline-none appearance-none"
+            className="w-full h-2 bg-[rgb(60,60,60)] rounded-lg outline-hidden appearance-none"
         />
         {/* Thumb styling */}
         <style>

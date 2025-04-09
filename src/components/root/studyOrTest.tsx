@@ -144,7 +144,7 @@ function FileListHeader({course, studyable, displayInputField, setDisplayInputFi
             {displayInputField === 'root' && <div className="grid grid-cols-4">
                 <input 
                     ref={inputRef}
-                    className="bg-transparent col-span-3 border-b-2 border-bright text-bright outline-none caret-orange-500" 
+                    className="bg-transparent col-span-3 border-b-2 border-bright text-bright outline-hidden caret-orange-500" 
                     maxLength={20} 
                     type="text" 
                     value={input} 
@@ -261,7 +261,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
             {displayInputField === file.name && <div className="grid grid-cols-4 pl-4">
                 <input 
                     ref={inputRef}
-                    className={'bg-transparent col-span-3 border-b-2 border-bright text-bright outline-none caret-orange-500'} 
+                    className={'bg-transparent col-span-3 border-b-2 border-bright text-bright outline-hidden caret-orange-500'} 
                     maxLength={20} 
                     type="text" 
                     value={input} 

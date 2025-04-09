@@ -11,7 +11,8 @@ type OtherProps = {
 
 // Main component of the program, holds the main page and the user can navigate
 // to different pages from here
-export default async function Profile({ params }: { params: { id: string[] } }) {
+export default async function Profile(props: { params: Promise<{ id: string[] }> }) {
+    const params = await props.params;
     const id = params.id[0]
     const user = await getUser(id)
 

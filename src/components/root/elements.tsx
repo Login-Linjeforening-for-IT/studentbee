@@ -79,7 +79,7 @@ function GetQuestions({cards, current, id}: QuestionsProps) {
             <h1 className="text-xl mb-2">Questions</h1>
             {relevant.map((card, i) => {
                 const index = (current||0) > 3 ? (current||0)-4+i+1 : i+1
-                const outline = current==index-1 ? "outline-gray-500" : "outline-none"
+                const outline = current==index-1 ? "outline-gray-500" : "outline-hidden"
                 return(
                 <button onClick={() => router.push(`/course/${id}/${index}`)} key={card.question} className={`w-full pt-3 pb-3 bg-dark rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2`}>
                     <div className="grid grid-cols-12 w-full">

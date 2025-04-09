@@ -2,6 +2,8 @@ import ListHeader from "./listHeader"
 import ScoreBoardEntry from "./scoreboardEntry"
 import { getScoreBoard } from "@utils/fetch"
 
+import type { JSX } from "react";
+
 export default async function List(): Promise<JSX.Element> {
     const scoreboard = await getScoreBoard()
 
