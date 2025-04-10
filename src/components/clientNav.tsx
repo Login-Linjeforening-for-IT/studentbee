@@ -88,12 +88,9 @@ export function LeftIcon() {
 
 export function RightSide() {
     const [active, setActive] = useState(true)
-    const cols = active ? 'md:grid-cols-3' : 'md:grid-cols-2'
 
     return (
-        <div className={`grid ${cols} justify-between rounded-xl gap-2 min-w-[15vh] grid-cols-3`}>
-            {/* Scoreboard */}
-            <LeftIcon />
+        <div className={`flex justify-end rounded-xl pr-[1rem] gap-2 min-w-[10rem]`}>
             {/* create account */}
             {active && <MiddleIcon setActive={setActive} />}
             {/* login */}
