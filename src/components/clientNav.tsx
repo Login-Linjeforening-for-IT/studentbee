@@ -90,7 +90,7 @@ export function RightSide() {
     const [active, setActive] = useState(true)
 
     return (
-        <div className={`flex justify-end rounded-xl pr-[1rem] gap-2 min-w-[10rem]`}>
+        <div className={`flex justify-end rounded-xl pr-[1rem] gap-2 md:min-w-[10rem]`}>
             {/* create account */}
             {active && <MiddleIcon setActive={setActive} />}
             {/* login */}

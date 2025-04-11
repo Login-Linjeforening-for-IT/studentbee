@@ -23,7 +23,7 @@ export function Burger() {
     }
 
     return (
-        <div className='md:hidden grid place-self-center w-[4vh] h-[4vh] relative' onClick={handleClick}>
+        <div className='lg:hidden grid place-self-center w-[4vh] h-[4vh] relative' onClick={handleClick}>
             <div className='bg-white rounded-xl h-[3px] self-center' />
             <div className='bg-white rounded-xl h-[3px] self-center' />
             <div className='bg-white rounded-xl h-[3px] self-center' />

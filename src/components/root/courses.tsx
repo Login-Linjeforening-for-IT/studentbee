@@ -13,11 +13,14 @@ export default async function CourseList() {
     }
 
     return (
-        <div className='w-full h-full bg-darker overflow-hidden grid grid-rows-12'>
+        <div className='w-full h-full overflow-hidden grid grid-rows-12'>
             <div className="w-full row-span-12 mb-4 pt-4 pb-4 flex flex-col h-full px-4 overflow-hidden">
                 <div className="h-full noscroll">
                     <Header />
                     <StudyOrTest courses={courses} currentPath={path} />
+                </div>
+                <div className='absolute bottom-4'>
+                    <ToolTipsButton />
                 </div>
             </div>
         </div>

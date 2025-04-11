@@ -54,7 +54,12 @@ export default function Edit() {
         <div className="hidden lg:grid">
             {displayCourseSelector && <CourseSelector />}
             <div className="flex flex-rows">
-                <button onClick={handleReview} className="text-base rounded-md pt-[1px] bg-light px-2">Edit</button>
+                <Link 
+                    onClick={handleReview} 
+                    className="text-base rounded-md self-center bg-light px-2"
+                    href={""}>
+                        Edit
+                </Link>
             </div>
             {error && <Error text={error} />}
         </div>

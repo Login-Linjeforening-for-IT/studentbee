@@ -18,7 +18,7 @@ export default async function Course(props: { params: Promise<{ id: string[] }> 
 
     return (
         <div className='grid grid-cols-10 gap-8 w-full h-full max-h-full'>
-            <div className='hidden lg:grid col-span-3 sm:col-span-2 w-[12.5rem] xl:w-[15.5rem] max-h-[calc(100vh-var(--h-navbar))]'>
+            <div className='hidden bg-darker lg:grid col-span-3 sm:col-span-2 w-[12.5rem] xl:w-[15.5rem] max-h-[calc(100vh-var(--h-navbar))]'>
                 <CourseList />
             </div>
             <div className='col-span-10 lg:col-span-8 max-h-full overflow-auto p-[1rem]'>

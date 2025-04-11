@@ -278,20 +278,20 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
 
 function InnerCourseList({courses, currentPath}: CoursesProps) {
     return (
-        <div className="flex flex-col h-full min-h-0 pb-[4rem]">
-            <div className="shrink-0">
+        <div className="flex flex-col h-full min-h-0 pb-[6rem]">
+            <div className="shrink-0 border-b-2 border-light">
                 <div className="flex flex-cols mb-2">
                     <h1 className="text-xl mr-2">Courses</h1>
                     <Link 
                         href='/add/course' 
-                        className="hidden lg:grid text-base self-center rounded-md mr-2 bg-light px-2"
+                        className="hidden rounded-md lg:grid text-base self-center mr-2 bg-light px-2"
                     >
                         Add
                     </Link>
                     <Edit />
                 </div>
             </div>
-            <div className="overflow-auto grow pr-1 space-y-1 bg-normal noscroll rounded-lg">
+            <div className="overflow-auto grow space-y-1 noscroll">
             {courses.map(course =>
                 <Course key={course.id} course={course} currentPath={currentPath} /> 
             )}
@@ -305,7 +305,7 @@ function Course({course, currentPath}: CourseProps) {
     return (
         <Link 
             href={`/course/${course.id}`} 
-            className={`flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] hover:pl-[1.5rem] duration-[500ms] transition-[padding] ${currentCourse === course.id ? '*:fill-login text-login pl-[1.2rem] bg-normal border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
+            className={`flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] hover:pl-[1.5rem] duration-[500ms] transition-[padding] ${currentCourse === course.id ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
         >
             <h1>{course.id}</h1>
         </Link>
