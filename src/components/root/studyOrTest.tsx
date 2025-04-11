@@ -291,7 +291,7 @@ function InnerCourseList({courses, currentPath}: CoursesProps) {
                     <Edit />
                 </div>
             </div>
-            <div className="overflow-auto grow space-y-1 noscroll">
+            <div className="pt-[0.5rem] overflow-auto grow noscroll">
             {courses.map(course =>
                 <Course key={course.id} course={course} currentPath={currentPath} /> 
             )}

@@ -19,7 +19,7 @@ export default async function CourseList() {
                     <Header />
                     <StudyOrTest courses={courses} currentPath={path} />
                 </div>
-                <div className='absolute bottom-4'>
+                <div className='absolute bottom-[1rem]'>
                     <ToolTipsButton />
                 </div>
             </div>
