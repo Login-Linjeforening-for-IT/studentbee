@@ -85,7 +85,7 @@ export default function Grades(props: { params: Promise<{ id: string[] }> }): JS
                         value={input} 
                         onChange={(e)=>setInput(e.target.value)} 
                         onKeyDown={(e)=>{if(e.key=='Enter')router.push(input)}} 
-                        className='absolute w-full h-full bg-dark rounded-md border-[1px] border-[rgb(44,44,44)] px-2 py-1 focus:outline-hidden focus:outline-white focus:outline-offset-1 '>
+                        className='absolute w-full h-full bg-darker rounded-md border-[1px] border-[rgb(44,44,44)] px-2 py-1 focus:outline-hidden focus:outline-white focus:outline-offset-1 '>
                     </input>
                     <button onClick={()=>{router.push(input)}} className='absolute h-[1.5rem] w-[1.5rem] right-1'><Search fill='fill-white' className='w-full h-full'/></button>
                 </div>

@@ -15,7 +15,7 @@ export default function RootLayout({children}: {children: ReactNode}): JSX.Eleme
                 <nav className='row-span-1 w-full h-[var(--h-navbar)]'>
                     <Navbar />
                 </nav>
-                <main className='row-span-11 w-full rounded-xl p-[2rem] max-h-[calc(100vh-var(--h-navbar))]'>
+                <main className='row-span-11 w-full rounded-xl max-h-[calc(100vh-var(--h-navbar))]'>
                     {children}
                 </main>
             </body>

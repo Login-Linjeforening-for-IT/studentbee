@@ -38,7 +38,7 @@ export default function Elements({id, current, course}: ElementsProps) {
     function Help() {
         if (help) {
             return (
-                <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto noscroll">
+                <div className="w-full h-full bg-darker rounded-xl p-4 overflow-auto noscroll">
                     <h1 className="text-xl">Info</h1>
                     <div className="h-full w-full">
                         {help}
@@ -52,11 +52,6 @@ export default function Elements({id, current, course}: ElementsProps) {
 
     return (
         <div className='hidden xl:inline-flex flex-col w-full rounded-xl col-span-2 overflow-hidden'>
-            <Link 
-                href={`../../grades/${id}`}
-                className={`bg-dark h-8 rounded-lg p-2 mb-2 flex items-center justify-center text-lg`}>
-                Exam statistics
-            </Link>
             <Help />
             <div className="w-full h-full rounded-xl overflow-auto noscroll">
                 <GetQuestions cards={cards} current={current} id={id} />
@@ -81,7 +76,7 @@ function GetQuestions({cards, current, id}: QuestionsProps) {
                 const index = (current||0) > 3 ? (current||0)-4+i+1 : i+1
                 const outline = current==index-1 ? "outline-gray-500" : "outline-hidden"
                 return(
-                <button onClick={() => router.push(`/course/${id}/${index}`)} key={card.question} className={`w-full pt-3 pb-3 bg-dark rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2`}>
+                <button onClick={() => router.push(`/course/${id}/${index}`)} key={card.question} className={`w-full pt-3 pb-3 bg-darker rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2`}>
                     <div className="grid grid-cols-12 w-full">
                         <h1 className="text-sm text-left w-full col-span-11">{card.question.slice(0, 20)}{card.question.length > 20 && '...'}</h1>
                         <h1 className="text-bright text-right w-full">{index}</h1>

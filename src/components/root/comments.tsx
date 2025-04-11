@@ -106,7 +106,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
     }
 
     return (
-        <div className="w-full h-full bg-dark absolute left-0 mt-[86vh] grid grid-cols-10 p-8">
+        <div className="w-full h-full bg-darker absolute left-0 mt-[86vh] grid grid-cols-10 p-8">
             {/* not sure what to use this space for */}
             <div className="col-span-2" />
             <div className="w-full col-span-6 overflow-auto noscroll px-1">

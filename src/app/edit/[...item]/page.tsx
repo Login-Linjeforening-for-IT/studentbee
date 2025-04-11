@@ -143,7 +143,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     return (
         <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
             <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
-                <div className={`w-full h-full bg-dark col-span-3 rounded-xl flex flex-col`}>
+                <div className={`w-full h-full bg-darker col-span-3 rounded-xl flex flex-col`}>
                     <Header
                         clearCard={clearCard} 
                         editing={editing}
@@ -181,7 +181,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                 <Link
                     href={`/`}
                     onClick={handleSubmit}
-                    className="h-full rounded-xl bg-dark px-8 text-xl grid place-items-center"
+                    className="h-full rounded-xl bg-darker px-8 text-xl grid place-items-center"
                 >
                     Publish changes
                 </Link>
@@ -392,7 +392,7 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
     }
     
     return (
-        <div className="w-full h-full bg-dark rounded-xl p-4 overflow-auto noscroll">
+        <div className="w-full h-full bg-darker rounded-xl p-4 overflow-auto noscroll">
             <div className="grid grid-cols-12">
                 <h1 className="text-xl mb-4 grid grid-row col-span-11">Accepted</h1>
                 <h1 className="text-bright">({accepted.length})</h1>

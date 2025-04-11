@@ -61,10 +61,10 @@ function AddCourse() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            <div className="bg-dark w-[35vw] rounded-xl grid place-items-center gap-4 p-5 px-10 max-h-[75vh] overflow-auto">
+            <div className="bg-darker w-[35vw] rounded-xl grid place-items-center gap-4 p-5 px-10 max-h-[75vh] overflow-auto">
                 <div className="grid grid-cols-12 w-full">
                     {selected != 0 ? <button 
-                        className="text-xl bg-dark rounded-md px-2" 
+                        className="text-xl bg-darker rounded-md px-2" 
                         onClick={handleBack}
                     >
                         ⬅️

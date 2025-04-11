@@ -20,7 +20,7 @@ export default function ListHeader({userCount}: {userCount: number}): JSX.Elemen
 
 function HeaderItem({className}: {className: string}) {
     return (
-        <div className={`grid bg-dark mb-4 pt-2 pb-2 grid-cols-4 place-items-center rounded-xl ${className} font-semibold`}>
+        <div className={`grid bg-darker mb-4 pt-2 pb-2 grid-cols-4 place-items-center rounded-xl ${className} font-semibold`}>
             <h1>Place</h1>
             <h1>User</h1>
             <h1>Time</h1>

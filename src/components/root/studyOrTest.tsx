@@ -11,6 +11,7 @@ import Trash from "../svg/trash"
 
 type CoursesProps = {
     courses: CourseAsList[]
+    currentPath: string
 }
 
 type FileProps = {
@@ -54,9 +55,9 @@ export default function StudyOrTest({courses}: CoursesProps) {
     }, [path])
 
     return (
-        <div className="w-full">
+        <div className="h-full">
             {study && <Files studyable={cardCount > 0} />}
-            {!study && <InnerCourseList courses={courses} />}
+            {!study && <InnerCourseList courses={courses} currentPath={path} />}
         </div>
     )
 }
@@ -275,31 +276,36 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
     )
 }
 
-function InnerCourseList({courses}: CoursesProps) {
+function InnerCourseList({courses, currentPath}: CoursesProps) {
     return (
-        <>
-            <div className="flex flex-cols mb-2">
-                <h1 className="text-xl mr-2">Courses</h1>
-                <Link 
-                    href='/add/course' 
-                    className="hidden lg:grid text-xl rounded-md mr-2 bg-light px-2"
-                >
-                    Add
-                </Link>
-                <Edit />
+        <div className="flex flex-col h-full min-h-0 pb-[4rem]">
+            <div className="shrink-0">
+                <div className="flex flex-cols mb-2">
+                    <h1 className="text-xl mr-2">Courses</h1>
+                    <Link 
+                        href='/add/course' 
+                        className="hidden lg:grid text-base self-center rounded-md mr-2 bg-light px-2"
+                    >
+                        Add
+                    </Link>
+                    <Edit />
+                </div>
             </div>
+            <div className="overflow-auto grow pr-1 space-y-1 bg-normal noscroll rounded-lg">
             {courses.map(course =>
-                <Course key={course.id} course={course} /> 
+                <Course key={course.id} course={course} currentPath={currentPath} /> 
             )}
-        </>
+            </div>
+        </div>
     )
 }
 
-function Course({course}: CourseProps) {
+function Course({course, currentPath}: CourseProps) {
+    const currentCourse = currentPath.includes("/course/") ? currentPath.split("/course/")[1].split("/")[0] : ''
     return (
         <Link 
             href={`/course/${course.id}`} 
-            className={`w-full bg-light mb-2 rounded-xl flex items-center pl-4 pt-2 pb-2`}
+            className={`flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] hover:pl-[1.5rem] duration-[500ms] transition-[padding] ${currentCourse === course.id ? '*:fill-login text-login pl-[1.2rem] bg-normal border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
         >
             <h1>{course.id}</h1>
         </Link>

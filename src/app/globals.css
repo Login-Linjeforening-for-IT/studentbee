@@ -3,6 +3,7 @@
 
 @theme {
     --color-dark: red;
+    --color-darker: red;
     --color-normal: red;
     --color-light: red;
     --color-extralight: red;
@@ -32,7 +33,7 @@
 
 :root {
     --w-sidebar:  13rem;
-    --h-navbar:   2.8rem;
+    --h-navbar:   3rem;
     --h-pageInfo: 5rem;
     transition: background 0.4s, color 0.4s;
 }
@@ -40,7 +41,8 @@
 .dark {
     --background: #0a0a0a;
     --foreground: #ededed;
-    --color-dark: #121212;
+    --color-dark: #0a0a0a;
+	--color-darker: #121212;
     --color-normal: #171717;
     --color-light: #212121;
     --color-extralight: #323232;
@@ -54,7 +56,7 @@
     --background: #ffffff;
     --foreground: #171717;
     --color-dark: #e7e5dd;
-    --color-sidebar: #d6d6d6;
+    --color-darker: #d6d6d6;
     --color-normal: #fafdf3;
     --color-light: #f0efe0;
     --color-extralight: #d6d6d6;

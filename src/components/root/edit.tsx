@@ -28,7 +28,7 @@ export default function Edit() {
     function CourseSelector() {
         return (
             <div className="w-full h-full absolute left-0 top-0 grid place-items-center bg-black bg-opacity-90" onClick={() => setDisplayCourseSelector(false)}>
-                <div className="w-[35vw] h-[45vh] bg-dark rounded-xl p-8 overflow-auto noscroll">
+                <div className="w-[35vw] h-[45vh] bg-darker rounded-xl p-8 overflow-auto noscroll">
                     <h1 className="text-xl text-center font-semibold mb-4">Edit course</h1>
                     <div className="w-full grid space-y-2">
                         {courses.map((course) => (
@@ -54,7 +54,7 @@ export default function Edit() {
         <div className="hidden lg:grid">
             {displayCourseSelector && <CourseSelector />}
             <div className="flex flex-rows">
-                <button onClick={handleReview} className="text-md rounded-md pt-[1px] bg-light px-2">Edit</button>
+                <button onClick={handleReview} className="text-base rounded-md pt-[1px] bg-light px-2">Edit</button>
             </div>
             {error && <Error text={error} />}
         </div>
@@ -69,7 +69,7 @@ function Error({text}: { text: string }) {
     }
 
     return (
-        <div className="absolute bg-dark bottom-8 right-8 min-h-50 p-4 max-w-[17.6vw] rounded-xl max-h-[19.5vh] overflow-auto">
+        <div className="absolute bg-darker bottom-8 right-8 min-h-50 p-4 max-w-[17.6vw] rounded-xl max-h-[19.5vh] overflow-auto">
             <h1 className="text-red-500">{text}</h1>
         </div>
     )

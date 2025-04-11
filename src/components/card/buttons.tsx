@@ -10,13 +10,13 @@ export default function Buttons({animateAnswer, navigate, flashColor}: ButtonsPr
     return (
         <div className="w-full rounded-xl grid grid-cols-3 gap-8">
             <button 
-                className={`${button} ${animateAnswer === 'back' ? "bg-light" : "bg-dark"}`}
+                className={`${button} ${animateAnswer === 'back' ? "bg-light" : "bg-darker"}`}
                 onClick={() => navigate('back')}
             >
                 back
             </button>
             <button 
-                className={`${button} ${animateAnswer === 'skip' ? "bg-light" : "bg-dark"}`}
+                className={`${button} ${animateAnswer === 'skip' ? "bg-light" : "bg-darker"}`}
                 onClick={() => navigate('skip')}
             >
                 skip

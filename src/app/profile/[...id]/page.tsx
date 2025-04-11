@@ -21,7 +21,7 @@ export default async function Profile(props: { params: Promise<{ id: string[] }>
             <div className='col-span-2'>
                 <CourseList />
             </div>
-            <div className='w-full h-full grid place-items-center bg-dark rounded-xl col-span-8'>
+            <div className='w-full h-full grid place-items-center bg-darker rounded-xl col-span-8'>
                 {typeof user === 'object' && id === user.username ? <Self user={user} /> : <Other id={id} user={user} />}
             </div>
         </div>

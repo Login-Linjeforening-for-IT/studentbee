@@ -58,7 +58,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         ? "bg-red-800" 
         : animate === "correct" 
             ? "bg-green-500" 
-            : "bg-dark"
+            : "bg-darker"
 
 
     function markCourse() {
@@ -103,7 +103,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 <div className="grid place-items-center">
                     <h1 className="text-xl text-center mb-2">Course {course.id} has no content yet.</h1>
                     <Link
-                        className="bg-dark rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-orange-500"
+                        className="bg-darker rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-orange-500"
                         href={`/edit/${course.id}`}
                     >
                         Edit course

@@ -1,5 +1,6 @@
 type CourseProps = {
     course: CourseAsList
+    currentPath: string
 }
 
 type Editing = {

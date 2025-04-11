@@ -9,12 +9,12 @@ import ArrowOutward from '@components/svg/arrowOutward'
 // Displays the header
 export default function Navbar() {
     return (
-        <div className='flex justify-between bg-dark h-full w-full md:px-[2rem] gap-4 overflow-hidden'>
+        <div className='flex justify-between bg-dark h-full w-full md:px-[1rem] gap-4 overflow-hidden'>
             <Sidebar />
             <ToolTips />
             {/* logo */}
-            <div className='relative h-[var(--h-navbar)] w-[10rem] md:p-0'>
-                <Link href='/' className='relative block h-[var(--h-navbar)] w-[var(--h-navbar)]'>
+            <div className='flex items-center h-[3rem] w-[10rem] md:p-0'>
+                <Link href='/' className='relative block h-[2.5rem] w-[2.5rem]'>
                     <Image 
                         src={'/images/logo/logo.svg'}
                         className='object-cover'
