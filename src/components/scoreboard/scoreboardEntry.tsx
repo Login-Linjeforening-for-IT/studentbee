@@ -16,7 +16,7 @@ export default function ScoreBoardEntry({user, index}: ScoreBoardEntryProps): JS
     const backgroundColor = backgroundColors[index] || ((index >= 4 && index <= 10) ? 'bg-[#152238]' : 'bg-light')
 
     return (
-        <div className={`grid grid-cols-4 place-items-center ${backgroundColor} pt-2 pb-2 mb-4 ${index < 4 ? 'font-semibold text-white':''} ${index % 2 === 0 ? 'md:mr-4' : 'md:ml-4'} rounded-xl`}>
+        <div className={`grid grid-cols-4 place-items-center ${backgroundColor} pt-2 pb-2 mb-2 ${index < 4 ? 'font-semibold text-white':''} ${index % 2 === 0 ? 'md:mr-2' : 'md:ml-2'} rounded-xl`}>
             <h1>{index + 1}</h1>
             <h1>{user.name}</h1>
             <h1>{user.time}</h1>

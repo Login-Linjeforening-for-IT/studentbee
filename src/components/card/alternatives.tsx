@@ -82,10 +82,10 @@ export default function Alternatives({
                             : setSelected([...selected, originalIndex])
                         : setSelected([originalIndex]); setAttempted(prev => [...prev, originalIndex])
                     }}
-                    className={`${getColor(index)} rounded-xl text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
+                    className={`${getColor(index)} rounded-lg text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
                 >
                     <h1 
-                        className="h-full pr-2 text-md grid place-items-center text-bright"
+                        className="h-full pr-2 text-md grid place-items-center text-almostbright"
                     >
                         {index + 1}
                     </h1>

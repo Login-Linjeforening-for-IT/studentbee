@@ -13,8 +13,8 @@ export default function Self({user}: UserProps) {
     }
 
     return (
-        <div className='w-full h-full p-4'>
-            <h1 className='text-2xl mb-4'>Good afternoon, {user.name}!</h1>
+        <div className='w-full h-full p-2'>
+            <h1 className='text-2xl mb-2'>Good afternoon, {user.name}!</h1>
             <div className='max-w-[15vw]'>
                 <div className='grid grid-cols-2'>
                     <h1 className='text-xl'>Email</h1>

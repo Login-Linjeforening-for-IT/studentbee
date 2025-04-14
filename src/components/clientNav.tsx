@@ -7,6 +7,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Dispatch, SetStateAction, useEffect, useState } from "react"
 import { Burger } from "./sidebar"
+import ThemeSwitch from "./theme/themeSwitch"
 
 type MiddleIconProps = {
     setActive: Dispatch<SetStateAction<boolean>>
@@ -90,11 +91,12 @@ export function RightSide() {
     const [active, setActive] = useState(true)
 
     return (
-        <div className={`flex justify-end rounded-xl pr-[1rem] gap-2 md:min-w-[10rem]`}>
+        <div className={`flex justify-end rounded-xl gap-2 md:min-w-[10rem]`}>
             {/* create account */}
             {active && <MiddleIcon setActive={setActive} />}
             {/* login */}
             <RightIcon />
+            <ThemeSwitch />
             <Burger />
         </div>
     )

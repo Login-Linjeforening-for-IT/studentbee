@@ -101,16 +101,16 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         return (
             <div className="w-full h-full col-span-6 grid place-items-center">
                 <div className="grid place-items-center">
-                    <h1 className="text-xl text-center mb-2">Course {course.id} has no content yet.</h1>
+                    <h1 className="text-lg text-center mb-2">Course {course.id} has no content yet.</h1>
                     <Link
-                        className="bg-darker rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-orange-500"
+                        className="bg-darker rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-login"
                         href={`/edit/${course.id}`}
                     >
                         Edit course
                     </Link>
-                    <h1 className="text-xl text-center mb-2">Mark course as learning based (no multiple choice)</h1>
+                    <h1 className="text-lg text-center mb-2">Mark course as learning based (no multiple choice)</h1>
                     <button 
-                        className="bg-orange-500 rounded-xl px-2 h-[4vh] w-[10vw]"
+                        className="bg-login rounded-xl px-2 h-[4vh] w-[10vw]"
                         onClick={markCourse}
                     >
                         Mark
@@ -159,7 +159,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     return (
-        <div className="w-full h-full max-h-full grid grid-rows-10 gap-8 col-span-6 overflow-hidden">
+        <div className="w-full h-full max-h-[87vh] flex flex-col gap-2 col-span-6">
             {id && <Question
                 card={card} 
                 cards={cards} 

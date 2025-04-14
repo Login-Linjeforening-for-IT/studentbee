@@ -55,25 +55,25 @@ export default function Question({
     shuffledAlternatives
 }: QuestionProps) {
     return (
-        <div className={`w-full h-full row-span-9 bg-darker rounded-xl p-8 pb-10`}>
+        <div className={`w-full h-full min-h-[87vh] bg-darker rounded-xl pt-1 px-2 pb-2 pb-9`}>
             <div className="w-full h-full overflow-auto mb-2 noscroll">
-                    <h1 className="text-right text-bright float-right">
-                        {card.source} {(current || 0) + 1} / {cards.length}
-                    </h1>
-                    <div className={`text-md mb-4`}>
-                        {card.correct.length > 1 && <h1 className="text-bright">
-                            Multiple choice - Select all correct answers
-                        </h1>}
-                        {card.theme && <h1 className="text-bright">
-                            {card.theme}
-                        </h1>}
-                        
-                        <Markdown
-                            displayEditor={false} 
-                            handleDisplayEditor={() => {}} 
-                            markdown={card.question} 
-                        />
-                    </div>
+                <h1 className="text-right text-almostbright float-right">
+                    {card.source} {(current || 0) + 1} / {cards.length}
+                </h1>
+                <div className="mb-2">
+                    {card.correct.length > 1 && <h1 className="text-almostbright">
+                        Multiple choice - Select all correct answers
+                    </h1>}
+                    {card.theme && <h1 className="text-almostbright">
+                        {card.theme}
+                    </h1>}
+                    
+                    <Markdown
+                        displayEditor={false} 
+                        handleDisplayEditor={() => {}} 
+                        markdown={card.question} 
+                    />
+                </div>
                 <Alternatives
                     selected={selected}
                     animateAnswer={animateAnswer} 

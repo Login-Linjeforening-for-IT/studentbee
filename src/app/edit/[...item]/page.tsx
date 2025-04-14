@@ -141,8 +141,8 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     }
 
     return (
-        <div className="w-full h-full rounded-xl gap-4 grid grid-rows-12">
-            <div className="w-full h-full grid grid-cols-4 gap-8 row-span-11">
+        <div className="w-full h-full rounded-xl gap-2 flex flex-col">
+            <div className="w-full h-full grid grid-cols-4 gap-2 min-h-[87vh]">
                 <div className={`w-full h-full bg-darker col-span-3 rounded-xl flex flex-col`}>
                     <Header
                         clearCard={clearCard} 
@@ -152,8 +152,8 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                         text={text}
                         setText={setText}
                     />
-                    <div className="w-full h-[68vh] px-4">
-                        <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-4' : ''}`}>
+                    <div className="w-full h-[68vh] px-2">
+                        <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-2' : ''}`}>
                             {showText && <textarea
                                 value={text}
                                 onChange={handleTextChange}
@@ -181,7 +181,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                 <Link
                     href={`/`}
                     onClick={handleSubmit}
-                    className="h-full rounded-xl bg-darker px-8 text-xl grid place-items-center"
+                    className="h-full rounded-xl bg-login px-8 font-bold grid place-items-center"
                 >
                     Publish changes
                 </Link>
@@ -247,7 +247,7 @@ function AddCard({
     }
 
     return (
-        <div className="w-full h-full overflow-auto noscroll p-1">
+        <div className="w-full h-full overflow-auto noscroll">
             <h1 className="flex items-center justify-start text-lg h-[4vh]">Source</h1>
             <input
                 className="bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500"
@@ -322,7 +322,7 @@ function AddCard({
                 setAlternativeIndex={setAlternativeIndex}
             />
             <button 
-                className="w-full h-[4vh] text-lg place-self-center bg-orange-500 rounded-xl mt-2"
+                className="w-full h-[4vh] text-lg place-self-center bg-login rounded-xl mt-2"
                 onClick={handleSubmit}
             >Add card</button>
         </div>
@@ -376,7 +376,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
                 </div>
             </div>
             {alternativeIndex < 9 && <button 
-                className="w-full h-[4vh] bg-orange-500 rounded-lg text-xl"
+                className="w-full h-[4vh] bg-login rounded-lg text-xl"
                 onClick={handleAddAlternative}
             >Add alternative</button>}
         </div>
@@ -392,10 +392,10 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
     }
     
     return (
-        <div className="w-full h-full bg-darker rounded-xl p-4 overflow-auto noscroll">
+        <div className="w-full h-full bg-darker rounded-xl p-2 overflow-auto noscroll">
             <div className="grid grid-cols-12">
-                <h1 className="text-xl mb-4 grid grid-row col-span-11">Accepted</h1>
-                <h1 className="text-bright">({accepted.length})</h1>
+                <h1 className="text-xl mb-2 grid grid-row col-span-11">Accepted</h1>
+                <h1 className="text-almostbright">({accepted.length})</h1>
             </div>
             <div>
                 {accepted.map((card: Card, index: number) => {
@@ -410,9 +410,9 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
                                 className={`w-full outline outline-1 ${outline} hover:outline-white bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
                             >
                                 <div className="grid grid-cols-12 w-full">
-                                    <h1 className="w-full text-bright">{index + 1}</h1>
+                                    <h1 className="w-full text-almostbright">{index + 1}</h1>
                                     <h1 className="w-full col-span-10">{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
-                                    <h1 className="text-bright text-right w-full">{card.alternatives.length}</h1>
+                                    <h1 className="text-almostbright text-right w-full">{card.alternatives.length}</h1>
                                 </div>
                             </button>
                             <button className="flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw]" onClick={() => handleRemove(index)}>
@@ -475,7 +475,7 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
     }
   
     return (
-      <div className="w-full p-4 flex flex-rows justify-between">
+      <div className="w-full p-2 flex flex-rows justify-between">
             <Script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js" />
             <h1 className="text-xl">Editing course</h1>
             <div className="space-x-2">

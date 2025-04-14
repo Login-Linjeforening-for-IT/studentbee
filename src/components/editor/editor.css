@@ -22,3 +22,12 @@
     font-size: 1em;
     font-weight: bold;
 }
+
+.light .hljs {
+    background-color: #f0efe0;
+    color: black;
+}
+
+.dark .hljs {
+    background-color: #0d1117;
+}

@@ -39,9 +39,9 @@ export default function QuestionFooter({
         : "Reveal"
 
     return (
-        <div className="grid grid-cols-3 ">
-            <div className="flex flex-rows space-x-2 mb-4">
-                <h1 className="text-bright">
+        <div className="grid grid-cols-3">
+            <div className="flex flex-rows space-x-2 mb-2">
+                <h1 className="text-almostbright">
                     {card.rating + clientVote > 0 ? '+' : ''}
                     {card.rating + clientVote}
                 </h1>
@@ -59,7 +59,7 @@ export default function QuestionFooter({
                 </button>
             </div>
             <button 
-                className="pb-4 text-bright flex items-center justify-center w-full" 
+                className="pb-2 text-almostbright flex items-center justify-center w-full" 
                 onClick={() => setShowComments(!showComments)}
             >
                 <h1 className="hidden xs:hidden sm:block mr-2">
@@ -78,7 +78,7 @@ export default function QuestionFooter({
             </button>
             <div>
                 <button 
-                    className="w-full text-end text-bright" 
+                    className="w-full text-end text-almostbright" 
                     onClick={showAnswers}
                 >
                     {revealText}

@@ -1,14 +1,14 @@
-import { MutableRefObject } from "react"
+import { RefObject } from "react"
 import { updateUserTime } from "./fetch"
 
 type FocusCheckProps = {
-    startFocusTime: MutableRefObject<Date | undefined>
-    lastUserInteraction: MutableRefObject<Date | undefined>
+    startFocusTime: RefObject<Date | undefined>
+    lastUserInteraction: RefObject<Date | undefined>
 }
 
 type WindowFocusedProps = {
-    lastUserInteraction: MutableRefObject<Date | undefined>
-    startFocusTime: MutableRefObject<Date | undefined>
+    lastUserInteraction: RefObject<Date | undefined>
+    startFocusTime: RefObject<Date | undefined>
 }
 
 // Check if the user has been inactive for more than 4.5 minutes
@@ -30,7 +30,7 @@ export function windowFocused({lastUserInteraction, startFocusTime}: WindowFocus
 }
 
 // Handler for window unfocus event to update time spent on the page
-export function windowUnfocused(startFocusTime: MutableRefObject<Date | undefined>) {
+export function windowUnfocused(startFocusTime: RefObject<Date | undefined>) {
     if (startFocusTime.current != undefined) {
         let stopFocusTime = new Date()
         let time = stopFocusTime.getTime() - startFocusTime.current.getTime()

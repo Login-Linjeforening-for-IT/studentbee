@@ -101,7 +101,7 @@ type Files = {
 type FileListProps = {
     files: Files[]
     path: string
-    inputRef: MutableRefObject<HTMLInputElement | null>
+    inputRef: RefObject<HTMLInputElement | null>
 }
 
 type ClientVote = {

@@ -164,8 +164,8 @@ export function EditorWithoutLogic({
         >
             <div className="">
                 {displayEditor && <div className="grid grid-cols-2">
-                    <h1 className="text-lg text-bright">Markdown</h1>
-                    <h1 className="text-lg pl-4 text-bright">Preview</h1>
+                    <h1 className="text-lg text-almostbright">Markdown</h1>
+                    <h1 className="text-lg pl-2 text-almostbright">Preview</h1>
                 </div>}
                 <div className={`markdown-editor space-x-2 h-full ${displayEditor && "grid grid-cols-2"}`}>
                     {(displayEditor || !markdown.length) && <textarea
@@ -184,7 +184,7 @@ export function EditorWithoutLogic({
             </div>
             {edited && !hideSave && !hideSaveButton && <div className="mt-2">
                 <button 
-                    className="text-md bg-orange-500 px-8 rounded-xl h-[4vh]" 
+                    className="text-md bg-login px-8 rounded-xl h-[4vh]" 
                     onClick={handleSave}
                 >
                     Save
@@ -202,7 +202,7 @@ export function Markdown({
 }: MarkdownProps) {
     return (
         <div
-            className={`markdown-preview ${displayEditor && "pl-2 border-l-2 border-orange-500"} text-white h-full break-words ${className}`}
+            className={`markdown-preview ${displayEditor && "pl-2 border-l-2 border-orange-500"} text-foreground h-full break-words ${className}`}
             onClick={handleDisplayEditor}
             dangerouslySetInnerHTML={{ __html: marked(markdown) }}
         />

@@ -36,7 +36,7 @@ function AddCourse() {
     const [course, setCourse] = useState<Course>(emptyCourse)
     const [selected, setSelected] = useState(0)
     const courseIDspan = selected === 0 ? "col-span-12" : "col-span-10"
-    const inputText = "text-xl flex items-center justify-start col-span-2"
+    const inputText = "text-lg flex items-center justify-start col-span-2"
     const navigate = error.length 
         ? '/add/course/' 
         : course.id.length 
@@ -61,15 +61,15 @@ function AddCourse() {
 
     return (
         <div className="w-full h-full grid place-items-center">
-            <div className="bg-darker w-[35vw] rounded-xl grid place-items-center gap-4 p-5 px-10 max-h-[75vh] overflow-auto">
+            <div className="bg-darker w-[32vw] rounded-xl grid place-items-center gap-3 p-5 max-h-[75vh] overflow-auto">
                 <div className="grid grid-cols-12 w-full">
                     {selected != 0 ? <button 
-                        className="text-xl bg-darker rounded-md px-2" 
+                        className="bg-darker rounded-md px-2" 
                         onClick={handleBack}
                     >
                         ⬅️
                     </button> : null}
-                    <h1 className={`text-3xl font-semibold ${courseIDspan} text-center`}>Add course</h1>
+                    <h1 className={`text-lg font-semibold ${courseIDspan} text-center`}>Add course</h1>
                     <h1 className={`text-md text-red-500 ${courseIDspan} text-center`}>{error}</h1>
                     {selected != 0 ? <div/> : null}
                 </div>
@@ -79,14 +79,14 @@ function AddCourse() {
                         value={course.id} 
                         onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())}
                         type="text"
-                        placeholder="Course code"
+                        placeholder="Course ID"
                         className="bg-light rounded-xl overflow-hidden px-2 col-span-6 outline-hidden caret-orange-500"
                         maxLength={10}
                     />
                 </div>
                 <Link
                     href={navigate}
-                    className="grid w-full bg-orange-500 rounded-xl text-xl h-[5vh] place-items-center" 
+                    className="grid w-full bg-login rounded-xl font-semibold h-[5vh] place-items-center" 
                     onClick={handleAddCourse}
                 >
                     Add course

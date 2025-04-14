@@ -1,5 +1,5 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import { Dispatch, MutableRefObject, SetStateAction } from "react"
+import { Dispatch, RefObject, SetStateAction } from "react"
 
 type HandleNavigationProps = {
     direction: string
@@ -11,7 +11,7 @@ type HandleNavigationProps = {
     id: string | undefined
     card: Card
     cards: Card[]
-    selectedRef: MutableRefObject<number[]>
+    selectedRef: RefObject<number[]>
     attempted: number[]
     setAttempted: Dispatch<SetStateAction<number[]>>
     wait: boolean

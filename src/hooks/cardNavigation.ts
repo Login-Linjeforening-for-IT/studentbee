@@ -7,8 +7,8 @@ import {
     useCallback, 
     useRef, 
     Dispatch, 
-    SetStateAction, 
-    MutableRefObject 
+    SetStateAction,
+    RefObject, 
 } from 'react'
 
 type UseCardNavigationProps = {
@@ -19,7 +19,7 @@ type UseCardNavigationProps = {
     setAnimate: Dispatch<SetStateAction<string>>
     setAnimateAnswer: Dispatch<SetStateAction<string>>
     setSelected: Dispatch<SetStateAction<number[]>>
-    selectedRef: MutableRefObject<number[]>
+    selectedRef: RefObject<number[]>
     attempted: number[]
     setAttempted: Dispatch<SetStateAction<number[]>>
     wait: boolean

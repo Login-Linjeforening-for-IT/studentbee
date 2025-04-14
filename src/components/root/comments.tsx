@@ -111,7 +111,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
             <div className="col-span-2" />
             <div className="w-full col-span-6 overflow-auto noscroll px-1">
                 <h1 className="text-xl mb-2">Comments ({totalCommentsLength})</h1>
-                <div className="mb-2 w-full">
+                <div className="w-full">
                     {clientComments.map(comment => <Comment
                         key={comment.id}
                         comment={comment}
@@ -129,7 +129,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                 </div>
                 <Editor
                     placeholder="Write a comment..."
-                    className="w-full bg-light p-4 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll"
+                    className="w-full bg-light p-2 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll"
                     courseID=""
                     value={content.split('\n')} 
                     customSaveLogic={true} 
@@ -137,7 +137,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                     save={() => {}}
                     onChange={setContent}
                 />
-                <button className="h-[5vh] bg-light px-4 rounded-xl h-[5vh] float-right" onClick={sendComment}>Post comment</button>
+                <button className="h-[5vh] bg-light px-2 rounded-xl h-[5vh] float-right" onClick={sendComment}>Post comment</button>
             </div>
             {/* not sure what to use this space for */}
             <div className="col-span-2" />

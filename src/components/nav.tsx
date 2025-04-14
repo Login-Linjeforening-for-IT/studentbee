@@ -9,12 +9,12 @@ import ArrowOutward from '@components/svg/arrowOutward'
 // Displays the header
 export default function Navbar() {
     return (
-        <div className='flex justify-between bg-dark h-full w-full md:px-[1rem] gap-4 overflow-hidden'>
+        <div className='flex justify-between bg-black h-full w-full md:px-[1rem] gap-2 overflow-hidden'>
             <Sidebar />
             <ToolTips />
             {/* logo */}
-            <div className='flex items-center h-[3rem] md:w-[10rem] md:p-0'>
-                <Link href='/' className='relative block h-[2.5rem] w-[2.5rem]'>
+            <div className='flex items-center h-[3rem] md:w-[10rem]'>
+                <Link href='/' className='relative block h-8 w-8'>
                     <Image 
                         src={'/images/logo/logo.svg'}
                         className='object-cover'
@@ -28,19 +28,19 @@ export default function Navbar() {
             {/* Links */}
             <nav className='hidden md:flex justify-between items-center w-fill max-w-[40rem]'>
                 <Link href={'/scoreboard'}>
-                    <li className='flex flex-row items-center list-none no-underline text-base leading-[1rem] p-3 font-medium cursor-pointer link--corner-hover'>
+                    <li className='text-white flex flex-row items-center list-none no-underline leading-[1rem] p-3 font-medium cursor-pointer link--corner-hover'>
                         Scoreboard
                     </li>
                 </Link>
                 <Link href='/grades'>
-                    <li className='flex flex-row items-center list-none no-underline text-base leading-[1rem] p-3 font-medium cursor-pointer link--corner-hover'>
+                    <li className='text-white flex flex-row items-center list-none no-underline leading-[1rem] p-3 font-medium cursor-pointer link--corner-hover'>
                         Exam statistics
                     </li>
                 </Link>
                 <Link href='https://login.no'>
-                    <li className='flex flex-row items-center list-none no-underline text-base leading-[1rem] p-3 pr-[1.5rem] font-medium cursor-pointer link--corner-hover'>
+                    <li className='text-white flex flex-row items-center list-none no-underline leading-[1rem] p-3 pr-[1.5rem] font-medium cursor-pointer link--corner-hover'>
                         Login
-                        <ArrowOutward className='absolute right-[0.25rem] w-[1.25rem] h-[1.25rem] fill-login'/>
+                        <ArrowOutward className='absolute right-[0.25rem] w-[1rem] h-[1rem] fill-login'/>
                     </li>
                 </Link>
             </nav>

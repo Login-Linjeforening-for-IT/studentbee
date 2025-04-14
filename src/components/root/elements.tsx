@@ -38,7 +38,7 @@ export default function Elements({id, current, course}: ElementsProps) {
     function Help() {
         if (help) {
             return (
-                <div className="w-full h-full bg-darker rounded-xl p-4 overflow-auto noscroll">
+                <div className="w-full h-full bg-darker rounded-xl p-2 overflow-auto noscroll">
                     <h1 className="text-xl">Info</h1>
                     <div className="h-full w-full">
                         {help}
@@ -53,36 +53,48 @@ export default function Elements({id, current, course}: ElementsProps) {
     return (
         <div className='hidden xl:inline-flex flex-col w-full rounded-xl col-span-2 overflow-hidden'>
             <Help />
-            <div className="w-full h-full rounded-xl overflow-auto noscroll">
+            <div className="w-full h-full rounded-xl">
                 <GetQuestions cards={cards} current={current} id={id} />
             </div>
         </div>
     )
 }
 
-// Gets all the courese questions
+// Gets all the course questions
 function GetQuestions({cards, current, id}: QuestionsProps) {
-    const relevant = cards.slice((current||0) > 3 ? (current||0)-4 : 0, (current||0)+5);
     const router = useRouter()
+    const remaining = cards.length - (current || 0);
+    const count = remaining > 9
+        ? 7
+        : Math.min(15, 7 + (9 - remaining))
+
+    const relevant = cards.slice(Math.max(0, (current || 0) - count))
 
     if (!cards.length) {
         return
     }
 
     return (
-        <div className='p-2'>
-            <h1 className="text-xl mb-2">Questions</h1>
-            {relevant.map((card, i) => {
-                const index = (current||0) > 3 ? (current||0)-4+i+1 : i+1
-                const outline = current==index-1 ? "outline-gray-500" : "outline-hidden"
-                return(
-                <button onClick={() => router.push(`/course/${id}/${index}`)} key={card.question} className={`w-full pt-3 pb-3 bg-darker rounded-xl outline outline-1 ${outline} hover:outline-white mb-2 flex items-center p-2`}>
-                    <div className="grid grid-cols-12 w-full">
-                        <h1 className="text-sm text-left w-full col-span-11">{card.question.slice(0, 20)}{card.question.length > 20 && '...'}</h1>
-                        <h1 className="text-bright text-right w-full">{index}</h1>
-                    </div>
-                </button>)
-            })}
+        <div className="flex flex-col gap-[0.2rem]">
+            <h1 className="text-lg">Questions</h1>
+            <div className="flex flex-col gap-2">
+                {relevant.map((card, i) => {
+                    const index = i + 1 + cards.length - relevant.length
+                    const outline = current === index - 1 ? "outline-gray-500 scale-[0.99]" : "outline-hidden"
+                    return (
+                        <button 
+                            onClick={() => router.push(`/course/${id}/${index}`)} 
+                            key={i} 
+                            className={`relative w-full px-3 py-[0.52rem] bg-darker cursor-pointer rounded-xl outline outline-1 ${outline} hover:outline-white flex items-center ${index === cards.length ? "-top-[1px]" : ""}`}
+                        >
+                            <div className="grid grid-cols-12 w-full">
+                                <h1 className="text-md text-left w-full col-span-11">{card.question.slice(0, 25)}{card.question.length > 25 && '...'}</h1>
+                                <h1 className="text-extralight text-right w-full">{index}</h1>
+                            </div>
+                        </button>
+                    )
+                })}
+            </div>
         </div>
     )
 }

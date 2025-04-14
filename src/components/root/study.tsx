@@ -29,7 +29,7 @@ export default function Study({ courseID, value }: StudyProps) {
                 <h1 className="text-xl font-bold">Learning Material for {courseID}</h1>
                 <MarkAsMultipleChoice courseID={courseID} />
             </div>
-            <p className="text-md text-bright">
+            <p className="text-md text-almostbright">
                 This course allows examination aids, and is not a multiple choice based exam.
             </p>
             <Editor

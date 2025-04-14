@@ -27,8 +27,8 @@ export default function CourseListClient() {
 
     return (
         <div className='w-full h-full grid grid-rows-12 noscroll'>
-            <div className="row-span-11 bg-darker mb-4 pt-4 pb-4">
-                <div className="h-full px-4 noscroll">
+            <div className="row-span-11 bg-darker mb-2 py-2">
+                <div className="h-full px-2 noscroll">
                     <Header />
                     <StudyOrTest courses={courses} currentPath={path} />
                 </div>
