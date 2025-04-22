@@ -56,7 +56,7 @@ export default function Edit() {
             <div className="flex flex-rows">
                 <Link 
                     onClick={handleReview} 
-                    className="text-base rounded-md self-center bg-light px-4"
+                    className="text-base rounded-md self-center bg-light lg:px-2 2xl:px-4"
                     href={""}>
                         Edit
                 </Link>

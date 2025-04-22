@@ -277,7 +277,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
 function InnerCourseList({courses, currentPath}: CoursesProps) {
     return (
         <div className="h-full bg-darker rounded-xl">
-            <div className="pt-[0.5rem] overflow-auto grow noscroll">
+            <div className="pt-[0.5rem] pb-[6rem] h-full overflow-auto grow noscroll">
                 {courses.map(course =>
                     <Course key={course.id} course={course} currentPath={currentPath} /> 
                 )}

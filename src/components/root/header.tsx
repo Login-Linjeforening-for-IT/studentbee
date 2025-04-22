@@ -19,17 +19,17 @@ export default function Header() {
             <div className="grid grid-cols-2 gap-2 justify-items-center pb-2">
                 <Link 
                     href={course ? `/course/${course}` : '/'} 
-                    className={`${isStudy ? "bg-normal" : "bg-light"} w-full rounded-lg w-full px-2 content-center text-almostbright flex text-lg`}
+                    className={`${isStudy ? "bg-normal" : "bg-light"} w-full rounded-lg px-2 content-center text-almostbright flex text-lg`}
                 >
                     <h1 className="xl:mr-1">≡</h1>
-                    <h1 className="hidden xl:grid text-base place-self-center">Browse</h1>
+                    <h1 className="grid text-base place-self-center">Browse</h1>
                 </Link>
                 <Link 
                     href={`/course/${course}/study`} 
                     className={`${isStudy ? "bg-light" : "bg-normal"} w-full rounded-lg px-2 text-almostbright flex text-lg`}
                 >
                     <h1 className="xl:mr-1">✎</h1>
-                    <h1 className="hidden xl:grid text-base place-self-center">Study</h1>
+                    <h1 className="grid text-base place-self-center">Study</h1>
                 </Link>
             </div>
             <CourseHeader />
@@ -43,7 +43,7 @@ function CourseHeader() {
             <h1 className="text-lg">Courses</h1>
             <Link 
                 href='/add/course' 
-                className="hidden rounded-md lg:grid text-base self-center bg-light px-4"
+                className="hidden rounded-md lg:grid text-base self-center bg-light lg:px-2 2xl:px-4"
             >
                 Add
             </Link>
