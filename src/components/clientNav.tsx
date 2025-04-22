@@ -36,7 +36,7 @@ export function RightIcon() {
     return (
         <Link 
             href={href} 
-            className='grid place-self-center w-[4vh] h-[4vh] relative'
+            className='grid place-self-center w-[1.8rem] h-[1.8rem] relative'
             onClick={handleClick}
         >
             <Image src={icon} alt="logo" fill={true} />
@@ -67,7 +67,7 @@ export function MiddleIcon({ setActive }: MiddleIconProps) {
     return (
         <Link 
             href={href} 
-            className='grid place-self-center w-[4vh] h-[4vh] relative' 
+            className='grid place-self-center w-[1.8rem] h-[1.8rem] relative' 
             onClick={handleClick}
         >
             <Image src={icon} alt="logo" fill={true} />

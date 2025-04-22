@@ -55,7 +55,7 @@ export default function Question({
     shuffledAlternatives
 }: QuestionProps) {
     return (
-        <div className={`w-full h-full min-h-[87vh] bg-darker rounded-xl pt-1 px-2 pb-2 pb-9`}>
+        <div className={`w-full h-full min-h-[85vh] bg-darker rounded-xl pt-1 px-2 pb-2 pb-9`}>
             <div className="w-full h-full overflow-auto mb-2 noscroll">
                 <h1 className="text-right text-almostbright float-right">
                     {card.source} {(current || 0) + 1} / {cards.length}
