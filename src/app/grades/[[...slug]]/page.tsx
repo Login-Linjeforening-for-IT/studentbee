@@ -2,10 +2,10 @@ import { getGrades } from '@/utils/fetch'
 import Input from '@/components/grades/input'
 import ClientPage from './client'
 
-export default async function Grades({params}: { params: { slug?: string[] } }) {
-    const slugs = await params
+export default async function Grades({params}: { params: Promise<{ slug: string[] | undefined }> }) {
+    const { slug } = await params 
 
-    const course = slugs.slug && slugs.slug[0] ? slugs.slug[0] : ''
+    const course = slug && slug[0] ? slug[0] : ''
     
     let grades = null
     let years = null
