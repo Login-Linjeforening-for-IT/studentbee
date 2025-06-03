@@ -1,3 +1,5 @@
+'use client'
+
 import {
 	Chart as ChartJS,
 	CategoryScale,
@@ -25,7 +27,7 @@ ChartJS.register(
 type GradeProp = Record<string, number>
 
 type GradesProps = {
-	sYear: number
+	selectedYear: number
 	years: number[]
 	grades: Record<number, GradeProp>
 }
@@ -45,10 +47,10 @@ type LineGraphProps = {
 	avgGradeOptions: object
 }
 
-export default function Graphs({ grades, years, sYear }: GradesProps) {
+export default function Graphs({ grades, years, selectedYear }: GradesProps) {
 
-	const totalCandidatesAlp = grades[sYear].A + grades[sYear].B + grades[sYear].C + grades[sYear].D + grades[sYear].E + grades[sYear].F
-	const totalCandidatesBin = grades[sYear].G + grades[sYear].H
+	const totalCandidatesAlp = grades[selectedYear].A + grades[selectedYear].B + grades[selectedYear].C + grades[selectedYear].D + grades[selectedYear].E + grades[selectedYear].F
+	const totalCandidatesBin = grades[selectedYear].G + grades[selectedYear].H
 
 	const options = {
 		responsive: true,
@@ -123,7 +125,7 @@ export default function Graphs({ grades, years, sYear }: GradesProps) {
     		{ (totalCandidatesAlp !== 0 || totalCandidatesBin !== 0) && (
 
 				<BarGraph 
-					grade={grades[sYear]}
+					grade={grades[selectedYear]}
 					totalCandidatesAlp={totalCandidatesAlp}
 					totalCandidatesBin={totalCandidatesBin}
 					options={options}
@@ -134,7 +136,7 @@ export default function Graphs({ grades, years, sYear }: GradesProps) {
 			<LineGraph 
 				grades={grades}
 				years={[...years].reverse()}
-				selectedYear={sYear}
+				selectedYear={selectedYear}
 				avgGradeOptions={avgGradeOptions}
 				failRatioOptions={failRatioOptions}
 			/>
