@@ -10,7 +10,7 @@ type ClientPageProps = {
     defaultYear: number
 }
 
-export default function ClientPage({grades, years, defaultYear}: ClientPageProps){
+export default function ClientPage({ grades, years, defaultYear }: ClientPageProps) {
     const [selectedYear, setSelectedYear] = useState(defaultYear)
 
     return (
