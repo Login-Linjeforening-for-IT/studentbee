@@ -2,10 +2,10 @@
 
 import { addCourse } from "@utils/fetchClient"
 import Link from "next/link"
-import { useState, use } from "react";
+import { useState, use } from "react"
 
 export default function Add(props: { params: Promise<{ item: string[] }> }) {
-    const params = use(props.params);
+    const params = use(props.params)
     const item = params.item[0].toUpperCase()
 
     if (!item) {

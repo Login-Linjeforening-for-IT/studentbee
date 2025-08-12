@@ -10,8 +10,8 @@ import {
 	Title,
 	Tooltip,
 	Legend,
-} from 'chart.js';
-import { Bar, Line } from 'react-chartjs-2';
+} from 'chart.js'
+import { Bar, Line } from 'react-chartjs-2'
 
 ChartJS.register(
 	CategoryScale,
@@ -22,7 +22,7 @@ ChartJS.register(
 	Title,
 	Tooltip,
 	Legend,
-);
+)
 
 type GradeProp = Record<string, number>
 
@@ -112,8 +112,8 @@ export default function Graphs({ grades, years, selectedYear }: GradesProps) {
 				ticks: {
 					stepSize: 1,
 					callback: function(value:number) {
-						const letters = ['F', 'E', 'D', 'C', 'B', 'A'];
-						return letters[value];
+						const letters = ['F', 'E', 'D', 'C', 'B', 'A']
+						return letters[value]
 					}
 				},
 			}

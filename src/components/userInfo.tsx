@@ -33,9 +33,9 @@ export default function UserInfo() {
 
         if (path.includes('edit') && (middle !== edit || !middle.length)) {
             setEdit(`Editing ${path.split('/')[2]}`)
-            setMiddle(`Editing ${path.split('/')[2]}`);
+            setMiddle(`Editing ${path.split('/')[2]}`)
 
-            (async() => {
+            ;(async() => {
                 const courseByID = await getCourse(course, 'client')
                 if (typeof courseByID === 'object') {
                     setRight(`${courseByID.cards.length} cards`)

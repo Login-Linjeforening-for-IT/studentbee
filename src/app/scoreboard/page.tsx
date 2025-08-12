@@ -1,6 +1,6 @@
 import List from "@components/scoreboard/list"
 
-import type { JSX } from "react";
+import type { JSX } from "react"
 
 export default function Scoreboard(): JSX.Element {
     return (

@@ -5,7 +5,7 @@ import Trash from "@/components/svg/trash"
 import { getCourse, updateCourse } from "@/utils/fetch"
 import Link from "next/link"
 import Script from "next/script"
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState, use } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState, use } from "react"
 
 type AddCardProps = {
     courseID: string
@@ -40,7 +40,7 @@ type HeaderProps = {
 }
 
 export default function Edit(props: { params: Promise<{ item: string[] }> }) {
-    const params = use(props.params);
+    const params = use(props.params)
     const [editing, setEditing] = useState<Editing>({ cards: [], texts: [] })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [accepted, setAccepted] = useState<Card[]>([])
@@ -226,7 +226,7 @@ function AddCard({
         addCard()
         
         if (inputRef.current) {
-            inputRef.current.value = "";
+            inputRef.current.value = ""
         }
     }
 

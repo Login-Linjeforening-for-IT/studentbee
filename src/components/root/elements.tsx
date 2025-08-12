@@ -63,7 +63,7 @@ export default function Elements({id, current, course}: ElementsProps) {
 // Gets all the course questions
 function GetQuestions({cards, current, id}: QuestionsProps) {
     const router = useRouter()
-    const remaining = cards.length - (current || 0);
+    const remaining = cards.length - (current || 0)
     const count = remaining > 9
         ? 7
         : Math.min(15, 7 + (9 - remaining))
