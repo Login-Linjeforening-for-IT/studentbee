@@ -12,8 +12,7 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
     let error = null
 
     const data = await getGrades(course) as any
-
-    if (typeof data === 'string') {
+    if (typeof data === 'string' && course.length) {
         error = 'No grades found'
     }
 
@@ -44,6 +43,7 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
             }
         }
     }
+
     grades = transformedData
 
     return (
