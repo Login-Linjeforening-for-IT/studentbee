@@ -67,11 +67,12 @@ type UserSolved = {
 }
 
 type ScoreBoardUser = {
-    id: number
+    username: number
     score: number
     solved: number
     name: string
     time: number
+    seen: string
 }
 
 type CardComment = {

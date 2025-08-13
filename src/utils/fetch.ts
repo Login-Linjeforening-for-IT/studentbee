@@ -24,7 +24,8 @@ export async function getScoreBoard() {
             throw Error(data.error)
         }
     
-        return await response.json()
+        const data = await response.json()
+        return data
     } catch (error: unknown) {
         const err = error as Error
         return err.message

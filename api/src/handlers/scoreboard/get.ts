@@ -23,9 +23,11 @@ export async function scoreboardHandler(_: FastifyRequest, res: FastifyReply) {
         // Constructs the scoreboard
         return snapshot.docs.map((doc: any) => ({
             username: doc.id,
+            name: doc.data().name,
             score: doc.data().score,
             solved: doc.data().solved.length,
-            time: doc.data().time
+            time: doc.data().time,
+            seen: doc.data().last_updated
         }))
     }
     

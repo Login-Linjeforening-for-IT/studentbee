@@ -19,7 +19,7 @@ export default async function List(): Promise<JSX.Element> {
             <ListHeader userCount={scoreboard.length}/>
             <div className={`grid ${span} md:grid-cols-2`}>
                 {scoreboard.map((user: ScoreBoardUser, index: number) => 
-                    <ScoreBoardEntry key={user.id} user={user} index={index}  />
+                    <ScoreBoardEntry key={user.username} user={user} index={index}  />
                 )}
             </div>
         </div>
