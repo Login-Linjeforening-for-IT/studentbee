@@ -104,7 +104,7 @@ export async function callbackHandler(req: FastifyRequest, res: FastifyReply): P
                     score: 0,
                     solved: 0,
                     time: 0,
-                };
+                }
 
                 transaction.set(userRef, userData)
                 createdUser = true
@@ -113,7 +113,7 @@ export async function callbackHandler(req: FastifyRequest, res: FastifyReply): P
 
         // Invalidates the cache to ensure that the new user is included
         if (createdUser) {
-            invalidateCache(userInfo.email);
+            invalidateCache(userInfo.email)
         }
 
         redirectUrl.search = params.toString()

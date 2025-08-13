@@ -19,10 +19,10 @@ const redisClient = createClient({
     url: `redis://${redisHost}:${redisPort}`
 })
 
-redisClient.on('error', (err) => console.error('Redis Client Error', err));
+redisClient.on('error', (err) => console.error('Redis Client Error', err))
 
 // Connects to the Redis client
-(async () => {
+;(async () => {
     try {
         await redisClient.connect()
         console.log('Redis client connected')

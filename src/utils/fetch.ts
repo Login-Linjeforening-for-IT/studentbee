@@ -209,7 +209,7 @@ export async function updateUserTime({time}: {time: number}) {
             })
         })
 
-        user.time += time;
+        user.time += time
         setItem('user',JSON.stringify(user))
     
         if (!response.ok) {
