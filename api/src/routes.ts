@@ -1,88 +1,73 @@
-// Imports express to host the API
-import express from 'express'
+// Imports Fastify to host the API
+import { FastifyInstance, FastifyPluginOptions } from 'fastify'
 
 // Imports all GET handlers from the handlers folder
-import { 
-    getScoreboard, 
-    getCourses, 
-    getCourse,
-    getFile, 
-    getFiles, 
-    getUserProfile, 
-    getIndexHandler, 
-    getComments,
-    getHealthHandler,
-    getCallback,
-    getLogin,
-    getVersion
-} from './handlers/get'
+import indexHandler from './handlers/index'
+import { scoreboardHandler } from './handlers/scoreboard/get'
+import { fileHandler, filesHandler } from './handlers/file/get'
+import { courseHandler, coursesHandler } from './handlers/course/get'
+import { healthHandler } from './handlers/health/get'
+import { commentsHandler } from './handlers/comment/get'
+import { profileHandler } from './handlers/user/get'
+import { versionHandler } from './handlers/version/get'
+import { callbackHandler, loginHandler } from './handlers/login/get'
 
 // Imports all POST handlers from the handlers folder
-import { 
-    postFile, 
-    postRegister, 
-    postLogin, 
-    postCard, 
-    postCourse, 
-    postComment, 
-    postVote, 
-    postCardVote 
-} from './handlers/post'
+import { postFile } from './handlers/file/post'
+import { postLogin } from './handlers/login/post'
+import { postCard } from './handlers/card/post'
+import { postCourse } from './handlers/course/post'
+import { postComment, postCommentVote } from './handlers/comment/post'
+import { postCardVote } from './handlers/card/post'
 
 // Imports all PUT handlers from the handlers folder
-import { 
-    putCourse, 
-    putText, 
-    putMarkCourse, 
-    putFile,
-    putTime,
-    putScore
-} from './handlers/put'
+import { putCourse, putCourseMark, putCourseText } from './handlers/course/put'
+import { putFile } from './handlers/file/put'
+import { putScore, putTime } from './handlers/user/put'
 
 // Imports all DELETE handlers from the handlers folder
-import {
-    deleteComment,
-    deleteFile,
-} from './handlers/delete'
+import { deleteFile } from './handlers/file/delete'
+import { deleteComment } from './handlers/comment/delete'
 
-// Creates a new express router
-const router = express.Router()
+/**
+ * Defines the routes available in the API.
+ * 
+ * @param fastify Fastify Instance
+ * @param _ Fastify Plugin Options
+ */
+export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
+    // Defines all GET routes that are available on the API
+    fastify.get('/', indexHandler)
+    fastify.get('/health', healthHandler)
+    fastify.get('/scoreboard', scoreboardHandler)
+    fastify.get('/courses', coursesHandler)
+    fastify.get('/course/:courseID', courseHandler)
+    fastify.get('/files/:courseID', filesHandler)
+    fastify.get('/file/:courseID/:fileID', fileHandler)
+    fastify.get('/user/:username', profileHandler)
+    fastify.get('/comments/:courseID', commentsHandler)
+    fastify.get('/login', loginHandler)
+    fastify.get('/callback', callbackHandler)
+    fastify.get('/version', versionHandler)
 
-// Defines all GET routes that are available on the API
-router.get('/', getIndexHandler)
-router.get('/health', getHealthHandler)
-router.get('/scoreboard', getScoreboard)
-router.get('/courses', getCourses)
-router.get('/course/:courseID', getCourse)
-router.get('/files/:courseID', getFiles)
-router.get('/file/:courseID/:fileID', getFile)
-router.get('/user/:id', getUserProfile)
-router.get('/comments/:courseID', getComments)
-router.get('/login', getLogin)
-router.get('/callback', getCallback)
-router.get('/version', getVersion)
+    // Defines all PUT routes that are available on the API
+    fastify.put('/course/:courseID', putCourse) 
+    fastify.put('/time', putTime)
+    fastify.put('/score', putScore)
+    fastify.put('/text', putCourseText)
+    fastify.put('/mark', putCourseMark)
+    fastify.put('/file', putFile)
 
-// Defines all PUT routes that are available on the API
-router.put('/course/:courseID', putCourse) 
-router.put('/time', putTime)
-router.put('/score', putScore)
-router.put('/text', putText)
-router.put('/mark', putMarkCourse)
-router.put('/file', putFile)
+    // // Defines all POST routes that are available on the API
+    fastify.post('/file', postFile)
+    fastify.post('/login', postLogin)
+    fastify.post('/upload_card', postCard)
+    fastify.post('/upload_course', postCourse)
+    fastify.post('/comment', postComment)
+    fastify.post('/vote/comment', postCommentVote)
+    fastify.post('/vote/card', postCardVote)
 
-// // Defines all POST routes that are available on the API
-router.post('/file', postFile)
-router.post('/register', postRegister)
-router.post('/login', postLogin)
-router.post('/upload_card', postCard)
-router.post('/upload_course', postCourse)
-router.post('/comment', postComment)
-router.post('/vote', postVote)
-router.post('/vote/card', postCardVote)
-
-// // Defines all DELETE routes that are available on the API
-router.delete('/comment', deleteComment)
-router.delete('/file/:courseID/:fileID', deleteFile)
-
-// Exports the router
-export default router
+    // // Defines all DELETE routes that are available on the API
+    fastify.delete('/comment', deleteComment)
+    fastify.delete('/file/:courseID/:fileID', deleteFile)
+}

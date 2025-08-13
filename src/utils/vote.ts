@@ -56,7 +56,7 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
             throw Error('You must be logged in to vote')
         }
 
-        const response = await fetch(`${API}/vote`, {
+        const response = await fetch(`${API}/vote/comment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
