@@ -95,7 +95,13 @@ export async function getGrades(id: string): Promise<Object | string> {
     
     const courseID = `${id.toUpperCase()}-1`
 
-    const queryBody = {"tabell_id":308,"api_versjon":1,"statuslinje":"J","begrensning":"100","kodetekst":"J","desimal_separator":".",
+    const queryBody = {
+        "tabell_id":308,
+        "api_versjon":1,
+        "statuslinje":"J",
+        "begrensning":"100",
+        "kodetekst":"J",
+        "desimal_separator":".",
         "groupBy":["Institusjonskode", "Årstall","Emnekode","Karakter"],
         "sortBy":["Årstall","Karakter"],
         "filter":[
