@@ -45,7 +45,7 @@ export async function callbackHandler(req: FastifyRequest, res: FastifyReply): P
     if (!code) {
         return res.status(400).send('No authorization code found.')
     }
-    
+
     try {
         // Exchanges callback code for access token
         const tokenResponse = await fetch(TOKEN_URL, {
@@ -61,7 +61,7 @@ export async function callbackHandler(req: FastifyRequest, res: FastifyReply): P
         })
 
         const tokenResponseBody = await tokenResponse.text()
-     
+
         if (!tokenResponse.ok) {
             return res.status(500).send(`Failed to obtain token: ${tokenResponseBody}`)
         }
@@ -90,29 +90,30 @@ export async function callbackHandler(req: FastifyRequest, res: FastifyReply): P
         })
 
         const userRef = db.collection('User').doc(userInfo.email)
+        let createdUser = false
 
-        // Creates the user data object
-        const userData = {
-            id: userInfo.sub,
-            name: userInfo.name,
-            email: userInfo.email,
-            courses: [
-                // Sample object
-                // {
-                //     id: '',
-                //     time: 0,
-                //     score: 0,
-                // }
-            ],
-            score: 0,
-            time: 0,
-        }
+        await db.runTransaction(async (transaction) => {
+            const userSnap = await transaction.get(userRef)
 
-        // Saves the user data to Firestore
-        await userRef.set(userData)
+            if (!userSnap.exists) {
+                const userData = {
+                    id: userInfo.sub,
+                    name: userInfo.name,
+                    email: userInfo.email,
+                    courses: [],
+                    score: 0,
+                    time: 0,
+                };
+
+                transaction.set(userRef, userData)
+                createdUser = true
+            }
+        })
 
         // Invalidates the cache to ensure that the new user is included
-        invalidateCache(userInfo.email)
+        if (createdUser) {
+            invalidateCache(userInfo.email);
+        }
 
         redirectUrl.search = params.toString()
         return res.redirect(redirectUrl.toString())
