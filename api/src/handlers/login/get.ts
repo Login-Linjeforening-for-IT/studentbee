@@ -102,6 +102,7 @@ export async function callbackHandler(req: FastifyRequest, res: FastifyReply): P
                     email: userInfo.email,
                     courses: [],
                     score: 0,
+                    solved: 0,
                     time: 0,
                 };
 
