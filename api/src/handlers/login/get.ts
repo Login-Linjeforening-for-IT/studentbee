@@ -104,6 +104,7 @@ export async function callbackHandler(req: FastifyRequest, res: FastifyReply): P
                     score: 0,
                     solved: 0,
                     time: 0,
+                    last_updated: new Date().toISOString(),
                 }
 
                 transaction.set(userRef, userData)
