@@ -1,7 +1,6 @@
 'use client'
 
 import { getUser } from "@/utils/fetch"
-import { sendRegister } from "@/utils/user"
 import { useEffect } from "react"
 
 type Details = {
@@ -38,14 +37,11 @@ export default function Login() {
 }
 
 // Fetches extra details from Firebase
-async function getDetails({id, name, username}: Details) {
+async function getDetails({ username }: Details) {
     // Fetches the user from Firebase
     const user = await getUser(username)
 
     if (typeof user === 'string') {
-        // Registers the user if it doesnt exist
-        sendRegister({ id, name, username })
-
         // Initializes data to zero since the user is new
         localStorage.setItem('time', '0')
         localStorage.setItem('score', '0')

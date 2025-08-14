@@ -1,6 +1,5 @@
 'use client'
 
-import { BROWSER_API } from "@parent/constants"
 import getItem, { removeItem } from "./localStorage"
 
 // Function to logout the user
@@ -51,29 +50,5 @@ export function getRedirect(alternative?: string): void {
 
     if (alternative) {
         window.location.href = alternative
-    }
-}
-
-// Function to register the user
-export async function sendRegister(user: RegisterUser): Promise<true | string> {
-    try {
-        const response = await fetch(`${BROWSER_API}/register`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(user)
-        })
-
-        if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
-        }
-
-        return true
-    } catch (error: unknown) {
-        const err = error as Error
-        return err.message
     }
 }
