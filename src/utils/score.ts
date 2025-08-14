@@ -14,16 +14,12 @@ export default async function addScore(){
         user.score += 10
         setItem('user', JSON.stringify(user)) 
 
-        const response = await fetch(`${BROWSER_API}/score`, {
-            method: 'PUT',
+        const response = await fetch(`${BROWSER_API}/score/${user.username}`, {
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                username: user.username,
-                score: user.score 
-            })
+            }
         })
 
         if (!response.ok) {
@@ -38,5 +34,4 @@ export default async function addScore(){
         const err = error as Error
         return err.message
     }
-
 }

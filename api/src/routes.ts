@@ -8,7 +8,7 @@ import { fileHandler, filesHandler } from './handlers/file/get'
 import { courseHandler, coursesHandler } from './handlers/course/get'
 import { healthHandler } from './handlers/health/get'
 import { commentsHandler } from './handlers/comment/get'
-import { profileHandler } from './handlers/user/get'
+import { profileHandler, scoreHandler } from './handlers/user/get'
 import { versionHandler } from './handlers/version/get'
 import { callbackHandler, loginHandler } from './handlers/login/get'
 
@@ -23,7 +23,6 @@ import { postCardVote } from './handlers/card/post'
 // Imports all PUT handlers from the handlers folder
 import { putCourse, putCourseMark, putCourseText } from './handlers/course/put'
 import { putFile } from './handlers/file/put'
-import { putScore, putTime } from './handlers/user/put'
 
 // Imports all DELETE handlers from the handlers folder
 import { deleteFile } from './handlers/file/delete'
@@ -47,13 +46,12 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/user/:username', profileHandler)
     fastify.get('/comments/:courseID', commentsHandler)
     fastify.get('/login', loginHandler)
+    fastify.get('/score/:username', scoreHandler)
     fastify.get('/callback', callbackHandler)
     fastify.get('/version', versionHandler)
 
     // Defines all PUT routes that are available on the API
     fastify.put('/course/:courseID', putCourse) 
-    fastify.put('/time', putTime)
-    fastify.put('/score', putScore)
     fastify.put('/text', putCourseText)
     fastify.put('/mark', putCourseMark)
     fastify.put('/file', putFile)
