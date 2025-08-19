@@ -5,7 +5,7 @@ type ButtonsProps = {
 }
 
 export default function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
-    const button = `rounded-xl hidden lg:flex w-full p-2 bg-darker text-center justify-center`
+    const button = `rounded-xl flex w-full p-2 bg-darker text-center justify-center`
 
     return (
         <div className="w-full flex gap-2 h-full">
@@ -13,19 +13,19 @@ export default function Buttons({animateAnswer, navigate, flashColor}: ButtonsPr
                 className={`${button} ${animateAnswer === 'back' ? "bg-light" : "bg-darker"}`}
                 onClick={() => navigate('back')}
             >
-                back
+                Back
             </button>
             <button 
                 className={`${button} ${animateAnswer === 'skip' ? "bg-light" : "bg-darker"}`}
                 onClick={() => navigate('skip')}
             >
-                skip
+                Skip
             </button>
             <button 
                 className={`${button} ${flashColor}`}
                 onClick={() => navigate('next')}
             >
-                next
+                Next
             </button>
         </div>
     )

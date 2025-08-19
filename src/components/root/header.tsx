@@ -15,20 +15,20 @@ export default function Header() {
     }, [path])
 
     return (
-        <div className="bg-darker p-2 rounded-xl">
+        <div className="bg-darker md:p-2 rounded-xl">
             <div className="grid grid-cols-2 gap-2 justify-items-center pb-2">
-                <Link 
-                    href={course ? `/course/${course}` : '/'} 
+                <Link
+                    href={course && course != 'study' ? `/course/${course}` : '/'} 
                     className={`${isStudy ? "bg-normal" : "bg-light"} w-full rounded-lg px-2 content-center text-almostbright flex text-lg`}
                 >
-                    <h1 className="xl:mr-1">≡</h1>
+                    <h1 className="mr-1">≡</h1>
                     <h1 className="grid text-base place-self-center">Browse</h1>
                 </Link>
                 <Link 
                     href={`/course/${course}/study`} 
                     className={`${isStudy ? "bg-light" : "bg-normal"} w-full rounded-lg px-2 text-almostbright flex text-lg`}
                 >
-                    <h1 className="xl:mr-1">✎</h1>
+                    <h1 className="mr-1">✎</h1>
                     <h1 className="grid text-base place-self-center">Study</h1>
                 </Link>
             </div>
@@ -39,7 +39,7 @@ export default function Header() {
 
 function CourseHeader() {
     return (
-        <div className="flex flex-cols gap-2">
+        <div className="hidden lg:flex flex-cols gap-2">
             <h1 className="text-lg">Courses</h1>
             <Link 
                 href='/add/course' 

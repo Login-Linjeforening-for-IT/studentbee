@@ -9,7 +9,7 @@ import ArrowOutward from '@components/svg/arrowOutward'
 // Displays the header
 export default function Navbar() {
     return (
-        <div className='flex justify-between bg-black h-full w-full md:px-[1rem] gap-2 overflow-hidden'>
+        <div className='flex justify-between bg-black h-full w-full md:px-[1rem] gap-2 overflow-hidden px-4'>
             <Sidebar />
             <ToolTips />
             {/* logo */}

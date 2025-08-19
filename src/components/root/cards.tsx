@@ -86,10 +86,15 @@ export default function Cards({id, current, course, comments}: CardsProps) {
 
     if (current && current >= cards.length ) {
         router.push(`/course/${id}/1`)
-        return
+        return <></>
     }
 
     if (typeof course === 'string') {
+        if (course.toLocaleLowerCase().includes("not valid json")) {
+            router.push("/")
+            return <></>
+        }
+
         return (
             <div className="w-full h-full grid place-items-center col-span-6">
                 <h1 className="text-xl">{course}</h1>
@@ -132,6 +137,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
 
     if (!card) {
         router.push(`/course/${id}/1`)
+        return <></>
     }
 
     function handleVote(vote: boolean) {

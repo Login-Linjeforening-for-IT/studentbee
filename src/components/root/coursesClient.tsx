@@ -13,7 +13,7 @@ export default function CourseListClient() {
 
     useEffect(() => {
         (async() => {
-            const response = await getCourses('server')
+            const response = await getCourses('client')
 
             if (response) {
                 setCourses(response)

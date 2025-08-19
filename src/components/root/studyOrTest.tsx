@@ -278,20 +278,23 @@ function InnerCourseList({courses, currentPath}: CoursesProps) {
     return (
         <div className="h-full bg-darker rounded-xl">
             <div className="pt-[0.5rem] pb-[6rem] h-full overflow-auto grow noscroll">
-                {courses.map(course =>
-                    <Course key={course.id} course={course} currentPath={currentPath} /> 
+                {courses.map((course, index) =>
+                    <Course key={course.id} course={course} currentPath={currentPath} index={index} /> 
                 )}
             </div>
         </div>
     )
 }
 
-function Course({course, currentPath}: CourseProps) {
+function Course({course, currentPath, index}: CourseProps) {
     const currentCourse = currentPath.includes("/course/") ? currentPath.split("/course/")[1].split("/")[0] : ''
+    const current = currentCourse === course.id
+    const bg = index % 2 === 0 ? "bg-normal" : "bg-darker"
+
     return (
         <Link 
             href={`/course/${course.id}`} 
-            className={`flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] hover:pl-[1.5rem] duration-[500ms] transition-[padding] ${currentCourse === course.id ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
+            className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] hover:pl-[1.5rem] duration-[500ms] transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
         >
             <h1>{course.id}</h1>
         </Link>

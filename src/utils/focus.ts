@@ -13,6 +13,10 @@ type WindowFocusedProps = {
 
 // Check if the user has been inactive for more than 4.5 minutes
 export function focusCheck({startFocusTime, lastUserInteraction}: FocusCheckProps) {
+    if (!startFocusTime.current) {
+        startFocusTime.current = new Date()
+    }
+
     if (startFocusTime.current != undefined) {
         let currentTime = new Date()
         if ((currentTime.getTime() - (lastUserInteraction.current?.getTime() || 0)) > (270 * 1000)) {

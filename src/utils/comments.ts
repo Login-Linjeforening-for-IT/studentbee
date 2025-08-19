@@ -9,21 +9,26 @@ type CommentProps = {
 }
 
 export default async function getComments(CourseID: string): Promise<CardComment[][]> {
-    const response = await fetch(`${API}/comments/${CourseID}`, {
-        next: { revalidate: 10 },
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
+    try {
+        const response = await fetch(`${API}/comments/${CourseID}`, {
+            next: { revalidate: 10 },
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
 
-    if (!response.ok) {
-        const data = await response.json()
+        if (!response.ok) {
+            const data = await response.json()
 
-        throw Error(data.error)
+            throw new Error(data.error)
+        }
+
+        return await response.json()
+    } catch (error) {
+        console.error(error)
+        return []
     }
-
-    return await response.json()
 }
 
 export async function postComment({courseID, cardID, content, parent}: CommentProps) {

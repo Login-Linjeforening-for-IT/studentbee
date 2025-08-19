@@ -1,12 +1,29 @@
 'use client'
 
+import { useEffect } from "react"
 import CourseListClient from "./root/coursesClient"
 
+const TAILWIND_LG_BREAKPOINT = 1024
+
 export default function Menu() {
+    useEffect(() => {
+        function handleResize() {
+            const menu = document.querySelector('.menu')
+            if (menu) {
+                if (window.innerWidth >= TAILWIND_LG_BREAKPOINT) {
+                    menu.classList.add('hidden')
+                }
+            }
+        }
+
+        window.addEventListener('resize', handleResize)
+
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
+
     return (
-        <div className="hidden menu absolute grid grid-rows-9 left-0 top-0 h-full w-full bg-normal">
-            <div />
-            <div className="row-span-8">
+        <div className="hidden menu absolute grid left-0 top-0 h-full w-full">
+            <div className="mt-12">
                 <CourseListClient />
             </div>
         </div>

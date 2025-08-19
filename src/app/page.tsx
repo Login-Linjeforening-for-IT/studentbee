@@ -18,7 +18,7 @@ export default async function Home() {
 
     return (
         <div className="w-full h-full rounded-xl overflow-auto noscroll flex md:justify-center flex-col place-items-center">
-            <div className="flex flex-col 2xs:w-[80vw] xs:w-[50vw] sm:w-[30vw] max-h-[60vh] md:h-[45vh] bg-darker rounded-xl p-2 overflow-auto mb-8 noscroll gap-2">
+            <div className="flex flex-col 2xs:w-[95vw] xs:w-[50vw] sm:w-[30vw] max-h-[86vh] md:max-h-[60vh] md:h-[45vh] bg-darker rounded-xl p-2 overflow-auto mb-2 md:mb-8 noscroll gap-2">
                 <h1 className="text-center font-semibold">Select course</h1>
                 <div className='grid gap-2'>
                     {courses.map((course) => <Link
@@ -30,7 +30,7 @@ export default async function Home() {
                     </Link>)}
                 </div>
             </div>
-            <Link href="/add/course" className='bg-darker h-[5vh] 2xs:w-[80vw] xs:w-[50vw] sm:w-[30vw] grid place-items-center rounded-xl px-8 text-2xs md:text-lg'>Add course</Link>
+            <Link href="/add/course" className='bg-darker h-[5vh] 2xs:w-[95vw] xs:w-[50vw] sm:w-[30vw] grid place-items-center rounded-xl px-8 text-2xs md:text-lg'>Add course</Link>
         </div>
     )
 }
