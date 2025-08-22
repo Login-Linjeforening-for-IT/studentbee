@@ -1,9 +1,9 @@
-import { deleteComment, postComment } from "@/utils/comments"
-import getItem from "@/utils/localStorage"
-import { sendVote } from "@/utils/vote"
-import { useState } from "react"
-import Editor from "../editor/editor"
-import Comment from "../comments/comment"
+import { deleteComment, postComment } from '@/utils/comments'
+import getItem from '@/utils/localStorage'
+import { sendVote } from '@/utils/vote'
+import { useState } from 'react'
+import Editor from '../editor/editor'
+import Comment from '../comments/comment'
 
 type CommentsProps = {
     comments: CardComment[]
@@ -19,7 +19,7 @@ type VoteProps = {
 }
 
 export default function Comments({comments, courseID, cardID, totalCommentsLength}: CommentsProps) {
-    const [content, setContent] = useState("")
+    const [content, setContent] = useState('')
     const [parent, setParent] = useState<number | undefined>()
     const [clientComments, setClientComments] = useState(comments)
     const [voted, setVoted] = useState<ClientVote[]>([])
@@ -41,14 +41,14 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
             id: clientComments.length,
             courseID,
             cardID,
-            username: "You",
+            username: 'You',
             content,
             time: new Date().toISOString(),
             rating: 0,
             votes: []
         })
 
-        setContent("")
+        setContent('')
     }
 
     function handleDelete({commentID}: {commentID: number}) {
@@ -106,12 +106,12 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
     }
 
     return (
-        <div className="w-full h-full bg-darker absolute left-0 top-[100vh] grid grid-cols-10 p-8">
+        <div className='w-full h-full bg-darker absolute left-0 top-[100vh] grid grid-cols-10 p-8'>
             {/* not sure what to use this space for */}
-            <div className="col-span-2" />
-            <div className="w-full col-span-6 overflow-auto noscroll px-1">
-                <h1 className="text-xl mb-2">Comments ({totalCommentsLength})</h1>
-                <div className="w-full">
+            <div className='col-span-2' />
+            <div className='w-full col-span-6 overflow-auto noscroll px-1'>
+                <h1 className='text-xl mb-2'>Comments ({totalCommentsLength})</h1>
+                <div className='w-full'>
                     {clientComments.map(comment => <Comment
                         key={comment.id}
                         comment={comment}
@@ -128,19 +128,19 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                     />)}
                 </div>
                 <Editor
-                    placeholder="Write a comment..."
-                    className="w-full bg-light p-2 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll"
-                    courseID=""
+                    placeholder='Write a comment...'
+                    className='w-full bg-light p-2 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll'
+                    courseID=''
                     value={content.split('\n')} 
                     customSaveLogic={true} 
                     hideSaveButton={true}
                     save={() => {}}
                     onChange={setContent}
                 />
-                <button className="h-[5vh] bg-light px-2 rounded-xl h-[5vh] float-right" onClick={sendComment}>Post comment</button>
+                <button className='h-[5vh] bg-light px-2 rounded-xl h-[5vh] float-right' onClick={sendComment}>Post comment</button>
             </div>
             {/* not sure what to use this space for */}
-            <div className="col-span-2" />
+            <div className='col-span-2' />
         </div>
     )
 }

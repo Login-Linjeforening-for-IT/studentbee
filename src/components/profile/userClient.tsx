@@ -1,5 +1,5 @@
 // 'use client'
-// import getItem from "@/utils/localStorage"
+// import getItem from d'@/utils/localStoraged'
 
 type UserProps = {
     user: User | string

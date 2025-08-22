@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation'
-import handleCardsNavigation, { handleKeyDown } from "@utils/navigation"
-import { focusCheck, windowFocused, windowUnfocused } from "@utils/focus"
+import handleCardsNavigation, { handleKeyDown } from '@utils/navigation'
+import { focusCheck, windowFocused, windowUnfocused } from '@utils/focus'
 import addScore from '@/utils/score'
 import { 
     useEffect, 

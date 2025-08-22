@@ -1,20 +1,20 @@
 export default function voteColor(direction: 'up' | 'down', votes: Vote[], username: string, clientVote?: number) {
     
-    if (!username) {
-        return "fill-bright"
-    }
+    // if (!username) {
+    //     return 'text-bright'
+    // }
 
     if (direction === 'up') {
         if (votes.some(vote => vote.username === username && vote.vote) && clientVote === 0 || clientVote === 1) {
-            return "fill-green-500"
+            return 'text-green-400/50'
         }
 
-        return "fill-bright hover:fill-green-500"
+        return 'text-bright hover:text-green-400/50'
     } 
     
     if (votes.some(vote => vote.username === username && !vote.vote) && clientVote === 0 || clientVote === -1) {
-        return "fill-red-500"
+        return 'text-red-400/50'
     }
 
-    return "fill-bright hover:fill-red-500"
+    return 'text-bright hover:text-red-400/50'
 }

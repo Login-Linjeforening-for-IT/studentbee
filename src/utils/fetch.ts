@@ -1,5 +1,5 @@
-import { API, BROWSER_API } from "@parent/constants"
-import getItem, { setItem } from "./localStorage"
+import { API, BROWSER_API } from '@parent/constants'
+import getItem, { setItem } from './localStorage'
 
 type UpdateCourseProps = {
     courseID: string
@@ -97,30 +97,30 @@ export async function getGrades(id: string): Promise<Object | string> {
     const courseID = `${id.toUpperCase()}-1`
 
     const queryBody = {
-        "tabell_id":308,
-        "api_versjon":1,
-        "statuslinje":"J",
-        "begrensning":"100",
-        "kodetekst":"J",
-        "desimal_separator":".",
-        "groupBy":["Institusjonskode", "Årstall","Emnekode","Karakter"],
-        "sortBy":["Årstall","Karakter"],
-        "filter":[
+        'tabell_id':308,
+        'api_versjon':1,
+        'statuslinje':'J',
+        'begrensning':'100',
+        'kodetekst':'J',
+        'desimal_separator':'.',
+        'groupBy':['Institusjonskode', 'Årstall','Emnekode','Karakter'],
+        'sortBy':['Årstall','Karakter'],
+        'filter':[
             {
-                "variabel": "Emnekode",
-                "selection": {
-                   "filter": "item",
-                   "values": [
+                'variabel': 'Emnekode',
+                'selection': {
+                   'filter': 'item',
+                   'values': [
                       courseID
                    ]
                 }
             },
             {
-                "variabel": "Institusjonskode",
-                "selection": {
-                    "filter": "item",
-                    "values": [
-                        "1150"
+                'variabel': 'Institusjonskode',
+                'selection': {
+                    'filter': 'item',
+                    'values': [
+                        '1150'
                     ]
                 }
             }

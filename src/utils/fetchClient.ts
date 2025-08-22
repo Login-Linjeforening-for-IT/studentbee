@@ -1,7 +1,7 @@
 'use client'
 
-import { BROWSER_API } from "@parent/constants"
-import getItem from "./localStorage"
+import { BROWSER_API } from '@parent/constants'
+import getItem from './localStorage'
 
 type MarkProps = {
     courseID: string

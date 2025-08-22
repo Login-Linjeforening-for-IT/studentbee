@@ -91,6 +91,6 @@ body {
 
 .link--corner-hover:hover::after {
     border-color: var(--color-login);
-    right: 0;
-    bottom: 0;
+    right: 0.1rem;
+    bottom: 0.2rem;
 }

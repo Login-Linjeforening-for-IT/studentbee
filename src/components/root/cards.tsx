@@ -1,14 +1,14 @@
 'use client'
-import { useState, useRef, useEffect } from "react"
-import { useCardNavigation } from "@/hooks/cardNavigation"
-import Comments from "./comments"
-import { getTotalCommentsLength } from "@/utils/comments"
-import sendCardVote from "@/utils/vote"
-import Link from "next/link"
-import { sendMark } from "@/utils/fetchClient"
-import Buttons from "../card/buttons"
-import Question from "../card/question"
-import { useRouter } from "next/navigation"
+import { useState, useRef, useEffect } from 'react'
+import { useCardNavigation } from '@/hooks/cardNavigation'
+import Comments from './comments'
+import { getTotalCommentsLength } from '@/utils/comments'
+import sendCardVote from '@/utils/vote'
+import Link from 'next/link'
+import { sendMark } from '@/utils/fetchClient'
+import Buttons from '../card/buttons'
+import Question from '../card/question'
+import { useRouter } from 'next/navigation'
 
 type CardsProps = {
     id?: string
@@ -20,8 +20,8 @@ type CardsProps = {
 export default function Cards({id, current, course, comments}: CardsProps) {
     
     const router = useRouter()
-    const [animate, setAnimate] = useState("-1")
-    const [animateAnswer, setAnimateAnswer] = useState("-1")
+    const [animate, setAnimate] = useState('-1')
+    const [animateAnswer, setAnimateAnswer] = useState('-1')
     const [selected, setSelected] = useState<number[]>([-1])
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const [showComments, setShowComments] = useState(false)
@@ -39,7 +39,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
 
     const { navigate, checkAnswer } = useCardNavigation({
         current,
-        id: id || "PROG1001",
+        id: id || 'PROG1001',
         card,
         cards,
         setAnimate,
@@ -54,15 +54,15 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         indexMapping
     })
 
-    const flashColor = animate === "wrong" 
-        ? "bg-red-800" 
-        : animate === "correct" 
-            ? "bg-green-500" 
-            : "bg-darker"
+    const flashColor = animate === 'wrong' 
+        ? 'bg-red-800' 
+        : animate === 'correct' 
+            ? 'bg-green-500' 
+            : 'bg-darker'
 
 
     function markCourse() {
-        sendMark({courseID: id || "PROG1001", mark: true})
+        sendMark({courseID: id || 'PROG1001', mark: true})
     }
 
     useEffect(() => {
@@ -90,32 +90,32 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     if (typeof course === 'string') {
-        if (course.toLocaleLowerCase().includes("not valid json")) {
-            router.push("/")
+        if (course.toLocaleLowerCase().includes('not valid json')) {
+            router.push('/')
             return <></>
         }
 
         return (
-            <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-xl">{course}</h1>
+            <div className='w-full h-full grid place-items-center col-span-6'>
+                <h1 className='text-xl'>{course}</h1>
             </div>
         )
     }
 
     if (!cards.length) {
         return (
-            <div className="w-full h-full col-span-6 grid place-items-center">
-                <div className="grid place-items-center">
-                    <h1 className="text-lg text-center mb-2">Course {course.id} has no content yet.</h1>
+            <div className='w-full h-full col-span-6 grid place-items-center'>
+                <div className='grid place-items-center'>
+                    <h1 className='text-lg text-center mb-2'>Course {course.id} has no content yet.</h1>
                     <Link
-                        className="bg-darker rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-login"
+                        className='bg-darker rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-login'
                         href={`/edit/${course.id}`}
                     >
                         Edit course
                     </Link>
-                    <h1 className="text-lg text-center mb-2">Mark course as learning based (no multiple choice)</h1>
+                    <h1 className='text-lg text-center mb-2'>Mark course as learning based (no multiple choice)</h1>
                     <button 
-                        className="bg-login rounded-xl px-2 h-[4vh] w-[10vw]"
+                        className='bg-login rounded-xl px-2 h-[4vh] w-[10vw]'
                         onClick={markCourse}
                     >
                         Mark
@@ -129,8 +129,8 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         const length = cards.length
 
         return (
-            <div className="w-full h-full grid place-items-center col-span-6">
-                <h1 className="text-xl">Course {course.id} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
+            <div className='w-full h-full grid place-items-center col-span-6'>
+                <h1 className='text-xl'>Course {course.id} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
             </div>
         )
     }
@@ -165,7 +165,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     }
 
     return (
-        <div className="w-full h-full max-h-[87vh] flex flex-col gap-2 col-span-6">
+        <div className='w-full h-full max-h-[87vh] flex flex-col gap-2 col-span-6'>
             {id && <Question
                 card={card} 
                 cards={cards} 

@@ -1,10 +1,9 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import UserInfo from './userInfo'
 import ToolTips from './root/toolTips'
 import Sidebar from './sidebar'
 import { RightSide } from './clientNav'
-import ArrowOutward from '@components/svg/arrowOutward'
+import { ArrowUpRight } from 'lucide-react'
 
 // Displays the header
 export default function Navbar() {
@@ -18,9 +17,9 @@ export default function Navbar() {
                     <Image 
                         src={'/images/logo/logo.svg'}
                         className='object-cover'
-                        alt="logo" 
+                        alt='logo'
                         fill={true}
-                     />
+                    />
                 </Link>
             </div>
             {/* Info for the user */}
@@ -40,7 +39,7 @@ export default function Navbar() {
                 <Link href='https://login.no'>
                     <li className='text-white flex flex-row items-center list-none no-underline leading-[1rem] p-3 pr-[1.5rem] font-medium cursor-pointer link--corner-hover'>
                         Login
-                        <ArrowOutward className='absolute right-[0.25rem] w-[1rem] h-[1rem] fill-login'/>
+                        <ArrowUpRight className='absolute right-1 w-[1.25rem] h-[1.25rem] text-login'/>
                     </li>
                 </Link>
             </nav>

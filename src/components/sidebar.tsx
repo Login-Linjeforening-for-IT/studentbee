@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect } from "react"
-import CourseListClient from "./root/coursesClient"
+import { useEffect } from 'react'
+import CourseListClient from './root/coursesClient'
 
 const TAILWIND_LG_BREAKPOINT = 1024
 
@@ -22,8 +22,8 @@ export default function Menu() {
     }, [])
 
     return (
-        <div className="hidden menu absolute grid left-0 top-0 h-full w-full">
-            <div className="mt-12">
+        <div className='hidden menu absolute grid left-0 top-0 h-full w-full'>
+            <div className='mt-12'>
                 <CourseListClient />
             </div>
         </div>

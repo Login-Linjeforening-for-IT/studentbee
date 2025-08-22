@@ -1,5 +1,5 @@
-import { BROWSER_API } from "@parent/constants"
-import getItem, { setItem } from "./localStorage"
+import { BROWSER_API } from '@parent/constants'
+import getItem, { setItem } from './localStorage'
 
 export default async function addScore(){
     

@@ -1,14 +1,14 @@
-import ListHeader from "./listHeader"
-import ScoreBoardEntry from "./scoreboardEntry"
-import { getScoreBoard } from "@utils/fetch"
+import ListHeader from './listHeader'
+import ScoreBoardEntry from './scoreboardEntry'
+import { getScoreBoard } from '@utils/fetch'
 
-import type { JSX } from "react"
+import type { JSX } from 'react'
 
 export default async function List(): Promise<JSX.Element> {
     const scoreboard = await getScoreBoard()
 
     if (!Array.isArray(scoreboard) || scoreboard.length === 0) {
-        return <h1 className="w-full h-full grid place-items-center">The scoreboard is empty.</h1>
+        return <h1 className='w-full h-full grid place-items-center'>The scoreboard is empty.</h1>
     }
 
     const cols = scoreboard.length > 1 ? 'md:grid-cols-2' : ''

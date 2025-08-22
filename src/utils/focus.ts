@@ -1,5 +1,5 @@
-import { RefObject } from "react"
-import { updateUserTime } from "./fetch"
+import { RefObject } from 'react'
+import { updateUserTime } from './fetch'
 
 type FocusCheckProps = {
     startFocusTime: RefObject<Date | undefined>

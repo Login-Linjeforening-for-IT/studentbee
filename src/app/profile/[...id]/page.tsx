@@ -17,7 +17,7 @@ export default async function Profile(props: { params: Promise<{ id: string[] }>
     const user = await getUser(id)
 
     return (
-        <div className="grid grid-cols-10 w-full h-full rounded-xl gap-8">
+        <div className='grid grid-cols-10 w-full h-full rounded-xl gap-8'>
             <div className='col-span-2'>
                 <CourseList />
             </div>

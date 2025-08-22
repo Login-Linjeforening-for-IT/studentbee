@@ -1,4 +1,4 @@
-import db from "../db"
+import db from '../db'
 
 const recentlyChecked = [] as { username: string, result: boolean, timestamp: string }[]
 

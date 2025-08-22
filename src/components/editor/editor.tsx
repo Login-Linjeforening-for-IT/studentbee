@@ -1,10 +1,10 @@
 'use client'
 
-import { ChangeEvent, RefObject, useEffect, useRef, useState } from "react"
-import { marked } from "marked"
-import hljs from "highlight.js"
-import "highlight.js/styles/github-dark.css"
-import { sendText } from "@/utils/fetchClient"
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
+import { marked } from 'marked'
+import hljs from 'highlight.js'
+import 'highlight.js/styles/github-dark.css'
+import { sendText } from '@/utils/fetchClient'
 import './editor.css'
 
 type EditorProps = {
@@ -44,18 +44,18 @@ type MarkdownProps = {
 marked.use({
     renderer: {
         code(code, lang) {
-            const language = hljs.getLanguage(typeof lang === 'string' ? lang : "plaintext") ? lang || "plaintext" : "plaintext"
-            return `<pre class="inline-block rounded-xl overflow-auto whitespace-pre-wrap break-words"><code class="hljs ${language}">${hljs.highlight(code, { language }).value}</code></pre>`
+            const language = hljs.getLanguage(typeof lang === 'string' ? lang : 'plaintext') ? lang || 'plaintext' : 'plaintext'
+            return `<pre class='inline-block rounded-xl overflow-auto whitespace-pre-wrap break-words'><code class='hljs ${language}'>${hljs.highlight(code, { language }).value}</code></pre>`
         },
         image(href, title) {
             const width = 'width="300"'
-            return `<img src="${href}" alt="${title}" ${width} />`
+            return `<img src='${href}' alt='${title}' ${width} />`
         },
         link(href, title, text) {
-            return `<a href="${href}" title="${title}" target="_blank" rel="noopener noreferrer" class="text-blue-500 underline">${text}</a>`
+            return `<a href='${href}' title='${title}' target='_blank' rel='noopener noreferrer' class='text-blue-500 underline'>${text}</a>`
         },
         codespan(text) {
-            return `<code class="break-all bg-extralight p-0.3 rounded-xs">${text}</code>`
+            return `<code class='break-all bg-extralight p-0.3 rounded-xs'>${text}</code>`
         }
     }
 })
@@ -162,17 +162,17 @@ export function EditorWithoutLogic({
             className={`${className}`} 
             onClick={() => textareaRef?.current?.focus()}
         >
-            <div className="">
-                {displayEditor && <div className="grid grid-cols-2">
-                    <h1 className="text-lg text-almostbright">Markdown</h1>
-                    <h1 className="text-lg pl-2 text-almostbright">Preview</h1>
+            <div className=''>
+                {displayEditor && <div className='grid grid-cols-2'>
+                    <h1 className='text-lg text-almostbright'>Markdown</h1>
+                    <h1 className='text-lg pl-2 text-almostbright'>Preview</h1>
                 </div>}
-                <div className={`markdown-editor space-x-2 h-full ${displayEditor && "grid grid-cols-2"}`}>
+                <div className={`markdown-editor space-x-2 h-full ${displayEditor && 'grid grid-cols-2'}`}>
                     {(displayEditor || !markdown.length) && <textarea
                         className={`w-full h-full rounded-sm text-white bg-transparent focus:outline-hidden resize-none overflow-hidden outline-hidden caret-orange-500 ${placeholderClassName}`}
                         value={markdown}
                         onChange={handleMarkdownChange}
-                        placeholder={placeholder || "Write your markdown here..."}
+                        placeholder={placeholder || 'Write your markdown here...'}
                         ref={textareaRef}
                     />}
                     <Markdown
@@ -182,9 +182,9 @@ export function EditorWithoutLogic({
                     />
                 </div>
             </div>
-            {edited && !hideSave && !hideSaveButton && <div className="mt-2">
+            {edited && !hideSave && !hideSaveButton && <div className='mt-2'>
                 <button 
-                    className="text-md bg-login px-8 rounded-xl h-[4vh]" 
+                    className='text-md bg-login px-8 rounded-xl h-[4vh]'
                     onClick={handleSave}
                 >
                     Save
@@ -202,7 +202,7 @@ export function Markdown({
 }: MarkdownProps) {
     return (
         <div
-            className={`markdown-preview ${displayEditor && "pl-2 border-l-2 border-orange-500"} text-foreground h-full break-words ${className}`}
+            className={`markdown-preview ${displayEditor && 'pl-2 border-l-2 border-orange-500'} text-foreground h-full break-words ${className}`}
             onClick={handleDisplayEditor}
             dangerouslySetInnerHTML={{ __html: marked(markdown) }}
         />

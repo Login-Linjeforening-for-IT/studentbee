@@ -1,7 +1,7 @@
-import { Dispatch, SetStateAction } from "react"
-import { Markdown } from "../editor/editor"
-import Alternatives from "./alternatives"
-import QuestionFooter from "./questionFooter"
+import { Dispatch, SetStateAction } from 'react'
+import { Markdown } from '../editor/editor'
+import Alternatives from './alternatives'
+import QuestionFooter from './questionFooter'
 
 type QuestionProps = {
     card: Card
@@ -56,15 +56,15 @@ export default function Question({
 }: QuestionProps) {
     return (
         <div className={`w-full h-full min-h-[85vh] bg-darker rounded-xl pt-1 px-2 pb-2 pb-9`}>
-            <div className="w-full h-full overflow-auto mb-2 noscroll">
-                <h1 className="text-right text-almostbright float-right">
+            <div className='w-full h-full overflow-auto mb-2 noscroll'>
+                <h1 className='text-right text-almostbright float-right'>
                     {card.source} {(current || 0) + 1} / {cards.length}
                 </h1>
-                <div className="mb-2">
-                    {card.correct.length > 1 && <h1 className="text-almostbright">
+                <div className='mb-2'>
+                    {card.correct.length > 1 && <h1 className='text-almostbright'>
                         Multiple choice - Select all correct answers
                     </h1>}
-                    {card.theme && <h1 className="text-almostbright">
+                    {card.theme && <h1 className='text-almostbright'>
                         {card.theme}
                     </h1>}
                     

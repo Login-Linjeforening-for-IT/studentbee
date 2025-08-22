@@ -1,4 +1,4 @@
-import type { JSX } from "react"
+import type { JSX } from 'react'
 
 type LineProps = {
     color?: string,
@@ -11,6 +11,6 @@ type LineProps = {
 export default function Line({color, className, height, width}: LineProps): JSX.Element {
     return <div 
         className={`${className}`} 
-        style={{backgroundColor: color || "#555", height, width}}
+        style={{backgroundColor: color || '#555', height, width}}
     />
 }

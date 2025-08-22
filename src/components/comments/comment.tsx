@@ -1,11 +1,10 @@
-import Link from "next/link"
-import { Markdown } from "../editor/editor"
-import ThumbsUp from "../svg/thumbsup"
-import ThumbsDown from "../svg/thumbsdown"
-import voteColor from "./voteColor"
-import Reply, { Replies } from "./reply"
-import Trash from "../svg/trash"
-import { Dispatch, SetStateAction, useState } from "react"
+import Link from 'next/link'
+import { Markdown } from '../editor/editor'
+import voteColor from './voteColor'
+import Reply, { Replies } from './reply'
+import Trash from '../svg/trash'
+import { Dispatch, SetStateAction, useState } from 'react'
+import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 
 type CommentProps = {
     comment: CardComment
@@ -51,10 +50,10 @@ export default function Comment({
 
     return (
         <div key={comment.id}>
-            <div className="bg-normal rounded-xl p-2 mt-2 w-full">
-                <div className="w-full grid grid-cols-2 text-almostbright mb-2">
-                    <Link href={`/profile/${comment_user}`} className="text-lg text-almostbright underline">{author}</Link>
-                    <h1 className="text-right">{new Date(comment.time).toLocaleString()}</h1>
+            <div className='bg-normal rounded-xl p-2 mt-2 w-full'>
+                <div className='w-full grid grid-cols-2 text-almostbright mb-2'>
+                    <Link href={`/profile/${comment_user}`} className='text-lg text-almostbright underline'>{author}</Link>
+                    <h1 className='text-right'>{new Date(comment.time).toLocaleString()}</h1>
                 </div>
                 <Markdown
                     displayEditor={false} 
@@ -62,22 +61,22 @@ export default function Comment({
                     markdown={comment.content} 
                 />
             </div>
-            <div className="w-full flex flex-rows space-x-2 mt-1">
-                <h1 className="text-almostbright">{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
-                <button className="w-[1.3vw]" onClick={() => handleVote('up')}>
-                    <ThumbsUp fill={voteColor('up', comment.votes, username, clientVote)} className="w-full h-full pt-[0.2vh]" />
+            <div className='w-full flex flex-rows space-x-2 mt-1'>
+                <h1 className='text-almostbright'>{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
+                <button className='w-[1.3vw]' onClick={() => handleVote('up')}>
+                    <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', comment.votes, username, clientVote)}`} />
                 </button>
-                <button className="w-[1.3vw]" onClick={() => handleVote('down')}>
-                    <ThumbsDown fill={voteColor('down', comment.votes, username, clientVote)} className="w-full h-full pt-[0.2vh]" />
+                <button className='w-[1.3vw]' onClick={() => handleVote('down')}>
+                    <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', comment.votes, username, clientVote)}`} />
                 </button>
                 {username === comment_user && <button 
-                    className="text-almostbright underline w-[1.4vw]" 
+                    className='text-almostbright underline w-[1.4vw]' 
                     onClick={() => handleDelete({commentID: comment.id})}
                 >
-                    <Trash fill="fill-bright hover:fill-red-500" className="w-full h-full pt-[0.2vh]" />
+                    <Trash2 className='w-full h-full pt-[0.2vh] text-bright hover:text-red-500' />
                 </button>}
                 <button 
-                    className="text-almostbright underline" 
+                    className='text-almostbright underline' 
                     onClick={() => setParent(parent ? undefined : comment.id)}
                 >
                     Reply

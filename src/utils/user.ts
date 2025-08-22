@@ -1,6 +1,6 @@
 'use client'
 
-import getItem, { removeItem } from "./localStorage"
+import getItem, { removeItem } from './localStorage'
 
 // Function to logout the user
 export async function sendLogout(): Promise<Boolean | string> {
@@ -15,7 +15,7 @@ export async function sendLogout(): Promise<Boolean | string> {
         window.location.reload()
 
         window.location.href = '/login'
-        return "Logged out successfully."
+        return 'Logged out successfully.'
     } catch (error) {
         return `Failed to log out: ${error}`
     }

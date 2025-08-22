@@ -229,7 +229,7 @@ function LineGraph({ grades, years, selectedYear, failRatioOptions, avgGradeOpti
 				},
 				pointBorderColor: (context:any) => {
 					const label = context.chart.data.labels[context.dataIndex]
-					return label == selectedYear ? "#181818" : "rgba(0,0,0,0)"
+					return label == selectedYear ? '#181818' : 'rgba(0,0,0,0)'
 				},
 				pointBorderWidth: 3
 			},
@@ -252,7 +252,7 @@ function LineGraph({ grades, years, selectedYear, failRatioOptions, avgGradeOpti
 				},
 				pointBorderColor: (context:any) => {
 					const label = context.chart.data.labels[context.dataIndex]
-					return label == selectedYear ? "#181818" : "rgba(0,0,0,0)"
+					return label == selectedYear ? '#181818' : 'rgba(0,0,0,0)'
 				},
 				pointBorderWidth: 3
 			},

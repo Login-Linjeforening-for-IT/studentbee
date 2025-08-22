@@ -1,8 +1,7 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react"
-import ThumbsDown from "../svg/thumbsdown"
-import ThumbsUp from "../svg/thumbsup"
-import voteColor from "../comments/voteColor"
-import getItem from "@/utils/localStorage"
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import voteColor from '../comments/voteColor'
+import getItem from '@/utils/localStorage'
+import { ChevronDown, ChevronUp, ThumbsDown, ThumbsUp } from 'lucide-react'
 
 type QuestionFooterProps = {
     card: Card
@@ -35,50 +34,48 @@ export default function QuestionFooter({
 
     const showAnswer = card.correct.every(answer => remainGreen.includes(answer))
     const revealText = showAnswer
-        ? "Hide" 
-        : "Reveal"
+        ? 'Hide' 
+        : 'Reveal'
 
     return (
-        <div className="grid grid-cols-3">
-            <div className="flex flex-rows space-x-2 mb-2">
-                <h1 className="text-almostbright">
+        <div className='grid grid-cols-3'>
+            <div className='flex flex-rows space-x-2 mb-2'>
+                <h1 className='text-almostbright'>
                     {card.rating + clientVote > 0 ? '+' : ''}
                     {card.rating + clientVote}
                 </h1>
-                <button className="w-[2.3vh]" onClick={() => handleVote(true)}>
+                <button className='w-[2.3vh]' onClick={() => handleVote(true)}>
                     <ThumbsUp 
-                        fill={voteColor('up', card.votes, username, clientVote)} 
-                        className="w-full h-full pt-[0.2vh]" 
+                        className={`w-full h-full pt-[0.2vh] ${voteColor('up', card.votes, username, clientVote)}`}
                     />
                 </button>
-                <button className="w-[2.3vh]" onClick={() => handleVote(false)}>
+                <button className='w-[2.3vh]' onClick={() => handleVote(false)}>
                     <ThumbsDown 
-                        fill={voteColor('down', card.votes, username, clientVote)} 
-                        className="w-full h-full pt-[0.2vh]" 
+                        className={`w-full h-full pt-[0.2vh] ${voteColor('down', card.votes, username, clientVote)}`}
                     />
                 </button>
             </div>
             <button 
-                className="pb-2 text-almostbright flex items-center justify-center w-full" 
+                className='pb-2 text-almostbright flex items-center justify-center w-full' 
                 onClick={() => setShowComments(!showComments)}
             >
-                <h1 className="hidden xs:hidden sm:block mr-2">
+                <h1 className='hidden xs:hidden sm:block mr-2'>
                     {totalCommentsLength 
                         ? `View comments (${totalCommentsLength})` 
-                        : "Add comment"
+                        : 'Add comment'
                     }
                 </h1>
-                <h1 className="hidden xs:block sm:hidden mr-2">
+                <h1 className='hidden xs:block sm:hidden mr-2'>
                     {totalCommentsLength 
                         ? `Chat (${totalCommentsLength})` 
-                        : "Comment"
+                        : 'Comment'
                     }
                 </h1>
-                {showComments ? '▼' : '▲'}
+                {showComments ? <ChevronDown /> : <ChevronUp />}
             </button>
             <div>
                 <button 
-                    className="w-full text-end text-almostbright" 
+                    className='w-full text-end text-almostbright' 
                     onClick={showAnswers}
                 >
                     {revealText}

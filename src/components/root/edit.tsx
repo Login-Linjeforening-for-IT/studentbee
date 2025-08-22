@@ -1,8 +1,8 @@
 'use client'
 
-import { getCourses } from "@/utils/fetch"
-import Link from "next/link"
-import { useEffect, useState } from "react"
+import { getCourses } from '@/utils/fetch'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function Edit() {
     const [courses, setCourses] = useState<CourseAsList[]>([])
@@ -27,15 +27,15 @@ export default function Edit() {
 
     function CourseSelector() {
         return (
-            <div className="w-full h-full absolute left-0 top-0 grid place-items-center bg-black bg-opacity-90 z-100" onClick={() => setDisplayCourseSelector(false)}>
-                <div className="w-[35vw] h-[45vh] bg-darker rounded-xl p-8 overflow-auto noscroll">
-                    <h1 className="text-xl text-center font-semibold mb-2">Edit course</h1>
-                    <div className="w-full grid space-y-2">
+            <div className='w-full h-full absolute left-0 top-0 grid place-items-center bg-black bg-opacity-90 z-100' onClick={() => setDisplayCourseSelector(false)}>
+                <div className='w-[35vw] h-[45vh] bg-darker rounded-xl p-8 overflow-auto noscroll'>
+                    <h1 className='text-xl text-center font-semibold mb-2'>Edit course</h1>
+                    <div className='w-full grid space-y-2'>
                         {courses.map((course) => (
                             <Link
                                 href={`/edit/${course.id}`}
                                 key={course.id}
-                                className="text-lg bg-light w-full rounded-md p-2"
+                                className='text-lg bg-light w-full rounded-md p-2'
                             >
                                 {course.id}
                             </Link>
@@ -47,17 +47,17 @@ export default function Edit() {
     }
 
     if (typeof courses === 'string') {
-        return <h1 className="hidden lg:grid w-full h-full grid place-items-center">{courses}</h1>
+        return <h1 className='hidden lg:grid w-full h-full grid place-items-center'>{courses}</h1>
     }
 
     return (
-        <div className="hidden lg:grid">
+        <div className='hidden lg:grid'>
             {displayCourseSelector && <CourseSelector />}
-            <div className="flex flex-rows">
+            <div className='flex flex-rows'>
                 <Link 
                     onClick={handleReview} 
-                    className="text-base rounded-md self-center bg-light lg:px-2 2xl:px-4"
-                    href={""}>
+                    className='text-base rounded-md self-center bg-light lg:px-2 2xl:px-4'
+                    href={''}>
                         Edit
                 </Link>
             </div>
@@ -74,8 +74,8 @@ function Error({text}: { text: string }) {
     }
 
     return (
-        <div className="absolute bg-darker bottom-8 right-8 min-h-50 p-2 max-w-[17.6vw] rounded-xl max-h-[19.5vh] overflow-auto">
-            <h1 className="text-red-500">{text}</h1>
+        <div className='absolute bg-darker bottom-8 right-8 min-h-50 p-2 max-w-[17.6vw] rounded-xl max-h-[19.5vh] overflow-auto'>
+            <h1 className='text-red-500'>{text}</h1>
         </div>
     )
 }

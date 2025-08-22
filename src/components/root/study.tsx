@@ -1,8 +1,8 @@
-import React, { useState } from "react"
-import Editor from "../editor/editor"
-import MarkAsMultipleChoice from "./markAsMultipleChoice"
-import { updateFile } from "@/utils/fetchClient"
-import { usePathname } from "next/navigation"
+import React, { useState } from 'react'
+import Editor from '../editor/editor'
+import MarkAsMultipleChoice from './markAsMultipleChoice'
+import { updateFile } from '@/utils/fetchClient'
+import { usePathname } from 'next/navigation'
 
 type StudyProps = {
     courseID: string
@@ -24,12 +24,12 @@ export default function Study({ courseID, value }: StudyProps) {
     }
 
     return (
-        <div className="col-span-8 bg-darker rounded-xl p-8 h-full overflow-auto noscroll">
-            <div className="flex flex-cols justify-between">
-                <h1 className="text-xl font-bold">Learning Material for {courseID}</h1>
+        <div className='col-span-8 bg-darker rounded-xl p-8 h-full overflow-auto noscroll'>
+            <div className='flex flex-cols justify-between'>
+                <h1 className='text-xl font-bold'>Learning Material for {courseID}</h1>
                 <MarkAsMultipleChoice courseID={courseID} />
             </div>
-            <p className="text-md text-almostbright">
+            <p className='text-md text-almostbright'>
                 This course allows examination aids, and is not a multiple choice based exam.
             </p>
             <Editor
@@ -37,8 +37,8 @@ export default function Study({ courseID, value }: StudyProps) {
                 value={value}
                 customSaveLogic={true}
                 save={save}
-                className="min-h-[68vh]"
-                placeholderClassName="placeholder-bright"
+                className='min-h-[68vh]'
+                placeholderClassName='placeholder-bright'
                 onChange={handleChange}
             />
         </div>

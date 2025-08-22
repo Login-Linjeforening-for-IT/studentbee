@@ -1,11 +1,11 @@
 export default function getItem(name: string): object | string | undefined {
-    if (typeof window === "undefined" || !window.localStorage) {
+    if (typeof window === 'undefined' || !window.localStorage) {
         return undefined
     }
 
     if (name === 'user') {
         const token = localStorage.getItem('token')
-        if (!token || token === "null") {
+        if (!token || token === 'null') {
             return undefined
         }
 
@@ -41,7 +41,7 @@ export default function getItem(name: string): object | string | undefined {
 }
 
 export function setItem(name: string, value: string) {
-    if (typeof window !== "undefined" && window.localStorage) {
+    if (typeof window !== 'undefined' && window.localStorage) {
         localStorage.setItem(name, value)
     }
 }

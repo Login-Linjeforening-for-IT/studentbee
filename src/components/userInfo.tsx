@@ -1,14 +1,14 @@
 'use client'
 
-import { getCourse } from "@/utils/fetch"
-import getItem from "@utils/localStorage"
-import { usePathname } from "next/navigation"
-import { useEffect, useState } from "react"
+import { getCourse } from '@/utils/fetch'
+import getItem from '@utils/localStorage'
+import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 
 export default function UserInfo() {
     const [user, setUser] = useState<User>({ 
         name: 'Loading...', 
-        username: "Loading...", 
+        username: 'Loading...', 
         time: 0
     } as User)
     const [edit, setEdit] = useState('')

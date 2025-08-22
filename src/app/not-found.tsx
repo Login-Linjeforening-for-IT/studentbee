@@ -1,12 +1,12 @@
 'use client'
 import Line from '../components/line'
 
-import type { JSX } from "react"
+import type { JSX } from 'react'
 
 // Handles invalid pages
 export default function Custom404 (): JSX.Element {
     return (
-        <main className="grid place-items-center h-[92vh]">
+        <main className='grid place-items-center h-[92vh]'>
             <div className='flex place-items-center'>
                 <h1 className='text-3xl'>404</h1>
                 <Line width={1} height={40} className='mx-2' />

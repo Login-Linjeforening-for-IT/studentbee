@@ -1,5 +1,5 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime"
-import { Dispatch, RefObject, SetStateAction } from "react"
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime'
+import { Dispatch, RefObject, SetStateAction } from 'react'
 
 type HandleNavigationProps = {
     direction: string
@@ -191,16 +191,16 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case 'ArrowLeft': navigate('back'); break
         case 's': 
         case 'S': navigate('skip'); break
-        case '1': navigate("1"); break
-        case '2': navigate("2"); break
-        case '3': navigate("3"); break
-        case '4': navigate("4"); break
-        case '5': navigate("5"); break
-        case '6': navigate("6"); break
-        case '7': navigate("7"); break
-        case '8': navigate("8"); break
-        case '9': navigate("9"); break
-        case '0': navigate("0"); break
+        case '1': navigate('1'); break
+        case '2': navigate('2'); break
+        case '3': navigate('3'); break
+        case '4': navigate('4'); break
+        case '5': navigate('5'); break
+        case '6': navigate('6'); break
+        case '7': navigate('7'); break
+        case '8': navigate('8'); break
+        case '9': navigate('9'); break
+        case '0': navigate('0'); break
         case 'w':
         case 'ArrowUp': 
             if (event.shiftKey) {
@@ -222,5 +222,5 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
 
 export function animate200ms({key, setAnimateAnswer}: animate200msProps) {
     setAnimateAnswer(key)
-    setTimeout(() => setAnimateAnswer("-1"), 200)
+    setTimeout(() => setAnimateAnswer('-1'), 200)
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { sendMark } from "@/utils/fetchClient"
+import { sendMark } from '@/utils/fetchClient'
 
 export default function MarkAsMultipleChoice({courseID}: {courseID: string}) {
     function markCourse() {
@@ -8,6 +8,6 @@ export default function MarkAsMultipleChoice({courseID}: {courseID: string}) {
     }
     
     return (
-        <button className="text-md bg-light px-2 rounded-xl text-almostbright" onClick={markCourse}>Convert to multiple choice</button>
+        <button className='text-md bg-light px-2 rounded-xl text-almostbright' onClick={markCourse}>Convert to multiple choice</button>
     )
 }

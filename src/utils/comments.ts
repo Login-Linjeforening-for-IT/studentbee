@@ -1,5 +1,5 @@
-import { API } from "@parent/constants"
-import getItem from "./localStorage"
+import { API } from '@parent/constants'
+import getItem from './localStorage'
 
 type CommentProps = {
     courseID: string

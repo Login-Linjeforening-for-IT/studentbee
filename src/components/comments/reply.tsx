@@ -1,12 +1,11 @@
-import { deleteComment, postComment } from "@/utils/comments"
-import getItem from "@/utils/localStorage"
-import { Dispatch, SetStateAction, useState } from "react"
-import Editor, { Markdown } from "../editor/editor"
-import Link from "next/link"
-import ThumbsUp from "../svg/thumbsup"
-import ThumbsDown from "../svg/thumbsdown"
-import Trash from "../svg/trash"
-import voteColor from "./voteColor"
+import { deleteComment, postComment } from '@/utils/comments'
+import getItem from '@/utils/localStorage'
+import { Dispatch, SetStateAction, useState } from 'react'
+import Editor, { Markdown } from '../editor/editor'
+import Link from 'next/link'
+import Trash from '../svg/trash'
+import voteColor from './voteColor'
+import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 
 type ReplyProps = {
     courseID: string
@@ -40,7 +39,7 @@ export default function Reply({
     setComments
 }: ReplyProps) {
     const user = getItem('user') as User
-    const [reply, setReply] = useState("")
+    const [reply, setReply] = useState('')
 
     function send() {
         if (!reply.length) {
@@ -62,7 +61,7 @@ export default function Reply({
                 id: comment.replies.length,
                 courseID,
                 cardID,
-                username: "You",
+                username: 'You',
                 content: reply,
                 time: new Date().toISOString(),
                 rating: 0,
@@ -71,7 +70,7 @@ export default function Reply({
                 id: 0,
                 courseID,
                 cardID,
-                username: "You",
+                username: 'You',
                 content: reply,
                 time: new Date().toISOString(),
                 rating: 0,
@@ -84,21 +83,21 @@ export default function Reply({
     }
 
     return (
-        <div className="grid grid-cols-12">
-            <div className="col-span-1" />
+        <div className='grid grid-cols-12'>
+            <div className='col-span-1' />
             <Editor
-                className="w-full bg-light p-2 rounded-xl min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2"
-                placeholder="Write a comment..."
-                courseID=""
+                className='w-full bg-light rounded-xl min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2'
+                placeholder='Write a comment...'
+                courseID=''
                 value={reply.split('\n')} 
                 customSaveLogic={true} 
                 hideSaveButton={true}
                 save={() => {}}
                 onChange={setReply}
             />
-            <div className="col-span-10"/>
+            <div className='col-span-10'/>
             <button 
-                className="col-span-2 justify-end bg-light rounded-xl mt-2 h-[5vh]" 
+                className='col-span-2 justify-end bg-light rounded-xl mt-2 h-[5vh]' 
                 onClick={send}
             >
                 Add comment
@@ -115,9 +114,9 @@ export function Replies({
     setComments
 }: RepliesProps) {
     return (
-        <div className="grid grid-cols-12 mt-2">
-            <div className="col-span-1" />
-            <div className="col-span-11">
+        <div className='grid grid-cols-12 mt-2'>
+            <div className='col-span-1' />
+            <div className='col-span-11'>
                 {replies.map((reply) => <ReplyComponent 
                     key={reply.id}
                     reply={reply} 
@@ -169,15 +168,15 @@ function ReplyComponent({
 
     return (
         <div>
-            <div className="bg-normal rounded-xl p-2 mb-1">
-                <div className="w-full grid grid-cols-2 text-almostbright">
+            <div className='bg-normal rounded-xl p-2 mb-1'>
+                <div className='w-full grid grid-cols-2 text-almostbright'>
                     <Link 
                         href={`/profile/${reply_user}`} 
-                        className="text-lg text-almostbright underline"
+                        className='text-lg text-almostbright underline'
                     >
                         {author}
                     </Link>
-                    <h1 className="text-right pr-2">
+                    <h1 className='text-right pr-2'>
                         {new Date(reply.time).toLocaleString()}
                     </h1>
                 </div>
@@ -187,31 +186,25 @@ function ReplyComponent({
                     markdown={reply.content} 
                 />
             </div>
-            <div className="w-full flex flex-rows space-x-2 mb-2">
-                <h1 className="text-almostbright">{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
+            <div className='w-full flex flex-rows space-x-2 mb-2'>
+                <h1 className='text-almostbright'>{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
                 <button 
-                    className="w-[1.3vw]" 
+                    className='w-[1.3vw]' 
                     onClick={() => handleVote({commentID: reply.id, current: true})}
                 >
-                    <ThumbsUp 
-                        fill={voteColor('up', reply.votes, username, clientVote)} 
-                        className="w-full h-full pt-[0.2vh]"
-                    />
+                    <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', reply.votes, username, clientVote)}`} />
                 </button>
                 <button 
-                    className="w-[1.3vw]" 
+                    className='w-[1.3vw]' 
                     onClick={() => handleVote({commentID: reply.id, current: false})}
                 >
-                    <ThumbsDown 
-                        fill={voteColor('down', reply.votes, username, clientVote)} 
-                        className="w-full h-full pt-[0.2vh]" 
-                    />
+                    <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', reply.votes, username, clientVote)}`} />
                 </button>
                 {username === reply_user && <button 
-                    className="text-almostbright underline w-[1.3vw]" 
+                    className='text-almostbright underline w-[1.3vw]' 
                     onClick={handleDelete}
                 >
-                    <Trash fill="fill-almostbright hover:fill-red-500" className="w-full h-full pt-[0.2vh]" /> 
+                    <Trash2 className='w-full h-full pt-[0.2vh] text-almostbright hover:text-red-500' /> 
                 </button>}
             </div>
         </div>

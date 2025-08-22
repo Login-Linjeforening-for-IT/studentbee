@@ -1,11 +1,12 @@
 'use client'
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from "react"
-import { deleteFile, sendFile } from "@/utils/fetchClient"
-import { getFiles } from "@/utils/fetch"
-import Trash from "../svg/trash"
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react'
+import { deleteFile, sendFile } from '@/utils/fetchClient'
+import { getFiles } from '@/utils/fetch'
+import Trash from '../svg/trash'
+import { Trash2 } from 'lucide-react'
 
 type CoursesProps = {
     courses: CourseAsList[]
@@ -53,7 +54,7 @@ export default function StudyOrTest({courses}: CoursesProps) {
     }, [path])
 
     return (
-        <div className="h-full">
+        <div className='h-full'>
             {study && <Files studyable={cardCount > 0} />}
             {!study && <InnerCourseList courses={courses} currentPath={path} />}
         </div>
@@ -77,7 +78,7 @@ function Files({studyable}: {studyable: boolean}) {
         setDisplayInputField('')
 
         if (inputRef.current) {
-            inputRef.current.value = ""
+            inputRef.current.value = ''
         }
     }
 
@@ -110,7 +111,7 @@ function Files({studyable}: {studyable: boolean}) {
     }, [])
 
     return (
-        <div className="w-full bg-darker p-2 h-full rounded-xl">
+        <div className='w-full bg-darker p-2 h-full rounded-xl'>
             <FileListHeader 
                 course={course} 
                 studyable={studyable}
@@ -130,27 +131,27 @@ function FileListHeader({course, studyable, displayInputField, setDisplayInputFi
     return (
         <>
             {studyable && <Button text='/ test' href={`/course/${course}`} />}
-            {course === 'IDATG2204' && <Button text='/ sql-practice' href='https://sql-practice.com' target="_blank" />}
-            <div className="flex flex-rows group">
+            {course === 'IDATG2204' && <Button text='/ sql-practice' href='https://sql-practice.com' target='_blank' />}
+            <div className='flex flex-rows group'>
                 <Button text='/ study' href={`/course/${course}/study`} />
                 <button 
-                    className="text-xl opacity-0 group-hover:opacity-100 text-end text-almostbright" 
+                    className='text-xl opacity-0 group-hover:opacity-100 text-end text-almostbright' 
                     onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}
                 >
                     +
                 </button>
             </div>
-            {displayInputField === 'root' && <div className="grid grid-cols-4">
+            {displayInputField === 'root' && <div className='grid grid-cols-4'>
                 <input 
                     ref={inputRef}
-                    className="bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500" 
+                    className='bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500' 
                     maxLength={20} 
-                    type="text" 
+                    type='text' 
                     value={input} 
                     onChange={(e) => setInput(e.target.value)} 
                 />
                 <button 
-                    className="text-end text-almostbright" 
+                    className='text-end text-almostbright' 
                     onClick={createFile}
                 >
                     Add
@@ -164,7 +165,7 @@ function Button({text, href, target}: ButtonProps) {
     return (
         <Link
             href={href} 
-            className="text-lg rounded-md mr-2 text-almostbright w-full"
+            className='text-lg rounded-md mr-2 text-almostbright w-full'
             target={target}
         >
             {text}
@@ -181,7 +182,7 @@ function FileList({files, path, inputRef}: FileListProps) {
     }
 
     return (
-        <div className="grid w-full">
+        <div className='grid w-full'>
             {files.map(file => <File 
                 key={file.name} 
                 file={file} 
@@ -211,7 +212,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
         sendFile({courseID: course, name: input, parent: file.name})
         setDisplayInputField('')
         if (inputRef.current) {
-            inputRef.current.value = ""
+            inputRef.current.value = ''
         }
     }
 
@@ -220,34 +221,31 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
     }
 
     return (
-        <div className={className || "grid space-between"}>
-            <button className="text-almostbright grid grid-cols-5 group" key={file.name}>
+        <div className={className || 'grid space-between'}>
+            <button className='text-almostbright grid grid-cols-5 group' key={file.name}>
                 <Link 
                     href={`/course/${course}/files/${file.name}`} 
-                    className="text-start pl-2 text-lg col-span-4"
+                    className='text-start pl-2 text-lg col-span-4'
                 >
                     / {file.name}
                 </Link>
-                <div className="flex flex-rows float-end justify-end space-x-1">
+                <div className='flex flex-rows float-end justify-end space-x-1'>
                     <h1
-                        className="text-end text-xl opacity-0 group-hover:opacity-100 hover:text-green-500" 
+                        className='text-end text-xl opacity-0 group-hover:opacity-100 hover:text-green-500' 
                         onClick={handleDisplayInput}
                     >
                         +
                     </h1>
                     <h1 
-                        className="text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center" 
+                        className='text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center' 
                         onClick={handleDelete}
                     >
-                        <Trash 
-                            fill="fill-bright hover:fill-red-500" 
-                            className="w-full h-full" 
-                        />
+                        <Trash2 className='w-full h-full text-bright hover:text-red-500' />
                     </h1>
                 </div>
             </button>
             {file.files.map((file) => <File 
-                className="pl-2 w-full grid space-between" 
+                className='pl-2 w-full grid space-between' 
                 key={file.name} 
                 file={file} 
                 path={path}
@@ -257,16 +255,16 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
                 displayInputField={displayInputField}
                 setDisplayInputField={setDisplayInputField}
             /> )}
-            {displayInputField === file.name && <div className="grid grid-cols-4 pl-2">
+            {displayInputField === file.name && <div className='grid grid-cols-4 pl-2'>
                 <input 
                     ref={inputRef}
                     className={'bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500'} 
                     maxLength={20} 
-                    type="text" 
+                    type='text' 
                     value={input} 
                     onChange={(e) => setInput(e.target.value)} 
                 />
-                <button className="text-end text-almostbright" onClick={addFile}>
+                <button className='text-end text-almostbright' onClick={addFile}>
                     Add
                 </button>
             </div>}
@@ -276,8 +274,8 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
 
 function InnerCourseList({courses, currentPath}: CoursesProps) {
     return (
-        <div className="h-full bg-darker rounded-xl">
-            <div className="pt-[0.5rem] pb-[6rem] h-full overflow-auto grow noscroll">
+        <div className='h-full bg-darker rounded-xl'>
+            <div className='pt-[0.5rem] pb-[6rem] h-full overflow-auto grow noscroll'>
                 {courses.map((course, index) =>
                     <Course key={course.id} course={course} currentPath={currentPath} index={index} /> 
                 )}
@@ -287,9 +285,9 @@ function InnerCourseList({courses, currentPath}: CoursesProps) {
 }
 
 function Course({course, currentPath, index}: CourseProps) {
-    const currentCourse = currentPath.includes("/course/") ? currentPath.split("/course/")[1].split("/")[0] : ''
+    const currentCourse = currentPath.includes('/course/') ? currentPath.split('/course/')[1].split('/')[0] : ''
     const current = currentCourse === course.id
-    const bg = index % 2 === 0 ? "bg-normal" : "bg-darker"
+    const bg = index % 2 === 0 ? 'bg-normal' : 'bg-darker'
 
     return (
         <Link 

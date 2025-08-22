@@ -1,7 +1,7 @@
 'use client'
 
-import { getUser } from "@/utils/fetch"
-import { useEffect } from "react"
+import { getUser } from '@/utils/fetch'
+import { useEffect } from 'react'
 
 type Details = {
     id: string

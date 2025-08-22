@@ -1,10 +1,10 @@
-import type { JSX } from "react"
+import type { JSX } from 'react'
 export default function ListHeader({userCount}: {userCount: number}): JSX.Element {
     
     return (
-        <div className="grid md:grid-cols-2 md:col-span-2">
-            <HeaderItem className="hidden md:grid mr-2" />
-            <HeaderItem className="md:ml-2" />
+        <div className='grid md:grid-cols-2 md:col-span-2'>
+            <HeaderItem className='hidden md:grid mr-2' />
+            <HeaderItem className='md:ml-2' />
         </div>
     )
 }
