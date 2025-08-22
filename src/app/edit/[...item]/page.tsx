@@ -1,7 +1,6 @@
 'use client'
 
 import Editor from '@/components/editor/editor'
-import Trash from '@/components/svg/trash'
 import { getCourse, updateCourse } from '@/utils/fetch'
 import { Trash2 } from 'lucide-react'
 import Link from 'next/link'

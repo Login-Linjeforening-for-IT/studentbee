@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react'
 import { deleteFile, sendFile } from '@/utils/fetchClient'
 import { getFiles } from '@/utils/fetch'
-import Trash from '../svg/trash'
 import { Trash2 } from 'lucide-react'
 
 type CoursesProps = {

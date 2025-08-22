@@ -2,7 +2,6 @@ import Link from 'next/link'
 import { Markdown } from '../editor/editor'
 import voteColor from './voteColor'
 import Reply, { Replies } from './reply'
-import Trash from '../svg/trash'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 

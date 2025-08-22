@@ -3,7 +3,6 @@ import getItem from '@/utils/localStorage'
 import { Dispatch, SetStateAction, useState } from 'react'
 import Editor, { Markdown } from '../editor/editor'
 import Link from 'next/link'
-import Trash from '../svg/trash'
 import voteColor from './voteColor'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 
@@ -38,7 +37,7 @@ export default function Reply({
     comments, 
     setComments
 }: ReplyProps) {
-    const user = getItem('user') as User
+    // const user = getItem('user') as User
     const [reply, setReply] = useState('')
 
     function send() {
