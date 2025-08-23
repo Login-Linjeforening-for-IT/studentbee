@@ -1,5 +1,5 @@
 import { API, BROWSER_API } from '@parent/constants'
-import getItem, { setItem } from './localStorage'
+import getItem from './localStorage'
 
 type UpdateCourseProps = {
     courseID: string
