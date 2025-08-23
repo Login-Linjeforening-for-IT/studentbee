@@ -89,68 +89,6 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
     }
 }
 
-
-// Fetches the requested grades from the server.
-// ID - Course ID
-export async function getGrades(id: string): Promise<Object | string> {
-    
-    const courseID = `${id.toUpperCase()}-1`
-
-    const queryBody = {
-        'tabell_id':308,
-        'api_versjon':1,
-        'statuslinje':'J',
-        'begrensning':'100',
-        'kodetekst':'J',
-        'desimal_separator':'.',
-        'groupBy':['Institusjonskode', 'Årstall','Emnekode','Karakter'],
-        'sortBy':['Årstall','Karakter'],
-        'filter':[
-            {
-                'variabel': 'Emnekode',
-                'selection': {
-                   'filter': 'item',
-                   'values': [
-                      courseID
-                   ]
-                }
-            },
-            {
-                'variabel': 'Institusjonskode',
-                'selection': {
-                    'filter': 'item',
-                    'values': [
-                        '1150'
-                    ]
-                }
-            }
-        ]
-    }
-
-    try {
-        const response = await fetch('https://dbh-data.dataporten-api.no/Tabeller/hentJSONTabellData', {
-            next: { revalidate: 10 },
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(queryBody)
-        })
-    
-        if (!response.ok) {
-            const data = await response.json()
-    
-            throw Error(data.error)
-        }
-    
-        const grades = await response.json()
-        return grades
-    } catch (error) {
-        const err = error as Error
-        return err.message
-    }
-}
-
 // Updates the passed course
 export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
     const user: User | undefined = getItem('user') as User | undefined  
@@ -250,6 +188,30 @@ export async function getUser(username: string): Promise<User | string> {
     
         const user: User = await response.json()
         return user
+    } catch (error: unknown) {
+        const err = error as Error
+        return err.message   
+    }
+}
+
+// Fetches the requested grades from the server.
+// ID - Course ID
+export async function getGrades(course: string): Promise<Grades | string> {
+    try {
+        const response = await fetch(`${BROWSER_API}/grades/${course}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        if (!response.ok) {
+            const data = await response.json()
+            throw new Error(data.error)
+        }
+    
+        const grades: Grades = await response.json()
+        return grades
     } catch (error: unknown) {
         const err = error as Error
         return err.message   
