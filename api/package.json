@@ -3,7 +3,9 @@
   "version": "2.3.4",
   "main": "index.js",
   "scripts": {
-    "start": "ts-node-dev src/index.ts"
+    "build": "tsc",
+    "dev": "ts-node-dev src/index.ts",
+    "start": "node dist/src/index.js"
   },
   "keywords": [],
   "author": "Login - Linjeforeningen for IT - TekKom",

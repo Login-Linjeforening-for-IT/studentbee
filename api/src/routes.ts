@@ -11,6 +11,7 @@ import { commentsHandler } from './handlers/comment/get'
 import { profileHandler, scoreHandler } from './handlers/user/get'
 import { versionHandler } from './handlers/version/get'
 import { callbackHandler, loginHandler } from './handlers/login/get'
+import { gradeHandler } from './handlers/grades/get'
 
 // Imports all POST handlers from the handlers folder
 import { postFile } from './handlers/file/post'
@@ -49,6 +50,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/score/:username', scoreHandler)
     fastify.get('/callback', callbackHandler)
     fastify.get('/version', versionHandler)
+    fastify.get('/grades/:course', gradeHandler)
 
     // Defines all PUT routes that are available on the API
     fastify.put('/course/:courseID', putCourse) 

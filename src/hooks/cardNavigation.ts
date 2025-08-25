@@ -1,6 +1,5 @@
 import { useRouter } from 'next/navigation'
 import handleCardsNavigation, { handleKeyDown } from '@utils/navigation'
-import { focusCheck, windowFocused, windowUnfocused } from '@utils/focus'
 import addScore from '@/utils/score'
 import { 
     useEffect, 
@@ -93,29 +92,6 @@ export const useCardNavigation = ({
     )
 
     useEffect(() => {
-        function focusHandler() {
-            windowFocused({ lastUserInteraction, startFocusTime })
-        }
-
-        function unfocusedHandler() {
-            windowUnfocused(startFocusTime)
-        }
-
-        window.addEventListener('focus', focusHandler)
-        window.addEventListener('blur', unfocusedHandler)
-        window.addEventListener('unload', unfocusedHandler)
-
-        const interval = setInterval(focusCheck, 300 * 1000)
-
-        return () => {
-            window.removeEventListener('focus', focusHandler)
-            window.removeEventListener('blur', unfocusedHandler)
-            window.removeEventListener('unload', unfocusedHandler)
-            clearInterval(interval)
-        }
-    }, [])
-
-    useEffect(() => {
         function keyDownHandler(event: any) {
             handleKeyDown({ event, navigate })
         }
@@ -123,15 +99,6 @@ export const useCardNavigation = ({
         window.addEventListener('keydown', keyDownHandler)
         return () => window.removeEventListener('keydown', keyDownHandler)
     }, [navigate])
-
-    useEffect(() => {
-        windowFocused({ lastUserInteraction, startFocusTime })
-        return () => windowUnfocused(startFocusTime)
-    }, [])
-
-    useEffect(() => {
-        windowFocused({ lastUserInteraction, startFocusTime })
-    }, [])
 
     return { navigate, checkAnswer }
 }

@@ -117,3 +117,29 @@ type RegisterUser = {
     name: string
     username: string
 }
+
+type Status = {
+  status: {
+    tabell_id: number
+    api_versjon: number
+    leveransenr: number
+    leveringstid: string // ISO datetime string
+    antall: number
+    "antall linjer anonymisert": number
+    returkode: number
+    melding: string
+  }
+}
+
+type GradeDistribution = {
+  Institusjonskode: string
+  Institusjonsnavn: string
+  Årstall: string
+  Emnekode: string
+  Karakter: string
+  "Antall kandidater totalt": string
+  "Antall kandidater kvinner": string
+  "Antall kandidater menn": string
+}
+
+type Grades = (Status | GradeDistribution)[]

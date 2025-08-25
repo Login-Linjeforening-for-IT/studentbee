@@ -4,6 +4,9 @@ node_modules/
 # testing
 /coverage
 
+# tsc
+dist/
+
 # next.js
 /.next/
 /out/
