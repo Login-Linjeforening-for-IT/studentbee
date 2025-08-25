@@ -14,7 +14,7 @@ export default function Navbar() {
             {/* logo */}
             <div className='flex items-center h-[3rem] md:w-[10rem]'>
                 <Link href='/' className='relative block h-8 w-8'>
-                    <Image 
+                    <Image
                         src={'/images/logo/logo.svg'}
                         className='object-cover'
                         alt='logo'

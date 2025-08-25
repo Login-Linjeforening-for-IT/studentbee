@@ -18,7 +18,7 @@ export default function Login() {
         const email = query.get('email') as string
         const name = query.get('name') as string
         const username = email?.split('@')[0]
-        
+
         // Sets the user object in localStorage based on URL params
         localStorage.setItem('id', id)
         localStorage.setItem('name', query.get('name') as string)

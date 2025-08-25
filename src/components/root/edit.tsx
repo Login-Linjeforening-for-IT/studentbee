@@ -15,7 +15,7 @@ export default function Edit() {
 
             if (typeof newCourses === 'string') {
                 setError(newCourses)
-            } else {   
+            } else {
                 setCourses(newCourses)
             }
         })()
@@ -54,11 +54,11 @@ export default function Edit() {
         <div className='hidden lg:grid'>
             {displayCourseSelector && <CourseSelector />}
             <div className='flex flex-rows'>
-                <Link 
-                    onClick={handleReview} 
+                <Link
+                    onClick={handleReview}
                     className='text-base rounded-md self-center bg-light lg:px-2 2xl:px-4'
                     href={''}>
-                        Edit
+                    Edit
                 </Link>
             </div>
             {error && <Error text={error} />}

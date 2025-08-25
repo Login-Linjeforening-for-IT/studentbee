@@ -31,8 +31,8 @@ export function RightIcon() {
     }, [loggedIn])
 
     return (
-        <Link 
-            href={href} 
+        <Link
+            href={href}
             className='grid place-self-center w-[1.8rem] h-[1.8rem] relative'
             onClick={handleClick}
         >
@@ -61,9 +61,9 @@ export function MiddleIcon({ setActive }: MiddleIconProps) {
     }
 
     return (
-        <Link 
-            href={href} 
-            className='grid place-self-center w-[1.8rem] h-[1.8rem] relative' 
+        <Link
+            href={href}
+            className='grid place-self-center w-[1.8rem] h-[1.8rem] relative'
             onClick={handleClick}
         >
             <LogOut />

@@ -42,7 +42,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
         }
 
         return await response.json()
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
         console.error(err.message)
     }
@@ -69,15 +69,15 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
                 vote
             })
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         return await response.json()
-    } catch (error) {
+    } catch(error) {
         console.error(error)
     }
 }

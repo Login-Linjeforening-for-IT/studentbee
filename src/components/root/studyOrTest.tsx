@@ -84,7 +84,9 @@ function Files({studyable}: {studyable: boolean}) {
     useEffect(() => {
         async function fetchFiles() {
             const response = await getFiles(course)
-            response && setFiles(response)
+            if (response) {
+                setFiles(response)
+            }
         }
 
         fetchFiles()
@@ -94,8 +96,8 @@ function Files({studyable}: {studyable: boolean}) {
         function handleKeyDown(e: KeyboardEvent) {
             const activeElement = document.activeElement
             if (
-                (activeElement?.tagName === 'INPUT' 
-                || activeElement?.tagName === 'TEXTAREA') 
+                (activeElement?.tagName === 'INPUT'
+                || activeElement?.tagName === 'TEXTAREA')
                 && e.key === 'Enter'
             ) {
                 createFile()
@@ -111,13 +113,13 @@ function Files({studyable}: {studyable: boolean}) {
 
     return (
         <div className='w-full bg-darker p-2 h-full rounded-xl'>
-            <FileListHeader 
-                course={course} 
+            <FileListHeader
+                course={course}
                 studyable={studyable}
-                displayInputField={displayInputField} 
-                setDisplayInputField={setDisplayInputField} 
-                input={input} 
-                setInput={setInput} 
+                displayInputField={displayInputField}
+                setDisplayInputField={setDisplayInputField}
+                input={input}
+                setInput={setInput}
                 inputRef={inputRef}
                 createFile={createFile}
             />
@@ -133,24 +135,24 @@ function FileListHeader({course, studyable, displayInputField, setDisplayInputFi
             {course === 'IDATG2204' && <Button text='/ sql-practice' href='https://sql-practice.com' target='_blank' />}
             <div className='flex flex-rows group'>
                 <Button text='/ study' href={`/course/${course}/study`} />
-                <button 
-                    className='text-xl opacity-0 group-hover:opacity-100 text-end text-almostbright' 
+                <button
+                    className='text-xl opacity-0 group-hover:opacity-100 text-end text-almostbright'
                     onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}
                 >
                     +
                 </button>
             </div>
             {displayInputField === 'root' && <div className='grid grid-cols-4'>
-                <input 
+                <input
                     ref={inputRef}
-                    className='bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500' 
-                    maxLength={20} 
-                    type='text' 
-                    value={input} 
-                    onChange={(e) => setInput(e.target.value)} 
+                    className='bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500'
+                    maxLength={20}
+                    type='text'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
                 />
-                <button 
-                    className='text-end text-almostbright' 
+                <button
+                    className='text-end text-almostbright'
                     onClick={createFile}
                 >
                     Add
@@ -163,7 +165,7 @@ function FileListHeader({course, studyable, displayInputField, setDisplayInputFi
 function Button({text, href, target}: ButtonProps) {
     return (
         <Link
-            href={href} 
+            href={href}
             className='text-lg rounded-md mr-2 text-almostbright w-full'
             target={target}
         >
@@ -182,13 +184,13 @@ function FileList({files, path, inputRef}: FileListProps) {
 
     return (
         <div className='grid w-full'>
-            {files.map(file => <File 
-                key={file.name} 
-                file={file} 
-                path={path} 
-                input={input} 
+            {files.map(file => <File
+                key={file.name}
+                file={file}
+                path={path}
+                input={input}
                 setInput={setInput}
-                inputRef={inputRef} 
+                inputRef={inputRef}
                 displayInputField={displayInputField}
                 setDisplayInputField={setDisplayInputField}
             />)}
@@ -222,31 +224,31 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
     return (
         <div className={className || 'grid space-between'}>
             <button className='text-almostbright grid grid-cols-5 group' key={file.name}>
-                <Link 
-                    href={`/course/${course}/files/${file.name}`} 
+                <Link
+                    href={`/course/${course}/files/${file.name}`}
                     className='text-start pl-2 text-lg col-span-4'
                 >
                     / {file.name}
                 </Link>
                 <div className='flex flex-rows float-end justify-end space-x-1'>
                     <h1
-                        className='text-end text-xl opacity-0 group-hover:opacity-100 hover:text-green-500' 
+                        className='text-end text-xl opacity-0 group-hover:opacity-100 hover:text-green-500'
                         onClick={handleDisplayInput}
                     >
                         +
                     </h1>
-                    <h1 
-                        className='text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center' 
+                    <h1
+                        className='text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center'
                         onClick={handleDelete}
                     >
                         <Trash2 className='w-full h-full text-bright hover:text-red-500' />
                     </h1>
                 </div>
             </button>
-            {file.files.map((file) => <File 
-                className='pl-2 w-full grid space-between' 
-                key={file.name} 
-                file={file} 
+            {file.files.map((file) => <File
+                className='pl-2 w-full grid space-between'
+                key={file.name}
+                file={file}
                 path={path}
                 input={input}
                 setInput={setInput}
@@ -255,13 +257,13 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
                 setDisplayInputField={setDisplayInputField}
             /> )}
             {displayInputField === file.name && <div className='grid grid-cols-4 pl-2'>
-                <input 
+                <input
                     ref={inputRef}
-                    className={'bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500'} 
-                    maxLength={20} 
-                    type='text' 
-                    value={input} 
-                    onChange={(e) => setInput(e.target.value)} 
+                    className={'bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500'}
+                    maxLength={20}
+                    type='text'
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
                 />
                 <button className='text-end text-almostbright' onClick={addFile}>
                     Add
@@ -276,7 +278,7 @@ function InnerCourseList({courses, currentPath}: CoursesProps) {
         <div className='h-full bg-darker rounded-xl'>
             <div className='pt-[0.5rem] pb-[6rem] h-full overflow-auto grow noscroll'>
                 {courses.map((course, index) =>
-                    <Course key={course.id} course={course} currentPath={currentPath} index={index} /> 
+                    <Course key={course.id} course={course} currentPath={currentPath} index={index} />
                 )}
             </div>
         </div>
@@ -289,8 +291,8 @@ function Course({course, currentPath, index}: CourseProps) {
     const bg = index % 2 === 0 ? 'bg-normal' : 'bg-darker'
 
     return (
-        <Link 
-            href={`/course/${course.id}`} 
+        <Link
+            href={`/course/${course.id}`}
             className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] hover:pl-[1.5rem] duration-[500ms] transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
         >
             <h1>{course.id}</h1>

@@ -2,9 +2,9 @@ import { BROWSER_API } from '@parent/constants'
 import getItem, { setItem } from './localStorage'
 
 export default async function addScore(){
-    
-    const token = getItem('token') 
-    let user = getItem('user') as User | undefined
+
+    const token = getItem('token')
+    const user = getItem('user') as User | undefined
 
     try {
         if (!user) {
@@ -12,7 +12,7 @@ export default async function addScore(){
         }
 
         user.score += 10
-        setItem('user', JSON.stringify(user)) 
+        setItem('user', JSON.stringify(user))
 
         const response = await fetch(`${BROWSER_API}/score/${user.username}`, {
             method: 'GET',
@@ -30,7 +30,7 @@ export default async function addScore(){
 
         const result = await response.json()
         return result
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
         return err.message
     }

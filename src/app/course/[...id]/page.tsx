@@ -22,12 +22,12 @@ export default async function Course(props: { params: Promise<{ id: string[] }> 
                 <CourseList />
             </div>
             <div className='col-span-10 lg:col-span-8 max-h-full overflow-auto'>
-                <CourseClient 
-                    course={course} 
-                    learningBased={learningBased} 
-                    id={id} 
-                    current={current} 
-                    comments={comments} 
+                <CourseClient
+                    course={course}
+                    learningBased={learningBased}
+                    id={id}
+                    current={current}
+                    comments={comments}
                     fileContent={fileContent.split('\n')}
                 />
             </div>

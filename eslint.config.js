@@ -1,15 +1,16 @@
 import eslint from '@eslint/js'
 import tseslint from 'typescript-eslint'
 import typescriptParser from '@typescript-eslint/parser'
-import stylisticJs from '@stylistic/eslint-plugin-js'
+import stylistic from '@stylistic/eslint-plugin'
+import pluginNext from '@next/eslint-plugin-next'
 
 export default [
     eslint.configs.recommended,
     ...tseslint.configs.recommended,
     {
-        files: ['src/**/*.{js,ts,jsx,tsx}'],
         plugins: {
-            '@stylistic/js': stylisticJs,
+            '@stylistic': stylistic,
+            '@next/next': pluginNext
         },
         languageOptions: {
             sourceType: 'module',
@@ -17,26 +18,19 @@ export default [
             parser: typescriptParser
         },
         rules: {
+            ...pluginNext.configs.recommended.rules,
             'strict': 'error',
             'no-var': 'error',
             'array-callback-return': 'error',
             'yoda': 'error',
-            '@stylistic/js/indent': [
-                'error',
-                4,
-            ],
-            '@stylistic/js/quotes': [
-                'error',
-                'single'
-            ],
-            '@stylistic/js/semi': [
-                'error',
-                'never'
-            ],
-            'jsx-quotes': [
-                'error',
-                'prefer-single'
-            ],
+            '@stylistic/indent': ['error', 4],
+            '@stylistic/quotes': ['error', 'single'],
+            '@stylistic/semi': ['error', 'never'],
+            '@stylistic/jsx-quotes': ['error', 'prefer-single'],
+            '@stylistic/space-before-function-paren': ['error', 'never'],
+            '@stylistic/type-generic-spacing': ['error'],
+            '@stylistic/type-annotation-spacing': 'error',
+            '@stylistic/no-trailing-spaces': 'error',
             '@typescript-eslint/no-unused-vars': 'error',
             '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/no-non-null-assertion': 'off'

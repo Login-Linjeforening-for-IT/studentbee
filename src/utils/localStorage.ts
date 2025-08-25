@@ -32,10 +32,12 @@ export default function getItem(name: string): object | string | undefined {
         try {
             const parsedTwice = JSON.parse(parsedOnce)
             return parsedTwice
-        } catch (error) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch(error) {
             return parsedOnce
         }
-    } catch (error: unknown) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch(error: unknown) {
         return item
     }
 }

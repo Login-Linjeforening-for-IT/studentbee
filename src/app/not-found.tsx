@@ -4,7 +4,7 @@ import Line from '../components/line'
 import type { JSX } from 'react'
 
 // Handles invalid pages
-export default function Custom404 (): JSX.Element {
+export default function Custom404(): JSX.Element {
     return (
         <main className='grid place-items-center h-[92vh]'>
             <div className='flex place-items-center'>

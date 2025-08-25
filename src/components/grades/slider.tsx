@@ -24,9 +24,9 @@ export default function Slider({ years, selectedYear, setSelectedYear }: SliderP
         const closestValue = positions.reduce((prev, curr) =>
             Math.abs(curr - inputValue) < Math.abs(prev - inputValue) ? curr : prev
         )
-        
+
         setCurrentValue(closestValue)
-        
+
         if (closestValue !== selectedYear) {
             setSelectedYear(closestValue)
         }
@@ -36,7 +36,7 @@ export default function Slider({ years, selectedYear, setSelectedYear }: SliderP
         <div className='flex flex-col items-center w-full max-w-md mt-6'>
             <input
                 type='range'
-                min={Math.min(...positions)} 
+                min={Math.min(...positions)}
                 max={Math.max(...positions)}
                 value={currentValue}
                 onChange={handleChange}

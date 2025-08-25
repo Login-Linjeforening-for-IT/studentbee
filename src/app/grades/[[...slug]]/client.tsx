@@ -5,6 +5,7 @@ import Slider from '@/components/grades/slider'
 import { useState } from 'react'
 
 type ClientPageProps = {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     grades: any
     years: number[]
     defaultYear: number

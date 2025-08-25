@@ -25,7 +25,7 @@ export default async function getComments(CourseID: string): Promise<CardComment
         }
 
         return await response.json()
-    } catch (error) {
+    } catch(error) {
         console.error(error)
         return []
     }
@@ -52,15 +52,15 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
                 parent
             })
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         return await response.json()
-    } catch (error) {
+    } catch(error) {
         console.error(error)
     }
 }
@@ -84,24 +84,24 @@ export async function deleteComment({commentID, courseID}: {commentID: number, c
                 commentID
             })
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         return await response.json()
-    } catch (error) {
+    } catch(error) {
         console.error(error)
     }
 }
 
 export function getTotalCommentsLength(comments: CardComment[], cardID: number): number {
-    let length = comments.reduce((acc, comment) => { 
-        acc += comment.cardID === cardID ? 1 : 0; return acc 
+    let length = comments.reduce((acc, comment) => {
+        acc += comment.cardID === cardID ? 1 : 0; return acc
     }, 0)
-    
+
     for (const comment of comments) {
         if (comment.replies && comment.replies.length > 0 && comment.cardID === cardID) {
             length += getTotalCommentsLength(comment.replies, cardID)

@@ -37,11 +37,11 @@ function AddCourse() {
     const [selected, setSelected] = useState(0)
     const courseIDspan = selected === 0 ? 'col-span-12' : 'col-span-10'
     const inputText = 'text-lg flex items-center justify-start col-span-2'
-    const navigate = error.length 
-        ? '/add/course/' 
-        : course.id.length 
+    const navigate = error.length
+        ? '/add/course/'
+        : course.id.length
             ? `/course/${course.id}`
-            : '/add/course/' 
+            : '/add/course/'
 
     function handleCourseNameChange(courseName: string) {
         setCourse({ ...course, id: courseName})
@@ -63,8 +63,8 @@ function AddCourse() {
         <div className='w-full h-full grid place-items-center'>
             <div className='bg-darker w-[32vw] rounded-xl grid place-items-center gap-3 p-5 max-h-[75vh] overflow-auto'>
                 <div className='grid grid-cols-12 w-full'>
-                    {selected != 0 ? <button 
-                        className='bg-darker rounded-md px-2' 
+                    {selected != 0 ? <button
+                        className='bg-darker rounded-md px-2'
                         onClick={handleBack}
                     >
                         ⬅️
@@ -75,8 +75,8 @@ function AddCourse() {
                 </div>
                 <div className='grid grid-cols-8 w-full space-between h-[5vh]'>
                     <h1 className={inputText}>Course ID:</h1>
-                    <input 
-                        value={course.id} 
+                    <input
+                        value={course.id}
                         onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())}
                         type='text'
                         placeholder='Course ID'
@@ -86,12 +86,12 @@ function AddCourse() {
                 </div>
                 <Link
                     href={navigate}
-                    className='grid w-full bg-login rounded-xl font-semibold h-[5vh] place-items-center' 
+                    className='grid w-full bg-login rounded-xl font-semibold h-[5vh] place-items-center'
                     onClick={handleAddCourse}
                 >
                     Add course
                 </Link>
-            </div>  
+            </div>
         </div>
     )
 }

@@ -15,13 +15,13 @@ type QuestionFooterProps = {
 }
 
 export default function QuestionFooter({
-    card, 
-    clientVote, 
+    card,
+    clientVote,
     handleVote,
-    showComments, 
-    setShowComments, 
-    totalCommentsLength, 
-    showAnswers, 
+    showComments,
+    setShowComments,
+    totalCommentsLength,
+    showAnswers,
     remainGreen
 }: QuestionFooterProps) {
     const [username, setUsername] = useState('')
@@ -30,11 +30,11 @@ export default function QuestionFooter({
         const user = getItem('user') as User | string | undefined
         const username = user && typeof user === 'object' ? user.username : ''
         setUsername(username)
-    }, []) 
+    }, [])
 
     const showAnswer = card.correct.every(answer => remainGreen.includes(answer))
     const revealText = showAnswer
-        ? 'Hide' 
+        ? 'Hide'
         : 'Reveal'
 
     return (
@@ -45,37 +45,37 @@ export default function QuestionFooter({
                     {card.rating + clientVote}
                 </h1>
                 <button className='w-[2.3vh]' onClick={() => handleVote(true)}>
-                    <ThumbsUp 
+                    <ThumbsUp
                         className={`w-full h-full pt-[0.2vh] ${voteColor('up', card.votes, username, clientVote)}`}
                     />
                 </button>
                 <button className='w-[2.3vh]' onClick={() => handleVote(false)}>
-                    <ThumbsDown 
+                    <ThumbsDown
                         className={`w-full h-full pt-[0.2vh] ${voteColor('down', card.votes, username, clientVote)}`}
                     />
                 </button>
             </div>
-            <button 
-                className='pb-2 text-almostbright flex items-center justify-center w-full' 
+            <button
+                className='pb-2 text-almostbright flex items-center justify-center w-full'
                 onClick={() => setShowComments(!showComments)}
             >
                 <h1 className='hidden xs:hidden sm:block mr-2'>
-                    {totalCommentsLength 
-                        ? `View comments (${totalCommentsLength})` 
+                    {totalCommentsLength
+                        ? `View comments (${totalCommentsLength})`
                         : 'Add comment'
                     }
                 </h1>
                 <h1 className='hidden xs:block sm:hidden mr-2'>
-                    {totalCommentsLength 
-                        ? `Chat (${totalCommentsLength})` 
+                    {totalCommentsLength
+                        ? `Chat (${totalCommentsLength})`
                         : 'Comment'
                     }
                 </h1>
                 {showComments ? <ChevronDown /> : <ChevronUp />}
             </button>
             <div>
-                <button 
-                    className='w-full text-end text-almostbright' 
+                <button
+                    className='w-full text-end text-almostbright'
                     onClick={showAnswers}
                 >
                     {revealText}

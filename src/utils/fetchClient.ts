@@ -38,19 +38,19 @@ export async function addCourse(course: Course): Promise<void | string> {
                     course: {...course, id: course.id.trim()}
                 }),
             })
-        
+
             if (!response.ok) {
                 const data = await response.json()
-        
+
                 throw Error(data.error)
             }
-    
+
             const result = response.json()
             return result
         }
 
         return 'Please log in to add a course'
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
         return err.message
     }
@@ -74,13 +74,13 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
                 card
             }),
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         return await response.json()
     }
 
@@ -105,13 +105,13 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
                 text
             }),
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         return await response.json()
     }
 

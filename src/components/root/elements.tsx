@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 type ElementsProps = {
@@ -82,9 +81,9 @@ function GetQuestions({cards, current, id}: QuestionsProps) {
                     const index = i + 1 + cards.length - relevant.length
                     const outline = current === index - 1 ? 'outline-gray-500 scale-[0.99]' : 'outline-hidden'
                     return (
-                        <button 
-                            onClick={() => router.push(`/course/${id}/${index}`)} 
-                            key={i} 
+                        <button
+                            onClick={() => router.push(`/course/${id}/${index}`)}
+                            key={i}
                             className={`relative w-full px-3 py-[0.52rem] bg-darker cursor-pointer rounded-xl outline outline-1 ${outline} hover:outline-white flex items-center ${index === cards.length ? '-top-[1px]' : ''}`}
                         >
                             <div className='grid grid-cols-12 w-full'>

@@ -20,16 +20,16 @@ type CommentProps = {
 }
 
 export default function Comment({
-    user, 
-    comment, 
-    vote, 
-    parent, 
-    setParent, 
-    courseID, 
-    cardID, 
-    clientComments, 
-    setClientComments, 
-    comments, 
+    user,
+    comment,
+    vote,
+    parent,
+    setParent,
+    courseID,
+    cardID,
+    clientComments,
+    setClientComments,
+    comments,
     handleDelete
 }: CommentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
@@ -55,9 +55,9 @@ export default function Comment({
                     <h1 className='text-right'>{new Date(comment.time).toLocaleString()}</h1>
                 </div>
                 <Markdown
-                    displayEditor={false} 
-                    handleDisplayEditor={() => {}} 
-                    markdown={comment.content} 
+                    displayEditor={false}
+                    handleDisplayEditor={() => {}}
+                    markdown={comment.content}
                 />
             </div>
             <div className='w-full flex flex-rows space-x-2 mt-1'>
@@ -68,32 +68,32 @@ export default function Comment({
                 <button className='w-[1.3vw]' onClick={() => handleVote('down')}>
                     <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', comment.votes, username, clientVote)}`} />
                 </button>
-                {username === comment_user && <button 
-                    className='text-almostbright underline w-[1.4vw]' 
+                {username === comment_user && <button
+                    className='text-almostbright underline w-[1.4vw]'
                     onClick={() => handleDelete({commentID: comment.id})}
                 >
                     <Trash2 className='w-full h-full pt-[0.2vh] text-bright hover:text-red-500' />
                 </button>}
-                <button 
-                    className='text-almostbright underline' 
+                <button
+                    className='text-almostbright underline'
                     onClick={() => setParent(parent ? undefined : comment.id)}
                 >
                     Reply
                 </button>
             </div>
             {parent === comment.id && <Reply
-                courseID={courseID} 
-                cardID={cardID} 
+                courseID={courseID}
+                cardID={cardID}
                 comment={comment}
                 comments={clientComments}
-                setComments={setClientComments} 
+                setComments={setClientComments}
             />}
             {comment.replies && <Replies
-                replies={comment.replies} 
-                vote={vote} 
-                comment={comment} 
-                comments={comments} 
-                setComments={setClientComments} 
+                replies={comment.replies}
+                vote={vote}
+                comment={comment}
+                comments={comments}
+                setComments={setClientComments}
             />}
         </div>
     )

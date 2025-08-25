@@ -11,6 +11,7 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
     let years = null
     let error = null
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const data = await getGrades(course) as any
     if (typeof data === 'string' && course.length) {
         error = 'No grades found'
@@ -26,6 +27,7 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
     years = availableYears.reverse()
     const selectedYear = availableYears[0]
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const transformedData = {} as any
     for (let i = 0; i < availableYears.length; i++) {
         const year = availableYears[i]

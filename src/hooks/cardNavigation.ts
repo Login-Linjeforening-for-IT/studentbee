@@ -1,13 +1,12 @@
 import { useRouter } from 'next/navigation'
 import handleCardsNavigation, { handleKeyDown } from '@utils/navigation'
 import addScore from '@/utils/score'
-import { 
-    useEffect, 
-    useCallback, 
-    useRef, 
-    Dispatch, 
+import {
+    useEffect,
+    useCallback,
+    Dispatch,
     SetStateAction,
-    RefObject, 
+    RefObject,
 } from 'react'
 
 type UseCardNavigationProps = {
@@ -44,8 +43,8 @@ export const useCardNavigation = ({
     indexMapping
 }: UseCardNavigationProps) => {
     const router = useRouter()
-    let startFocusTime = useRef<Date | undefined>(undefined)
-    let lastUserInteraction = useRef<Date | undefined>(undefined)
+    // const startFocusTime = useRef<Date | undefined>(undefined)
+    // const lastUserInteraction = useRef<Date | undefined>(undefined)
 
     const checkAnswer = useCallback(
         (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>, next?: boolean) => {
@@ -62,36 +61,41 @@ export const useCardNavigation = ({
                     }
                 }
             } else {
-                !(card.correct.length > 1) && setAttempted(prev => [...prev, ...input])
-                !attempted.every(answer => input.includes(answer)) && setAttempted(prev => [...prev, ...input])
+                if (!(card.correct.length > 1)) {
+                    setAttempted(prev => [...prev, ...input])
+                }
+                if (!attempted.every(answer => input.includes(answer))) {
+                    setAttempted(prev => [...prev, ...input])
+                }
             }
         },
         [current, router, id, card, cards, setAnimate, wait, remainGreen]
     )
 
     const navigate = useCallback((direction: string) => {
-            handleCardsNavigation({
-                direction,
-                current,
-                router,
-                setAnimateAnswer,
-                setSelected,
-                checkAnswer,
-                id,
-                card,
-                cards,
-                selectedRef,
-                attempted,
-                setAttempted,
-                wait,
-                setWait,
-                indexMapping
-            })
-        },
-        [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted, wait, setWait, indexMapping]
+        handleCardsNavigation({
+            direction,
+            current,
+            router,
+            setAnimateAnswer,
+            setSelected,
+            checkAnswer,
+            id,
+            card,
+            cards,
+            selectedRef,
+            attempted,
+            setAttempted,
+            wait,
+            setWait,
+            indexMapping
+        })
+    },
+    [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted, wait, setWait, indexMapping]
     )
 
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         function keyDownHandler(event: any) {
             handleKeyDown({ event, navigate })
         }

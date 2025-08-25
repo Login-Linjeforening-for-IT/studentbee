@@ -17,22 +17,22 @@ export async function getScoreBoard() {
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const data = await response.json()
         return data
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
         return err.message
     }
 }
 
-// Fetches courses from server, different url based on location, therefore the 
+// Fetches courses from server, different url based on location, therefore the
 // location parameter to ensure all requests are successful
 export async function getCourses(location: 'server' | 'client'): Promise<CourseAsList[] | string> {
     const url = location === 'server' ? `${API}/courses` : `${BROWSER_API}/courses`
@@ -45,16 +45,16 @@ export async function getCourses(location: 'server' | 'client'): Promise<CourseA
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const courses = await response.json()
         return courses
-    } catch (error) {
+    } catch(error) {
         const err = error as Error
         return err.message
     }
@@ -74,16 +74,16 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const course = await response.json()
         return course
-    } catch (error) {
+    } catch(error) {
         const err = error as Error
         return err.message
     }
@@ -91,14 +91,14 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
 
 // Updates the passed course
 export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
-    const user: User | undefined = getItem('user') as User | undefined  
+    const user: User | undefined = getItem('user') as User | undefined
     const token = getItem('token')
 
     try {
         if (!user) {
             throw Error('User not logged in')
         }
-        
+
         const response = await fetch(`${BROWSER_API}/course/${courseID}`, {
             method: 'PUT',
             headers: {
@@ -111,16 +111,16 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
                 editing
             })
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         const result = await response.json()
         return result
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
         return err.message
     }
@@ -138,12 +138,12 @@ export async function getFile(courseID: string, name: string) {
 
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         return await response.json()
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
         return err.message
     }
@@ -158,15 +158,15 @@ export async function getFiles(courseID: string) {
                 'Content-Type': 'application/json',
             },
         })
-    
+
         if (!response.ok) {
             const data = await response.json()
-    
+
             throw Error(data.error)
         }
-    
+
         return await response.json()
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
         return err.message
     }
@@ -185,12 +185,12 @@ export async function getUser(username: string): Promise<User | string> {
             const data = await response.json()
             throw new Error(data.error)
         }
-    
+
         const user: User = await response.json()
         return user
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
-        return err.message   
+        return err.message
     }
 }
 
@@ -209,11 +209,11 @@ export async function getGrades(course: string): Promise<Grades | string> {
             const data = await response.json()
             throw new Error(data.error)
         }
-    
+
         const grades: Grades = await response.json()
         return grades
-    } catch (error: unknown) {
+    } catch(error: unknown) {
         const err = error as Error
-        return err.message   
+        return err.message
     }
 }

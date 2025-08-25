@@ -6,7 +6,7 @@ export default function MarkAsMultipleChoice({courseID}: {courseID: string}) {
     function markCourse() {
         sendMark({courseID, mark: false})
     }
-    
+
     return (
         <button className='text-md bg-light px-2 rounded-xl text-almostbright' onClick={markCourse}>Convert to multiple choice</button>
     )

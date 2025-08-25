@@ -131,8 +131,8 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                     placeholder='Write a comment...'
                     className='w-full bg-light p-2 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll'
                     courseID=''
-                    value={content.split('\n')} 
-                    customSaveLogic={true} 
+                    value={content.split('\n')}
+                    customSaveLogic={true}
                     hideSaveButton={true}
                     save={() => {}}
                     onChange={setContent}

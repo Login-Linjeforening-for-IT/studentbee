@@ -9,8 +9,8 @@ type LineProps = {
 
 // Basic line of passed color
 export default function Line({color, className, height, width}: LineProps): JSX.Element {
-    return <div 
-        className={`${className}`} 
+    return <div
+        className={`${className}`}
         style={{backgroundColor: color || '#555', height, width}}
     />
 }

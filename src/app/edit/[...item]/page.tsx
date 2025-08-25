@@ -53,7 +53,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     const item = params.item[0].toUpperCase()
 
     useEffect(() => {
-        (async () => {
+        (async() => {
             const newCourse = await getCourse(item, 'client')
 
             if (newCourse) {
@@ -65,7 +65,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                     if (!text.length) {
                         setText(newCourse.textUnreviewed.join('\n\n'))
                     }
-    
+
                     setEditing({
                         texts: newCourse.textUnreviewed,
                         cards: newCourse.unreviewed,
@@ -109,7 +109,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
             setCard(emptyCard)
             setEditingIndex(-1)
             return
-        } 
+        }
 
         setAlternativeIndex(0)
         setAccepted([...accepted, {
@@ -143,9 +143,9 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     return (
         <div className='w-full h-full rounded-xl gap-2 flex flex-col'>
             <div className='w-full h-full grid grid-cols-4 gap-2 min-h-[87vh]'>
-                <div className={`w-full h-full bg-darker col-span-3 rounded-xl flex flex-col`}>
+                <div className={'w-full h-full bg-darker col-span-3 rounded-xl flex flex-col'}>
                     <Header
-                        clearCard={clearCard} 
+                        clearCard={clearCard}
                         editing={editing}
                         setEditing={setEditing}
                         hideText={hideText}
@@ -170,16 +170,16 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                         </div>
                     </div>
                 </div>
-                <Accepted 
+                <Accepted
                     card={card}
-                    accepted={accepted} 
+                    accepted={accepted}
                     setAccepted={setAccepted}
                     handleAcceptedIndexClick={handleAcceptedIndexClick}
                 />
             </div>
             <div className='w-full h-full grid place-items-center'>
                 <Link
-                    href={`/`}
+                    href={'/'}
                     onClick={handleSubmit}
                     className='h-full rounded-xl bg-login px-8 font-bold grid place-items-center'
                 >
@@ -191,23 +191,23 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
 }
 
 function AddCard({
-    courseID, 
-    card, 
-    setCard, 
-    addCard, 
-    alternativeIndex, 
+    courseID,
+    card,
+    setCard,
+    addCard,
+    alternativeIndex,
     setAlternativeIndex
-} : AddCardProps) {
+}: AddCardProps) {
     const inputRef = useRef<HTMLInputElement | null>(null)
-    function updateQuestion (question: string) {
+    function updateQuestion(question: string) {
         setCard({...card, question})
     }
 
-    function updateTheme (theme: string) {
+    function updateTheme(theme: string) {
         setCard({...card, theme})
     }
 
-    function updateSource (source: string) {
+    function updateSource(source: string) {
         setCard({...card, source})
     }
 
@@ -224,7 +224,7 @@ function AddCard({
 
     function handleSubmit() {
         addCard()
-        
+
         if (inputRef.current) {
             inputRef.current.value = ''
         }
@@ -270,8 +270,8 @@ function AddCard({
                 <Editor
                     placeholder='Enter question...'
                     courseID={courseID}
-                    value={card.question.split('\n')} 
-                    customSaveLogic={true} 
+                    value={card.question.split('\n')}
+                    customSaveLogic={true}
                     save={() => {}}
                     onChange={updateQuestion}
                     hideSaveButton={true}
@@ -283,36 +283,36 @@ function AddCard({
                     const isCorrect = typeof card.correct === 'number' ? card.correct === index : card.correct.includes(index)
 
                     if (index == card.alternatives.length - 1 && !alternative) {
-                        return
+                        return null
                     }
 
                     return (
                         <div key={index} className='flex flex-rows max-w-full w-full'>
                             <h1 className='w-10 text-superlight'>{index + 1}</h1>
                             <button
-                                onClick={() => handleAlternativeClick(index)} 
-                                key={alternative} 
+                                onClick={() => handleAlternativeClick(index)}
+                                key={alternative}
                                 className='text-left flex flex-rows space-x-2 w-full'
                             >
                                 <h1>{alternative}</h1>
                             </button>
                             <div className='flex flex-rows place-items-start gap-1'>
                                 <h1 className='text-superlight float-right'>{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
-                                {isCorrect ? 
+                                {isCorrect ?
                                     <button className='text-xl text-superlight hover:text-red-500' onClick={() => removeCorrect(index)}>
                                         ☒
-                                    </button> 
-                                :
+                                    </button>
+                                    :
                                     <button className='text-xl text-superlight hover:text-green-500' onClick={() => addCorrect(index)}>
                                         ☑
-                                    </button>    
+                                    </button>
                                 }
                                 <button className='w-[20px]' onClick={() => removeAlternative(index)}>
                                     <Trash2 className='w-full h-full pt-[3.5px] text-superlight hover:text-red-500' />
                                 </button>
                             </div>
                         </div>
-                    )    
+                    )
                 })}
             </div>
             <Alternative
@@ -321,7 +321,7 @@ function AddCard({
                 alternativeIndex={alternativeIndex}
                 setAlternativeIndex={setAlternativeIndex}
             />
-            <button 
+            <button
                 className='w-full h-[4vh] text-lg place-self-center bg-login rounded-xl mt-2'
                 onClick={handleSubmit}
             >Add card</button>
@@ -368,14 +368,14 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
                 <div className='w-full col-span-11 h-full'>
                     <textarea
                         ref={inputRef}
-                        value={card.alternatives[alternativeIndex]} 
+                        value={card.alternatives[alternativeIndex]}
                         onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
                         className='min-h-[5vh] w-full bg-light rounded-xl px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
                     />
                 </div>
             </div>
-            {alternativeIndex < 9 && <button 
+            {alternativeIndex < 9 && <button
                 className='w-full h-[4vh] bg-login rounded-lg text-xl'
                 onClick={handleAddAlternative}
             >Add alternative</button>}
@@ -384,13 +384,13 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
 }
 
 function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexClick}: AcceptedProps) {
-    
+
     function handleRemove(index: number) {
         const tempAccepted = [...accepted]
         tempAccepted.splice(index, 1)
         setAccepted(tempAccepted)
     }
-    
+
     return (
         <div className='w-full h-full bg-darker rounded-xl p-2 overflow-auto noscroll'>
             <div className='grid grid-cols-12'>
@@ -406,7 +406,7 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
                         <div key={index} className='grid grid-cols-12 gap-2'>
                             <button
                                 key={card.question}
-                                onClick={() => handleAcceptedIndexClick(index)} 
+                                onClick={() => handleAcceptedIndexClick(index)}
                                 className={`w-full outline ${outline} hover:outline-white bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
                             >
                                 <div className='grid grid-cols-12 w-full'>
@@ -428,7 +428,7 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
 
 function Header({ clearCard, editing, setEditing, text, setText, hideText }: HeaderProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null)
-  
+
     async function upload(event: ChangeEvent<HTMLInputElement>) {
         const file = event.target.files?.[0]
 
@@ -436,7 +436,7 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
             try {
                 const fileReader = new FileReader()
 
-                fileReader.onload = async (event) => {
+                fileReader.onload = async(event) => {
                     const arrayBuffer = event.target?.result
 
                     if (arrayBuffer) {
@@ -446,10 +446,11 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
                         const loadingTask = pdfjsLib.getDocument({ data: uint8Array })
                         const pdf = await loadingTask.promise
                         let pdfText = ''
-                        
+
                         for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
                             const page = await pdf.getPage(pageNum)
                             const textContent = await page.getTextContent()
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
                             const pageText = textContent.items.map((item: any) => item.str).join('\n')
                             pdfText += pageText
                         }
@@ -462,20 +463,20 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
                         }
                     }
                 }
-    
+
                 fileReader.onerror = (error) => {
                     console.error('Error reading file:', error)
                 }
-    
+
                 fileReader.readAsArrayBuffer(file)
-            } catch (error) {
+            } catch(error) {
                 console.error('Error loading PDF:', error)
             }
         }
     }
-  
+
     return (
-      <div className='w-full p-2 flex flex-rows justify-between'>
+        <div className='w-full p-2 flex flex-rows justify-between'>
             <Script src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js' />
             <h1 className='text-xl'>Editing course</h1>
             <div className='space-x-2'>
@@ -501,6 +502,6 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
                     Clear
                 </button>
             </div>
-      </div>
+        </div>
     )
 }

@@ -13,7 +13,7 @@ type EditorProps = {
     customSaveLogic?: true
     hideSaveButton?: true
     save?: () => void
-    onChange?: Function
+    onChange?: (value: string) => void
     className?: string
     placeholder?: string
     placeholderClassName?: string
@@ -60,16 +60,16 @@ marked.use({
     }
 })
 
-export default function Editor({ 
-    courseID, 
-    value, 
-    customSaveLogic, 
-    hideSaveButton, 
-    save, 
-    onChange, 
-    className, 
-    placeholder, 
-    placeholderClassName 
+export default function Editor({
+    courseID,
+    value,
+    customSaveLogic,
+    hideSaveButton,
+    save,
+    onChange,
+    className,
+    placeholder,
+    placeholderClassName
 }: EditorProps) {
     const [markdown, setMarkdown] = useState(value.join('\n'))
     const [displayEditor, setDisplayEditor] = useState(false)
@@ -127,10 +127,10 @@ export default function Editor({
         setMarkdown(value.join('\n'))
     }, [value])
 
-    return <EditorWithoutLogic 
+    return <EditorWithoutLogic
         className={className}
         placeholder={placeholder}
-        markdown={markdown} 
+        markdown={markdown}
         handleMarkdownChange={handleMarkdownChange}
         handleSave={handleSave}
         displayEditor={displayEditor}
@@ -143,15 +143,15 @@ export default function Editor({
     />
 }
 
-export function EditorWithoutLogic({ 
-    markdown, 
-    handleMarkdownChange, 
-    handleSave, 
-    displayEditor, 
-    handleDisplayEditor, 
+export function EditorWithoutLogic({
+    markdown,
+    handleMarkdownChange,
+    handleSave,
+    displayEditor,
+    handleDisplayEditor,
     hideSaveButton,
-    hideSave, 
-    textareaRef, 
+    hideSave,
+    textareaRef,
     edited,
     className,
     placeholder,
@@ -159,7 +159,7 @@ export function EditorWithoutLogic({
 }: EditorWithoutLogicProps) {
     return (
         <div
-            className={`${className}`} 
+            className={`${className}`}
             onClick={() => textareaRef?.current?.focus()}
         >
             <div className=''>
@@ -176,14 +176,14 @@ export function EditorWithoutLogic({
                         ref={textareaRef}
                     />}
                     <Markdown
-                        displayEditor={displayEditor} 
-                        handleDisplayEditor={handleDisplayEditor} 
+                        displayEditor={displayEditor}
+                        handleDisplayEditor={handleDisplayEditor}
                         markdown={markdown}
                     />
                 </div>
             </div>
             {edited && !hideSave && !hideSaveButton && <div className='mt-2'>
-                <button 
+                <button
                     className='text-md bg-login px-8 rounded-xl h-[4vh]'
                     onClick={handleSave}
                 >
@@ -195,9 +195,9 @@ export function EditorWithoutLogic({
 }
 
 export function Markdown({
-    displayEditor, 
-    handleDisplayEditor, 
-    markdown, 
+    displayEditor,
+    handleDisplayEditor,
+    markdown,
     className
 }: MarkdownProps) {
     return (

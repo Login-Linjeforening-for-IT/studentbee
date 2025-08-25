@@ -18,7 +18,7 @@ type CardsProps = {
 }
 
 export default function Cards({id, current, course, comments}: CardsProps) {
-    
+
     const router = useRouter()
     const [animate, setAnimate] = useState('-1')
     const [animateAnswer, setAnimateAnswer] = useState('-1')
@@ -29,7 +29,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     const selectedRef = useRef(selected)
     const relevantComments = comments[Number(id) || 0] || []
     const [remainGreen, setRemainGreen] = useState<number[]>([])
-    const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0)   
+    const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0)
     const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
     const [indexMapping, setIndexMapping] = useState<number[]>([])
     const cards = typeof course === 'object' ? course.cards as Card[] : []
@@ -54,10 +54,10 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         indexMapping
     })
 
-    const flashColor = animate === 'wrong' 
-        ? 'bg-red-800' 
-        : animate === 'correct' 
-            ? 'bg-green-500' 
+    const flashColor = animate === 'wrong'
+        ? 'bg-red-800'
+        : animate === 'correct'
+            ? 'bg-green-500'
             : 'bg-darker'
 
 
@@ -73,13 +73,13 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         // Shuffles alternatives and creates map
         const shuffled = [...card.alternatives]
         const mapping = shuffled.map((_, index) => index)
-        
+
         for (let i = shuffled.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1))
             ;[shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]]
             ;[mapping[i], mapping[j]] = [mapping[j], mapping[i]]
         }
-        
+
         setShuffledAlternatives(shuffled)
         setIndexMapping(mapping)
     }, [card?.alternatives])
@@ -114,7 +114,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                         Edit course
                     </Link>
                     <h1 className='text-lg text-center mb-2'>Mark course as learning based (no multiple choice)</h1>
-                    <button 
+                    <button
                         className='bg-login rounded-xl px-2 h-[4vh] w-[10vw]'
                         onClick={markCourse}
                     >
@@ -167,12 +167,12 @@ export default function Cards({id, current, course, comments}: CardsProps) {
     return (
         <div className='w-full h-full max-h-[87vh] flex flex-col gap-2 col-span-6'>
             {id && <Question
-                card={card} 
-                cards={cards} 
-                current={current} 
-                selected={selected} 
-                animateAnswer={animateAnswer} 
-                attempted={attempted} 
+                card={card}
+                cards={cards}
+                current={current}
+                selected={selected}
+                animateAnswer={animateAnswer}
+                attempted={attempted}
                 remainGreen={remainGreen}
                 wait={wait}
                 clientVote={clientVote}
@@ -181,10 +181,10 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 indexMapping={indexMapping}
                 shuffledAlternatives={shuffledAlternatives}
                 courseID={id}
-                checkAnswer={checkAnswer} 
+                checkAnswer={checkAnswer}
                 handleVote={handleVote}
-                setSelected={setSelected} 
-                setAttempted={setAttempted} 
+                setSelected={setSelected}
+                setAttempted={setAttempted}
                 setRemainGreen={setRemainGreen}
                 setShowComments={setShowComments}
                 showAnswers={showAnswers}
@@ -194,11 +194,11 @@ export default function Cards({id, current, course, comments}: CardsProps) {
                 navigate={navigate}
                 flashColor={flashColor}
             />
-            {showComments && id && <Comments 
-                courseID={id} 
-                cardID={current || 0} 
-                comments={relevantComments} 
-                totalCommentsLength={totalCommentsLength} 
+            {showComments && id && <Comments
+                courseID={id}
+                cardID={current || 0}
+                comments={relevantComments}
+                totalCommentsLength={totalCommentsLength}
             />}
         </div>
     )

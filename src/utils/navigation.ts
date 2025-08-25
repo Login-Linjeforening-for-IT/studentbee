@@ -31,15 +31,15 @@ type animate200msProps = {
 
 // Handles navigation for the cards component
 export default function handleCardsNavigation({
-    direction, 
-    current, 
-    router, 
-    setAnimateAnswer, 
-    setSelected, 
+    direction,
+    current,
+    router,
+    setAnimateAnswer,
+    setSelected,
     checkAnswer,
     id,
-    card, 
-    cards, 
+    card,
+    cards,
     selectedRef,
     attempted,
     setAttempted,
@@ -47,26 +47,26 @@ export default function handleCardsNavigation({
     setWait,
     indexMapping
 }: HandleNavigationProps) {
-        if (!card || current === undefined) {
-            return
-        }
-    
-        function handleKey(key: string) {        
-            // Animates the answer
-            animate200ms({ key, setAnimateAnswer })
-        
-            // Gets the original index using indexMapping
-            const originalIndex = indexMapping[Number(key)]
-        
-            // Checks the answer using the original index
-            checkAnswer([originalIndex], attempted, setAttempted)
-        
-            // Updates the selected state with the original index
-            setSelected((prev) => card.correct.length > 1 ? [...prev, originalIndex] : [originalIndex])
-        }
+    if (!card || current === undefined) {
+        return
+    }
 
-        switch (direction) {
-        case 'back': 
+    function handleKey(key: string) {
+        // Animates the answer
+        animate200ms({ key, setAnimateAnswer })
+
+        // Gets the original index using indexMapping
+        const originalIndex = indexMapping[Number(key)]
+
+        // Checks the answer using the original index
+        checkAnswer([originalIndex], attempted, setAttempted)
+
+        // Updates the selected state with the original index
+        setSelected((prev) => card.correct.length > 1 ? [...prev, originalIndex] : [originalIndex])
+    }
+
+    switch (direction) {
+        case 'back':
             if (current != undefined) {
                 const previous = current === 0 ? 1 : current
                 router.push(`/course/${id}/${previous}`)
@@ -75,7 +75,7 @@ export default function handleCardsNavigation({
             animate200ms({key: 'back', setAnimateAnswer})
             setSelected([])
             break
-        case 'skip': 
+        case 'skip':
             if (current != undefined) {
                 const skip = (current + 1) % cards.length + 1
                 router.push(`/course/${id}/${skip}`)
@@ -90,7 +90,7 @@ export default function handleCardsNavigation({
             animate200ms({key: 'next', setAnimateAnswer})
 
             if (wait) {
-                setAttempted([...attempted, ...selectedRef.current]) 
+                setAttempted([...attempted, ...selectedRef.current])
                 setWait(false)
             }
 
@@ -108,7 +108,7 @@ export default function handleCardsNavigation({
         case '0': handleKey('9'); break
         case 'w':
         case 'W':
-        case 'up': 
+        case 'up':
             setSelected((prev) => {
                 const newSelected = [...prev]
                 const newIndex = (prev[0] === card.alternatives.length - 1) ? 0 : prev[0] + 1
@@ -121,54 +121,54 @@ export default function handleCardsNavigation({
                 return newSelected
             })
             break
-        case 'down': 
+        case 'down':
             setSelected((prev) => {
                 const newSelected = [...prev]
                 const newIndex = (prev[0] === 0) ? card.alternatives.length - 1 : prev[0] - 1
-                
+
                 if (card.correct.length <= 1) {
                     return [newIndex]
                 }
-                
+
                 newSelected.unshift(newIndex)
                 return newSelected
             })
             break
         case 'shiftup':
             setSelected((prev) => {
-                const newSelected = [...prev];
+                const newSelected = [...prev]
                 const newIndex = (prev[0] === card.alternatives.length - 1) ? 0 : prev[0] + 1
                 const previousIndex = (newIndex === 0) ? card.alternatives.length - 1 : newIndex - 1
-            
+
                 for (let i = newSelected.length - 1; i >= 0; i--) {
                     if (newSelected[i] === previousIndex) {
                         newSelected.splice(i, 1)
                     }
                 }
-            
+
                 newSelected.unshift(newIndex)
                 return newSelected
             })
             break
-            case 'shiftdown':
-                setSelected((prev) => {
-                    const newSelected = [...prev]
-                    const newIndex = (prev[0] === 0) ? card.alternatives.length - 1 : prev[0] - 1     
-                    const previousIndex = (newIndex === card.alternatives.length - 1) ? 0 : newIndex + 1
-                    
-                    for (let i = newSelected.length - 1; i >= 0; i--) {
-                        if (newSelected[i] === previousIndex) {
-                            newSelected.splice(i, 1)
-                        }
-                    }
+        case 'shiftdown':
+            setSelected((prev) => {
+                const newSelected = [...prev]
+                const newIndex = (prev[0] === 0) ? card.alternatives.length - 1 : prev[0] - 1
+                const previousIndex = (newIndex === card.alternatives.length - 1) ? 0 : newIndex + 1
 
-                    newSelected.unshift(newIndex)
-                    return newSelected
-                })
+                for (let i = newSelected.length - 1; i >= 0; i--) {
+                    if (newSelected[i] === previousIndex) {
+                        newSelected.splice(i, 1)
+                    }
+                }
+
+                newSelected.unshift(newIndex)
+                return newSelected
+            })
             break
     }
 }
-    
+
 export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
     const activeElement = document.activeElement
     if (activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA') {
@@ -189,7 +189,7 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case 'p':
         case 'P':
         case 'ArrowLeft': navigate('back'); break
-        case 's': 
+        case 's':
         case 'S': navigate('skip'); break
         case '1': navigate('1'); break
         case '2': navigate('2'); break
@@ -202,7 +202,7 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
         case '9': navigate('9'); break
         case '0': navigate('0'); break
         case 'w':
-        case 'ArrowUp': 
+        case 'ArrowUp':
             if (event.shiftKey) {
                 navigate('shiftup')
             } else {
@@ -210,7 +210,7 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
             }
             break
         case 'W':
-        case 'ArrowDown': 
+        case 'ArrowDown':
             if (event.shiftKey) {
                 navigate('shiftdown')
             } else {

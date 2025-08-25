@@ -25,29 +25,28 @@ type QuestionProps = {
     setShowComments: Dispatch<SetStateAction<boolean>>
     showAnswers: () => void
     checkAnswer: (
-        input: number[], 
-        attempted: number[], 
+        input: number[],
+        attempted: number[],
         setAttempted: Dispatch<SetStateAction<number[]>>
     ) => void
 }
 
 export default function Question({
-    animateAnswer, 
-    attempted, 
-    card, 
-    cards, 
-    clientVote, 
-    current, 
-    remainGreen, 
-    selected, 
-    showComments, 
-    totalCommentsLength, 
-    wait, 
-    courseID,
-    checkAnswer, 
-    handleVote, 
-    setSelected, 
-    setAttempted, 
+    animateAnswer,
+    attempted,
+    card,
+    cards,
+    clientVote,
+    current,
+    remainGreen,
+    selected,
+    showComments,
+    totalCommentsLength,
+    wait,
+    checkAnswer,
+    handleVote,
+    setSelected,
+    setAttempted,
     setRemainGreen,
     setShowComments,
     showAnswers,
@@ -55,7 +54,7 @@ export default function Question({
     shuffledAlternatives
 }: QuestionProps) {
     return (
-        <div className={`w-full h-full min-h-[85vh] bg-darker rounded-xl pt-1 px-2 pb-2 pb-9`}>
+        <div className={'w-full h-full min-h-[85vh] bg-darker rounded-xl pt-1 px-2 pb-2 pb-9'}>
             <div className='w-full h-full overflow-auto mb-2 noscroll'>
                 <h1 className='text-right text-almostbright float-right'>
                     {card.source} {(current || 0) + 1} / {cards.length}
@@ -67,16 +66,16 @@ export default function Question({
                     {card.theme && <h1 className='text-almostbright'>
                         {card.theme}
                     </h1>}
-                    
+
                     <Markdown
-                        displayEditor={false} 
-                        handleDisplayEditor={() => {}} 
-                        markdown={card.question} 
+                        displayEditor={false}
+                        handleDisplayEditor={() => {}}
+                        markdown={card.question}
                     />
                 </div>
                 <Alternatives
                     selected={selected}
-                    animateAnswer={animateAnswer} 
+                    animateAnswer={animateAnswer}
                     attempted={attempted}
                     correct={card.correct}
                     remainGreen={remainGreen}
@@ -90,12 +89,12 @@ export default function Question({
                 />
             </div>
             <QuestionFooter
-                card={card} 
-                clientVote={clientVote} 
-                showComments={showComments} 
+                card={card}
+                clientVote={clientVote}
+                showComments={showComments}
                 totalCommentsLength={totalCommentsLength}
                 remainGreen={remainGreen}
-                handleVote={handleVote} 
+                handleVote={handleVote}
                 setShowComments={setShowComments}
                 showAnswers={showAnswers}
             />

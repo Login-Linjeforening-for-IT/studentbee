@@ -3,7 +3,7 @@
 import getItem, { removeItem } from './localStorage'
 
 // Function to logout the user
-export async function sendLogout(): Promise<Boolean | string> {
+export async function sendLogout(): Promise<boolean | string> {
     try {
         // Removes user items from localstorage if the user wants to log out
         removeItem('token')
@@ -16,7 +16,7 @@ export async function sendLogout(): Promise<Boolean | string> {
 
         window.location.href = '/login'
         return 'Logged out successfully.'
-    } catch (error) {
+    } catch(error) {
         return `Failed to log out: ${error}`
     }
 }

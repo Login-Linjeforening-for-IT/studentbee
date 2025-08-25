@@ -6,15 +6,15 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function UserInfo() {
-    const [user, setUser] = useState<User>({ 
-        name: 'Loading...', 
-        username: 'Loading...', 
+    const [user, setUser] = useState<User>({
+        name: 'Loading...',
+        username: 'Loading...',
         time: 0
     } as User)
     const [edit, setEdit] = useState('')
     const path = usePathname()
-    const timeAsHumanReadable = user.time !== 0 
-        ? `${Math.floor(user.time / 60000)}min ${Math.floor(user.time / 1000 % 60)}s` 
+    const timeAsHumanReadable = user.time !== 0
+        ? `${Math.floor(user.time / 60000)}min ${Math.floor(user.time / 1000 % 60)}s`
         : ''
 
     const [left, setLeft] = useState('')
@@ -24,8 +24,8 @@ export default function UserInfo() {
     useEffect(() => {
         const newUser: User | undefined = getItem('user') as User | undefined
         const pathnames = path.split('/')
-        let course = pathnames[1] === 'course' || 'edit' ? pathnames[2] : path.split('/')[-1]
-        
+        const course = pathnames[1] === 'course' || pathnames[1] === 'edit' ? pathnames[2] : pathnames[pathnames.length - 1]
+
         if (newUser && newUser != user) {
             setUser(newUser)
             setLeft(newUser.username)
@@ -42,17 +42,17 @@ export default function UserInfo() {
                 }
             })()
         } else if (!path.includes('edit') && ((
-            left != user.username 
+            left != user.username
             || user.username === 'Loading...')
             || middle != course
             || right != timeAsHumanReadable
-        )) {            
+        )) {
             if (course) {
                 setMiddle(course.toUpperCase())
             } else {
                 setMiddle('exam.login.no')
             }
-            
+
             setRight(timeAsHumanReadable)
         }
     }, [edit, left, middle, right, timeAsHumanReadable, path])

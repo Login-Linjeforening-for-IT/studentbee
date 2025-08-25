@@ -23,7 +23,7 @@ type RepliesProps = {
 }
 
 type ReplyComponentProps = {
-    reply: CardComment 
+    reply: CardComment
     vote: ({commentID, vote}: ClientVote) => void
     comment: CardComment
     comments: CardComment[]
@@ -31,10 +31,10 @@ type ReplyComponentProps = {
 }
 
 export default function Reply({
-    courseID, 
-    cardID, 
-    comment, 
-    comments, 
+    courseID,
+    cardID,
+    comment,
+    comments,
     setComments
 }: ReplyProps) {
     // const user = getItem('user') as User
@@ -88,15 +88,15 @@ export default function Reply({
                 className='w-full bg-light rounded-xl min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2'
                 placeholder='Write a comment...'
                 courseID=''
-                value={reply.split('\n')} 
-                customSaveLogic={true} 
+                value={reply.split('\n')}
+                customSaveLogic={true}
                 hideSaveButton={true}
                 save={() => {}}
                 onChange={setReply}
             />
             <div className='col-span-10'/>
-            <button 
-                className='col-span-2 justify-end bg-light rounded-xl mt-2 h-[5vh]' 
+            <button
+                className='col-span-2 justify-end bg-light rounded-xl mt-2 h-[5vh]'
                 onClick={send}
             >
                 Add comment
@@ -106,23 +106,23 @@ export default function Reply({
 }
 
 export function Replies({
-    replies, 
-    vote, 
-    comment, 
-    comments, 
+    replies,
+    vote,
+    comment,
+    comments,
     setComments
 }: RepliesProps) {
     return (
         <div className='grid grid-cols-12 mt-2'>
             <div className='col-span-1' />
             <div className='col-span-11'>
-                {replies.map((reply) => <ReplyComponent 
+                {replies.map((reply) => <ReplyComponent
                     key={reply.id}
-                    reply={reply} 
-                    vote={vote} 
-                    comment={comment} 
-                    comments={comments} 
-                    setComments={setComments} 
+                    reply={reply}
+                    vote={vote}
+                    comment={comment}
+                    comments={comments}
+                    setComments={setComments}
                 />)}
             </div>
         </div>
@@ -130,10 +130,10 @@ export function Replies({
 }
 
 function ReplyComponent({
-    reply, 
-    vote, 
-    comment, 
-    comments, 
+    reply,
+    vote,
+    comment,
+    comments,
     setComments
 }: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
@@ -169,8 +169,8 @@ function ReplyComponent({
         <div>
             <div className='bg-normal rounded-xl p-2 mb-1'>
                 <div className='w-full grid grid-cols-2 text-almostbright'>
-                    <Link 
-                        href={`/profile/${reply_user}`} 
+                    <Link
+                        href={`/profile/${reply_user}`}
                         className='text-lg text-almostbright underline'
                     >
                         {author}
@@ -180,30 +180,30 @@ function ReplyComponent({
                     </h1>
                 </div>
                 <Markdown
-                    displayEditor={false} 
-                    handleDisplayEditor={() => {}} 
-                    markdown={reply.content} 
+                    displayEditor={false}
+                    handleDisplayEditor={() => {}}
+                    markdown={reply.content}
                 />
             </div>
             <div className='w-full flex flex-rows space-x-2 mb-2'>
                 <h1 className='text-almostbright'>{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
-                <button 
-                    className='w-[1.3vw]' 
+                <button
+                    className='w-[1.3vw]'
                     onClick={() => handleVote({commentID: reply.id, current: true})}
                 >
                     <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', reply.votes, username, clientVote)}`} />
                 </button>
-                <button 
-                    className='w-[1.3vw]' 
+                <button
+                    className='w-[1.3vw]'
                     onClick={() => handleVote({commentID: reply.id, current: false})}
                 >
                     <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', reply.votes, username, clientVote)}`} />
                 </button>
-                {username === reply_user && <button 
-                    className='text-almostbright underline w-[1.3vw]' 
+                {username === reply_user && <button
+                    className='text-almostbright underline w-[1.3vw]'
                     onClick={handleDelete}
                 >
-                    <Trash2 className='w-full h-full pt-[0.2vh] text-almostbright hover:text-red-500' /> 
+                    <Trash2 className='w-full h-full pt-[0.2vh] text-almostbright hover:text-red-500' />
                 </button>}
             </div>
         </div>
