@@ -24,7 +24,8 @@
             "@/*": ["./src/*"],
             "@utils/*": ["./src/utils/*"],
             "@components/*": ["./src/components/*"],
-            "@parent/*": ["./*"]
+            "@parent/*": ["./*"],
+            "@config": ["./constants.ts"]
         }
     },
     "include": [
