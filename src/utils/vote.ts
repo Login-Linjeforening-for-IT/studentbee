@@ -1,4 +1,4 @@
-import { API } from '@parent/constants'
+import config from '@config'
 import getItem from './localStorage'
 
 type VoteProps = {
@@ -22,7 +22,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
             throw Error('You must be logged in to vote')
         }
 
-        const response = await fetch(`${API}/vote/card`, {
+        const response = await fetch(`${config.url.API}/vote/card`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
             throw Error('You must be logged in to vote')
         }
 
-        const response = await fetch(`${API}/vote/comment`, {
+        const response = await fetch(`${config.url.API}/vote/comment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

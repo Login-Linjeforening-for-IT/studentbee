@@ -1,4 +1,4 @@
-import { API } from '@parent/constants'
+import config from '@config'
 import getItem from './localStorage'
 
 type CommentProps = {
@@ -10,7 +10,7 @@ type CommentProps = {
 
 export default async function getComments(CourseID: string): Promise<CardComment[][]> {
     try {
-        const response = await fetch(`${API}/comments/${CourseID}`, {
+        const response = await fetch(`${config.url.API}/comments/${CourseID}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -39,7 +39,7 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
             throw Error('You must be logged in to comment')
         }
 
-        const response = await fetch(`${API}/comment`, {
+        const response = await fetch(`${config.url.API}/comment`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ export async function deleteComment({commentID, courseID}: {commentID: number, c
             throw Error('You must be logged in to delete a comment')
         }
 
-        const response = await fetch(`${API}/comment`, {
+        const response = await fetch(`${config.url.API}/comment`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

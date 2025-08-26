@@ -1,6 +1,6 @@
 'use client'
 
-import { BROWSER_API } from '@parent/constants'
+import config from '@config'
 import { sendLogout } from '@utils/user'
 import isLoggedIn from '@utils/user'
 import Link from 'next/link'
@@ -26,7 +26,7 @@ export function RightIcon() {
         if (loggedIn) {
             setHref(`/profile/${loggedIn}`)
         } else {
-            setHref(`${BROWSER_API}/login`)
+            setHref(`${config.url.BROWSER_API}/login`)
         }
     }, [loggedIn])
 

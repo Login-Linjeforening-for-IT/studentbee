@@ -1,4 +1,4 @@
-import { BROWSER_API } from '@parent/constants'
+import config from '@config'
 import getItem, { setItem } from './localStorage'
 
 export default async function addScore(){
@@ -14,7 +14,7 @@ export default async function addScore(){
         user.score += 10
         setItem('user', JSON.stringify(user))
 
-        const response = await fetch(`${BROWSER_API}/score/${user.username}`, {
+        const response = await fetch(`${config.url.BROWSER_API}/score/${user.username}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

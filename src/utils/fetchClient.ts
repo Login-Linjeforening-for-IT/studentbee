@@ -1,6 +1,6 @@
 'use client'
 
-import { BROWSER_API } from '@parent/constants'
+import config from '@config'
 import getItem from './localStorage'
 
 type MarkProps = {
@@ -27,7 +27,7 @@ export async function addCourse(course: Course): Promise<void | string> {
 
     try {
         if (user) {
-            const response = await fetch(`${BROWSER_API}/upload_course`, {
+            const response = await fetch(`${config.url.BROWSER_API}/upload_course`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
     const token = getItem('token')
 
     if (user) {
-        const response = await fetch(`${BROWSER_API}/upload_card`, {
+        const response = await fetch(`${config.url.BROWSER_API}/upload_card`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
     const token = getItem('token')
 
     if (user) {
-        const response = await fetch(`${BROWSER_API}/text`, {
+        const response = await fetch(`${config.url.BROWSER_API}/text`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -125,7 +125,7 @@ export async function sendMark({courseID, mark}: MarkProps) {
         throw Error('You must be logged in to mark')
     }
 
-    const response = await fetch(`${BROWSER_API}/mark`, {
+    const response = await fetch(`${config.url.BROWSER_API}/mark`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -151,7 +151,7 @@ export async function sendFile({courseID, name, parent}: SendFileProps) {
         throw Error('You must be logged in to upload a file')
     }
 
-    const response = await fetch(`${BROWSER_API}/file`, {
+    const response = await fetch(`${config.url.BROWSER_API}/file`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -180,7 +180,7 @@ export async function updateFile({courseID, name, content}: UpdateFileProps) {
         throw Error('You must be logged in to upload a file')
     }
 
-    const response = await fetch(`${BROWSER_API}/file`, {
+    const response = await fetch(`${config.url.BROWSER_API}/file`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -209,7 +209,7 @@ export async function deleteFile({courseID, name}: SendFileProps) {
         throw Error('You must be logged in to delete a file')
     }
 
-    const response = await fetch(`${BROWSER_API}/file/${courseID}/${name}`, {
+    const response = await fetch(`${config.url.BROWSER_API}/file/${courseID}/${name}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

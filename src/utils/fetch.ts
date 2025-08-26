@@ -1,4 +1,4 @@
-import { API, BROWSER_API } from '@parent/constants'
+import config from '@config'
 import getItem from './localStorage'
 
 type UpdateCourseProps = {
@@ -10,7 +10,7 @@ type UpdateCourseProps = {
 // Fetches the scoreboard from the server
 export async function getScoreBoard() {
     try {
-        const response = await fetch(`${API}/scoreboard`, {
+        const response = await fetch(`${config.url.API}/scoreboard`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -35,7 +35,7 @@ export async function getScoreBoard() {
 // Fetches courses from server, different url based on location, therefore the
 // location parameter to ensure all requests are successful
 export async function getCourses(location: 'server' | 'client'): Promise<CourseAsList[] | string> {
-    const url = location === 'server' ? `${API}/courses` : `${BROWSER_API}/courses`
+    const url = location === 'server' ? `${config.url.API}/courses` : `${config.url.BROWSER_API}/courses`
 
     try {
         const response = await fetch(url, {
@@ -64,7 +64,7 @@ export async function getCourses(location: 'server' | 'client'): Promise<CourseA
 // ID - Course ID
 // location - Whether the request is coming from SSR or CSR
 export async function getCourse(id: string, location: 'server' | 'client'): Promise<Course | string> {
-    const url = location === 'server' ? API : BROWSER_API
+    const url = location === 'server' ? config.url.API : config.url.BROWSER_API
 
     try {
         const response = await fetch(`${url}/course/${id.toUpperCase()}`, {
@@ -99,7 +99,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
             throw Error('User not logged in')
         }
 
-        const response = await fetch(`${BROWSER_API}/course/${courseID}`, {
+        const response = await fetch(`${config.url.BROWSER_API}/course/${courseID}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
 
 export async function getFile(courseID: string, name: string) {
     try {
-        const response = await fetch(`${API}/file/${courseID}/${name}`, {
+        const response = await fetch(`${config.url.API}/file/${courseID}/${name}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -151,7 +151,7 @@ export async function getFile(courseID: string, name: string) {
 
 export async function getFiles(courseID: string) {
     try {
-        const response = await fetch(`${API}/files/${courseID}`, {
+        const response = await fetch(`${config.url.API}/files/${courseID}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -174,7 +174,7 @@ export async function getFiles(courseID: string) {
 
 export async function getUser(username: string): Promise<User | string> {
     try {
-        const response = await fetch(`${BROWSER_API}/user/${username}`, {
+        const response = await fetch(`${config.url.BROWSER_API}/user/${username}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
@@ -198,7 +198,7 @@ export async function getUser(username: string): Promise<User | string> {
 // ID - Course ID
 export async function getGrades(course: string): Promise<Grades | string> {
     try {
-        const response = await fetch(`${BROWSER_API}/grades/${course}`, {
+        const response = await fetch(`${config.url.BROWSER_API}/grades/${course}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
