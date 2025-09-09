@@ -15,7 +15,6 @@ import { gradeHandler } from './handlers/grades/get'
 
 // Imports all POST handlers from the handlers folder
 import { postFile } from './handlers/file/post'
-import { postLogin } from './handlers/login/post'
 import { postCard } from './handlers/card/post'
 import { postCourse } from './handlers/course/post'
 import { postComment, postCommentVote } from './handlers/comment/post'
@@ -61,7 +60,6 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
 
     // // Defines all POST routes that are available on the API
     fastify.post('/file', postFile)
-    fastify.post('/login', postLogin)
     fastify.post('/upload_card', postCard)
     fastify.post('/upload_course', postCourse)
     fastify.post('/comment', postComment)

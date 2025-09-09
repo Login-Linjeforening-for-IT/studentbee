@@ -9,13 +9,13 @@ import dotenv from 'dotenv'
 dotenv.config()
 
 // Destructures the environment variables from the process environment
-const { 
+const {
     // General environment variables
-    PRODUCTION, 
-    TYPE, 
-    AUTH_URI, 
-    TOKEN_URI, 
-    AUTH_CERT_URL, 
+    PRODUCTION,
+    TYPE,
+    AUTH_URI,
+    TOKEN_URI,
+    AUTH_CERT_URL,
     UNIVERSE_DOMAIN,
 
     // Service account development specific environment variables
@@ -62,11 +62,11 @@ const DEV = {
 
 // Validates prod env variables
 if (PRODUCTION === 'true' && (
-    !PROD.PROJECT_ID 
-    || !PROD.PRIVATE_KEY_ID 
-    || !PROD.PRIVATE_KEY 
-    || !PROD.CLIENT_EMAIL 
-    || !PROD.CLIENT_ID 
+    !PROD.PROJECT_ID
+    || !PROD.PRIVATE_KEY_ID
+    || !PROD.PRIVATE_KEY
+    || !PROD.CLIENT_EMAIL
+    || !PROD.CLIENT_ID
     || !PROD.CLIENT_CERT_URL
 )) {
     throw new Error('Missing production environment variables.')
@@ -74,18 +74,18 @@ if (PRODUCTION === 'true' && (
 
 // Validates dev env variables
 if (PRODUCTION !== 'true' && (
-    !DEV.PROJECT_ID 
-    || !DEV.PRIVATE_KEY_ID 
-    || !DEV.PRIVATE_KEY 
-    || !DEV.CLIENT_EMAIL 
-    || !DEV.CLIENT_ID 
+    !DEV.PROJECT_ID
+    || !DEV.PRIVATE_KEY_ID
+    || !DEV.PRIVATE_KEY
+    || !DEV.CLIENT_EMAIL
+    || !DEV.CLIENT_ID
     || !DEV.CLIENT_CERT_URL
 )) {
     throw new Error('Missing development environment variables.')
 }
 
 // Determines which service account to use based on the production environment
-const SERVICE_ACCOUNT = PRODUCTION === "true" ? PROD : DEV
+const SERVICE_ACCOUNT = PRODUCTION === 'true' ? PROD : DEV
 
 // Initializes the Firebase Admin SDK with the service account
 admin.initializeApp({

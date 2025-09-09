@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import { invalidateCache } from "../../flow"
-import db from "../../db"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { invalidateCache } from '../../flow'
+import db from '../../db'
 
 /**
  * Defines the PostFileProps type, used for type specification when posting files
@@ -12,21 +12,11 @@ type PostFileProps = {
 }
 
 /**
- * Defines the Files type, used for type specification when handling files
- */
-type Files = {
-    name: string
-    content: string
-    files: Files[]
-    parent?: string
-}
-
-/**
  * Posts a comment to the given course
  * @param req Request object
  * @param res Response object
  */
-export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body

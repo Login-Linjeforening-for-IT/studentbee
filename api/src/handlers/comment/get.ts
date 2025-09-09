@@ -1,12 +1,22 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import cache from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import cache from '../../flow'
 
 /**
  * CourseParam type, used for type specification when handling course parameters
  */
 type CourseParam = {
     courseID: string
+}
+
+/**
+ * Comment type, used for type specification when handling comments
+ */
+type Comment = {
+    id: string
+    cardID: string
+    parent?: string
+    replies: Comment[]
 }
 
 /**
@@ -17,7 +27,7 @@ type CourseParam = {
 export async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
     // Destructures the courseID from the request parameters
     const { courseID } = req.params as CourseParam
-        
+
     /**
      * Internal asynchronous function to fetch the comments from Firebase
      * @returns The comments for the specified course if found, or otherwise a string indicating the error
@@ -29,11 +39,11 @@ export async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
             .get()
 
         // Returns an empty array if no comments are found
-        const comments = commentsSnapshot.docs.map((doc: any) => doc.data())
+        const comments = commentsSnapshot.docs.map((doc) => doc.data()) as Comment[]
 
         // Groups comments by cardID and initialize replies array
-        const groupedComments: { [key: string]: any[] } = {}
-        const commentById: { [key: string]: any } = {}
+        const groupedComments: { [key: string]: Comment[] } = {}
+        const commentById: { [key: string]: Comment } = {}
 
         // Initialize comments by cardID and group comments
         comments.forEach(comment => {

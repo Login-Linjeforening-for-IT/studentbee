@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import { invalidateCache } from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import { invalidateCache } from '../../flow'
 
 /**
  * Editing type, used for type specification when editing courses
@@ -30,15 +30,15 @@ type Card = {
  * @param res Response objecet
  * @returns Status code based on the outcome of the operation
  */
-export async function putCourse(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function putCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures the courseID from the request parameters
-        const { courseID } = req.params as any
+        const { courseID } = req.params as { courseID: string }
 
         // Destructures relevant variables from the request body
         const { username, accepted, editing } = req.body as { username: string, accepted: Card[], editing: Editing }
-        
+
         // Checks if required variables are defined, or otherwise returns a 400 status code
         if (!username || accepted === undefined || editing === undefined) {
             return res.status(400).send({ error: 'username, accepted, and editing are required' })
@@ -76,12 +76,12 @@ export async function putCourse(req: FastifyRequest, res: FastifyReply): Promise
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putCourseText(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function putCourseText(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
         const { username, courseID, text } = req.body as { username: string, courseID: string, text: string[] }
-        
+
         // Checks if required variables are defined, or otherwise returns a 400 status code
         if (!username || !courseID || !text) {
             return res.status(400).send({ error: 'username, accepted, and editing are required' })
@@ -121,7 +121,7 @@ export async function putCourseText(req: FastifyRequest, res: FastifyReply): Pro
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putCourseMark(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function putCourseMark(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -133,7 +133,7 @@ export async function putCourseMark(req: FastifyRequest, res: FastifyReply): Pro
         }
 
         // Checks if required variables are defined, or otherwise returns a 400 status code
-        if (typeof mark === undefined || mark === null) {
+        if (mark === undefined || mark === null) {
             return res.status(400).send({ error: 'Mark is required.' })
         }
 
@@ -145,7 +145,7 @@ export async function putCourseMark(req: FastifyRequest, res: FastifyReply): Pro
 
         // Finds the course in the database and updates it with the new data
         const courseRef = db.collection('Course').doc(courseID)
-        await courseRef.update({mark})
+        await courseRef.update({ mark })
 
         // Invalidates the cache to ensure that the data served is up to date
         invalidateCache(courseID)
@@ -155,6 +155,6 @@ export async function putCourseMark(req: FastifyRequest, res: FastifyReply): Pro
     } catch (error: unknown) {
         // Returns a 500 status code with the error message if an error occured
         const err = error as Error
-        res.status(500).send({ error: err.message })   
+        res.status(500).send({ error: err.message })
     }
 }

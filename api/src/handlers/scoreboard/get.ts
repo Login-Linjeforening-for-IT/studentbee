@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import cache from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import cache from '../../flow'
 
 /**
  * Fetches the first 100 users on the scoreboard from Firebase
@@ -16,12 +16,12 @@ export async function scoreboardHandler(_: FastifyRequest, res: FastifyReply) {
     async function fetchScoreboard() {
         // Fetches the users from the 'User' collection in the database
         const snapshot = await db.collection('User')
-        .orderBy('score', 'desc')
-        .limit(100)
-        .get()
-        
+            .orderBy('score', 'desc')
+            .limit(100)
+            .get()
+
         // Constructs the scoreboard
-        return snapshot.docs.map((doc: any) => ({
+        return snapshot.docs.map((doc) => ({
             username: doc.id,
             name: doc.data().name,
             score: doc.data().score,
@@ -30,7 +30,7 @@ export async function scoreboardHandler(_: FastifyRequest, res: FastifyReply) {
             seen: doc.data().last_updated
         }))
     }
-    
+
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Fetches the scoreboard from cache or database and sends it as a response

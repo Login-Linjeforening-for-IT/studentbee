@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import { invalidateCache } from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import { invalidateCache } from '../../flow'
 
 /**
  * Defines the DeleteFileProps type, used for type specification when deleting files
@@ -16,7 +16,7 @@ type DeleteFileProps = {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function deleteFile(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function deleteFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         // Destructures the courseID and fileID from the request parameters
         const { courseID, fileID } = req.params as DeleteFileProps
@@ -39,6 +39,5 @@ export async function deleteFile(req: FastifyRequest, res: FastifyReply): Promis
         // Returns a 500 status code with the error message if an error occured
         const err = error as Error
         res.status(500).send({ error: err.message })
-        
     }
 }

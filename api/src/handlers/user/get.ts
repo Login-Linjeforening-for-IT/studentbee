@@ -1,7 +1,7 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import cache, { invalidateCache } from "../../flow"
-import isUserOnScoreboard from "../../utils/isUserOnScoreboard"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import cache, { invalidateCache } from '../../flow'
+import isUserOnScoreboard from '../../utils/isUserOnScoreboard'
 
 /**
  * UserParam type, used for type specification when handling user parameters
@@ -78,7 +78,7 @@ export async function profileHandler(req: FastifyRequest, res: FastifyReply) {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function scoreHandler(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function scoreHandler(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -112,8 +112,8 @@ export async function scoreHandler(req: FastifyRequest, res: FastifyReply): Prom
 
         // Gives 10 score for each update (correct answer), and a reasonable
         // time increase. If the user was updated within 5 minutes, it will use
-        // the difference in time since the last update, otherwise it will use a 
-        // default value of 5000 milliseconds. Reasonable time from open to first 
+        // the difference in time since the last update, otherwise it will use a
+        // default value of 5000 milliseconds. Reasonable time from open to first
         // answer.
         const score = userSnapShot.data()?.score + 10 || 10
         const timeDiff = Date.now() - (userSnapShot.data()?.last_updated || 0)

@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import cache from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import cache from '../../flow'
 
 /**
  * CourseParam type, used for type specification when handling course parameters
@@ -54,7 +54,7 @@ export async function fileHandler(req: FastifyRequest, res: FastifyReply) {
 
         // Returns the file content if found, or an empty string if not found
         if (!file) {
-           return ""
+            return ''
         }
 
         // Returns the file content
@@ -75,16 +75,16 @@ export async function fileHandler(req: FastifyRequest, res: FastifyReply) {
 
 /**
  * Fetches all cards for the given course
- * @param req Request 
+ * @param req Request
  * @param res Response
  */
 export async function filesHandler(req: FastifyRequest, res: FastifyReply) {
     // Destructures the courseID from the request parameters
     const { courseID } = req.params as CourseParam
-    
+
     /**
      * Internal asynchronous function to fetch the files from Firebase
-     * @returns 
+     * @returns void
      */
     async function fetchFiles() {
         // Fetches the files from the 'Files' collection in the database
@@ -96,11 +96,11 @@ export async function filesHandler(req: FastifyRequest, res: FastifyReply) {
         }
 
         // Maps the files to an array
-        const files = filesSnapshot.docs.map((doc: any) => doc.data())
+        const files = filesSnapshot.docs.map((doc) => doc.data()) as Files[]
 
         // Groups files by name and initializes files by name
-        const groupedFiles: { [key: string]: any[] } = {}
-        const filesByName: { [key: string]: any } = {}
+        const groupedFiles: { [key: string]: Files[] } = {}
+        const filesByName: { [key: string]: Files } = {}
 
         // Initialize files by name and group files
         files.forEach(file => {

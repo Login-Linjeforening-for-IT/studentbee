@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import { invalidateCache } from "../../flow"
-import db from "../../db"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import { invalidateCache } from '../../flow'
+import db from '../../db'
 
 /**
  * Defines the VoteProps type, used for type specification when posting votes
@@ -31,7 +31,7 @@ type ReplyProps = {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postComment(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function postComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -52,7 +52,7 @@ export async function postComment(req: FastifyRequest, res: FastifyReply): Promi
 
             // Checks if the document exists, and creates it if not
             if (!idDocSnapshot.exists) {
-                transaction.set(idDocRef, { nextID: 1 }) 
+                transaction.set(idDocRef, { nextID: 1 })
                 return 0
             }
 
@@ -106,7 +106,7 @@ export async function postComment(req: FastifyRequest, res: FastifyReply): Promi
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCommentVote(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function postCommentVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -134,7 +134,7 @@ export async function postCommentVote(req: FastifyRequest, res: FastifyReply): P
 
         // Extracts the votes and rating from the comment data
         const votes = commentData.votes || []
-        const existingVoteIndex = votes.findIndex((v: any) => v.username === username)
+        const existingVoteIndex = votes.findIndex((v: { username: string }) => v.username === username)
         let newRating = commentData.rating || 0
 
         // Updates the votes and rating based on the user's vote
@@ -145,13 +145,13 @@ export async function postCommentVote(req: FastifyRequest, res: FastifyReply): P
             if (existingVote === vote) {
                 votes.splice(existingVoteIndex, 1)
                 newRating += vote ? -1 : 1
-            // Updates the vote if the user has already voted, but the new vote
-            // is different from the existing vote
+                // Updates the vote if the user has already voted, but the new vote
+                // is different from the existing vote
             } else {
                 votes[existingVoteIndex].vote = vote
                 newRating += vote ? 2 : -2
             }
-        // Adds the vote if the user has not voted before
+            // Adds the vote if the user has not voted before
         } else {
             votes.push({ username, vote })
             newRating += vote ? 1 : -1

@@ -43,9 +43,9 @@ const TTL = Number(CACHE_TTL) || 3600
  */
 export default async function cache(
     cacheKey: string,
-    fetchFunction: () => Promise<any>,
+    fetchFunction: () => Promise<string | object>,
     ttl: number = TTL
-): Promise<any> {
+): Promise<string | object> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         const cachedData = await redisClient.get(cacheKey)
@@ -75,7 +75,7 @@ export default async function cache(
  * @param data Data to store for the passed key
  * @param ttl Time to live for the cache in seconds
  */
-export function updateCache(cacheKey: string, data: any, ttl: number = TTL) {
+export function updateCache(cacheKey: string, data: object, ttl: number = TTL) {
     redisClient.set(cacheKey, safeStringify(data), {
         EX: ttl,
     })
@@ -100,13 +100,17 @@ process.on('exit', () => {
  * @param space Space to use for indentation
  * @returns Stringified object
  */
-function safeStringify(obj: any, space?: number): string {
+function safeStringify(data: string | object, space?: number): string {
+    if (typeof data === 'string') {
+        return data
+    }
+
     // Creates a WeakSet to store seen objects
     const seen = new WeakSet()
 
     // Uses replacer function to handle circular references
-    return JSON.stringify(obj, function(_, value) {
-        if (typeof value === "object" && value !== null) {
+    return JSON.stringify(data, function (_, value) {
+        if (typeof value === 'object' && value !== null) {
             if (seen.has(value)) {
                 return
             }

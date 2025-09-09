@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import { invalidateCache } from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import { invalidateCache } from '../../flow'
 
 /**
  * Defines the Card type, used for type specification when handling cards
@@ -43,7 +43,7 @@ type Course = {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -53,13 +53,13 @@ export async function postCourse(req: FastifyRequest, res: FastifyReply): Promis
         if (!username || !course) {
             return res.status(400).send({ error: 'username and course are required' })
         }
-        
+
         // Checks the token, and returns a 401 unauthoirzed status code if the token is invalid
         // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
         // }
-        
+
         // Checks if the course has an ID field, and returns a 400 status code if it does not
         const courseID = course.id
         if (!courseID) {
@@ -78,7 +78,7 @@ export async function postCourse(req: FastifyRequest, res: FastifyReply): Promis
             content: '',
             files: []
         })
-        
+
         // Invalidates the cache to ensure that the data served is up to date
         invalidateCache('courses')
 

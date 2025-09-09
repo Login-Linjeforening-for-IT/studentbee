@@ -44,7 +44,7 @@ export function generateToken(id: string): string {
 
     // Encodes the token data using base64
     const base64Token = Buffer.from(tokenData).toString('base64')
-    
+
     // Returns the base64 encoded sha256 hashed token
     return base64Token
 }
@@ -77,7 +77,7 @@ export function verifyToken(token: string, username: string): boolean {
  * Checks the token and returns an error message if the token is invalid
  * @param authorizationHeader Authorization header including Bearer substring
  * @param username Username to verify the token against
- * @param verifyToken Function to verify the token 
+ * @param verifyToken Function to verify the token
  * @returns Boolean indicating if the token is valid, or an error message if the token is invalid
  */
 export function checkToken({authorizationHeader, username, verifyToken}: HandleTokenProps): boolean | string  {

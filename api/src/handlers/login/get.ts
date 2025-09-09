@@ -1,7 +1,4 @@
-// Used for type specification when recieving requests
 import { FastifyRequest, FastifyReply } from 'fastify'
-
-// Imports dotenv package to access environment variables
 import dotenv from 'dotenv'
 import db from '../../db'
 import { invalidateCache } from '../../flow'
@@ -12,7 +9,7 @@ dotenv.config()
 const { BASE_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, EXAM_URL } = process.env
 
 if (!BASE_URL || !CLIENT_ID || !CLIENT_SECRET || !REDIRECT_URI || !EXAM_URL) {
-    throw new Error("Missing one of: BASE_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, EXAM_URL")
+    throw new Error('Missing one of: BASE_URL, CLIENT_ID, CLIENT_SECRET, REDIRECT_URI, EXAM_URL')
 }
 
 // OAuth2 Endpoints for Authentik
@@ -39,8 +36,8 @@ export function loginHandler(_: FastifyRequest, res: FastifyReply) {
  * @param req Request
  * @param res Response
  */
-export async function callbackHandler(req: FastifyRequest, res: FastifyReply): Promise<any> {
-    const { code } = req.query as any
+export async function callbackHandler(req: FastifyRequest, res: FastifyReply): Promise<void> {
+    const { code } = req.query as { code: string }
 
     if (!code) {
         return res.status(400).send('No authorization code found.')

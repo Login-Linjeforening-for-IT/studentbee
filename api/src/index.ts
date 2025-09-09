@@ -21,7 +21,7 @@ fastify.get('/', IndexHandler)
 
 /**
  * Starts the API on the defined port, listening to all interfaces. This port is
- * only internal in the container. The external port can be changed using the 
+ * only internal in the container. The external port can be changed using the
  * `API_PORT` environment variable.
  */
 async function start() {

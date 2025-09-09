@@ -3,9 +3,9 @@ import db from '../db'
 const recentlyChecked = [] as { username: string, result: boolean, timestamp: string }[]
 
 /**
- * Checks if a user is on the scoreboard, caching the result for 60 seconds to 
+ * Checks if a user is on the scoreboard, caching the result for 60 seconds to
  * avoid frequent database queries.
- * 
+ *
  * @param username The username to check if the user is on the scoreboard
  * @returns True if the user is on the scoreboard, false otherwise
  */

@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import cache from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import cache from '../../flow'
 
 /**
  * CourseParam type, used for type specification when handling course parameters
@@ -22,9 +22,9 @@ export async function coursesHandler(_: FastifyRequest, res: FastifyReply) {
     async function fetchCourses() {
         // Fetches the courses from the 'Course' collection in the database
         const coursesSnapshot = await db.collection('Course').get()
-        
+
         // Returns the courses with the cards and card count
-        return coursesSnapshot.docs.map((doc: any) => ({
+        return coursesSnapshot.docs.map((doc) => ({
             id: doc.id,
             cards: doc.data().cards,
             count: doc.data().cards.length
@@ -59,7 +59,7 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
     async function fetchCourse() {
         // Fetches the course from the 'Course' collection database
         const courseSnapshot = await db.collection('Course').doc(courseID).get()
-        
+
         // Returns the course if found, or otherwise a string indicating the error
         if (!courseSnapshot.exists) {
             return 'Course not found'
@@ -68,7 +68,7 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
         // Assigns the data to course if it exists
         const course = courseSnapshot.data()
 
-        // Checks if course has any value, othwerwise returns a string 
+        // Checks if course has any value, othwerwise returns a string
         // indicating that the course does not have any data
         if (!course) {
             return 'Course has no data'

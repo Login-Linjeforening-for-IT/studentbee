@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import { invalidateCache } from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import { invalidateCache } from '../../flow'
 
 /**
  * PutFileProps type, used for type specification when putting files
@@ -13,11 +13,11 @@ type PutFileProps = {
 
 /**
  * Function used to update files in the database
- * @param req Request object 
+ * @param req Request object
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in a try-catch block to handle potential errors gracefully
     try {
         // Destructures relevant variables from the request body
@@ -31,7 +31,7 @@ export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<a
         // Finds the file in the database and updates it with the new content
         const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
         await fileRef.update({ content })
-        
+
         // Invalidates the cache to ensure that the data served is up to date
         invalidateCache(`${courseID}:${name}`)
         invalidateCache(`${courseID}_files`)

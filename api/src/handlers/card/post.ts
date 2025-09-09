@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from "fastify"
-import db from "../../db"
-import { invalidateCache } from "../../flow"
+import { FastifyReply, FastifyRequest } from 'fastify'
+import db from '../../db'
+import { invalidateCache } from '../../flow'
 
 /**
  * Defines the PostCardVoteProps type, used for type specification when posting card votes
@@ -16,19 +16,19 @@ type PostCardVoteProps = {
  * Uploads the given cards to storage as a struct (a unreviewed card struct directly)
  * username: string
  * token: string (user token)
- * 
+ *
  * courseID: number (the course the unreviewed question is for)
  * {
  *     question: string
  *     alternatives: string[]
  *     correct: number[]
  * }
- * 
+ *
  * @param req Request object
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -45,7 +45,7 @@ export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<
             return res.status(400).send({ error: 'Missing required fields' })
         }
 
-        // Checks the token, and returns a 401 unauthoirzed status code if the token is invalid
+        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
         // const error = checkToken({authorizationHeader: req.headers['authorization'], username: card.username, verifyToken})
         // if (error) {
         //     return res.status(401).json({ error })
@@ -81,7 +81,7 @@ export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCardVote(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function postCardVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
     // Wrapped in try-catch block to catch and handle errors gracefully
     try {
         // Destructures the relevant variables from the request body
@@ -116,7 +116,7 @@ export async function postCardVote(req: FastifyRequest, res: FastifyReply): Prom
 
         // Extracts the votes and rating from the card data
         const votes = courseData.cards[cardID].votes || []
-        const existingVoteIndex = votes.findIndex((v: any) => v.username === username)
+        const existingVoteIndex = votes.findIndex((v: { username: string }) => v.username === username)
         let newRating = courseData.cards[cardID].rating || 0
 
         // Updates the votes and rating based on the user's vote
@@ -127,12 +127,12 @@ export async function postCardVote(req: FastifyRequest, res: FastifyReply): Prom
             if (existingVote === vote) {
                 votes.splice(existingVoteIndex, 1)
                 newRating += vote ? -1 : 1
-            // Updates the vote if the user has already voted, but the new vote is different
+                // Updates the vote if the user has already voted, but the new vote is different
             } else {
                 votes[existingVoteIndex].vote = vote
                 newRating += vote ? 2 : -2
             }
-        // Adds the vote if the user has not voted before
+            // Adds the vote if the user has not voted before
         } else {
             votes.push({ username, vote })
             newRating += vote ? 1 : -1

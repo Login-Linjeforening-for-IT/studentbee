@@ -1,12 +1,7 @@
-// Used for type specification when recieving requests
 import { FastifyRequest, FastifyReply } from 'fastify'
-
-// Imports the database instance, necesarry to persist operations to the database
 import db from '../../db'
-
-// Imports the invalidateCache function from the flow module, used to invalidate 
-// the cache, ensuring that the data served is up to date
 import { invalidateCache } from '../../flow'
+// import { checkToken } from '../../manager'
 
 /**
  *  Defines the DeleteCommentProps type, used for type specification when deleting comments
@@ -23,9 +18,9 @@ type DeleteCommentProps = {
  * @param res Response object
  * @returns Status code bsaed on the outcome of the operation
  */
-export async function deleteComment(req: FastifyRequest, res: FastifyReply): Promise<any> {
+export async function deleteComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        // Destructures relevant variables from the request body 
+        // Destructures relevant variables from the request body
         const { courseID, username, commentID } = req.body as DeleteCommentProps
 
         // Checks if required variables are defined, or otherwise returns a 400 status code
@@ -36,7 +31,7 @@ export async function deleteComment(req: FastifyRequest, res: FastifyReply): Pro
         // Checks the token, and returns a 401 unauthoirzed status code if the token is invalid
         // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
         // if (error) {
-        //     return res.status(401).json({ error })
+        //     return res.status(401).send({ error })
         // }
 
         // Finds and deletes the comment from the database if found
