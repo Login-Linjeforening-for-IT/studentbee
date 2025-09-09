@@ -27,7 +27,6 @@ export default [
             '@stylistic/quotes': ['error', 'single'],
             '@stylistic/semi': ['error', 'never'],
             '@stylistic/jsx-quotes': ['error', 'prefer-single'],
-            '@stylistic/space-before-function-paren': ['error', 'never'],
             '@stylistic/type-generic-spacing': ['error'],
             '@stylistic/type-annotation-spacing': 'error',
             '@stylistic/no-trailing-spaces': 'error',
