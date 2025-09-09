@@ -31,10 +31,11 @@ import { deleteComment } from './handlers/comment/delete'
 
 /**
  * Defines the routes available in the API.
- * 
+ *
  * @param fastify Fastify Instance
  * @param _ Fastify Plugin Options
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
     // Defines all GET routes that are available on the API
     fastify.get('/', indexHandler)
@@ -53,7 +54,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/grades/:course', gradeHandler)
 
     // Defines all PUT routes that are available on the API
-    fastify.put('/course/:courseID', putCourse) 
+    fastify.put('/course/:courseID', putCourse)
     fastify.put('/text', putCourseText)
     fastify.put('/mark', putCourseMark)
     fastify.put('/file', putFile)
