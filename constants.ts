@@ -24,4 +24,5 @@ const config = {
     },
     version: packageInfo.version
 }
+
 export default config
