@@ -1,7 +1,9 @@
 // Fetches the requested grades from the server.
 
 import { FastifyReply, FastifyRequest } from 'fastify'
-import { DBH_API } from '../../constants'
+import config from '../../constants'
+
+const { DBH_API } = config
 
 // ID - Course ID
 export async function gradeHandler(req: FastifyRequest, res: FastifyReply): Promise<object | string> {

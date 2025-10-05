@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import db from '../../db'
 import { invalidateCache } from '../../flow'
+import validateToken from '../../utils/validateToken'
 
 /**
  * Defines the PostCardVoteProps type, used for type specification when posting card votes
@@ -46,10 +47,10 @@ export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<
         }
 
         // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], username: card.username, verifyToken})
-        // if (error) {
-        //     return res.status(401).json({ error })
-        // }
+        const { valid, error } = await validateToken(req, res)
+        if (!valid || error) {
+            return res.status(401).send({ error })
+        }
 
         // Generate a new document reference with an auto-generated ID
         const cardRef = db.collection('CardUnreviewed').doc()

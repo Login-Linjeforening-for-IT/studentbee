@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import db from '../../db'
 import { invalidateCache } from '../../flow'
+import validateToken from '../../utils/validateToken'
 
 /**
  * Defines the Card type, used for type specification when handling cards
@@ -54,11 +55,11 @@ export async function postCourse(req: FastifyRequest, res: FastifyReply): Promis
             return res.status(400).send({ error: 'username and course are required' })
         }
 
-        // Checks the token, and returns a 401 unauthoirzed status code if the token is invalid
-        // const error = checkToken({authorizationHeader: req.headers['authorization'], username, verifyToken})
-        // if (error) {
-        //     return res.status(401).json({ error })
-        // }
+        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
+        const { valid, error } = await validateToken(req, res)
+        if (!valid || error) {
+            return res.status(401).send({ error })
+        }
 
         // Checks if the course has an ID field, and returns a 400 status code if it does not
         const courseID = course.id

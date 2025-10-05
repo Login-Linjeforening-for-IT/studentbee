@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { invalidateCache } from '../../flow'
 import db from '../../db'
+import validateToken from '../../utils/validateToken'
 
 /**
  * Defines the PostFileProps type, used for type specification when posting files
@@ -25,6 +26,12 @@ export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<
         // Checks if required variables are defined, or otherwise returns a 400 status code
         if (!courseID || !name) {
             return res.status(400).send({ error: 'Missing required field (courseID, name)' })
+        }
+
+        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
+        const { valid, error } = await validateToken(req, res)
+        if (!valid || error) {
+            return res.status(401).send({ error })
         }
 
         // Generates a new document reference with the courseID and name

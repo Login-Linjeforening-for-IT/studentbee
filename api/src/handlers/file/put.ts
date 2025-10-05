@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import db from '../../db'
 import { invalidateCache } from '../../flow'
+import validateToken from '../../utils/validateToken'
 
 /**
  * PutFileProps type, used for type specification when putting files
@@ -26,6 +27,12 @@ export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<v
         // Checks if required variables are defined, or otherwise returns a 400 status code
         if (!courseID || !name || !content) {
             return res.status(400).send({ error: 'Missing required field (courseID, name, content)' })
+        }
+
+        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
+        const { valid, error } = await validateToken(req, res)
+        if (!valid || error) {
+            return res.status(401).send({ error })
         }
 
         // Finds the file in the database and updates it with the new content

@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { invalidateCache } from '../../flow'
 import db from '../../db'
+import validateToken from '../../utils/validateToken'
 
 /**
  * Defines the VoteProps type, used for type specification when posting votes
@@ -40,6 +41,12 @@ export async function postComment(req: FastifyRequest, res: FastifyReply): Promi
         // Validate the required fields
         if (!username || !courseID || typeof cardID != 'number' || !content) {
             return res.status(400).send({ error: 'Missing required field (username, courseID, cardID, content)' })
+        }
+
+        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
+        const { valid, error } = await validateToken(req, res)
+        if (!valid || error) {
+            return res.status(401).send({ error })
         }
 
         // Generates a new document reference with an auto-generated ID
@@ -115,6 +122,12 @@ export async function postCommentVote(req: FastifyRequest, res: FastifyReply): P
         // Validate the required fields
         if (!username || !courseID || typeof cardID !== 'number' || !commentID || vote == null) {
             return res.status(400).send({ error: 'Missing required field (username, courseID, cardID, commentID, vote)' })
+        }
+
+        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
+        const { valid, error } = await validateToken(req, res)
+        if (!valid || error) {
+            return res.status(401).send({ error })
         }
 
         // Fetches the comment document from Firestore
