@@ -4,6 +4,9 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    depends_on:
+      - postgres
+
 
   backend:
     container_name: backend
@@ -14,6 +17,7 @@ services:
       - "8080:8080"
     command: npm start
     depends_on:
+      - postgres
       - redis
     environment:
       - REDIS_HOST=redis
@@ -30,3 +34,24 @@ services:
       - backend
     environment:
       - API_URL=http://backend:8080/api
+
+  postgres:
+    image: postgres:18
+    container_name: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER:-studentbee}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB:-studentbee}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U studentbee -d studentbee"]
+      interval: 10s
+      retries: 5
+
+volumes:
+  postgres_data:
