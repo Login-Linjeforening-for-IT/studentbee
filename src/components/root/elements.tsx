@@ -37,7 +37,7 @@ export default function Elements({id, current, course}: ElementsProps) {
     function Help() {
         if (help) {
             return (
-                <div className='w-full h-full bg-darker rounded-xl p-2 overflow-auto noscroll'>
+                <div className='w-full h-full bg-login-900 rounded-xl p-2 overflow-auto noscroll'>
                     <h1 className='text-xl'>Info</h1>
                     <div className='h-full w-full'>
                         {help}
@@ -84,11 +84,11 @@ function GetQuestions({cards, current, id}: QuestionsProps) {
                         <button
                             onClick={() => router.push(`/course/${id}/${index}`)}
                             key={i}
-                            className={`relative w-full px-3 py-[0.52rem] bg-darker cursor-pointer rounded-xl outline outline-1 ${outline} hover:outline-white flex items-center ${index === cards.length ? '-top-[1px]' : ''}`}
+                            className={`relative w-full px-3 py-[0.52rem] bg-login-900 cursor-pointer rounded-xl outline outline-1 ${outline} hover:outline-white flex items-center ${index === cards.length ? '-top-[1px]' : ''}`}
                         >
                             <div className='grid grid-cols-12 w-full'>
                                 <h1 className='text-md text-left w-full col-span-11'>{card.question.slice(0, 25)}{card.question.length > 25 && '...'}</h1>
-                                <h1 className='text-extralight text-right w-full'>{index}</h1>
+                                <h1 className='text-login-500 text-right w-full'>{index}</h1>
                             </div>
                         </button>
                     )

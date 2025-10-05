@@ -24,12 +24,12 @@ export default function Study({ courseID, value }: StudyProps) {
     }
 
     return (
-        <div className='col-span-8 bg-darker rounded-xl p-8 h-full overflow-auto noscroll'>
+        <div className='col-span-8 bg-login-900 rounded-xl p-8 h-full overflow-auto noscroll'>
             <div className='flex flex-cols justify-between'>
                 <h1 className='text-xl font-bold'>Learning Material for {courseID}</h1>
                 <MarkAsMultipleChoice courseID={courseID} />
             </div>
-            <p className='text-md text-almostbright'>
+            <p className='text-md text-login-300'>
                 This course allows examination aids, and is not a multiple choice based exam.
             </p>
             <Editor
@@ -38,7 +38,7 @@ export default function Study({ courseID, value }: StudyProps) {
                 customSaveLogic={true}
                 save={save}
                 className='min-h-[68vh]'
-                placeholderClassName='placeholder-bright'
+                placeholderClassName='placeholder-login-50'
                 onChange={handleChange}
             />
         </div>

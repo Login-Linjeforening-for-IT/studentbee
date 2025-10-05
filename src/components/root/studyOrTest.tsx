@@ -112,7 +112,7 @@ function Files({studyable}: {studyable: boolean}) {
     }, [])
 
     return (
-        <div className='w-full bg-darker p-2 h-full rounded-xl'>
+        <div className='w-full bg-login-900 p-2 h-full rounded-xl'>
             <FileListHeader
                 course={course}
                 studyable={studyable}
@@ -136,7 +136,7 @@ function FileListHeader({course, studyable, displayInputField, setDisplayInputFi
             <div className='flex flex-rows group'>
                 <Button text='/ study' href={`/course/${course}/study`} />
                 <button
-                    className='text-xl opacity-0 group-hover:opacity-100 text-end text-almostbright'
+                    className='text-xl opacity-0 group-hover:opacity-100 text-end text-login-300'
                     onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}
                 >
                     +
@@ -145,14 +145,14 @@ function FileListHeader({course, studyable, displayInputField, setDisplayInputFi
             {displayInputField === 'root' && <div className='grid grid-cols-4'>
                 <input
                     ref={inputRef}
-                    className='bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500'
+                    className='bg-transparent col-span-3 border-b-2 border-login-50 text-login-300 outline-hidden caret-orange-500'
                     maxLength={20}
                     type='text'
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
                 <button
-                    className='text-end text-almostbright'
+                    className='text-end text-login-300'
                     onClick={createFile}
                 >
                     Add
@@ -166,7 +166,7 @@ function Button({text, href, target}: ButtonProps) {
     return (
         <Link
             href={href}
-            className='text-lg rounded-md mr-2 text-almostbright w-full'
+            className='text-lg rounded-md mr-2 text-login-300 w-full'
             target={target}
         >
             {text}
@@ -223,7 +223,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
 
     return (
         <div className={className || 'grid space-between'}>
-            <button className='text-almostbright grid grid-cols-5 group' key={file.name}>
+            <button className='text-login-300 grid grid-cols-5 group' key={file.name}>
                 <Link
                     href={`/course/${course}/files/${file.name}`}
                     className='text-start pl-2 text-lg col-span-4'
@@ -241,7 +241,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
                         className='text-xl opacity-0 group-hover:opacity-100 text-end w-[1.3vw] place-self-center'
                         onClick={handleDelete}
                     >
-                        <Trash2 className='w-full h-full text-bright hover:text-red-500' />
+                        <Trash2 className='w-full h-full text-login-50 hover:text-red-500' />
                     </h1>
                 </div>
             </button>
@@ -259,13 +259,13 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
             {displayInputField === file.name && <div className='grid grid-cols-4 pl-2'>
                 <input
                     ref={inputRef}
-                    className={'bg-transparent col-span-3 border-b-2 border-bright text-almostbright outline-hidden caret-orange-500'}
+                    className={'bg-transparent col-span-3 border-b-2 border-login-50 text-login-300 outline-hidden caret-orange-500'}
                     maxLength={20}
                     type='text'
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
-                <button className='text-end text-almostbright' onClick={addFile}>
+                <button className='text-end text-login-300' onClick={addFile}>
                     Add
                 </button>
             </div>}
@@ -275,7 +275,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
 
 function InnerCourseList({courses, currentPath}: CoursesProps) {
     return (
-        <div className='h-full bg-darker rounded-xl'>
+        <div className='h-full bg-login-900 rounded-xl'>
             <div className='pt-[0.5rem] pb-[6rem] h-full overflow-auto grow noscroll'>
                 {courses.map((course, index) =>
                     <Course key={course.id} course={course} currentPath={currentPath} index={index} />
@@ -288,7 +288,7 @@ function InnerCourseList({courses, currentPath}: CoursesProps) {
 function Course({course, currentPath, index}: CourseProps) {
     const currentCourse = currentPath.includes('/course/') ? currentPath.split('/course/')[1].split('/')[0] : ''
     const current = currentCourse === course.id
-    const bg = index % 2 === 0 ? 'bg-normal' : 'bg-darker'
+    const bg = index % 2 === 0 ? 'bg-login-800' : 'bg-login-900'
 
     return (
         <Link

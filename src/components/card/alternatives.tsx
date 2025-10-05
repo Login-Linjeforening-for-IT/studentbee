@@ -64,10 +64,10 @@ export default function Alternatives({
         }
 
         if (selected.includes(originalIndex)) {
-            return 'bg-extralight'
+            return 'bg-login-500'
         }
 
-        return 'bg-light'
+        return 'bg-login-700'
     }
 
     return (
@@ -90,7 +90,7 @@ export default function Alternatives({
                     className={`${getColor(index)} rounded-lg text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
                 >
                     <h1
-                        className='h-full pr-2 text-md grid place-items-center text-almostbright'
+                        className='h-full pr-2 text-md grid place-items-center text-login-300'
                     >
                         {index + 1}
                     </h1>

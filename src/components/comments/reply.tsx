@@ -85,7 +85,7 @@ export default function Reply({
         <div className='grid grid-cols-12'>
             <div className='col-span-1' />
             <Editor
-                className='w-full bg-light rounded-xl min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2'
+                className='w-full bg-login-700 rounded-xl min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2'
                 placeholder='Write a comment...'
                 courseID=''
                 value={reply.split('\n')}
@@ -96,7 +96,7 @@ export default function Reply({
             />
             <div className='col-span-10'/>
             <button
-                className='col-span-2 justify-end bg-light rounded-xl mt-2 h-[5vh]'
+                className='col-span-2 justify-end bg-login-700 rounded-xl mt-2 h-[5vh]'
                 onClick={send}
             >
                 Add comment
@@ -167,11 +167,11 @@ function ReplyComponent({
 
     return (
         <div>
-            <div className='bg-normal rounded-xl p-2 mb-1'>
-                <div className='w-full grid grid-cols-2 text-almostbright'>
+            <div className='bg-login-800 rounded-xl p-2 mb-1'>
+                <div className='w-full grid grid-cols-2 text-login-300'>
                     <Link
                         href={`/profile/${reply_user}`}
-                        className='text-lg text-almostbright underline'
+                        className='text-lg text-login-300 underline'
                     >
                         {author}
                     </Link>
@@ -186,7 +186,7 @@ function ReplyComponent({
                 />
             </div>
             <div className='w-full flex flex-rows space-x-2 mb-2'>
-                <h1 className='text-almostbright'>{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
+                <h1 className='text-login-300'>{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
                 <button
                     className='w-[1.3vw]'
                     onClick={() => handleVote({commentID: reply.id, current: true})}
@@ -200,10 +200,10 @@ function ReplyComponent({
                     <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', reply.votes, username, clientVote)}`} />
                 </button>
                 {username === reply_user && <button
-                    className='text-almostbright underline w-[1.3vw]'
+                    className='text-login-300 underline w-[1.3vw]'
                     onClick={handleDelete}
                 >
-                    <Trash2 className='w-full h-full pt-[0.2vh] text-almostbright hover:text-red-500' />
+                    <Trash2 className='w-full h-full pt-[0.2vh] text-login-300 hover:text-red-500' />
                 </button>}
             </div>
         </div>

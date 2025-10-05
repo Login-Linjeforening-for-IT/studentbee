@@ -4,16 +4,19 @@ import ToolTips from './root/toolTips'
 import Sidebar from './sidebar'
 import { RightSide } from './clientNav'
 import { ArrowUpRight } from 'lucide-react'
+import { cookies } from 'next/headers'
 
 // Displays the header
-export default function Navbar() {
+export default async function Navbar() {
+    const accessToken = (await cookies()).get('access_token')?.value
+
     return (
         <div className='flex justify-between bg-black h-full w-full md:px-[1rem] gap-2 overflow-hidden px-4'>
             <Sidebar />
             <ToolTips />
             {/* logo */}
             <div className='flex items-center h-[3rem] md:w-[10rem]'>
-                <Link href='/' className='relative block h-8 w-8'>
+                <Link href={accessToken ? '/course' : '/'} className='relative block h-8 w-8'>
                     <Image
                         src={'/images/logo/logo.svg'}
                         className='object-cover'

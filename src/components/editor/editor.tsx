@@ -55,7 +55,7 @@ marked.use({
             return `<a href='${href}' title='${title}' target='_blank' rel='noopener noreferrer' class='text-blue-500 underline'>${text}</a>`
         },
         codespan(text) {
-            return `<code class='break-all bg-extralight p-0.3 rounded-xs'>${text}</code>`
+            return `<code class='break-all bg-login-500 p-0.3 rounded-xs'>${text}</code>`
         }
     }
 })
@@ -164,8 +164,8 @@ export function EditorWithoutLogic({
         >
             <div className=''>
                 {displayEditor && <div className='grid grid-cols-2'>
-                    <h1 className='text-lg text-almostbright'>Markdown</h1>
-                    <h1 className='text-lg pl-2 text-almostbright'>Preview</h1>
+                    <h1 className='text-lg text-login-300'>Markdown</h1>
+                    <h1 className='text-lg pl-2 text-login-300'>Preview</h1>
                 </div>}
                 <div className={`markdown-editor space-x-2 h-full ${displayEditor && 'grid grid-cols-2'}`}>
                     {(displayEditor || !markdown.length) && <textarea

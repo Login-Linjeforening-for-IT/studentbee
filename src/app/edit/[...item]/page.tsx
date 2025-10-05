@@ -143,7 +143,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     return (
         <div className='w-full h-full rounded-xl gap-2 flex flex-col'>
             <div className='w-full h-full grid grid-cols-4 gap-2 min-h-[87vh]'>
-                <div className={'w-full h-full bg-darker col-span-3 rounded-xl flex flex-col'}>
+                <div className={'w-full h-full bg-login-900 col-span-3 rounded-xl flex flex-col'}>
                     <Header
                         clearCard={clearCard}
                         editing={editing}
@@ -157,7 +157,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                             {showText && <textarea
                                 value={text}
                                 onChange={handleTextChange}
-                                className='w-full h-full overflow-auto noscroll bg-light rounded-xl p-2 resize-none whitespace-pre-wrap outline-hidden caret-orange-500'
+                                className='w-full h-full overflow-auto noscroll bg-login-700 rounded-xl p-2 resize-none whitespace-pre-wrap outline-hidden caret-orange-500'
                             />}
                             <AddCard
                                 courseID={item}
@@ -250,7 +250,7 @@ function AddCard({
         <div className='w-full h-full overflow-auto noscroll'>
             <h1 className='flex items-center justify-start text-lg h-[4vh]'>Source</h1>
             <input
-                className='bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500'
+                className='bg-login-700 p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500'
                 value={card.source}
                 type='text'
                 placeholder='Exam or learning material source'
@@ -259,14 +259,14 @@ function AddCard({
             <h1 className='flex items-center justify-start text-lg h-[4vh]'>Theme</h1>
             <input
                 ref={inputRef}
-                className='bg-light p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500'
+                className='bg-login-700 p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500'
                 value={card.theme}
                 type='text'
                 placeholder='Question theme (optional)'
                 onChange={(event) => updateTheme(event.target.value)}
             />
             <h1 className='flex items-center justify-start text-lg col-span-1 h-[4vh]'>Question</h1>
-            <div className='bg-light rounded-xl p-2'>
+            <div className='bg-login-700 rounded-xl p-2'>
                 <Editor
                     placeholder='Enter question...'
                     courseID={courseID}
@@ -288,7 +288,7 @@ function AddCard({
 
                     return (
                         <div key={index} className='flex flex-rows max-w-full w-full'>
-                            <h1 className='w-10 text-superlight'>{index + 1}</h1>
+                            <h1 className='w-10 text-login-400'>{index + 1}</h1>
                             <button
                                 onClick={() => handleAlternativeClick(index)}
                                 key={alternative}
@@ -297,18 +297,18 @@ function AddCard({
                                 <h1>{alternative}</h1>
                             </button>
                             <div className='flex flex-rows place-items-start gap-1'>
-                                <h1 className='text-superlight float-right'>{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
+                                <h1 className='text-login-400 float-right'>{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
                                 {isCorrect ?
-                                    <button className='text-xl text-superlight hover:text-red-500' onClick={() => removeCorrect(index)}>
+                                    <button className='text-xl text-login-400 hover:text-red-500' onClick={() => removeCorrect(index)}>
                                         ☒
                                     </button>
                                     :
-                                    <button className='text-xl text-superlight hover:text-green-500' onClick={() => addCorrect(index)}>
+                                    <button className='text-xl text-login-400 hover:text-green-500' onClick={() => addCorrect(index)}>
                                         ☑
                                     </button>
                                 }
                                 <button className='w-[20px]' onClick={() => removeAlternative(index)}>
-                                    <Trash2 className='w-full h-full pt-[3.5px] text-superlight hover:text-red-500' />
+                                    <Trash2 className='w-full h-full pt-[3.5px] text-login-400 hover:text-red-500' />
                                 </button>
                             </div>
                         </div>
@@ -371,7 +371,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
                         value={card.alternatives[alternativeIndex]}
                         onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className='min-h-[5vh] w-full bg-light rounded-xl px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
+                        className='min-h-[5vh] w-full bg-login-700 rounded-xl px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
                     />
                 </div>
             </div>
@@ -392,10 +392,10 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
     }
 
     return (
-        <div className='w-full h-full bg-darker rounded-xl p-2 overflow-auto noscroll'>
+        <div className='w-full h-full bg-login-900 rounded-xl p-2 overflow-auto noscroll'>
             <div className='grid grid-cols-12'>
                 <h1 className='text-xl mb-2 grid grid-row col-span-11'>Accepted</h1>
-                <h1 className='text-almostbright'>({accepted.length})</h1>
+                <h1 className='text-login-300'>({accepted.length})</h1>
             </div>
             <div>
                 {accepted.map((card: Card, index: number) => {
@@ -407,16 +407,16 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
                             <button
                                 key={card.question}
                                 onClick={() => handleAcceptedIndexClick(index)}
-                                className={`w-full outline ${outline} hover:outline-white bg-light rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
+                                className={`w-full outline ${outline} hover:outline-white bg-login-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
                             >
                                 <div className='grid grid-cols-12 w-full'>
-                                    <h1 className='w-full text-almostbright'>{index + 1}</h1>
+                                    <h1 className='w-full text-login-300'>{index + 1}</h1>
                                     <h1 className='w-full col-span-10'>{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
-                                    <h1 className='text-almostbright text-right w-full'>{card.alternatives.length}</h1>
+                                    <h1 className='text-login-300 text-right w-full'>{card.alternatives.length}</h1>
                                 </div>
                             </button>
                             <button className='flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw]' onClick={() => handleRemove(index)}>
-                                <Trash2 className='w-full h-full place-self-center text-bright hover:text-red-500' />
+                                <Trash2 className='w-full h-full place-self-center text-login-50 hover:text-red-500' />
                             </button>
                         </div>
                     )
@@ -480,7 +480,7 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
             <Script src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js' />
             <h1 className='text-xl'>Editing course</h1>
             <div className='space-x-2'>
-                <button className='bg-light rounded-lg p-1 px-2' onClick={hideText}>
+                <button className='bg-login-700 rounded-lg p-1 px-2' onClick={hideText}>
                     Hide input area
                 </button>
                 <>
@@ -492,13 +492,13 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
                         onChange={upload}
                     />
                     <button
-                        className='bg-light rounded-lg p-1 px-2'
+                        className='bg-login-700 rounded-lg p-1 px-2'
                         onClick={() => fileInputRef.current?.click()}
                     >
                         Upload exam
                     </button>
                 </>
-                <button className='bg-light rounded-lg p-1 px-2' onClick={clearCard}>
+                <button className='bg-login-700 rounded-lg p-1 px-2' onClick={clearCard}>
                     Clear
                 </button>
             </div>

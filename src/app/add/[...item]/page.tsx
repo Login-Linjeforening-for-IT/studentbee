@@ -61,10 +61,10 @@ function AddCourse() {
 
     return (
         <div className='w-full h-full grid place-items-center'>
-            <div className='bg-darker w-[32vw] rounded-xl grid place-items-center gap-3 p-5 max-h-[75vh] overflow-auto'>
+            <div className='bg-login-900 w-[32vw] rounded-xl grid place-items-center gap-3 p-5 max-h-[75vh] overflow-auto'>
                 <div className='grid grid-cols-12 w-full'>
                     {selected != 0 ? <button
-                        className='bg-darker rounded-md px-2'
+                        className='bg-login-900 rounded-md px-2'
                         onClick={handleBack}
                     >
                         ⬅️
@@ -80,7 +80,7 @@ function AddCourse() {
                         onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())}
                         type='text'
                         placeholder='Course ID'
-                        className='bg-light rounded-xl overflow-hidden px-2 col-span-6 outline-hidden caret-orange-500'
+                        className='bg-login-700 rounded-xl overflow-hidden px-2 col-span-6 outline-hidden caret-orange-500'
                         maxLength={10}
                     />
                 </div>

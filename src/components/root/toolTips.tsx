@@ -59,7 +59,7 @@ export default function ToolTips() {
 
     return (
         <div className='w-full h-full fixed left-0 top-0 grid place-items-center bg-black bg-opacity-90 z-10' onClick={() => setDisplayTips(false)}>
-            <div className='w-[55vw] h-[63vh] bg-normal rounded-xl p-8 overflow-auto noscroll'>
+            <div className='w-[55vw] h-[63vh] bg-login-800 rounded-xl p-8 overflow-auto noscroll'>
                 <h1 className='w-full text-center text-xl font-semibold mb-2'>Tooltips</h1>
                 <div className='grid grid-cols-2'>
                     <div className='w-full'>
@@ -91,9 +91,9 @@ export default function ToolTips() {
 function Tips({hotkey, info, extraHotKey}: {hotkey: string, info: string, extraHotKey?: string}) {
     return (
         <div className='w-full p-2 flex flex-rows'>
-            {extraHotKey && <h1 className='text-sm px-2 bg-superlight rounded-md grid place-items-center mr-2'>{extraHotKey}</h1>}
+            {extraHotKey && <h1 className='text-sm px-2 bg-login-400 rounded-md grid place-items-center mr-2'>{extraHotKey}</h1>}
             {extraHotKey && <h1 className='text-sm grid place-items-center mr-2'>+</h1>}
-            <h1 className='text-sm px-2 bg-superlight rounded-md grid place-items-center mr-2'>{hotkey}</h1>
+            <h1 className='text-sm px-2 bg-login-400 rounded-md grid place-items-center mr-2'>{hotkey}</h1>
             <h1 className='text-sm grid place-items-center'>{info}</h1>
         </div>
     )

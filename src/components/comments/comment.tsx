@@ -49,9 +49,9 @@ export default function Comment({
 
     return (
         <div key={comment.id}>
-            <div className='bg-normal rounded-xl p-2 mt-2 w-full'>
-                <div className='w-full grid grid-cols-2 text-almostbright mb-2'>
-                    <Link href={`/profile/${comment_user}`} className='text-lg text-almostbright underline'>{author}</Link>
+            <div className='bg-login-800 rounded-xl p-2 mt-2 w-full'>
+                <div className='w-full grid grid-cols-2 text-login-300 mb-2'>
+                    <Link href={`/profile/${comment_user}`} className='text-lg text-login-300 underline'>{author}</Link>
                     <h1 className='text-right'>{new Date(comment.time).toLocaleString()}</h1>
                 </div>
                 <Markdown
@@ -61,7 +61,7 @@ export default function Comment({
                 />
             </div>
             <div className='w-full flex flex-rows space-x-2 mt-1'>
-                <h1 className='text-almostbright'>{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
+                <h1 className='text-login-300'>{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
                 <button className='w-[1.3vw]' onClick={() => handleVote('up')}>
                     <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', comment.votes, username, clientVote)}`} />
                 </button>
@@ -69,13 +69,13 @@ export default function Comment({
                     <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', comment.votes, username, clientVote)}`} />
                 </button>
                 {username === comment_user && <button
-                    className='text-almostbright underline w-[1.4vw]'
+                    className='text-login-300 underline w-[1.4vw]'
                     onClick={() => handleDelete({commentID: comment.id})}
                 >
-                    <Trash2 className='w-full h-full pt-[0.2vh] text-bright hover:text-red-500' />
+                    <Trash2 className='w-full h-full pt-[0.2vh] text-login-50 hover:text-red-500' />
                 </button>}
                 <button
-                    className='text-almostbright underline'
+                    className='text-login-300 underline'
                     onClick={() => setParent(parent ? undefined : comment.id)}
                 >
                     Reply
