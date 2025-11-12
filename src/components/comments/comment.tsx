@@ -7,7 +7,7 @@ import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 
 type CommentProps = {
     comment: CardComment
-    user: User
+    user: string | null
     vote: ({commentID, vote}: ClientVote) => void
     parent?: number
     setParent: Dispatch<SetStateAction<number | undefined>>
@@ -34,7 +34,7 @@ export default function Comment({
 }: CommentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const comment_user = comment.username.split('@')[0]
-    const username = user?.username.split('@')[0]
+    const username = user || ''
     const author = comment_user === username ? 'You' : comment_user
 
     function handleVote(direction: 'up' | 'down') {

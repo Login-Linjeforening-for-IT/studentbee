@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import voteColor from '../comments/voteColor'
-import getItem from '@/utils/localStorage'
 import { ChevronDown, ChevronUp, ThumbsDown, ThumbsUp } from 'lucide-react'
+import { getCookie } from '@utils/cookies'
 
 type QuestionFooterProps = {
     card: Card
@@ -27,8 +27,8 @@ export default function QuestionFooter({
     const [username, setUsername] = useState('')
 
     useEffect(() => {
-        const user = getItem('user') as User | string | undefined
-        const username = user && typeof user === 'object' ? user.username : ''
+        const user = getCookie('user_nickname') as string | null
+        const username = user || ''
         setUsername(username)
     }, [])
 

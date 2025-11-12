@@ -1,10 +1,10 @@
 import { deleteComment, postComment } from '@/utils/comments'
-import getItem from '@/utils/localStorage'
 import { Dispatch, SetStateAction, useState } from 'react'
 import Editor, { Markdown } from '../editor/editor'
 import Link from 'next/link'
 import voteColor from './voteColor'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
+import { getCookie } from '@utils/cookies'
 
 type ReplyProps = {
     courseID: string
@@ -37,7 +37,6 @@ export default function Reply({
     comments,
     setComments
 }: ReplyProps) {
-    // const user = getItem('user') as User
     const [reply, setReply] = useState('')
 
     function send() {
@@ -137,8 +136,7 @@ function ReplyComponent({
     setComments
 }: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
-    const user = getItem('user') as User | string | undefined
-    const username = typeof user === 'string' ? user : user ? user.username.split('@')[0] : ''
+    const username = getCookie('user_nickname') as string | undefined || ''
     const reply_author = reply.username.split('@')[0]
     const author = reply_author === username ? 'You' : reply_author
     const reply_user = reply.username.split('@')[0]

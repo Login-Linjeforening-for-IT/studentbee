@@ -1,5 +1,5 @@
 import config from '@config'
-import getItem from './localStorage'
+import { getCookie } from './cookies'
 
 type UpdateCourseProps = {
     courseID: string
@@ -91,11 +91,11 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
 
 // Updates the passed course
 export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
-    const user: User | undefined = getItem('user') as User | undefined
-    const token = getItem('token')
+    const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
 
     try {
-        if (!user) {
+        if (!username) {
             throw Error('User not logged in')
         }
 
@@ -106,7 +106,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                username: user.username,
+                username: username,
                 accepted,
                 editing
             })

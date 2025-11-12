@@ -1,20 +1,20 @@
 import config from '@config'
-import getItem, { setItem } from './localStorage'
+import { setItem } from './localStorage'
+import { getCookie } from './cookies'
 
 export default async function addScore(){
 
-    const token = getItem('token')
-    const user = getItem('user') as User | undefined
+    const token = getCookie('access_token')
+    const username = getCookie('user')
 
     try {
-        if (!user) {
+        if (!username) {
             throw Error('Please log in to log your efforts.')
         }
 
-        user.score += 10
-        setItem('user', JSON.stringify(user))
+        setItem('user', JSON.stringify(username))
 
-        const response = await fetch(`${config.url.BROWSER_API}/score/${user.username}`, {
+        const response = await fetch(`${config.url.BROWSER_API}/score/${username}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

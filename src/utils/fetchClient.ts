@@ -1,7 +1,7 @@
 'use client'
 
 import config from '@config'
-import getItem from './localStorage'
+import { getCookie } from './cookies'
 
 type MarkProps = {
     courseID: string
@@ -22,11 +22,11 @@ type UpdateFileProps = {
 
 // Adds a course with the given user id, course name and questions
 export async function addCourse(course: Course): Promise<void | string> {
-    const user: User | undefined = getItem('user') as User | undefined
-    const token = getItem('token')
+    const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
 
     try {
-        if (user) {
+        if (username) {
             const response = await fetch(`${config.url.BROWSER_API}/upload_course`, {
                 method: 'POST',
                 headers: {
@@ -34,7 +34,7 @@ export async function addCourse(course: Course): Promise<void | string> {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    username: user.username,
+                    username: username,
                     course: {...course, id: course.id.trim()}
                 }),
             })
@@ -58,10 +58,10 @@ export async function addCourse(course: Course): Promise<void | string> {
 
 // Adds a question to the course with the given user id
 export async function addCard(courseID: string, card: Card): Promise<void | string> {
-    const user: User | undefined = getItem('user') as User | undefined
-    const token = getItem('token')
+    const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
 
-    if (user) {
+    if (username) {
         const response = await fetch(`${config.url.BROWSER_API}/upload_card`, {
             method: 'POST',
             headers: {
@@ -70,7 +70,7 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
             },
             body: JSON.stringify({
                 courseID,
-                username: user.username,
+                username: username,
                 card
             }),
         })
@@ -89,10 +89,10 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
 
 // Adds a textinput to the course with the given user id
 export async function sendText(courseID: string, text: string[]): Promise<void | string> {
-    const user: User | undefined = getItem('user') as User | undefined
-    const token = getItem('token')
+    const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
 
-    if (user) {
+    if (username) {
         const response = await fetch(`${config.url.BROWSER_API}/text`, {
             method: 'PUT',
             headers: {
@@ -100,7 +100,7 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                username: user.username,
+                username: username,
                 courseID,
                 text
             }),
@@ -119,9 +119,9 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
 }
 
 export async function sendMark({courseID, mark}: MarkProps) {
-    const user = getItem('user') as User
+    const username = getCookie('user_nickname')
 
-    if (!user) {
+    if (!username) {
         throw Error('You must be logged in to mark')
     }
 
@@ -145,9 +145,9 @@ export async function sendMark({courseID, mark}: MarkProps) {
 }
 
 export async function sendFile({courseID, name, parent}: SendFileProps) {
-    const user = getItem('user') as User
+    const username = getCookie('user_nickname')
 
-    if (!user) {
+    if (!username) {
         throw Error('You must be logged in to upload a file')
     }
 
@@ -157,7 +157,7 @@ export async function sendFile({courseID, name, parent}: SendFileProps) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: user.username,
+            username: username,
             courseID,
             name,
             parent
@@ -174,9 +174,9 @@ export async function sendFile({courseID, name, parent}: SendFileProps) {
 }
 
 export async function updateFile({courseID, name, content}: UpdateFileProps) {
-    const user = getItem('user') as User
+    const username = getCookie('user_nickname')
 
-    if (!user) {
+    if (!username) {
         throw Error('You must be logged in to upload a file')
     }
 
@@ -186,7 +186,7 @@ export async function updateFile({courseID, name, content}: UpdateFileProps) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: user.username,
+            username: username,
             courseID,
             name,
             content
@@ -203,9 +203,9 @@ export async function updateFile({courseID, name, content}: UpdateFileProps) {
 }
 
 export async function deleteFile({courseID, name}: SendFileProps) {
-    const user = getItem('user') as User
+    const username = getCookie('user_nickname')
 
-    if (!user) {
+    if (!username) {
         throw Error('You must be logged in to delete a file')
     }
 
@@ -215,7 +215,7 @@ export async function deleteFile({courseID, name}: SendFileProps) {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-            username: user.username
+            username: username
         })
     })
 

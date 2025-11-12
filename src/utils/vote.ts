@@ -1,5 +1,5 @@
 import config from '@config'
-import getItem from './localStorage'
+import { getCookie } from './cookies'
 
 type VoteProps = {
     courseID: string
@@ -16,9 +16,9 @@ type CardVoteProps = {
 
 export default async function sendCardVote({courseID, cardID, vote}: CardVoteProps) {
     try {
-        const user = getItem('user') as User
+        const username = getCookie('user_nickname')
 
-        if (!user) {
+        if (!username) {
             throw Error('You must be logged in to vote')
         }
 
@@ -28,7 +28,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: user.username,
+                username: username,
                 courseID,
                 cardID,
                 vote
@@ -50,9 +50,9 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
 
 export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
     try {
-        const user = getItem('user') as User
+        const username = getCookie('user_nickname')
 
-        if (!user) {
+        if (!username) {
             throw Error('You must be logged in to vote')
         }
 
@@ -62,7 +62,7 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: user.username,
+                username: username,
                 courseID,
                 cardID,
                 commentID,

@@ -1,9 +1,9 @@
 import { deleteComment, postComment } from '@/utils/comments'
-import getItem from '@/utils/localStorage'
 import { sendVote } from '@/utils/vote'
 import { useState } from 'react'
 import Editor from '../editor/editor'
 import Comment from '../comments/comment'
+import { getCookie } from '@utils/cookies'
 
 type CommentsProps = {
     comments: CardComment[]
@@ -23,7 +23,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
     const [parent, setParent] = useState<number | undefined>()
     const [clientComments, setClientComments] = useState(comments)
     const [voted, setVoted] = useState<ClientVote[]>([])
-    const user = getItem('user') as User
+    const user = getCookie('user_nickname')
 
     function sendComment() {
         if (!content.length) {

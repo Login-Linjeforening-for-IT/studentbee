@@ -1,5 +1,5 @@
 import config from '@config'
-import getItem from './localStorage'
+import { getCookie } from './cookies'
 
 type CommentProps = {
     courseID: string
@@ -33,9 +33,9 @@ export default async function getComments(CourseID: string): Promise<CardComment
 
 export async function postComment({courseID, cardID, content, parent}: CommentProps) {
     try {
-        const user = getItem('user') as User
+        const username = getCookie('user_nickname')
 
-        if (!user) {
+        if (!username) {
             throw Error('You must be logged in to comment')
         }
 
@@ -45,7 +45,7 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                username: user.username,
+                username: username,
                 courseID,
                 cardID,
                 content,
@@ -67,9 +67,9 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
 
 export async function deleteComment({commentID, courseID}: {commentID: number, courseID: string}) {
     try {
-        const user = getItem('user') as User
+        const username = getCookie('user_nickname')
 
-        if (!user) {
+        if (!username) {
             throw Error('You must be logged in to delete a comment')
         }
 
@@ -80,7 +80,7 @@ export async function deleteComment({commentID, courseID}: {commentID: number, c
             },
             body: JSON.stringify({
                 courseID: courseID,
-                username: user.username,
+                username: username,
                 commentID
             })
         })
