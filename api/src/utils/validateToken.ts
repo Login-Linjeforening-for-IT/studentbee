@@ -1,9 +1,19 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import config from '../constants'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import config from '#constants'
 
 const { USERINFO_URL } = config
 
-export default async function validateToken( req: FastifyRequest, res: FastifyReply ): Promise<{ valid: boolean, error?: string }> {
+type CheckTokenResponse = {
+    valid: boolean
+    userInfo?: {
+        sub: string
+        name: string
+        email: string
+    }
+    error?: string
+}
+
+export default async function checkToken( req: FastifyRequest, res: FastifyReply ): Promise<CheckTokenResponse> {
     const authHeader = req.headers['authorization']
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
@@ -29,8 +39,11 @@ export default async function validateToken( req: FastifyRequest, res: FastifyRe
             }
         }
 
+        const userInfo = await userInfoRes.json()
+
         return {
-            valid: true
+            valid: true,
+            userInfo: userInfo
         }
     } catch (err) {
         res.log.error(err)

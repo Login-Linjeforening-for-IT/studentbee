@@ -1,23 +1,17 @@
-# Node image with Alpine Linux
-FROM node:20-alpine
+# Uses latest node alpine image for apk package manager
+FROM node:alpine
 
-# Installs Python
-RUN apk add --no-cache python3 make g++
+# Sets the working directory
+WORKDIR /usr/src/app
 
-# Sets working directory
-WORKDIR /api
+# Copies package.json and package-lock.json to the Docker environment
+COPY package.json package-lock.json ./
 
-# Copies package.json and package-lock.json
-COPY package*.json ./
-
-# Installs dependencies
+# Installs required dependencies
 RUN npm install
 
-# Copies the rest of the API source code
+# Copies contents
 COPY . .
 
-# Builds the distributable
-RUN npm run build
-
-# Exposes port 8080
-EXPOSE 8080
+# Starts the application
+CMD ["npm", "start"]

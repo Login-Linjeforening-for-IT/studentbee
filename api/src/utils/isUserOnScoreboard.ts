@@ -1,6 +1,6 @@
-import db from '../db'
+// import db from '../db'
 
-const recentlyChecked = [] as { username: string, result: boolean, timestamp: string }[]
+// const recentlyChecked = [] as { username: string, result: boolean, timestamp: string }[]
 
 /**
  * Checks if a user is on the scoreboard, caching the result for 60 seconds to
@@ -9,7 +9,7 @@ const recentlyChecked = [] as { username: string, result: boolean, timestamp: st
  * @param username The username to check if the user is on the scoreboard
  * @returns True if the user is on the scoreboard, false otherwise
  */
-export default async function isUserOnScoreboard(username: string): Promise<boolean> {
+/* export default async function isUserOnScoreboard(username: string): Promise<boolean> {
     if (recentlyChecked.some(user => user.username === username)) {
         const cachedResult = recentlyChecked.find(user => user.username === username)
         if (cachedResult && new Date().getTime() - new Date(cachedResult.timestamp).getTime() < 60000) {
@@ -28,3 +28,4 @@ export default async function isUserOnScoreboard(username: string): Promise<bool
         return result
     })
 }
+ */

@@ -1,16 +1,15 @@
-// Imports Fastify to host the API
 import { FastifyInstance, FastifyPluginOptions } from 'fastify'
+
+import { ping } from './handlers/health/get'
+import { version } from './handlers/version/get'
 
 // Imports all GET handlers from the handlers folder
 import indexHandler from './handlers/index'
 import { scoreboardHandler } from './handlers/scoreboard/get'
 import { fileHandler, filesHandler } from './handlers/file/get'
 import { courseHandler, coursesHandler } from './handlers/course/get'
-import { healthHandler } from './handlers/health/get'
 import { commentsHandler } from './handlers/comment/get'
 import { profileHandler, scoreHandler } from './handlers/user/get'
-import { versionHandler } from './handlers/version/get'
-import { callbackHandler, loginHandler } from './handlers/login/get'
 import { gradeHandler } from './handlers/grades/get'
 
 // Imports all POST handlers from the handlers folder
@@ -27,6 +26,7 @@ import { putFile } from './handlers/file/put'
 // Imports all DELETE handlers from the handlers folder
 import { deleteFile } from './handlers/file/delete'
 import { deleteComment } from './handlers/comment/delete'
+import authMiddleware from '#utils/authMiddleware.ts'
 
 /**
  * Defines the routes available in the API.
@@ -36,9 +36,13 @@ import { deleteComment } from './handlers/comment/delete'
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
-    // Defines all GET routes that are available on the API
     fastify.get('/', indexHandler)
-    fastify.get('/health', healthHandler)
+
+    fastify.get('/health', ping)
+    fastify.get('/ping', ping)
+    fastify.get('/version', version)
+
+    // Defines all GET routes that are available on the API
     fastify.get('/scoreboard', scoreboardHandler)
     fastify.get('/courses', coursesHandler)
     fastify.get('/course/:courseID', courseHandler)
@@ -46,27 +50,24 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/file/:courseID/:fileID', fileHandler)
     fastify.get('/user/:username', profileHandler)
     fastify.get('/comments/:courseID', commentsHandler)
-    fastify.get('/login', loginHandler)
     fastify.get('/score/:username', scoreHandler)
-    fastify.get('/callback', callbackHandler)
-    fastify.get('/version', versionHandler)
     fastify.get('/grades/:course', gradeHandler)
 
     // Defines all PUT routes that are available on the API
-    fastify.put('/course/:courseID', putCourse)
-    fastify.put('/text', putCourseText)
-    fastify.put('/mark', putCourseMark)
-    fastify.put('/file', putFile)
+    fastify.put('/course/:courseID', { preHandler: authMiddleware }, putCourse)
+    fastify.put('/text', { preHandler: authMiddleware }, putCourseText)
+    fastify.put('/mark', { preHandler: authMiddleware }, putCourseMark)
+    fastify.put('/file', { preHandler: authMiddleware }, putFile)
 
     // // Defines all POST routes that are available on the API
-    fastify.post('/file', postFile)
-    fastify.post('/upload_card', postCard)
-    fastify.post('/upload_course', postCourse)
-    fastify.post('/comment', postComment)
-    fastify.post('/vote/comment', postCommentVote)
-    fastify.post('/vote/card', postCardVote)
+    fastify.post('/file', { preHandler: authMiddleware }, postFile)
+    fastify.post('/upload_card', { preHandler: authMiddleware }, postCard)
+    fastify.post('/upload_course', { preHandler: authMiddleware }, postCourse)
+    fastify.post('/comment', { preHandler: authMiddleware }, postComment)
+    fastify.post('/vote/comment', { preHandler: authMiddleware }, postCommentVote)
+    fastify.post('/vote/card', { preHandler: authMiddleware }, postCardVote)
 
     // // Defines all DELETE routes that are available on the API
-    fastify.delete('/comment', deleteComment)
-    fastify.delete('/file/:courseID/:fileID', deleteFile)
+    fastify.delete('/comment', { preHandler: authMiddleware }, deleteComment)
+    fastify.delete('/file/:courseID/:fileID', { preHandler: authMiddleware }, deleteFile)
 }
