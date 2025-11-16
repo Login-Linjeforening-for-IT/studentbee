@@ -50,7 +50,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/version', version)
 
     // User routes
-    fastify.get('/user', getUser)
+    fastify.get('/user', { preHandler: authMiddleware }, getUser)
     fastify.post('/user', { preHandler: authMiddleware }, postUser)
 
     // Scoreboard
