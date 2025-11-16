@@ -1,4 +1,4 @@
-# exam.login.no
+# studentbee
 Website to practice for exams written in Nextjs, TypeScript and Tailwind.
 This website is a complete implementation of a card based learning website with all functionality implemented.
 In theory this website could be put in production and work out of the box.
