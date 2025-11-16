@@ -1,7 +1,8 @@
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
-    user_id TEXT UNIQUE NOT NULL,
-    score INTEGER NOT NULL DEFAULT 0,
+    user_id TEXT PRIMARY KEY,
+    email TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    solved INTEGER NOT NULL DEFAULT 0,
     total_time INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -11,7 +12,7 @@ CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     course_code TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
-    created_by INTEGER NOT NULL REFERENCES users(id),
+    created_by TEXT NOT NULL REFERENCES users(user_id),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -24,7 +25,7 @@ CREATE TABLE cards (
     correct_answers JSONB NOT NULL,
     source TEXT,
     help TEXT,
-    created_by INTEGER NOT NULL REFERENCES users(id),
+    created_by TEXT NOT NULL REFERENCES users(user_id),
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
@@ -32,7 +33,7 @@ CREATE TABLE cards (
 CREATE TABLE card_votes (
     id SERIAL PRIMARY KEY,
     card_id INTEGER NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
-    user_id INTEGER NOT NULL REFERENCES users(id),
+    user_id TEXT NOT NULL REFERENCES users(user_id),
     is_upvote BOOLEAN NOT NULL,
     voted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(card_id, user_id)
@@ -44,7 +45,7 @@ CREATE TABLE comments (
     course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     card_id INTEGER NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
     parent_id INTEGER REFERENCES comments(id),
-    user_id INTEGER NOT NULL REFERENCES users(id),
+    user_id TEXT NOT NULL REFERENCES users(user_id),
     content TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -53,7 +54,7 @@ CREATE TABLE comments (
 CREATE TABLE comment_votes (
     id SERIAL PRIMARY KEY,
     comment_id INTEGER NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
-    user_id INTEGER NOT NULL REFERENCES users(id),
+    user_id TEXT NOT NULL REFERENCES users(user_id),
     is_upvote BOOLEAN NOT NULL,
     voted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(comment_id, user_id)
