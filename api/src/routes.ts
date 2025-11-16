@@ -1,15 +1,23 @@
 import { FastifyInstance, FastifyPluginOptions } from 'fastify'
+import authMiddleware from '#utils/authMiddleware.ts'
+
+// index
+import getIndex from './handlers/index'
 
 import { ping } from './handlers/health/get'
 import { version } from './handlers/version/get'
 
+// User
+import { getUser } from './handlers/user/get'
+import { postUser } from './handlers/user/post'
+
+// Scoreboard
+import { getScoreboard } from './handlers/scoreboard/get'
+
 // Imports all GET handlers from the handlers folder
-import indexHandler from './handlers/index'
-import { scoreboardHandler } from './handlers/scoreboard/get'
 import { fileHandler, filesHandler } from './handlers/file/get'
 import { courseHandler, coursesHandler } from './handlers/course/get'
 import { commentsHandler } from './handlers/comment/get'
-import { profileHandler, scoreHandler } from './handlers/user/get'
 import { gradeHandler } from './handlers/grades/get'
 
 // Imports all POST handlers from the handlers folder
@@ -26,7 +34,6 @@ import { putFile } from './handlers/file/put'
 // Imports all DELETE handlers from the handlers folder
 import { deleteFile } from './handlers/file/delete'
 import { deleteComment } from './handlers/comment/delete'
-import authMiddleware from '#utils/authMiddleware.ts'
 
 /**
  * Defines the routes available in the API.
@@ -36,21 +43,26 @@ import authMiddleware from '#utils/authMiddleware.ts'
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPluginOptions) {
-    fastify.get('/', indexHandler)
+    fastify.get('/', getIndex)
 
     fastify.get('/health', ping)
     fastify.get('/ping', ping)
     fastify.get('/version', version)
 
+    // User routes
+    fastify.get('/user', getUser)
+    fastify.post('/user', { preHandler: authMiddleware }, postUser)
+
+    // Scoreboard
+    fastify.get('/scoreboard', getScoreboard)
+
     // Defines all GET routes that are available on the API
-    fastify.get('/scoreboard', scoreboardHandler)
     fastify.get('/courses', coursesHandler)
     fastify.get('/course/:courseID', courseHandler)
     fastify.get('/files/:courseID', filesHandler)
     fastify.get('/file/:courseID/:fileID', fileHandler)
-    fastify.get('/user/:username', profileHandler)
     fastify.get('/comments/:courseID', commentsHandler)
-    fastify.get('/score/:username', scoreHandler)
+    // fastify.get('/score/:username', scoreHandler)
     fastify.get('/grades/:course', gradeHandler)
 
     // Defines all PUT routes that are available on the API

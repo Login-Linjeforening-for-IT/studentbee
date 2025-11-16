@@ -1,5 +1,3 @@
-// Fetches the requested grades from the server.
-
 import { FastifyReply, FastifyRequest } from 'fastify'
 import config from '../../constants'
 
