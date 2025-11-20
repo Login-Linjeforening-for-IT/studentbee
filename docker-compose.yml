@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "8400:3000"
     depends_on:
@@ -16,6 +17,7 @@ services:
     build:
       context: ./api
       dockerfile: Dockerfile
+    restart: always
     ports:
       - "8401:8080"
     command: npm start
@@ -27,6 +29,7 @@ services:
 
   redis:
     image: redis:alpine
+    restart: always
     container_name: redis
     ports:
       - "6379:6379"
