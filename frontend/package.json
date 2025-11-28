@@ -22,7 +22,7 @@
     "react-chartjs-2": "^5.3.1",
     "react-dom": "^19.2.0",
     "remark-gfm": "^4.0.1",
-    "uibee": "^2.2.9"
+    "uibee": "^2.2.10"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.1",

@@ -38,10 +38,8 @@
 
 :root {
     --w-sidebar:  13rem;
-    --h-navbar:   3rem;
+    --h-navbar:   4rem;
     --h-pageInfo: 5rem;
-    color: var(--foreground);
-    background: var(--background);
     transition: background 0.4s, color 0.4s;
 }
 
@@ -83,7 +81,6 @@
 
 body {
     color: var(--foreground);
-    background: var(--background);
     font-family: Arial, Helvetica, sans-serif;
     transition: background 0.4s, color 0.4s;
 }
