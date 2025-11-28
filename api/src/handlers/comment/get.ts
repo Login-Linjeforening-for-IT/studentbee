@@ -1,6 +1,5 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import db from '../../db'
-import cache from '../../flow'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import db from '#db'
 
 /**
  * CourseParam type, used for type specification when handling course parameters
@@ -25,7 +24,6 @@ type Comment = {
  * @param res Response
  */
 export async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
-    // Destructures the courseID from the request parameters
     const { courseID } = req.params as CourseParam
 
     /**
@@ -85,13 +83,10 @@ export async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
         return Object.keys(groupedComments).map(cardID => groupedComments[cardID])
     }
 
-    // Wrapped in a try-catch block to handle potential errors gracefully
     try {
-        // Fetches the comments from cache or database and sends it as a response
         const commentsArray = await cache(`${courseID}_comments`, fetchComments)
         res.send(commentsArray)
     } catch (err) {
-        // Returns a 500 status code with the error message if an error occured
         const error = err as Error
         res.status(500).send({ error: error.message })
     }

@@ -1,7 +1,6 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import db from '../../db'
-import { invalidateCache } from '../../flow'
-import validateToken from '../../utils/validateToken'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import db from '#db'
+import validateToken from '../../utils/validateToken.ts'
 
 /**
  * Editing type, used for type specification when editing courses

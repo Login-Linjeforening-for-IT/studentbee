@@ -18,7 +18,7 @@ export default async function RootLayout({children}: {children: ReactNode}) {
                 <nav className='row-span-1 w-full h-[var(--h-navbar)] z-100'>
                     <Navbar />
                 </nav>
-                <main className='row-span-11 bg-login-800 w-full p-[0.5rem] rounded-xl max-h-[calc(100vh-var(--h-navbar))]'>
+                <main className='row-span-11 bg-login-800 w-full p-2 rounded-xl max-h-[calc(100vh-var(--h-navbar))]'>
                     {children}
                 </main>
             </body>

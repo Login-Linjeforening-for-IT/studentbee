@@ -1,6 +1,6 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import config from '../../../package.json'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import config from '../../../package.json' with { 'type': 'json' }
 
-export function version(_: FastifyRequest, res: FastifyReply): void {
+export default function version(_: FastifyRequest, res: FastifyReply): void {
     res.send(config.version)
 }

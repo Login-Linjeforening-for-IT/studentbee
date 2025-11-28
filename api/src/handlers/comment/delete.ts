@@ -1,8 +1,6 @@
-import { FastifyRequest, FastifyReply } from 'fastify'
-import db from '../../db'
-import { invalidateCache } from '../../flow'
-import validateToken from '../../utils/validateToken'
-// import { checkToken } from '../../manager'
+import type { FastifyRequest, FastifyReply } from 'fastify'
+import db from '#db'
+import validateToken from '../../utils/validateToken.ts'
 
 /**
  *  Defines the DeleteCommentProps type, used for type specification when deleting comments

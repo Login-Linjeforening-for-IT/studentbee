@@ -1,9 +1,8 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import config from '../../constants'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import config from '#constants'
 
 const { DBH_API } = config
 
-// ID - Course ID
 export async function gradeHandler(req: FastifyRequest, res: FastifyReply): Promise<object | string> {
     const { course } = req.params as { course: string }
     const courseID = `${course.toUpperCase()}-1`

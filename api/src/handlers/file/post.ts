@@ -1,7 +1,6 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { invalidateCache } from '../../flow'
-import db from '../../db'
-import validateToken from '../../utils/validateToken'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import db from '#db'
+import run from '#db'
 
 /**
  * Defines the PostFileProps type, used for type specification when posting files
@@ -18,9 +17,7 @@ type PostFileProps = {
  * @param res Response object
  */
 export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    // Wrapped in try-catch block to catch and handle errors gracefully
     try {
-        // Destructures the relevant variables from the request body
         const { courseID, name, parent } = req.body as PostFileProps
 
         // Checks if required variables are defined, or otherwise returns a 400 status code
@@ -28,13 +25,8 @@ export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<
             return res.status(400).send({ error: 'Missing required field (courseID, name)' })
         }
 
-        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        const { valid, error } = await validateToken(req, res)
-        if (!valid || error) {
-            return res.status(401).send({ error })
-        }
-
         // Generates a new document reference with the courseID and name
+        const fileResponse = await run('INSERT INTO files ', [courseID])
         const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
 
         // Creates the file data object
@@ -51,12 +43,8 @@ export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<
 
         // Saves the file data to Firestore
         await fileRef.set(fileData)
-
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(`${courseID}_files`)
         res.status(201).send({ name })
     } catch (err) {
-        // Returns a 500 status code with the error message if an error occured
         const error = err as Error
         res.status(500).send({ error: error.message })
     }

@@ -1,7 +1,6 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import { invalidateCache } from '../../flow'
-import db from '../../db'
-import validateToken from '../../utils/validateToken'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import db from '#db'
+import validateToken from '../../utils/validateToken.ts'
 
 /**
  * Defines the VoteProps type, used for type specification when posting votes
@@ -33,12 +32,8 @@ type ReplyProps = {
  * @returns Status code depending on the outcome of the operation
  */
 export async function postComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    // Wrapped in try-catch block to catch and handle errors gracefully
     try {
-        // Destructures the relevant variables from the request body
         const { username, courseID, cardID, content, parent } = req.body as ReplyProps
-
-        // Validate the required fields
         if (!username || !courseID || typeof cardID != 'number' || !content) {
             return res.status(400).send({ error: 'Missing required field (username, courseID, cardID, content)' })
         }

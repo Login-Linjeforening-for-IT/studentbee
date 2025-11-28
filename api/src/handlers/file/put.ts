@@ -1,7 +1,6 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import db from '../../db'
-import { invalidateCache } from '../../flow'
-import validateToken from '../../utils/validateToken'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import db from '#db'
+import validateToken from '../../utils/validateToken.ts'
 
 /**
  * PutFileProps type, used for type specification when putting files
@@ -38,10 +37,6 @@ export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<v
         // Finds the file in the database and updates it with the new content
         const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
         await fileRef.update({ content })
-
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(`${courseID}:${name}`)
-        invalidateCache(`${courseID}_files`)
 
         // Returns a 201 status code with the id of the updated file
         res.status(201).send({ id: fileRef.id })

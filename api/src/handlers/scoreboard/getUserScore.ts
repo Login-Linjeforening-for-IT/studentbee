@@ -1,12 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import db from '#db'
 
-export default async function getScoreboard(_: FastifyRequest, res: FastifyReply) {
+export default async function getUserScore(req: FastifyRequest, res: FastifyReply) {
+    const { id } = req.params as { id : string }
     try {
-        const scoreboard = await db(
-            'SELECT name, score, total_time FROM users ORDER BY score DESC LIMIT 10'
-        )
-
+        const scoreboard = await db('SELECT name, score FROM users WHERE id = $1', [id])
         return res.status(200).send(scoreboard.rows)
     } catch (error) {
         console.error('Error retrieving scoreboard:', error)

@@ -1,6 +1,5 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import db from '../../db'
-import cache from '../../flow'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import db from '#db'
 
 /**
  * CourseParam type, used for type specification when handling course parameters

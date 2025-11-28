@@ -1,7 +1,7 @@
-import { FastifyReply, FastifyRequest } from 'fastify'
-import db from '../../db'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import db from '#db'
 
-export async function postUser(req: FastifyRequest, res: FastifyReply) {
+export default async function postUser(req: FastifyRequest, res: FastifyReply) {
     try {
         const { id, name, email } = req.user!
 
