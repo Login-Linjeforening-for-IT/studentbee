@@ -1,4 +1,4 @@
-import { getCourses } from '@parent/frontend/src/utils/fetch'
+import { getCourses } from '@parent/src/utils/fetch'
 import ToolTipsButton from './toolTipsButton'
 import Header from './header'
 import StudyOrTest from './studyOrTest'

@@ -1,6 +1,6 @@
 import ListHeader from './listHeader'
 import ScoreBoardEntry from './scoreboardEntry'
-import { getScoreBoard } from '@parent/frontend/src/utils/fetch'
+import { getScoreBoard } from '@parent/src/utils/fetch'
 
 import type { JSX } from 'react'
 

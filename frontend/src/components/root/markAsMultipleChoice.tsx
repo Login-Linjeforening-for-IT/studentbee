@@ -1,6 +1,6 @@
 'use client'
 
-import { sendMark } from '@parent/frontend/src/utils/fetchClient'
+import { sendMark } from '@parent/src/utils/fetchClient'
 
 export default function MarkAsMultipleChoice({courseID}: {courseID: string}) {
     function markCourse() {

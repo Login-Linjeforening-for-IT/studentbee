@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Editor from '../editor/editor'
 import MarkAsMultipleChoice from './markAsMultipleChoice'
-import { updateFile } from '@parent/frontend/src/utils/fetchClient'
+import { updateFile } from '@parent/src/utils/fetchClient'
 import { usePathname } from 'next/navigation'
 
 type StudyProps = {
