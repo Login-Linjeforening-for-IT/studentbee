@@ -20,8 +20,8 @@ const config = {
         LOGOUT_URL: `${env.BASE_URL}/api/logout`,
     },
     authentik: {
-        CLIENT_ID: env.AUTHENTIK_CLIENT_ID,
-        CLIENT_SECRET: env.AUTHENTIK_CLIENT_SECRET,
+        CLIENT_ID: env.CLIENT_ID,
+        CLIENT_SECRET: env.CLIENT_SECRET,
         AUTH_URL: `${env.AUTHENTIK_URL}/application/o/authorize/`,
         TOKEN_URL: `${env.AUTHENTIK_URL}/application/o/token/`,
         USERINFO_URL: `${env.AUTHENTIK_URL}/application/o/userinfo/`,
