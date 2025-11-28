@@ -12,7 +12,7 @@ services:
       - studentbee-api
 
   studentbee-api:
-    container_name: studentbee-api
+    container_name: studentbee_api
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -25,7 +25,7 @@ services:
 
   studentbee-postgres:
     image: postgres:18
-    container_name: studentbee-postgres
+    container_name: studentbee_postgres
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER:-studentbee}
