@@ -1,33 +1,34 @@
 'use client'
 
-import { useEffect } from 'react'
-import CourseListClient from './root/coursesClient'
+// import { useEffect } from 'react'
+// import CourseListClient from './root/coursesClient'
 
-const TAILWIND_LG_BREAKPOINT = 1024
+// const TAILWIND_LG_BREAKPOINT = 1024
 
 export default function Menu() {
-    useEffect(() => {
-        function handleResize() {
-            const menu = document.querySelector('.menu')
-            if (menu) {
-                if (window.innerWidth >= TAILWIND_LG_BREAKPOINT) {
-                    menu.classList.add('hidden')
-                }
-            }
-        }
+    return null
+    // useEffect(() => {
+    //     function handleResize() {
+    //         const menu = document.querySelector('.menu')
+    //         if (menu) {
+    //             if (window.innerWidth >= TAILWIND_LG_BREAKPOINT) {
+    //                 menu.classList.add('hidden')
+    //             }
+    //         }
+    //     }
 
-        window.addEventListener('resize', handleResize)
+    //     window.addEventListener('resize', handleResize)
 
-        return () => window.removeEventListener('resize', handleResize)
-    }, [])
+    //     return () => window.removeEventListener('resize', handleResize)
+    // }, [])
 
-    return (
-        <div className='lg:hidden grid menu absolute left-0 top-0 h-full w-full'>
-            <div className='mt-12'>
-                <CourseListClient />
-            </div>
-        </div>
-    )
+    // return (
+    //     <div className='lg:hidden grid menu absolute left-0 top-0 h-full w-full'>
+    //         <div className='mt-12'>
+    //             <CourseListClient />
+    //         </div>
+    //     </div>
+    // )
 }
 
 export function Burger() {
