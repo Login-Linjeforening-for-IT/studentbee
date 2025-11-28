@@ -1,3 +1,14 @@
+// User
+type UserProps = {
+    user_id: string
+    email: string
+    name: string
+    score: number
+    total_time: number
+    created_at: string
+    updated_at: string
+}
+
 // Scoreboard
 type ScoreboardProps = {
     name: string

@@ -7,31 +7,6 @@ type UpdateCourseProps = {
     editing: Editing
 }
 
-// Fetches the scoreboard from the server
-export async function getScoreBoard() {
-    try {
-        const response = await fetch(`${config.url.API}/scoreboard`, {
-            next: { revalidate: 10 },
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-
-        if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
-        }
-
-        const data = await response.json()
-        return data
-    } catch(error: unknown) {
-        const err = error as Error
-        return err.message
-    }
-}
-
 // Fetches courses from server, different url based on location, therefore the
 // location parameter to ensure all requests are successful
 export async function getCourses(location: 'server' | 'client'): Promise<CourseAsList[] | string> {
@@ -166,28 +141,6 @@ export async function getFiles(courseID: string) {
         }
 
         return await response.json()
-    } catch(error: unknown) {
-        const err = error as Error
-        return err.message
-    }
-}
-
-export async function getUser(username: string): Promise<User | string> {
-    try {
-        const response = await fetch(`${config.url.BROWSER_API}/user/${username}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-
-        if (!response.ok) {
-            const data = await response.json()
-            throw new Error(data.error)
-        }
-
-        const user: User = await response.json()
-        return user
     } catch(error: unknown) {
         const err = error as Error
         return err.message

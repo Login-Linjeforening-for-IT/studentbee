@@ -25,6 +25,9 @@ export default function Topbar() {
             <NavItem href='/grades'>
                 Exam statistics
             </NavItem>
+            <NavItem href='/profile'>
+                Profile
+            </NavItem>
             <NavItem href='https://login.no' external>
                 Login.no
             </NavItem>

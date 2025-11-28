@@ -1,6 +1,6 @@
 import dotenv from 'dotenv'
 
-dotenv.config({ path: '../.env' })
+dotenv.config({ path: '.env' })
 
 const requiredEnvironmentVariables = [
     'AUTHENTIK_URL',
@@ -23,11 +23,11 @@ const env = Object.fromEntries(
 const config = {
     DBH_API: 'https://dbh-data.dataporten-api.no/Tabeller/hentJSONTabellData',
     USERINFO_URL: `${env.AUTHENTIK_URL}/application/o/userinfo/`,
-    DB: env.DB,
-    DB_USER: env.DB_USER,
-    DB_HOST: env.DB_HOST,
+    DB: process.env.DB || 'studentbee',
+    DB_USER: process.env.DB_USER || 'studentbee',
+    DB_HOST: process.env.DB_HOST || 'postgres',
     DB_PASSWORD: env.DB_PASSWORD,
-    DB_PORT: Number(env.DB_PORT) || 5432,
+    DB_PORT: Number(process.env.DB_PORT) || 5432,
     DB_MAX_CONN: 20,
     DB_IDLE_TIMEOUT_MS: 5000,
     DB_TIMEOUT_MS: 3000,

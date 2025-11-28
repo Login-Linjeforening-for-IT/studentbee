@@ -1,6 +1,6 @@
 services:
-  frontend:
-    container_name: studentbee_frontend
+  studentbee:
+    container_name: studentbee
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -9,10 +9,10 @@ services:
       - "8400:3000"
     env_file: .env
     depends_on:
-      - backend
+      - studentbee-api
 
-  backend:
-    container_name: studentbee_backend
+  studentbee-api:
+    container_name: studentbee-api
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -21,11 +21,11 @@ services:
       - "8401:8080"
     env_file: .env
     depends_on:
-      - postgres
+      - studentbee-postgres
 
-  postgres:
+  studentbee-postgres:
     image: postgres:18
-    container_name: postgres
+    container_name: studentbee-postgres
     restart: always
     environment:
       POSTGRES_USER: ${DB_USER:-studentbee}

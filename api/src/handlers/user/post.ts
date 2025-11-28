@@ -12,7 +12,7 @@ export default async function postUser(req: FastifyRequest, res: FastifyReply) {
 
         return res.status(201).send({ id: req.user!.id })
     } catch (error) {
-        console.error('Error creating/retrieving user:', error)
+        console.error('Error creating user:', error)
         return res.status(500).send({ error: (error as Error).message })
     }
 }

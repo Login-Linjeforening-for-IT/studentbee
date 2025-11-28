@@ -5,6 +5,7 @@ import ping from './handlers/health/get.ts'
 import version from './handlers/version/get.ts'
 import getUser from './handlers/user/get.ts'
 import postUser from './handlers/user/post.ts'
+import deleteUser from './handlers/user/delete.ts'
 import getScoreboard from './handlers/scoreboard/get.ts'
 import { fileHandler } from './handlers/file/get.ts'
 import { courseHandler } from './handlers/course/get.ts'
@@ -47,6 +48,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     // user
     fastify.get('/user', { preHandler: authMiddleware }, getUser)
     fastify.post('/user', { preHandler: authMiddleware }, postUser)
+    fastify.delete('/user', { preHandler: authMiddleware }, deleteUser)
 
     // score
     fastify.get('/score/:id', { preHandler: authMiddleware }, getUserScore)
