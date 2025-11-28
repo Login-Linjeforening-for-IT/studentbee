@@ -16,9 +16,9 @@ const pool = new Pool({
     host: DB_HOST,
     database: DB || 'studentbee',
     password: DB_PASSWORD,
-    port: Number(DB_PORT) || 5432,
-    max: Number(DB_MAX_CONN) || 20,
-    connectionTimeoutMillis: Number(DB_TIMEOUT_MS) || 3000,
+    port: DB_PORT,
+    max: DB_MAX_CONN,
+    connectionTimeoutMillis: DB_TIMEOUT_MS,
     keepAlive: true
 })
 

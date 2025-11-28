@@ -1,27 +1,19 @@
 import dotenv from 'dotenv'
 
-dotenv.config({path: '../.env'})
+dotenv.config({ path: '../.env' })
 
 const requiredEnvironmentVariables = [
-    'AUTH_URL',
-    'DB',
-    'DB_USER',
-    'DB_HOST',
+    'BASE_URL',
     'DB_PASSWORD',
-    'DB_PORT'
 ]
 
-const missingVariables = requiredEnvironmentVariables.filter(
-    (key) => !process.env[key]
-)
+const missingVariables = requiredEnvironmentVariables
+    .filter((key) => !process.env[key])
+    .map((key) => `${key}: ${process.env[key] || 'undefined'}`)
+    .join('\n    ')
 
 if (missingVariables.length > 0) {
-    throw new Error(
-        'Missing essential environment variables:\n' +
-            missingVariables
-                .map((key) => `${key}: ${process.env[key] || 'undefined'}`)
-                .join('\n')
-    )
+    throw new Error(`Missing essential environment variables:\n    ${missingVariables}`)
 }
 
 const env = Object.fromEntries(
@@ -30,7 +22,7 @@ const env = Object.fromEntries(
 
 const config = {
     DBH_API: 'https://dbh-data.dataporten-api.no/Tabeller/hentJSONTabellData',
-    USERINFO_URL: `${env.AUTH_URL}/application/o/userinfo/`,
+    USERINFO_URL: `${env.BASE_URL}/application/o/userinfo/`,
     DB: env.DB,
     DB_USER: env.DB_USER,
     DB_HOST: env.DB_HOST,

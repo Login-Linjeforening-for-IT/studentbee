@@ -16,7 +16,7 @@ type PostFileProps = {
  * @param req Request object
  * @param res Response object
  */
-export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
+export default async function postFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { courseID, name, content, parent } = req.body as PostFileProps ?? {}
         if (!courseID || !name) {
@@ -29,8 +29,8 @@ export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<
             RETURNING id, name;
         `, [courseID, name, content || '', parent || null])
 
-        res.status(201).send({ id: result.rows[0].id, name: result.rows[0].name })
-    } catch (err) {
-        res.status(500).send({ error: (err as Error).message })
+        return res.status(201).send({ id: result.rows[0].id, name: result.rows[0].name })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

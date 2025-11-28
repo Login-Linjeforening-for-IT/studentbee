@@ -34,8 +34,8 @@ export default async function deleteComment(req: FastifyRequest, res: FastifyRep
             return res.status(403).send({ error: 'You are not allowed to delete this comment' })
         }
 
-        res.status(200).send({ id: result.rows[0].id })
-    } catch (err) {
-        res.status(500).send({ error: (err as Error).message })
+        return res.status(200).send({ id: result.rows[0].id })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

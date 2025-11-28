@@ -16,12 +16,11 @@ export default async function deleteFile(req: FastifyRequest, res: FastifyReply)
 
         const fileResponse = await run('DELETE FROM files WHERE id = $1', [id])
         if (!fileResponse.rowCount) {
-            res.status(404).send({ error: 'File not found' })
+            return res.status(404).send({ error: 'File not found' })
         }
 
-        res.send({ id })
-    } catch (error: unknown) {
-        const err = error as Error
-        res.status(500).send({ error: err.message })
+        return res.send({ id })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

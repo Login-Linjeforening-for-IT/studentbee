@@ -24,8 +24,7 @@ export async function fileHandler(req: FastifyRequest, res: FastifyReply) {
 
         const file = fileResponse.rows[0]
         return res.send(file)
-    } catch (err) {
-        const error = err as Error
-        res.status(500).send({ error: error.message })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

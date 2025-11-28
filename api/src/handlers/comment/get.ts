@@ -1,7 +1,7 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import run from '#db'
 
-export async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
+export default async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
     const { id } = req.params as { id : string }
 
     try {
@@ -49,8 +49,8 @@ export async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
         })
 
         const groupedArray = Object.values(grouped)
-        res.send(groupedArray)
-    } catch (err) {
-        res.status(500).send({ error: (err as Error).message })
+        return res.send(groupedArray)
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

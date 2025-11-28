@@ -34,8 +34,8 @@ export default async function putFile(req: FastifyRequest, res: FastifyReply): P
             return res.status(404).send({ error: 'File not found' })
         }
 
-        res.status(200).send({ id: result.rows[0].id })
-    } catch (err) {
-        res.status(500).send({ error: (err as Error).message })
+        return res.status(200).send({ id: result.rows[0].id })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

@@ -7,23 +7,24 @@ import getUser from './handlers/user/get.ts'
 import postUser from './handlers/user/post.ts'
 import getScoreboard from './handlers/scoreboard/get.ts'
 import { fileHandler } from './handlers/file/get.ts'
-import { courseHandler, coursesHandler } from './handlers/course/get.ts'
-import { commentsHandler } from './handlers/comment/get.ts'
-import { gradeHandler } from './handlers/grades/get.ts'
-import { postFile } from './handlers/file/post.ts'
-import { postCard } from './handlers/card/post.ts'
-import { postCourse } from './handlers/course/post.ts'
-import { postComment } from './handlers/comment/post.ts'
-import { postCardVote } from './handlers/card/post.ts'
+import { courseHandler } from './handlers/course/get.ts'
+import commentsHandler from './handlers/comment/get.ts'
+import gradeHandler from './handlers/grades/get.ts'
+import postFile from './handlers/file/post.ts'
+import postCard from './handlers/card/post.ts'
+import postCourse from './handlers/course/post.ts'
+import postComment from './handlers/comment/post.ts'
 import putFile from './handlers/file/put.ts'
 import deleteFile from './handlers/file/delete.ts'
 import deleteComment from './handlers/comment/delete.ts'
 import getUserScore from './handlers/scoreboard/getUserScore.ts'
-import filesHandler from './handlers/course/getCards.ts'
+import filesHandler from './handlers/file/getFiles.ts'
 import putCourse from './handlers/course/put/course.ts'
 import postCommentVote from './handlers/comment/vote/post.ts'
 import putCourseNotes from './handlers/course/put/notes.ts'
-import { putCourseLearningBased } from './handlers/course/put/learningBased.ts'
+import putCourseLearningBased from './handlers/course/put/learningBased.ts'
+import postCardVote from './handlers/card/vote/post.ts'
+import { coursesHandler } from './handlers/course/get/courses.ts'
 
 /**
  * Defines the routes available in the API.
@@ -53,15 +54,15 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
 
     // course
     fastify.get('/courses', { preHandler: authMiddleware }, coursesHandler)
-    fastify.get('/course/:courseID', { preHandler: authMiddleware }, courseHandler)
-    fastify.put('/course/:id', { preHandler: authMiddleware }, putCourse)
-    fastify.put('/course/:id/notes', { preHandler: authMiddleware }, putCourseNotes)
+    fastify.get('/course/:id', { preHandler: authMiddleware }, courseHandler)
     fastify.post('/course', { preHandler: authMiddleware }, postCourse)
     fastify.post('/card', { preHandler: authMiddleware }, postCard)
+    fastify.put('/course/:id', { preHandler: authMiddleware }, putCourse)
+    fastify.put('/course/:id/notes', { preHandler: authMiddleware }, putCourseNotes)
     fastify.put('/learningBased', { preHandler: authMiddleware }, putCourseLearningBased)
     
     // files
-    fastify.get('/files/:courseID', { preHandler: authMiddleware }, filesHandler)
+    fastify.get('/files/:id', { preHandler: authMiddleware }, filesHandler)
     fastify.get('/file/:id', { preHandler: authMiddleware }, fileHandler)
     fastify.put('/file', { preHandler: authMiddleware }, putFile)
     fastify.post('/file', { preHandler: authMiddleware }, postFile)

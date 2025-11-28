@@ -19,7 +19,7 @@ type ReplyProps = {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
+export default async function postComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { username, courseID, cardID, content, parent } = req.body as ReplyProps ?? {}
 
@@ -40,8 +40,8 @@ export async function postComment(req: FastifyRequest, res: FastifyReply): Promi
             RETURNING id;
         `, [courseID, cardID, parent ?? null, username, content])
 
-        res.status(201).send({ id: result.rows[0].id })
-    } catch (err) {
-        res.status(500).send({ error: (err as Error).message })
+        return res.status(201).send({ id: result.rows[0].id })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

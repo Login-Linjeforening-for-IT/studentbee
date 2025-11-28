@@ -1,12 +1,12 @@
-import type { FastifyRequest, FastifyReply } from 'fastify'
+import type { FastifyReply, FastifyRequest } from 'fastify'
+import run from '#db'
 
 /**
- * Defines the VoteProps type, used for type specification when posting votes
+ * Used for type specification when posting comment votes
  */
-type VoteProps = {
-    username: string
+type PostCommentVoteProps = {
     courseID: string
-    cardID: number
+    username: string
     commentID: number
     vote: boolean
 }
@@ -17,58 +17,36 @@ type VoteProps = {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
+
 export default async function postCommentVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, courseID, cardID, commentID, vote } = req.body as VoteProps ?? {}
-        if (!username || !courseID || typeof cardID !== 'number' || !commentID || vote == null) {
-            return res.status(400).send({ error: 'Missing required field (username, courseID, cardID, commentID, vote)' })
+        const { username, commentID, vote } = req.body as PostCommentVoteProps ?? {}
+        if (!username || typeof commentID !== 'number' || vote == null) {
+            return res.status(400).send({ error: 'Missing required field (username, commentID, vote)' })
         }
 
-        // Fetches the comment document from Firestore
-        const commentRef = db.collection('Comment').doc(commentID.toString())
-        const commentDoc = await commentRef.get()
-
-        // Checks if the comment exists, and returns a 404 status code if not
-        if (!commentDoc.exists) {
+        const comment = await run('SELECT id FROM comments WHERE id = $1', [commentID])
+        if (comment.rowCount === 0) {
             return res.status(404).send({ error: 'Comment not found' })
         }
 
-        // Extracts the comment data from the document and returns a 404 error if the comment has no data
-        const commentData = commentDoc.data()
-        if (!commentData) {
-            return res.status(404).send({ error: 'Comment has no data' })
-        }
+        await run(`
+            INSERT INTO comment_votes (comment_id, user_id, is_upvote, voted_at)
+            VALUES ($1, $2, $3, NOW())
+            ON CONFLICT (comment_id, user_id)
+            DO UPDATE SET is_upvote = $3, voted_at = NOW();
+        `, [commentID, username, vote])
 
-        // Extracts the votes and rating from the comment data
-        const votes = commentData.votes || []
-        const existingVoteIndex = votes.findIndex((v: { username: string }) => v.username === username)
-        let newRating = commentData.rating || 0
+        const ratingResult = await run(`
+            SELECT
+                SUM(CASE WHEN is_upvote THEN 1 ELSE -1 END) AS rating
+            FROM comment_votes
+            WHERE comment_id = $1
+        `, [commentID])
 
-        // Updates the votes and rating based on the user's vote
-        if (existingVoteIndex >= 0) {
-            const existingVote = votes[existingVoteIndex].vote
-
-            // If the user has already voted, remove the vote if the vote is the same
-            if (existingVote === vote) {
-                votes.splice(existingVoteIndex, 1)
-                newRating += vote ? -1 : 1
-                // Updates the vote if the user has already voted, but the new vote
-                // is different from the existing vote
-            } else {
-                votes[existingVoteIndex].vote = vote
-                newRating += vote ? 2 : -2
-            }
-            // Adds the vote if the user has not voted before
-        } else {
-            votes.push({ username, vote })
-            newRating += vote ? 1 : -1
-        }
-
-        // Updates the comment with the new votes and rating
-        await commentRef.update({ votes, rating: newRating })
-        res.status(200).send({ id: commentRef.id, rating: newRating, votes })
-    } catch (err: unknown) {
-        const error = err as Error
-        res.status(500).send({ error: error.message })
+        const rating = ratingResult.rows[0].rating ?? 0
+        return res.status(200).send({ commentID, rating })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

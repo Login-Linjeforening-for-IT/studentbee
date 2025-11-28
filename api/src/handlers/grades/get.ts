@@ -3,7 +3,7 @@ import config from '#constants'
 
 const { DBH_API } = config
 
-export async function gradeHandler(req: FastifyRequest, res: FastifyReply): Promise<object | string> {
+export default async function gradeHandler(req: FastifyRequest, res: FastifyReply): Promise<object | string> {
     const { course } = req.params as { course: string }
     const courseID = `${course.toUpperCase()}-1`
     const queryBody = {
@@ -55,7 +55,6 @@ export async function gradeHandler(req: FastifyRequest, res: FastifyReply): Prom
         const grades = await response.json()
         return res.send(grades)
     } catch (error) {
-        const err = error as Error
-        return res.status(500).send(err.message)
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

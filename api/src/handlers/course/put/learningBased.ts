@@ -7,7 +7,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putCourseLearningBased(req: FastifyRequest, res: FastifyReply): Promise<void> {
+export default async function putCourseLearningBased(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { courseID, learningBased } = req.body as { courseID: string, learningBased: boolean }
         if (!courseID) {
@@ -29,8 +29,8 @@ export async function putCourseLearningBased(req: FastifyRequest, res: FastifyRe
             return res.status(404).send({ error: 'Course not found' })
         }
 
-        res.status(200).send(result.rows[0])
-    } catch (error: unknown) {
-         res.status(500).send({ error: (error as Error).message })
+        return res.status(200).send(result.rows[0])
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

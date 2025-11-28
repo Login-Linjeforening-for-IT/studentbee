@@ -13,7 +13,7 @@ type PostCourseProps = {
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
+export default async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { username, id, name } = req.body as PostCourseProps ?? {}
         if (!username || !id || !name) {
@@ -29,9 +29,8 @@ export async function postCourse(req: FastifyRequest, res: FastifyReply): Promis
             INSERT INTO files (course_id, name, content, created_by, updated_by) VALUES ($1, $2, $3, $4, $4) RETURNING id;
         `, [id, 'root', '', username])
 
-        res.status(201).send({ id })
-    } catch (err) {
-        const error = err as Error
-        res.status(500).send({ error: error.message })
+        return res.status(201).send({ id })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }

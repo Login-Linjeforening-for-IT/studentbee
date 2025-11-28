@@ -37,8 +37,8 @@ export default async function putCourseNotes(req: FastifyRequest, res: FastifyRe
             return res.status(404).send({ error: 'Course not found' })
         }
 
-        res.send({ id: result.rows[0].id })
-    } catch (err) {
-        res.status(500).send({ error: (err as Error).message })
+        return res.send({ id: result.rows[0].id })
+    } catch (error) {
+        return res.status(500).send({ error: (error as Error).message })
     }
 }
