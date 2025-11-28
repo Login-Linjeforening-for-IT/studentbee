@@ -38,7 +38,7 @@ export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<
             question: string
             alternatives: string[]
             correct: number[]
-        }
+        } ?? {}
 
         // Validate the required fields
         if (!card.username || !card.courseID || !card.question || !card.alternatives || card.correct === undefined) {
@@ -63,10 +63,6 @@ export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<
             correct: card.correct
         })
 
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(card.courseID)
-
-        // Returns a 201 status code with the ID of the uploaded card
         res.status(201).send({ id: cardRef.id })
     } catch (err) {
         // Returns a 500 status code with the error message if an error occured
@@ -82,10 +78,8 @@ export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<
  * @returns Status code depending on the outcome of the operation
  */
 export async function postCardVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    // Wrapped in try-catch block to catch and handle errors gracefully
     try {
-        // Destructures the relevant variables from the request body
-        const { courseID, username, cardID, vote } = req.body as PostCardVoteProps
+        const { courseID, username, cardID, vote } = req.body as PostCardVoteProps ?? {}
 
         // Validate the required fields
         if (!courseID || !username || typeof cardID !== 'number' || vote == null) {
@@ -149,10 +143,6 @@ export async function postCardVote(req: FastifyRequest, res: FastifyReply): Prom
         // Updates the course with the updated cards
         await courseRef.update({ cards: updatedCards })
 
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(courseID)
-
-        // Returns a 200 status code with the ID of the updated card
         res.status(200).send({ id: courseRef.id, rating: newRating, votes })
     } catch (error: unknown) {
         // Returns a 500 status code with the error message if an error occured

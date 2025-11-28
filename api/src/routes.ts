@@ -57,7 +57,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     
     // files
     fastify.get('/files/:courseID', { preHandler: authMiddleware }, filesHandler)
-    fastify.get('/file/:courseID/:fileID', { preHandler: authMiddleware }, fileHandler)
+    fastify.get('/file/:id', { preHandler: authMiddleware }, fileHandler)
     fastify.put('/text', { preHandler: authMiddleware }, putCourseText)
     fastify.put('/file', { preHandler: authMiddleware }, putFile)
     fastify.post('/file', { preHandler: authMiddleware }, postFile)

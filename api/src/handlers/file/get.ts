@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import db from '#db'
+import run from '#db'
 
 /**
  * CourseParam type, used for type specification when handling course parameters
@@ -12,8 +13,7 @@ type CourseParam = {
  * FileProps type, used for type specification when handling file parameters
  */
 type FileProps = {
-    courseID: string
-    fileID: string
+    id: string
 }
 
 /**
@@ -32,41 +32,17 @@ type Files = {
  * @param res Response
  */
 export async function fileHandler(req: FastifyRequest, res: FastifyReply) {
-    // Destructures the courseID and fileID from the request parameters
-    const { courseID, fileID } = req.params as FileProps
+    const { id } = req.params as FileProps
 
-    /**
-     * Internal asynchronous function to fetch the file from Firebase
-     * @returns The specified file from the database if found, or otherwise a string indicating the error
-     */
-    async function fetchFile() {
-        // Fetches the file from the database
-        const fileSnapShot = await db.collection('Files').doc(`${courseID}:${fileID}`).get()
-
-        // Returns the file content if found, or otherwise a string indicating the error
-        if (!fileSnapShot.exists) {
-            return 'File not found'
-        }
-
-        // Assigns the data to file if it exists
-        const file = fileSnapShot.data()?.content
-
-        // Returns the file content if found, or an empty string if not found
-        if (!file) {
-            return ''
-        }
-
-        // Returns the file content
-        return file
-    }
-
-    // Wrapped in a try-catch block to handle potential errors gracefully
     try {
-        // Fetches the file from cache or database and sends it as a response
-        const file = await cache(`${courseID}:${fileID}`, fetchFile)
-        res.send(file)
+        const fileResponse = await run('SELECT * from files WHERE id = $1', [id])
+        if (!fileResponse.rowCount) {
+            return res.status(404).send({ error: 'File not found' })
+        }
+
+        const file = fileResponse.rows[0]
+        return res.send(file)
     } catch (err) {
-        // Returns a 500 status code with the error message if an error occured
         const error = err as Error
         res.status(500).send({ error: error.message })
     }

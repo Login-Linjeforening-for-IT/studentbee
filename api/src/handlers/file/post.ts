@@ -18,9 +18,7 @@ type PostFileProps = {
  */
 export async function postFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { courseID, name, parent } = req.body as PostFileProps
-
-        // Checks if required variables are defined, or otherwise returns a 400 status code
+        const { courseID, name, parent } = req.body as PostFileProps ?? {}
         if (!courseID || !name) {
             return res.status(400).send({ error: 'Missing required field (courseID, name)' })
         }

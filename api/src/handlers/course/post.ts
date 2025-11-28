@@ -79,10 +79,6 @@ export async function postCourse(req: FastifyRequest, res: FastifyReply): Promis
             files: []
         })
 
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache('courses')
-
-        // Returns a 201 status code with the ID of the uploaded course
         res.status(201).send({ id: courseRef.id })
     } catch (err) {
         // Returns a 500 status code with the error message if an error occured

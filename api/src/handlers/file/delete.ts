@@ -36,9 +36,6 @@ export async function deleteFile(req: FastifyRequest, res: FastifyReply): Promis
         const fileRef = db.collection('Files').doc(`${courseID}:${fileID}`)
         await fileRef.delete()
 
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(`${courseID}_files`)
-
         // Returns a 200 status code with the id of the deleted file
         res.send({ id: fileRef.id })
     } catch (error: unknown) {

@@ -1,6 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import db from '#db'
-import validateToken from '../../utils/validateToken.ts'
 
 /**
  * Defines the VoteProps type, used for type specification when posting votes
@@ -33,15 +32,9 @@ type ReplyProps = {
  */
 export async function postComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, courseID, cardID, content, parent } = req.body as ReplyProps
+        const { username, courseID, cardID, content, parent } = req.body as ReplyProps ?? {}
         if (!username || !courseID || typeof cardID != 'number' || !content) {
             return res.status(400).send({ error: 'Missing required field (username, courseID, cardID, content)' })
-        }
-
-        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        const { valid, error } = await validateToken(req, res)
-        if (!valid || error) {
-            return res.status(401).send({ error })
         }
 
         // Generates a new document reference with an auto-generated ID
@@ -90,10 +83,6 @@ export async function postComment(req: FastifyRequest, res: FastifyReply): Promi
         // Saves the comment data to Firestore
         await commentRef.set(commentData)
 
-        // Invalidates the cache to ensure that the new comment is included
-        invalidateCache(`${courseID}_comments`)
-
-        // Returns a 201 status code with the ID of the uploaded comment
         res.status(201).send({ id: commentRef.id, nextID })
     } catch (err) {
         // Returns a 500 status code with the error message if an error occured
@@ -109,12 +98,8 @@ export async function postComment(req: FastifyRequest, res: FastifyReply): Promi
  * @returns Status code depending on the outcome of the operation
  */
 export async function postCommentVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    // Wrapped in try-catch block to catch and handle errors gracefully
     try {
-        // Destructures the relevant variables from the request body
-        const { username, courseID, cardID, commentID, vote } = req.body as VoteProps
-
-        // Validate the required fields
+        const { username, courseID, cardID, commentID, vote } = req.body as VoteProps ?? {}
         if (!username || !courseID || typeof cardID !== 'number' || !commentID || vote == null) {
             return res.status(400).send({ error: 'Missing required field (username, courseID, cardID, commentID, vote)' })
         }
@@ -168,10 +153,6 @@ export async function postCommentVote(req: FastifyRequest, res: FastifyReply): P
         // Updates the comment with the new votes and rating
         await commentRef.update({ votes, rating: newRating })
 
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(`${courseID}_comments`)
-
-        // Returns a 200 status code with the ID of the updated comment
         res.status(200).send({ id: commentRef.id, rating: newRating, votes })
     } catch (err: unknown) {
         // Returns a 500 status code with the error message if an error occured

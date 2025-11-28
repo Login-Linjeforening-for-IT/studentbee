@@ -18,11 +18,9 @@ type DeleteCommentProps = {
  * @returns Status code bsaed on the outcome of the operation
  */
 export async function deleteComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    try {
-        // Destructures relevant variables from the request body
-        const { courseID, username, commentID } = req.body as DeleteCommentProps
+    const { username, commentID } = req.body as DeleteCommentProps ?? {}
 
-        // Checks if required variables are defined, or otherwise returns a 400 status code
+    try {
         if (!username || typeof commentID !== 'number') {
             return res.status(400).send({ error: 'Comment ID is required' })
         }
@@ -33,14 +31,11 @@ export async function deleteComment(req: FastifyRequest, res: FastifyReply): Pro
             return res.status(401).send({ error })
         }
 
+        const response = await 
         // Finds and deletes the comment from the database if found
         const commentRef = db.collection('Comment').doc(commentID.toString())
         await commentRef.delete()
 
-        // Invalidates the cache to ensure that the data served is up to date
-        invalidateCache(`${courseID}_comments`)
-
-        // Returns a 200 status code with the id of the deleted comment
         res.send({ id: commentRef.id })
     } catch (err) {
         // Returns a 500 status code with the error message if an error occured

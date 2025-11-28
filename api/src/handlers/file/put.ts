@@ -18,12 +18,8 @@ type PutFileProps = {
  * @returns Status code based on the outcome of the operation
  */
 export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    // Wrapped in a try-catch block to handle potential errors gracefully
     try {
-        // Destructures relevant variables from the request body
-        const { courseID, name, content } = req.body as PutFileProps
-
-        // Checks if required variables are defined, or otherwise returns a 400 status code
+        const { courseID, name, content } = req.body as PutFileProps ?? {}
         if (!courseID || !name || !content) {
             return res.status(400).send({ error: 'Missing required field (courseID, name, content)' })
         }
