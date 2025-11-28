@@ -21,6 +21,7 @@ services:
     command: npm start
     depends_on:
       - postgres
+    env_file: .env
 
   postgres:
     image: postgres:18

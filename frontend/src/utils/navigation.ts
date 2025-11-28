@@ -72,7 +72,7 @@ export default function handleCardsNavigation({
                 router.push(`/course/${id}/${previous}`)
             }
 
-            animate200ms({key: 'back', setAnimateAnswer})
+            animate200ms({ key: 'back', setAnimateAnswer })
             setSelected([])
             break
         case 'skip':
@@ -81,13 +81,13 @@ export default function handleCardsNavigation({
                 router.push(`/course/${id}/${skip}`)
             }
 
-            animate200ms({key: 'skip', setAnimateAnswer})
+            animate200ms({ key: 'skip', setAnimateAnswer })
             setSelected([])
             break
         case 'next':
 
             checkAnswer(selectedRef.current, attempted, setAttempted, true)
-            animate200ms({key: 'next', setAnimateAnswer})
+            animate200ms({ key: 'next', setAnimateAnswer })
 
             if (wait) {
                 setAttempted([...attempted, ...selectedRef.current])
@@ -169,7 +169,7 @@ export default function handleCardsNavigation({
     }
 }
 
-export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
+export function handleKeyDown({ event, navigate }: HandleKeyDownProps) {
     const activeElement = document.activeElement
     if (activeElement?.tagName === 'INPUT' || activeElement?.tagName === 'TEXTAREA') {
         return
@@ -220,7 +220,7 @@ export function handleKeyDown({event, navigate}: HandleKeyDownProps) {
     }
 }
 
-export function animate200ms({key, setAnimateAnswer}: animate200msProps) {
+export function animate200ms({ key, setAnimateAnswer }: animate200msProps) {
     setAnimateAnswer(key)
     setTimeout(() => setAnimateAnswer('-1'), 200)
 }

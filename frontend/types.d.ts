@@ -6,14 +6,14 @@ type CourseProps = {
 
 type Editing = {
     cards: Card[]
-    texts: string[]
+    texts: notes
 }
 
 type Course = {
     id: string
     cards: Card[]
     unreviewed: Card[]
-    textUnreviewed: string[]
+    notes: string
     learningBased: boolean
 }
 
@@ -46,7 +46,7 @@ type User = {
     username: string
     token: string
 
-    // From Firebase
+    // From database
     time: number
     score: number
     solved: UserSolved[]

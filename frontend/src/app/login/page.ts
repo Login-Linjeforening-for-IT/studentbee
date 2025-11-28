@@ -26,7 +26,7 @@ export default function Login() {
         localStorage.setItem('groups', query.get('groups') as string)
         localStorage.setItem('token', query.get('access_token') as string)
 
-        // Fetches extra details from Firebase
+        // Fetches extra details from database
         getDetails({ id, name, username })
 
         // Redirects back to where the user was
@@ -36,9 +36,9 @@ export default function Login() {
     }, [])
 }
 
-// Fetches extra details from Firebase
+// Fetches extra details from database
 async function getDetails({ username }: Details) {
-    // Fetches the user from Firebase
+    // Fetches the user from database
     const user = await getUser(username)
 
     if (typeof user === 'string') {
@@ -47,7 +47,7 @@ async function getDetails({ username }: Details) {
         localStorage.setItem('score', '0')
         localStorage.setItem('solved', JSON.stringify([]))
     } else {
-        // Sets data fetched from Firebase
+        // Sets data fetched from database
         localStorage.setItem('time', user.time.toString())
         localStorage.setItem('score', user.score.toString())
         localStorage.setItem('solved', user.solved.toString())

@@ -19,19 +19,12 @@ export default function Add(props: { params: Promise<{ item: string[] }> }) {
 
 function AddCourse() {
     const [error, setError] = useState('')
-    const emptyCard: Card = {
-        question: '',
-        alternatives: [''],
-        correct: [],
-        source: '',
-        rating: 0,
-        votes: []
-    }
     const emptyCourse = {
         id: '',
         cards: [],
-        unreviewed: [emptyCard],
-        textUnreviewed: [],
+        unreviewed: [] as Card[],
+        notes: '',
+        learningBased: false
     }
     const [course, setCourse] = useState<Course>(emptyCourse)
     const [selected, setSelected] = useState(0)

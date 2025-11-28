@@ -276,7 +276,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
 function InnerCourseList({courses, currentPath}: CoursesProps) {
     return (
         <div className='h-full bg-login-900 rounded-xl'>
-            <div className='pt-[0.5rem] pb-[6rem] h-full overflow-auto grow noscroll'>
+            <div className='pt-2 pb-24 h-full overflow-auto grow noscroll'>
                 {courses.map((course, index) =>
                     <Course key={course.id} course={course} currentPath={currentPath} index={index} />
                 )}
@@ -293,7 +293,7 @@ function Course({course, currentPath, index}: CourseProps) {
     return (
         <Link
             href={`/course/${course.id}`}
-            className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-[1rem] items-center gap-[0.5rem] py-[0.8rem] hover:pl-[1.5rem] duration-[500ms] transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
+            className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-4 items-center gap-2 py-[0.8rem] hover:pl-6 duration-500 transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
         >
             <h1>{course.id}</h1>
         </Link>

@@ -63,11 +63,11 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                     }
 
                     if (!text.length) {
-                        setText(newCourse.textUnreviewed.join('\n\n'))
+                        setText(newCourse.notes)
                     }
 
                     setEditing({
-                        texts: newCourse.textUnreviewed,
+                        texts: newCourse.notes,
                         cards: newCourse.unreviewed,
                     } as Editing)
                 }
@@ -307,7 +307,7 @@ function AddCard({
                                         ☑
                                     </button>
                                 }
-                                <button className='w-[20px]' onClick={() => removeAlternative(index)}>
+                                <button className='w-5' onClick={() => removeAlternative(index)}>
                                     <Trash2 className='w-full h-full pt-[3.5px] text-login-400 hover:text-red-500' />
                                 </button>
                             </div>
