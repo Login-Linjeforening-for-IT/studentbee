@@ -1,10 +1,28 @@
 import dotenv from 'dotenv'
+import packageInfo from './package.json'
 
 dotenv.config({ path: '../.env' })
 
-import packageInfo from './package.json'
+const requiredEnvironmentVariables = [
+    'NEXT_PUBLIC_BROWSER_API_URL',
+    'BASE_URL',
+    'CLIENT_ID',
+    'CLIENT_SECRET',
+    'AUTHENTIK_URL',
+]
 
-const { env } = process
+const missingVariables = requiredEnvironmentVariables
+    .filter((key) => !process.env[key])
+    .map((key) => `${key}: ${process.env[key] || 'undefined'}`)
+    .join('\n    ')
+
+if (missingVariables.length > 0) {
+    throw new Error(`Missing essential environment variables:\n    ${missingVariables}`)
+}
+
+const env = Object.fromEntries(
+    requiredEnvironmentVariables.map((key) => [key, process.env[key]])
+)
 
 const config = {
     url: {
