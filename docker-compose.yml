@@ -9,9 +9,9 @@ services:
       - "8400:3000"
     env_file: .env
     depends_on:
-      - studentbee-api
+      - studentbee_api
 
-  studentbee-api:
+  studentbee_api:
     container_name: studentbee_api
     build:
       context: ./api
@@ -21,9 +21,9 @@ services:
       - "8401:8080"
     env_file: .env
     depends_on:
-      - studentbee-postgres
+      - studentbee_postgres
 
-  studentbee-postgres:
+  studentbee_postgres:
     image: postgres:18
     container_name: studentbee_postgres
     restart: always
