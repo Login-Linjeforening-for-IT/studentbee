@@ -59,3 +59,12 @@ CREATE TABLE comment_votes (
     voted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE(comment_id, user_id)
 );
+
+CREATE TABLE files (
+    id SERIAL PRIMARY KEY,
+    name TEXT NOT NULL,
+    content TEXT NOT NULL
+    course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
+    deleted BOOLEAN NOT NULL DEFAULT false,
+    parent TEXT,
+);

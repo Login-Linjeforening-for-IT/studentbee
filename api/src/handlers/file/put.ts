@@ -1,11 +1,11 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import db from '#db'
+import run from '#db'
 
 /**
  * PutFileProps type, used for type specification when putting files
  */
 type PutFileProps = {
-    courseID: string
+    id: string
     name: string
     content: string
 }
@@ -18,20 +18,24 @@ type PutFileProps = {
  */
 export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { courseID, name, content } = req.body as PutFileProps ?? {}
-        if (!courseID || !name || !content) {
-            return res.status(400).send({ error: 'Missing required field (courseID, name, content)' })
+        const { id, content } = req.body as PutFileProps ?? {}
+        if (!id || !content) {
+            return res.status(400).send({ error: 'Missing required field (id, content)' })
         }
 
-        // Finds the file in the database and updates it with the new content
-        const fileRef = db.collection('Files').doc(`${courseID}:${name}`)
-        await fileRef.update({ content })
+        const result = await run(`
+            UPDATE files
+            SET content = $1
+            WHERE id = $2
+            RETURNING id;
+        `, [content, id])
 
-        // Returns a 201 status code with the id of the updated file
-        res.status(201).send({ id: fileRef.id })
+        if (result.rowCount === 0) {
+            return res.status(404).send({ error: 'File not found' })
+        }
+
+        res.status(200).send({ id: result.rows[0].id })
     } catch (err) {
-        // Returns a 500 status code with the error message if an error occured
-        const error = err as Error
-        res.status(500).send({ error: error.message })
+        res.status(500).send({ error: (err as Error).message })
     }
 }

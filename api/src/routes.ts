@@ -6,7 +6,7 @@ import version from './handlers/version/get.ts'
 import getUser from './handlers/user/get.ts'
 import postUser from './handlers/user/post.ts'
 import getScoreboard from './handlers/scoreboard/get.ts'
-import { fileHandler, filesHandler } from './handlers/file/get.ts'
+import { fileHandler } from './handlers/file/get.ts'
 import { courseHandler, coursesHandler } from './handlers/course/get.ts'
 import { commentsHandler } from './handlers/comment/get.ts'
 import { gradeHandler } from './handlers/grades/get.ts'
@@ -20,6 +20,7 @@ import { putFile } from './handlers/file/put.ts'
 import { deleteFile } from './handlers/file/delete.ts'
 import { deleteComment } from './handlers/comment/delete.ts'
 import getUserScore from './handlers/scoreboard/getUserScore.ts'
+import { filesHandler } from './handlers/course/getCards.ts'
 
 /**
  * Defines the routes available in the API.
@@ -61,7 +62,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.put('/text', { preHandler: authMiddleware }, putCourseText)
     fastify.put('/file', { preHandler: authMiddleware }, putFile)
     fastify.post('/file', { preHandler: authMiddleware }, postFile)
-    fastify.delete('/file/:courseID/:fileID', { preHandler: authMiddleware }, deleteFile)
+    fastify.delete('/file/:id', { preHandler: authMiddleware }, deleteFile)
     
     // comments
     fastify.get('/comments/:courseID', { preHandler: authMiddleware }, commentsHandler)
