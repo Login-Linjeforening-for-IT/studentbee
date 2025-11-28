@@ -1,5 +1,6 @@
 import { getUser, deleteUser } from '@utils/api'
 import { redirect } from 'next/navigation'
+import { PageContainer } from 'uibee/components'
 
 async function deleteUserAction() {
     'use server'
@@ -19,27 +20,27 @@ export default async function Profile() {
     }
 
     return (
-        <div className='w-full h-full bg-login-900 p-8'>
+        <PageContainer title='Profile'>
             <h1 className='text-2xl mb-4'>Good afternoon, {user.name}!</h1>
             <div className='space-y-2'>
-                <div className='flex justify-between'>
-                    <span className='text-xl'>Email</span>
+                <div className='grid grid-cols-[auto_1fr] gap-4'>
+                    <span className='text-xl font-semibold'>Email: </span>
                     <span className='text-xl'>{user.email}</span>
                 </div>
-                <div className='flex justify-between'>
-                    <span className='text-xl'>Score</span>
+                <div className='grid grid-cols-[auto_1fr] gap-4'>
+                    <span className='text-xl font-semibold'>Score: </span>
                     <span className='text-xl'>{user.score}</span>
                 </div>
-                <div className='flex justify-between'>
-                    <span className='text-xl'>Total Time</span>
+                <div className='grid grid-cols-[auto_1fr] gap-4'>
+                    <span className='text-xl font-semibold'>Total Time: </span>
                     <span className='text-xl'>{user.total_time}</span>
                 </div>
-                <div className='flex justify-between'>
-                    <span className='text-xl'>Created At</span>
+                <div className='grid grid-cols-[auto_1fr] gap-4'>
+                    <span className='text-xl font-semibold'>Created At: </span>
                     <span className='text-xl'>{new Date(user.created_at).toLocaleString('nb-NO')}</span>
                 </div>
-                <div className='flex justify-between'>
-                    <span className='text-xl'>Updated At</span>
+                <div className='grid grid-cols-[auto_1fr] gap-4'>
+                    <span className='text-xl font-semibold'>Updated At: </span>
                     <span className='text-xl'>{new Date(user.updated_at).toLocaleString('nb-NO')}</span>
                 </div>
             </div>
@@ -48,6 +49,6 @@ export default async function Profile() {
                     Delete Account
                 </button>
             </form>
-        </div>
+        </PageContainer>
     )
 }

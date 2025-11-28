@@ -1,14 +1,25 @@
-import List from '@parent/src/components/scoreboard/list'
+import { PageContainer } from 'uibee/components'
+import { getScoreboard } from '@utils/api'
+import ListHeader from '@components/scoreboard/listHeader'
+import ScoreBoardEntry from '@components/scoreboard/scoreboardEntry'
 
-import type { JSX } from 'react'
+export default async function Page() {
+    const scoreboard = await getScoreboard()
 
-export default function Scoreboard(): JSX.Element {
     return (
-        <main className='grid place-items-center h-full]'>
+        <PageContainer title='Scoreboard'>
             <div className='w-full h-full grid place-items-center'>
-                <h1 className='grid place-items-center text-4xl font-bold mb-8'>Scoreboard</h1>
-                <List />
+                {!Array.isArray(scoreboard) || scoreboard.length === 0
+                    ? <h1>The scoreboard is empty.</h1>
+                    :
+                    <div className='flex flex-col w-full'>
+                        <ListHeader />
+                        {scoreboard.map((user: ScoreboardProps, index: number) =>
+                            <ScoreBoardEntry key={index} user={user} index={index}  />
+                        )}
+                    </div>
+                }
             </div>
-        </main>
+        </PageContainer>
     )
 }

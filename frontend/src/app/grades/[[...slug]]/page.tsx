@@ -1,6 +1,7 @@
-import { getGrades } from '@parent/src/utils/fetch'
+import { getGrades } from '@utils/api'
 import Input from '@parent/src/components/grades/input'
 import ClientPage from './client'
+import { PageContainer } from 'uibee/components'
 
 export default async function Grades({ params }: { params: Promise<{ slug: string[] | undefined }> }) {
     const { slug } = await params
@@ -49,16 +50,17 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
     grades = transformedData
 
     return (
-        <div className='grid place-items-center h-full]'>
-            <div className='w-full h-full grid place-items-center'>
+        <PageContainer title='Grades'>
+            <div className='mb-4'>
                 <Input course={course} />
-
+            </div>
+            <div className='w-full h-full'>
                 {error && <p className='pt-8'>{error}</p>}
 
                 {grades && selectedYear && years &&
                     <ClientPage grades={grades} years={years} defaultYear={selectedYear} />
                 }
             </div>
-        </div>
+        </PageContainer>
     )
 }
