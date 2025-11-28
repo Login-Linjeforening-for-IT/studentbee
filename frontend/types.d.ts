@@ -26,13 +26,13 @@ type CourseProps = {
 
 type Editing = {
     cards: Card[]
-    texts: notes
+    notes: string
 }
 
 type Course = {
     id: string
+    name: string
     cards: Card[]
-    unreviewed: Card[]
     notes: string
     learningBased: boolean
 }

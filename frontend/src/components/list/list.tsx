@@ -9,8 +9,8 @@ export default async function SelectCourseList() {
     if (typeof courses === 'string') {
         return (
             <div className='w-full h-full grid grid-rows-12'>
-                <h1 className='w-full grid place-items-center'>No courses</h1>
-                <Link href={'/add/course'} className='rounded-xl px-2 bg-login-900 p-2 row-span-11 grid place-self-center'>Add course</Link>
+                <h1 className='w-full grid place-items-center text-lg'>No courses</h1>
+                <Link href={'/add/course'} className='rounded-xl py-3 px-5 bg-login-900 row-span-11 grid place-self-center'>Add course</Link>
             </div>
         )
     }

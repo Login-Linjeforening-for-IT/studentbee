@@ -34,18 +34,15 @@ type HeaderProps = {
     clearCard: () => void
     editing: Editing
     setEditing: Dispatch<SetStateAction<Editing>>
-    text: string
-    setText: Dispatch<SetStateAction<string>>
     hideText: () => void
 }
 
 export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     const params = use(props.params)
-    const [editing, setEditing] = useState<Editing>({ cards: [], texts: [] })
+    const [editing, setEditing] = useState<Editing>({ cards: [], notes: '' })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [accepted, setAccepted] = useState<Card[]>([])
     const [showText, setShowText] = useState(true)
-    const [text, setText] = useState(editing.texts.join('\n\n'))
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
     const emptyCard: Card = { question: '', alternatives: [''], correct: [], source: '', rating: 0, votes: [] }
@@ -53,7 +50,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     const item = params.item[0].toUpperCase()
 
     useEffect(() => {
-        (async() => {
+        (async () => {
             const newCourse = await getCourse(item, 'client')
 
             if (newCourse) {
@@ -62,13 +59,9 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                         setAccepted(newCourse.cards)
                     }
 
-                    if (!text.length) {
-                        setText(newCourse.notes)
-                    }
-
                     setEditing({
-                        texts: newCourse.notes,
-                        cards: newCourse.unreviewed,
+                        notes: newCourse.notes,
+                        cards: newCourse.cards,
                     } as Editing)
                 }
             }
@@ -87,12 +80,11 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     }, [editing.cards])
 
     function handleSubmit() {
-        updateCourse({courseID: item, accepted, editing})
+        updateCourse({ courseID: item, accepted, editing })
     }
 
     function handleTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
-        setText(event.target.value)
-        setEditing({...editing, texts: event.target.value.split('\n\n')})
+        setEditing({ ...editing, notes: event.target.value })
     }
 
     function addCard() {
@@ -116,7 +108,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
             ...card,
             alternatives: card.alternatives.filter((alternative) => alternative.length)
         }])
-        setCard({...emptyCard, source: card.source})
+        setCard({ ...emptyCard, source: card.source })
     }
 
     function handleAcceptedIndexClick(index: number) {
@@ -149,13 +141,11 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                         editing={editing}
                         setEditing={setEditing}
                         hideText={hideText}
-                        text={text}
-                        setText={setText}
                     />
                     <div className='w-full h-[68vh] px-2'>
                         <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-2' : ''}`}>
                             {showText && <textarea
-                                value={text}
+                                value={editing.notes}
                                 onChange={handleTextChange}
                                 className='w-full h-full overflow-auto noscroll bg-login-700 rounded-xl p-2 resize-none whitespace-pre-wrap outline-hidden caret-orange-500'
                             />}
@@ -200,15 +190,15 @@ function AddCard({
 }: AddCardProps) {
     const inputRef = useRef<HTMLInputElement | null>(null)
     function updateQuestion(question: string) {
-        setCard({...card, question})
+        setCard({ ...card, question })
     }
 
     function updateTheme(theme: string) {
-        setCard({...card, theme})
+        setCard({ ...card, theme })
     }
 
     function updateSource(source: string) {
-        setCard({...card, source})
+        setCard({ ...card, source })
     }
 
     function handleAlternativeClick(index: number) {
@@ -218,7 +208,7 @@ function AddCard({
     function removeAlternative(index: number) {
         const tempAlternatives = [...card.alternatives]
         tempAlternatives.splice(index, 1)
-        setCard({...card, alternatives: tempAlternatives})
+        setCard({ ...card, alternatives: tempAlternatives })
         setAlternativeIndex(alternativeIndex - 1 > 0 ? alternativeIndex - 1 : 0)
     }
 
@@ -232,17 +222,17 @@ function AddCard({
 
     function addCorrect(index: number) {
         if (typeof card.correct === 'number') {
-            setCard({...card, correct: [card.correct, index]})
+            setCard({ ...card, correct: [card.correct, index] })
         } else {
-            setCard({...card, correct: [...card.correct, index]})
+            setCard({ ...card, correct: [...card.correct, index] })
         }
     }
 
     function removeCorrect(index: number) {
         if (typeof card.correct === 'number') {
-            setCard({...card, correct: []})
+            setCard({ ...card, correct: [] })
         } else {
-            setCard({...card, correct: card.correct.filter((correctIndex) => correctIndex !== index)})
+            setCard({ ...card, correct: card.correct.filter((correctIndex) => correctIndex !== index) })
         }
     }
 
@@ -272,7 +262,7 @@ function AddCard({
                     courseID={courseID}
                     value={card.question.split('\n')}
                     customSaveLogic={true}
-                    save={() => {}}
+                    save={() => { }}
                     onChange={updateQuestion}
                     hideSaveButton={true}
                 />
@@ -329,14 +319,14 @@ function AddCard({
     )
 }
 
-function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: AlternativeProps) {
+function Alternative({ card, setCard, alternativeIndex, setAlternativeIndex }: AlternativeProps) {
     const inputRef = useRef<HTMLTextAreaElement | null>(null)
 
     // Updates the alternative in the course object
     function handleInput(input: string) {
         const tempAlternatives = [...card.alternatives]
         tempAlternatives[alternativeIndex] = input
-        setCard({...card, alternatives: tempAlternatives})
+        setCard({ ...card, alternatives: tempAlternatives })
         autoResizeTextarea(inputRef.current as HTMLTextAreaElement)
     }
 
@@ -383,7 +373,7 @@ function Alternative({card, setCard, alternativeIndex, setAlternativeIndex}: Alt
     )
 }
 
-function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexClick}: AcceptedProps) {
+function Accepted({ card: editCard, accepted, setAccepted, handleAcceptedIndexClick }: AcceptedProps) {
 
     function handleRemove(index: number) {
         const tempAccepted = [...accepted]
@@ -426,7 +416,7 @@ function Accepted({card: editCard, accepted, setAccepted, handleAcceptedIndexCli
     )
 }
 
-function Header({ clearCard, editing, setEditing, text, setText, hideText }: HeaderProps) {
+function Header({ clearCard, editing, setEditing, hideText }: HeaderProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     async function upload(event: ChangeEvent<HTMLInputElement>) {
@@ -436,7 +426,7 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
             try {
                 const fileReader = new FileReader()
 
-                fileReader.onload = async(event) => {
+                fileReader.onload = async (event) => {
                     const arrayBuffer = event.target?.result
 
                     if (arrayBuffer) {
@@ -455,9 +445,7 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
                             pdfText += pageText
                         }
 
-                        setEditing({...editing, texts: [...text, pdfText]})
-                        setText([...text, '\n\n', pdfText].join(''))
-
+                        setEditing({ ...editing, notes: `${editing.notes}\n${pdfText}` })
                         if (fileInputRef.current) {
                             fileInputRef.current.value = ''
                         }
@@ -469,7 +457,7 @@ function Header({ clearCard, editing, setEditing, text, setText, hideText }: Hea
                 }
 
                 fileReader.readAsArrayBuffer(file)
-            } catch(error) {
+            } catch (error) {
                 console.error('Error loading PDF:', error)
             }
         }
