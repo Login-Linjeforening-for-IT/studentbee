@@ -12,15 +12,15 @@
   "description": "",
   "dependencies": {
     "@fastify/cors": "^11.1.0",
-    "dotenv": "^17.2.2",
-    "fastify": "^5.6.0",
+    "dotenv": "^17.2.3",
+    "fastify": "^5.6.2",
     "pg": "^8.16.3"
   },
   "devDependencies": {
-    "@types/node": "^24.3.1",
+    "@types/node": "^24.10.1",
     "@types/pg": "^8.15.6",
     "ts-node-dev": "^2.0.0",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "imports": {
     "#utils/*": "./src/utils/*",
