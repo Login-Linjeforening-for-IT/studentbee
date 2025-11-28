@@ -4,7 +4,7 @@ import Editor, { Markdown } from '../editor/editor'
 import Link from 'next/link'
 import voteColor from './voteColor'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
-import { getCookie } from '@parent/src/utils/cookies'
+import { getCookie } from 'uibee/utils'
 
 type ReplyProps = {
     courseID: string

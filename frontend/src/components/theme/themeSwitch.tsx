@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getCookie, setCookie } from '@parent/src/utils/cookies'
+import { getCookie, setCookie } from 'uibee/utils'
 import './toggle.css'
 
 export default function ThemeSwitch() {

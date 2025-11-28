@@ -3,7 +3,7 @@ import { sendVote } from '@parent/src/utils/vote'
 import { useState } from 'react'
 import Editor from '../editor/editor'
 import Comment from '../comments/comment'
-import { getCookie } from '@parent/src/utils/cookies'
+import { getCookie } from 'uibee/utils'
 
 type CommentsProps = {
     comments: CardComment[]

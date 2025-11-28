@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { ChevronDown, ChevronUp, ThumbsDown, ThumbsUp } from 'lucide-react'
 import voteColor from '../comments/voteColor'
-import { getCookie } from '@parent/src/utils/cookies'
+import { getCookie } from 'uibee/utils'
 
 type QuestionFooterProps = {
     card: Card
