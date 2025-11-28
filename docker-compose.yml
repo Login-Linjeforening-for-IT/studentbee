@@ -1,6 +1,7 @@
 services:
   studentbee:
     container_name: studentbee
+    image: studentbee
     build:
       context: ./frontend
       dockerfile: Dockerfile
@@ -13,6 +14,7 @@ services:
 
   studentbee_api:
     container_name: studentbee_api
+    image: studentbee_api
     build:
       context: ./api
       dockerfile: Dockerfile
