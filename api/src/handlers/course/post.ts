@@ -2,20 +2,6 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import db from '#db'
 
 /**
- * Defines the Card type, used for type specification when handling cards
- */
-type Card = {
-    question: string
-    alternatives: string[]
-    correct: number[]
-    source: string
-    rating: number
-    votes: number[]
-    help?: string
-    theme?: string
-}
-
-/**
  * Defines the Course type, used for type specification when handling courses
  */
 type Course = {
@@ -33,12 +19,8 @@ type Course = {
  * @returns Status code depending on the outcome of the operation
  */
 export async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    // Wrapped in try-catch block to catch and handle errors gracefully
     try {
-        // Destructures the relevant variables from the request body
         const { username, course } = req.body as { username: string, course: Course }
-
-        // Validate the required fields
         if (!username || !course) {
             return res.status(400).send({ error: 'username and course are required' })
         }
@@ -64,7 +46,6 @@ export async function postCourse(req: FastifyRequest, res: FastifyReply): Promis
 
         res.status(201).send({ id: courseRef.id })
     } catch (err) {
-        // Returns a 500 status code with the error message if an error occured
         const error = err as Error
         res.status(500).send({ error: error.message })
     }

@@ -51,7 +51,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     // course
     fastify.get('/courses', { preHandler: authMiddleware }, coursesHandler)
     fastify.get('/course/:courseID', { preHandler: authMiddleware }, courseHandler)
-    fastify.put('/course/:courseID', { preHandler: authMiddleware }, putCourse)
+    fastify.put('/course/:id', { preHandler: authMiddleware }, putCourse)
     fastify.post('/course', { preHandler: authMiddleware }, postCourse)
     fastify.post('/card', { preHandler: authMiddleware }, postCard)
     fastify.put('/mark', { preHandler: authMiddleware }, putCourseMark)
