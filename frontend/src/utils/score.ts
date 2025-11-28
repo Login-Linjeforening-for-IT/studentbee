@@ -1,6 +1,6 @@
 import config from '@config'
 import { setItem } from './localStorage'
-import { getCookie } from './cookies'
+import { getCookie } from 'uibee/utils'
 
 export default async function addScore(){
 

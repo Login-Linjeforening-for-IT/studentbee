@@ -1,5 +1,5 @@
 import config from '@config'
-import { getCookie } from './cookies'
+import { getCookie } from 'uibee/utils'
 
 type UpdateCourseProps = {
     courseID: string

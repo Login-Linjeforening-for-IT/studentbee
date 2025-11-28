@@ -1,7 +1,7 @@
 'use server'
 
 import config from '@config'
-import { getCookie } from './cookies'
+import { getCookie } from 'uibee/utils'
 
 type MarkProps = {
     courseID: string
