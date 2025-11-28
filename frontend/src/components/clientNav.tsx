@@ -62,15 +62,20 @@ export function MiddleIcon() {
 }
 
 export function RightSide() {
+    const [loggedIn, setLoggedIn] = useState<string | null>(null)
+
+    useEffect(() => {
+        setLoggedIn(getCookie('access_token'))
+    }, [])
 
     return (
-        <div className='flex justify-end rounded-xl gap-2 md:min-w-[10rem]'>
+        <div className='flex justify-end rounded-xl gap-2 md:min-w-40'>
             {/* create account */}
             <MiddleIcon />
             {/* login */}
             <RightIcon />
             <ThemeSwitch />
-            <Burger />
+            {loggedIn && <Burger />}
         </div>
     )
 }

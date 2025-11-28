@@ -45,7 +45,7 @@ marked.use({
     renderer: {
         code(code, lang) {
             const language = hljs.getLanguage(typeof lang === 'string' ? lang : 'plaintext') ? lang || 'plaintext' : 'plaintext'
-            return `<pre class='inline-block rounded-xl overflow-auto whitespace-pre-wrap break-words'><code class='hljs ${language}'>${hljs.highlight(code, { language }).value}</code></pre>`
+            return `<pre class='inline-block rounded-xl overflow-auto whitespace-pre-wrap wrap-break-word'><code class='hljs ${language}'>${hljs.highlight(code, { language }).value}</code></pre>`
         },
         image(href, title) {
             const width = 'width="300"'
@@ -202,7 +202,7 @@ export function Markdown({
 }: MarkdownProps) {
     return (
         <div
-            className={`markdown-preview ${displayEditor && 'pl-2 border-l-2 border-orange-500'} text-foreground h-full break-words ${className}`}
+            className={`markdown-preview ${displayEditor && 'pl-2 border-l-2 border-orange-500'} text-foreground h-full wrap-break-word ${className}`}
             onClick={handleDisplayEditor}
             dangerouslySetInnerHTML={{ __html: marked(markdown) }}
         />

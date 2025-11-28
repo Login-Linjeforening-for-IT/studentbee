@@ -108,7 +108,7 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
                 <div className='grid place-items-center'>
                     <h1 className='text-lg text-center mb-2'>Course {course.id} has no content yet.</h1>
                     <Link
-                        className='bg-login-900 rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 bg-login'
+                        className='bg-login-900 rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 hover:bg-login'
                         href={`/edit/${course.id}`}
                     >
                         Edit course

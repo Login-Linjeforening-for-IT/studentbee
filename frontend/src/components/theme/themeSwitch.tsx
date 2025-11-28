@@ -29,7 +29,7 @@ export default function ThemeSwitch() {
 
     return (
         <div className='grid place-items-center justify-end'>
-            <label>
+            <label className='cursor-pointer'>
                 <input
                     type='checkbox'
                     checked={theme === 'light'}

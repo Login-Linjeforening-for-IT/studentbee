@@ -40,7 +40,7 @@ type ButtonProps = {
     target?: string
 }
 
-export default function StudyOrTest({courses}: CoursesProps) {
+export default function StudyOrTest({ courses }: CoursesProps) {
     const path = usePathname()
     const [study, setStudy] = useState(path.includes('study') || path.includes('files'))
     const [cardCount, setCardCount] = useState(0)
@@ -60,7 +60,7 @@ export default function StudyOrTest({courses}: CoursesProps) {
     )
 }
 
-function Files({studyable}: {studyable: boolean}) {
+function Files({ studyable }: { studyable: boolean }) {
     const [files, setFiles] = useState<Files[]>([])
     const inputRef = useRef<HTMLInputElement | null>(null)
     const path = usePathname()
@@ -73,7 +73,7 @@ function Files({studyable}: {studyable: boolean}) {
             return
         }
 
-        sendFile({courseID: course, name: input})
+        sendFile({ courseID: course, name: input })
         setDisplayInputField('')
 
         if (inputRef.current) {
@@ -97,7 +97,7 @@ function Files({studyable}: {studyable: boolean}) {
             const activeElement = document.activeElement
             if (
                 (activeElement?.tagName === 'INPUT'
-                || activeElement?.tagName === 'TEXTAREA')
+                    || activeElement?.tagName === 'TEXTAREA')
                 && e.key === 'Enter'
             ) {
                 createFile()
@@ -128,7 +128,7 @@ function Files({studyable}: {studyable: boolean}) {
     )
 }
 
-function FileListHeader({course, studyable, displayInputField, setDisplayInputField, input, setInput, inputRef, createFile}: FileListHeaderProps) {
+function FileListHeader({ course, studyable, displayInputField, setDisplayInputField, input, setInput, inputRef, createFile }: FileListHeaderProps) {
     return (
         <>
             {studyable && <Button text='/ test' href={`/course/${course}`} />}
@@ -162,7 +162,7 @@ function FileListHeader({course, studyable, displayInputField, setDisplayInputFi
     )
 }
 
-function Button({text, href, target}: ButtonProps) {
+function Button({ text, href, target }: ButtonProps) {
     return (
         <Link
             href={href}
@@ -174,7 +174,7 @@ function Button({text, href, target}: ButtonProps) {
     )
 }
 
-function FileList({files, path, inputRef}: FileListProps) {
+function FileList({ files, path, inputRef }: FileListProps) {
     const [input, setInput] = useState('')
     const [displayInputField, setDisplayInputField] = useState('')
 
@@ -198,7 +198,7 @@ function FileList({files, path, inputRef}: FileListProps) {
     )
 }
 
-function File({file, className, path, input, setInput, inputRef, displayInputField, setDisplayInputField}: FileProps) {
+function File({ file, className, path, input, setInput, inputRef, displayInputField, setDisplayInputField }: FileProps) {
     if (file.name === 'root') {
         return
     }
@@ -210,7 +210,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
     }
 
     function addFile() {
-        sendFile({courseID: course, name: input, parent: file.name})
+        sendFile({ courseID: course, name: input, parent: file.name })
         setDisplayInputField('')
         if (inputRef.current) {
             inputRef.current.value = ''
@@ -218,7 +218,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
     }
 
     function handleDelete() {
-        deleteFile({courseID: course, name: file.name})
+        deleteFile({ courseID: course, name: file.name })
     }
 
     return (
@@ -255,7 +255,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
                 inputRef={inputRef}
                 displayInputField={displayInputField}
                 setDisplayInputField={setDisplayInputField}
-            /> )}
+            />)}
             {displayInputField === file.name && <div className='grid grid-cols-4 pl-2'>
                 <input
                     ref={inputRef}
@@ -273,7 +273,7 @@ function File({file, className, path, input, setInput, inputRef, displayInputFie
     )
 }
 
-function InnerCourseList({courses, currentPath}: CoursesProps) {
+function InnerCourseList({ courses, currentPath }: CoursesProps) {
     return (
         <div className='h-full bg-login-900 rounded-xl'>
             <div className='pt-2 pb-24 h-full overflow-auto grow noscroll'>
@@ -285,7 +285,7 @@ function InnerCourseList({courses, currentPath}: CoursesProps) {
     )
 }
 
-function Course({course, currentPath, index}: CourseProps) {
+function Course({ course, currentPath, index }: CourseProps) {
     const currentCourse = currentPath.includes('/course/') ? currentPath.split('/course/')[1].split('/')[0] : ''
     const current = currentCourse === course.id
     const bg = index % 2 === 0 ? 'bg-login-800' : 'bg-login-900'
@@ -293,7 +293,7 @@ function Course({course, currentPath, index}: CourseProps) {
     return (
         <Link
             href={`/course/${course.id}`}
-            className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-4 items-center gap-2 py-[0.8rem] hover:pl-6 duration-500 transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : '' } hover:*:fill-login hover:text-login font-medium`}
+            className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-4 items-center gap-2 py-[0.8rem] hover:pl-6 duration-500 transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : ''} hover:*:fill-login hover:text-login font-medium`}
         >
             <h1>{course.id}</h1>
         </Link>

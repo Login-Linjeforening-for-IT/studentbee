@@ -24,7 +24,7 @@ export default async function SelectCourseList() {
                         {courses.map((course) => <Link
                             href={`/course/${course.id}`}
                             key={course.id}
-                            className='text-2xs md:text-base bg-login-700 w-full rounded-md p-1 pl-2 md:p-2 h-[28px] md:h-auto'
+                            className='text-2xs md:text-base bg-login-700 w-full rounded-md p-1 pl-2 md:p-2 h-7 md:h-auto'
                         >
                             {course.id}
                         </Link>)}

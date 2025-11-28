@@ -22,7 +22,7 @@ export default function Menu() {
     }, [])
 
     return (
-        <div className='hidden menu absolute grid left-0 top-0 h-full w-full'>
+        <div className='lg:hidden grid menu absolute left-0 top-0 h-full w-full'>
             <div className='mt-12'>
                 <CourseListClient />
             </div>

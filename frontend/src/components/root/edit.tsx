@@ -47,7 +47,7 @@ export default function Edit() {
     }
 
     if (typeof courses === 'string') {
-        return <h1 className='hidden lg:grid w-full h-full grid place-items-center'>{courses}</h1>
+        return <h1 className='hidden lg:grid w-full h-full place-items-center'>{courses}</h1>
     }
 
     return (

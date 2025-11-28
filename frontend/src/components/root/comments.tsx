@@ -137,7 +137,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                     save={() => {}}
                     onChange={setContent}
                 />
-                <button className='h-[5vh] bg-login-700 px-2 rounded-xl h-[5vh] float-right' onClick={sendComment}>Post comment</button>
+                <button className='h-[5vh] bg-login-700 px-2 rounded-xl float-right' onClick={sendComment}>Post comment</button>
             </div>
             {/* not sure what to use this space for */}
             <div className='col-span-2' />

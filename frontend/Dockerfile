@@ -1,7 +1,7 @@
 # Latest node base image
-FROM node:20-alpine
+FROM node:alpine
 
-# Installs Python
+# Installs dependencies
 RUN apk add --no-cache python3 make g++ varnish
 
 # Container working directory
