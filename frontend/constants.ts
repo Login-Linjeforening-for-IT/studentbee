@@ -1,7 +1,9 @@
 import dotenv from 'dotenv'
 import packageInfo from './package.json'
 
-dotenv.config({ path: '../.env' })
+if (typeof window === 'undefined') {
+    dotenv.config({ path: '../.env' })
+}
 
 const requiredEnvironmentVariables = [
     'NEXT_PUBLIC_BROWSER_API_URL',
