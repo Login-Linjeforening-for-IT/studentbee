@@ -1,5 +1,4 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
-import db from '#db'
 import run from '#db'
 
 /**
@@ -17,23 +16,26 @@ type DeleteCommentProps = {
  * @param res Response object
  * @returns Status code bsaed on the outcome of the operation
  */
-export async function deleteComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
-    const { username, commentID } = req.body as DeleteCommentProps ?? {}
-
+export default async function deleteComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
+        const { username, commentID } = req.body as DeleteCommentProps ?? {}
         if (!username || typeof commentID !== 'number') {
-            return res.status(400).send({ error: 'Comment ID is required' })
+            return res.status(400).send({ error: 'Missing required field (username, commentID)' })
         }
 
-        const response = await run('DELETE')
-        // Finds and deletes the comment from the database if found
-        const commentRef = db.collection('Comment').doc(commentID.toString())
-        await commentRef.delete()
+        const result = await run(
+            `DELETE FROM comments
+             WHERE id = $1 AND user_id = $2
+             RETURNING id;`,
+            [commentID, username]
+        )
 
-        res.send({ id: commentRef.id })
+        if (result.rowCount === 0) {
+            return res.status(403).send({ error: 'You are not allowed to delete this comment' })
+        }
+
+        res.status(200).send({ id: result.rows[0].id })
     } catch (err) {
-        // Returns a 500 status code with the error message if an error occured
-        const error = err as Error
-        res.status(500).send({ error: error.message })
+        res.status(500).send({ error: (err as Error).message })
     }
 }

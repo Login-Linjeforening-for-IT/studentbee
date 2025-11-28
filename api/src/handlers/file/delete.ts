@@ -7,7 +7,7 @@ import run from '#db'
  * @param res Response object
  * @returns Status code depending on the outcome of the operation
  */
-export async function deleteFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
+export default async function deleteFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { id } = req.params as { id : string }
         if (!id) {

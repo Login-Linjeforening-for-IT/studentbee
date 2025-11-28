@@ -13,14 +13,17 @@ import { gradeHandler } from './handlers/grades/get.ts'
 import { postFile } from './handlers/file/post.ts'
 import { postCard } from './handlers/card/post.ts'
 import { postCourse } from './handlers/course/post.ts'
-import { postComment, postCommentVote } from './handlers/comment/post.ts'
+import { postComment } from './handlers/comment/post.ts'
 import { postCardVote } from './handlers/card/post.ts'
-import { putCourse, putCourseMark, putCourseText } from './handlers/course/put.ts'
-import { putFile } from './handlers/file/put.ts'
-import { deleteFile } from './handlers/file/delete.ts'
-import { deleteComment } from './handlers/comment/delete.ts'
+import putFile from './handlers/file/put.ts'
+import deleteFile from './handlers/file/delete.ts'
+import deleteComment from './handlers/comment/delete.ts'
 import getUserScore from './handlers/scoreboard/getUserScore.ts'
-import { filesHandler } from './handlers/course/getCards.ts'
+import filesHandler from './handlers/course/getCards.ts'
+import putCourse from './handlers/course/put/course.ts'
+import postCommentVote from './handlers/comment/vote/post.ts'
+import putCourseNotes from './handlers/course/put/notes.ts'
+import { putCourseLearningBased } from './handlers/course/put/learningBased.ts'
 
 /**
  * Defines the routes available in the API.
@@ -52,14 +55,14 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/courses', { preHandler: authMiddleware }, coursesHandler)
     fastify.get('/course/:courseID', { preHandler: authMiddleware }, courseHandler)
     fastify.put('/course/:id', { preHandler: authMiddleware }, putCourse)
+    fastify.put('/course/:id/notes', { preHandler: authMiddleware }, putCourseNotes)
     fastify.post('/course', { preHandler: authMiddleware }, postCourse)
     fastify.post('/card', { preHandler: authMiddleware }, postCard)
-    fastify.put('/mark', { preHandler: authMiddleware }, putCourseMark)
+    fastify.put('/learningBased', { preHandler: authMiddleware }, putCourseLearningBased)
     
     // files
     fastify.get('/files/:courseID', { preHandler: authMiddleware }, filesHandler)
     fastify.get('/file/:id', { preHandler: authMiddleware }, fileHandler)
-    fastify.put('/text', { preHandler: authMiddleware }, putCourseText)
     fastify.put('/file', { preHandler: authMiddleware }, putFile)
     fastify.post('/file', { preHandler: authMiddleware }, postFile)
     fastify.delete('/file/:id', { preHandler: authMiddleware }, deleteFile)

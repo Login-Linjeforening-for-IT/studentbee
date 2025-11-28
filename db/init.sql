@@ -4,17 +4,20 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     score INTEGER NOT NULL DEFAULT 0,
     total_time INTEGER NOT NULL DEFAULT 0,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
     course_code TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
+    notes TEXT NOT NULL,
+    learning_based BOOLEAN NOT NULL DEFAULT false,
     created_by TEXT NOT NULL REFERENCES users(user_id),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_by TEXT NOT NULL REFERENCES users(user_id),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE cards (
@@ -26,8 +29,8 @@ CREATE TABLE cards (
     source TEXT,
     help TEXT,
     created_by TEXT NOT NULL REFERENCES users(user_id),
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE card_votes (
@@ -35,10 +38,9 @@ CREATE TABLE card_votes (
     card_id INTEGER NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
     user_id TEXT NOT NULL REFERENCES users(user_id),
     is_upvote BOOLEAN NOT NULL,
-    voted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    voted_at TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(card_id, user_id)
 );
-
 
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
@@ -47,8 +49,8 @@ CREATE TABLE comments (
     parent_id INTEGER REFERENCES comments(id),
     user_id TEXT NOT NULL REFERENCES users(user_id),
     content TEXT NOT NULL,
-    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
 );
 
 CREATE TABLE comment_votes (
@@ -56,7 +58,7 @@ CREATE TABLE comment_votes (
     comment_id INTEGER NOT NULL REFERENCES comments(id) ON DELETE CASCADE,
     user_id TEXT NOT NULL REFERENCES users(user_id),
     is_upvote BOOLEAN NOT NULL,
-    voted_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    voted_at TIMESTAMP NOT NULL DEFAULT NOW(),
     UNIQUE(comment_id, user_id)
 );
 
@@ -67,4 +69,8 @@ CREATE TABLE files (
     course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     deleted BOOLEAN NOT NULL DEFAULT false,
     parent TEXT,
+    created_by TEXT NOT NULL REFERENCES users(user_id),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_by TEXT NOT NULL REFERENCES users(user_id),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );

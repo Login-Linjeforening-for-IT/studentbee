@@ -5,7 +5,7 @@ import { getCookie } from './cookies'
 
 type MarkProps = {
     courseID: string
-    mark: boolean
+    learningBased: boolean
 }
 
 type SendFileProps = {
@@ -35,7 +35,7 @@ export async function addCourse(course: Course): Promise<void | string> {
                 },
                 body: JSON.stringify({
                     username: username,
-                    course: {...course, id: course.id.trim()}
+                    course: { ...course, id: course.id.trim() }
                 }),
             })
 
@@ -50,7 +50,7 @@ export async function addCourse(course: Course): Promise<void | string> {
         }
 
         return 'Please log in to add a course'
-    } catch(error: unknown) {
+    } catch (error: unknown) {
         const err = error as Error
         return err.message
     }
@@ -77,7 +77,6 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
 
         if (!response.ok) {
             const data = await response.json()
-
             throw Error(data.error)
         }
 
@@ -118,35 +117,30 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
     return 'Please log in to add input'
 }
 
-export async function sendMark({courseID, mark}: MarkProps) {
+export async function sendMark({ courseID, learningBased }: MarkProps) {
     const username = getCookie('user_nickname')
-
     if (!username) {
-        throw Error('You must be logged in to mark')
+        throw Error('You must be logged in to mark a course as learning based')
     }
 
-    const response = await fetch(`${config.url.BROWSER_API}/mark`, {
+    const response = await fetch(`${config.url.BROWSER_API}/learningBased`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            courseID, mark
-        })
+        body: JSON.stringify({ courseID, learningBased })
     })
 
     if (!response.ok) {
         const data = await response.json()
-
         throw Error(data.error)
     }
 
     return await response.json()
 }
 
-export async function sendFile({courseID, name, parent}: SendFileProps) {
+export async function sendFile({ courseID, name, parent }: SendFileProps) {
     const username = getCookie('user_nickname')
-
     if (!username) {
         throw Error('You must be logged in to upload a file')
     }
@@ -166,16 +160,14 @@ export async function sendFile({courseID, name, parent}: SendFileProps) {
 
     if (!response.ok) {
         const data = await response.json()
-
         throw Error(data.error)
     }
 
     return await response.json()
 }
 
-export async function updateFile({courseID, name, content}: UpdateFileProps) {
+export async function updateFile({ courseID, name, content }: UpdateFileProps) {
     const username = getCookie('user_nickname')
-
     if (!username) {
         throw Error('You must be logged in to upload a file')
     }
@@ -195,16 +187,14 @@ export async function updateFile({courseID, name, content}: UpdateFileProps) {
 
     if (!response.ok) {
         const data = await response.json()
-
         throw Error(data.error)
     }
 
     return await response.json()
 }
 
-export async function deleteFile({courseID, name}: SendFileProps) {
+export async function deleteFile({ courseID, name }: SendFileProps) {
     const username = getCookie('user_nickname')
-
     if (!username) {
         throw Error('You must be logged in to delete a file')
     }
@@ -221,7 +211,6 @@ export async function deleteFile({courseID, name}: SendFileProps) {
 
     if (!response.ok) {
         const data = await response.json()
-
         throw Error(data.error)
     }
 

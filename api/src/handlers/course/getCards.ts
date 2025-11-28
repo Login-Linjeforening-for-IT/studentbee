@@ -12,7 +12,7 @@ type CourseParam = {
  * @param req Request
  * @param res Response
  */
-export async function filesHandler(req: FastifyRequest, res: FastifyReply) {
+export default async function filesHandler(req: FastifyRequest, res: FastifyReply) {
     const { courseID } = req.params as CourseParam
 
     /**

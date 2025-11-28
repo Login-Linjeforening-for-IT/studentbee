@@ -1,93 +1,56 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import db from '#db'
+import run from '#db'
 
-/**
- * CourseParam type, used for type specification when handling course parameters
- */
-type CourseParam = {
-    courseID: string
-}
-
-/**
- * Comment type, used for type specification when handling comments
- */
-type Comment = {
-    id: string
-    cardID: string
-    parent?: string
-    replies: Comment[]
-}
-
-/**
- * Fetches all comments for the given course
- * @param req Request
- * @param res Response
- */
 export async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
-    const { courseID } = req.params as CourseParam
-
-    /**
-     * Internal asynchronous function to fetch the comments from Firebase
-     * @returns The comments for the specified course if found, or otherwise a string indicating the error
-     */
-    async function fetchComments() {
-        // Fetches the comments from the 'Comment' collection in the database
-        const commentsSnapshot = await db.collection('Comment')
-            .where('courseID', '==', courseID)
-            .get()
-
-        // Returns an empty array if no comments are found
-        const comments = commentsSnapshot.docs.map((doc) => doc.data()) as Comment[]
-
-        // Groups comments by cardID and initialize replies array
-        const groupedComments: { [key: string]: Comment[] } = {}
-        const commentById: { [key: string]: Comment } = {}
-
-        // Initialize comments by cardID and group comments
-        comments.forEach(comment => {
-            comment.replies = []
-            // Inserts the comment into commentById
-            commentById[comment.id] = comment
-
-            // Assigns the cardID to cardID, or 'no_cardID' if the cardID is not defined
-            const cardID = comment.cardID || 'no_cardID'
-
-            // Groups comments by cardID
-            if (!groupedComments[cardID]) {
-                groupedComments[cardID] = []
-            }
-
-            // Pushes the comment into the groupedComments array
-            groupedComments[cardID].push(comment)
-        })
-
-        // Nests replies under their parent comments
-        comments.forEach(comment => {
-            // Assigns the parent comment to parentComment if it exists
-            if (comment.parent) {
-                const parentComment = commentById[comment.parent]
-
-                // Pushes the comment into the parentComment's replies array
-                if (parentComment) {
-                    parentComment.replies.push(comment)
-                }
-            }
-        })
-
-        // Filters out comments that are replies, to avoid duplicates in the top-level array
-        Object.keys(groupedComments).forEach(cardID => {
-            groupedComments[cardID] = groupedComments[cardID].filter(comment => !comment.parent)
-        })
-
-        // Converts grouped comments to 2D array
-        return Object.keys(groupedComments).map(cardID => groupedComments[cardID])
-    }
+    const { id } = req.params as { id : string }
 
     try {
-        const commentsArray = await cache(`${courseID}_comments`, fetchComments)
-        res.send(commentsArray)
+        const result = await run(`
+            SELECT 
+                id,
+                card_id,
+                parent_id,
+                user_id,
+                content,
+                created_at,
+                updated_at
+            FROM comments
+            WHERE course_id = $1
+            ORDER BY created_at ASC;
+        `, [id])
+
+        const rows = result.rows
+
+        const commentById: Record<number, any> = {}
+        rows.forEach(row => {
+            commentById[row.id] = {
+                ...row,
+                parent: row.parent_id ?? null,
+                replies: []
+            }
+        })
+
+        const topLevel: any[] = []
+        rows.forEach(row => {
+            const comment = commentById[row.id]
+
+            if (row.parent_id) {
+                commentById[row.parent_id]?.replies.push(comment)
+            } else {
+                topLevel.push(comment)
+            }
+        })
+
+        const grouped: Record<string, any[]> = {}
+        topLevel.forEach(c => {
+            const key = c.card_id?.toString() ?? 'no_cardID'
+            if (!grouped[key]) grouped[key] = []
+            grouped[key].push(c)
+        })
+
+        const groupedArray = Object.values(grouped)
+        res.send(groupedArray)
     } catch (err) {
-        const error = err as Error
-        res.status(500).send({ error: error.message })
+        res.status(500).send({ error: (err as Error).message })
     }
 }

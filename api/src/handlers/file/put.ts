@@ -16,7 +16,7 @@ type PutFileProps = {
  * @param res Response object
  * @returns Status code based on the outcome of the operation
  */
-export async function putFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
+export default async function putFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { id, content } = req.body as PutFileProps ?? {}
         if (!id || !content) {

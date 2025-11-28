@@ -1,4 +1,15 @@
 /**
+ * Defines the Course type, used for type specification when handling courses
+ */
+type Course = {
+    id: string
+    cards: Card[]
+    unreviewed: Card[]
+    notes: string
+    files: Files
+}
+
+/**
  * Files type, used for type specification when handling files
  */
 type Files = {

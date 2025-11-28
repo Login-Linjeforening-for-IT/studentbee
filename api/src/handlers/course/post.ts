@@ -1,15 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import db from '#db'
+import run from '#db'
 
-/**
- * Defines the Course type, used for type specification when handling courses
- */
-type Course = {
+type PostCourseProps = {
     id: string
-    cards: Card[]
-    unreviewed: Card[]
-    textUnreviewed: string[]
-    files: Files
+    name: string
+    username: string
 }
 
 /**
@@ -20,31 +15,21 @@ type Course = {
  */
 export async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, course } = req.body as { username: string, course: Course }
-        if (!username || !course) {
-            return res.status(400).send({ error: 'username and course are required' })
+        const { username, id, name } = req.body as PostCourseProps ?? {}
+        if (!username || !id || !name) {
+            return res.status(400).send({ error: 'Missing required field (username, id, name)' })
         }
 
-        // Checks if the course has an ID field, and returns a 400 status code if it does not
-        const courseID = course.id
-        if (!courseID) {
-            return res.status(400).send({ error: 'Course ID is required.' })
+        const courseResponse = await run('INSERT INTO courses (id) VALUES ($1) RETURNING id', [id])
+        if (!courseResponse.rowCount) {
+            throw new Error('Failed to create course')
         }
 
-        // Generates a document reference with the courseID
-        const courseRef = db.collection('Course').doc(courseID)
-        await courseRef.set(course)
+        await run(`
+            INSERT INTO files (course_id, name, content, created_by, updated_by) VALUES ($1, $2, $3, $4, $4) RETURNING id;
+        `, [id, 'root', '', username])
 
-        // Creates root file for the course
-        const fileRef = db.collection('Files').doc(`${courseID}:root`)
-        await fileRef.set({
-            courseID,
-            name: 'root',
-            content: '',
-            files: []
-        })
-
-        res.status(201).send({ id: courseRef.id })
+        res.status(201).send({ id })
     } catch (err) {
         const error = err as Error
         res.status(500).send({ error: error.message })

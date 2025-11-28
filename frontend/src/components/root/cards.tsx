@@ -17,7 +17,7 @@ type CardsProps = {
     comments: CardComment[][]
 }
 
-export default function Cards({id, current, course, comments}: CardsProps) {
+export default function Cards({ id, current, course, comments }: CardsProps) {
 
     const router = useRouter()
     const [animate, setAnimate] = useState('-1')
@@ -62,7 +62,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
 
 
     function markCourse() {
-        sendMark({courseID: id || 'PROG1001', mark: true})
+        sendMark({ courseID: id || 'PROG1001', learningBased: true })
     }
 
     useEffect(() => {
@@ -84,7 +84,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
         setIndexMapping(mapping)
     }, [card?.alternatives])
 
-    if (current && current >= cards.length ) {
+    if (current && current >= cards.length) {
         router.push(`/course/${id}/1`)
         return <></>
     }
@@ -151,7 +151,7 @@ export default function Cards({id, current, course, comments}: CardsProps) {
             setClientVote(vote ? 1 : -1)
         }
 
-        sendCardVote({courseID: id, cardID: current || 0, vote})
+        sendCardVote({ courseID: id, cardID: current || 0, vote })
     }
 
     function showAnswers() {

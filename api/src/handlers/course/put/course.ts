@@ -14,7 +14,7 @@ type Editing = {
  * @param res Response objecet
  * @returns Status code based on the outcome of the operation
  */
-export async function putCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
+export default async function putCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { id } = req.params as { id: string }
         const { username, accepted, editing } = req.body as { username: string, accepted: Card[], editing: Editing } ?? {}
