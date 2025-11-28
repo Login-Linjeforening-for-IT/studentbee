@@ -3,7 +3,7 @@ import dotenv from 'dotenv'
 dotenv.config({ path: '../.env' })
 
 const requiredEnvironmentVariables = [
-    'BASE_URL',
+    'AUTHENTIK_URL',
     'DB_PASSWORD',
 ]
 
@@ -22,7 +22,7 @@ const env = Object.fromEntries(
 
 const config = {
     DBH_API: 'https://dbh-data.dataporten-api.no/Tabeller/hentJSONTabellData',
-    USERINFO_URL: `${env.BASE_URL}/application/o/userinfo/`,
+    USERINFO_URL: `${env.AUTHENTIK_URL}/application/o/userinfo/`,
     DB: env.DB,
     DB_USER: env.DB_USER,
     DB_HOST: env.DB_HOST,
