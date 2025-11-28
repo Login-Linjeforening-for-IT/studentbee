@@ -43,19 +43,20 @@ type MarkdownProps = {
 
 marked.use({
     renderer: {
-        code(code, lang) {
+        code(token) {
+            const lang = token.lang
             const language = hljs.getLanguage(typeof lang === 'string' ? lang : 'plaintext') ? lang || 'plaintext' : 'plaintext'
-            return `<pre class='inline-block rounded-xl overflow-auto whitespace-pre-wrap wrap-break-word'><code class='hljs ${language}'>${hljs.highlight(code, { language }).value}</code></pre>`
+            return `<pre class='inline-block rounded-xl overflow-auto whitespace-pre-wrap wrap-break-word'><code class='hljs ${language}'>${hljs.highlight(token.text, { language }).value}</code></pre>`
         },
-        image(href, title) {
+        image(token) {
             const width = 'width="300"'
-            return `<img src='${href}' alt='${title}' ${width} />`
+            return `<img src='${token.href}' alt='${token.title}' ${width} />`
         },
-        link(href, title, text) {
-            return `<a href='${href}' title='${title}' target='_blank' rel='noopener noreferrer' class='text-blue-500 underline'>${text}</a>`
+        link(token) {
+            return `<a href='${token.href}' title='${token.title}' target='_blank' rel='noopener noreferrer' class='text-blue-500 underline'>${token.text}</a>`
         },
-        codespan(text) {
-            return `<code class='break-all bg-login-500 p-0.3 rounded-xs'>${text}</code>`
+        codespan(token) {
+            return `<code class='break-all bg-login-500 p-0.3 rounded-xs'>${token.text}</code>`
         }
     }
 })
