@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 import './globals.css'
 import 'uibee/styles'
-import Topbar from '@components/nav'
+import Topbar from '@components/navbar/nav'
 import { cookies } from 'next/headers'
 
 export const metadata = {

@@ -1,5 +1,5 @@
 'use client'
-import Line from '../components/line'
+import Line from '../components/line/line'
 
 import type { JSX } from 'react'
 
