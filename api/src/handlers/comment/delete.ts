@@ -1,6 +1,6 @@
 import type { FastifyRequest, FastifyReply } from 'fastify'
 import db from '#db'
-import validateToken from '../../utils/validateToken.ts'
+import run from '#db'
 
 /**
  *  Defines the DeleteCommentProps type, used for type specification when deleting comments
@@ -25,13 +25,7 @@ export async function deleteComment(req: FastifyRequest, res: FastifyReply): Pro
             return res.status(400).send({ error: 'Comment ID is required' })
         }
 
-        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        const { valid, error } = await validateToken(req, res)
-        if (!valid || error) {
-            return res.status(401).send({ error })
-        }
-
-        const response = await 
+        const response = await run('DELETE')
         // Finds and deletes the comment from the database if found
         const commentRef = db.collection('Comment').doc(commentID.toString())
         await commentRef.delete()

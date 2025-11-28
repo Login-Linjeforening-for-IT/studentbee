@@ -1,6 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import db from '#db'
-import validateToken from '../../utils/validateToken.ts'
 
 /**
  * Editing type, used for type specification when editing courses
@@ -49,12 +48,6 @@ export async function putCourse(req: FastifyRequest, res: FastifyReply): Promise
             return res.status(400).send({ error: 'Course ID is required.' })
         }
 
-        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        const { valid, error } = await validateToken(req, res)
-        if (!valid || error) {
-            return res.status(401).send({ error })
-        }
-
         // Finds the course in the database and updates it with the new data
         const courseRef = db.collection('Course').doc(courseID)
         await courseRef.update({
@@ -87,12 +80,6 @@ export async function putCourseText(req: FastifyRequest, res: FastifyReply): Pro
         // Checks if required variables are defined, or otherwise returns a 400 status code
         if (!username || !courseID || !text) {
             return res.status(400).send({ error: 'username, accepted, and editing are required' })
-        }
-
-        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        const { valid, error } = await validateToken(req, res)
-        if (!valid || error) {
-            return res.status(401).send({ error })
         }
 
         // Finds the course in the database and updates it with the new data

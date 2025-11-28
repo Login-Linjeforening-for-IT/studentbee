@@ -1,6 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 import db from '#db'
-import validateToken from '../../utils/validateToken.ts'
 
 /**
  * Defines the PostCardVoteProps type, used for type specification when posting card votes
@@ -43,12 +42,6 @@ export async function postCard(req: FastifyRequest, res: FastifyReply): Promise<
         // Validate the required fields
         if (!card.username || !card.courseID || !card.question || !card.alternatives || card.correct === undefined) {
             return res.status(400).send({ error: 'Missing required fields' })
-        }
-
-        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        const { valid, error } = await validateToken(req, res)
-        if (!valid || error) {
-            return res.status(401).send({ error })
         }
 
         // Generate a new document reference with an auto-generated ID

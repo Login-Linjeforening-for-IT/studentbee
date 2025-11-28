@@ -104,12 +104,6 @@ export async function postCommentVote(req: FastifyRequest, res: FastifyReply): P
             return res.status(400).send({ error: 'Missing required field (username, courseID, cardID, commentID, vote)' })
         }
 
-        // Checks the token, and returns a 401 unauthorized status code if the token is invalid
-        const { valid, error } = await validateToken(req, res)
-        if (!valid || error) {
-            return res.status(401).send({ error })
-        }
-
         // Fetches the comment document from Firestore
         const commentRef = db.collection('Comment').doc(commentID.toString())
         const commentDoc = await commentRef.get()
