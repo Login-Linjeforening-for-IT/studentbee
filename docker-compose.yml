@@ -2,7 +2,7 @@ services:
   frontend:
     container_name: studentbee_frontend
     build:
-      context: .
+      context: ./frontend
       dockerfile: Dockerfile
     restart: always
     ports:
