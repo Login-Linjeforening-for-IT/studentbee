@@ -1,6 +1,16 @@
 services:
+  frontend:
+    container_name: studentbee_frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
   backend:
-    container_name: backend
+    container_name: studentbee_backend
     build:
       context: ./api
       dockerfile: Dockerfile
@@ -10,15 +20,6 @@ services:
     depends_on:
       - postgres
 
-  frontend:
-    container_name: frontend
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
 
   postgres:
     image: postgres:18
