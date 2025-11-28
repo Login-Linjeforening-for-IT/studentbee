@@ -1,7 +1,7 @@
 import type { JSX } from 'react'
 
 type ScoreBoardEntryProps = {
-    user: ScoreBoardUser
+    user: ScoreboardProps
     index: number
 }
 
@@ -15,7 +15,7 @@ export default function ScoreBoardEntry({user, index}: ScoreBoardEntryProps): JS
     // Checks if the user is top 3, if so gives gold, silver or bronze color,
     // otherwise checks if its top 10 for blue, or anything else for gray
     const backgroundColor = backgroundColors[index] || ((index >= 3 && index < 10) ? 'bg-[#152238]' : 'bg-login-700')
-    const time = humanizeTime(user.time)
+    const time = humanizeTime(user.total_time)
 
     return (
         <div className={`grid grid-cols-4 place-items-center ${backgroundColor} pt-2 pb-2 mb-2 ${index < 4 ? 'font-semibold text-white':''} ${index % 2 === 0 ? 'md:mr-2' : 'md:ml-2'} rounded-xl`}>

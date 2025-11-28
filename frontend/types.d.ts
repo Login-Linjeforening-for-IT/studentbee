@@ -1,3 +1,12 @@
+// Scoreboard
+type ScoreboardProps = {
+    name: string
+    score: number
+    total_time: number
+}
+
+
+// Before rewrite
 type CourseProps = {
     course: CourseAsList
     currentPath: string
