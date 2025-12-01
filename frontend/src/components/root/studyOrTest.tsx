@@ -48,7 +48,7 @@ export default function StudyOrTest({ courses }: CoursesListProps) {
     useEffect(() => {
         setStudy(path.includes('study') || path.includes('files'))
         const name = path.split('/')[2] || ''
-        const amountOfCards = courses.find(course => course.id === name)?.card_count || 0
+        const amountOfCards = courses.find(course => course.course_code === name)?.card_count || 0
         setCardCount(amountOfCards)
     }, [path])
 
@@ -293,15 +293,15 @@ type CourseItemProps = {
 
 function Course({ course, currentPath, index }: CourseItemProps) {
     const currentCourse = currentPath.includes('/course/') ? currentPath.split('/course/')[1].split('/')[0] : ''
-    const current = currentCourse === course.id
+    const current = currentCourse === course.course_code
     const bg = index % 2 === 0 ? 'bg-login-800' : 'bg-login-900'
 
     return (
         <Link
-            href={`/course/${course.id}`}
+            href={`/course/${course.course_code}`}
             className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-4 items-center gap-2 py-[0.8rem] hover:pl-6 duration-500 transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : ''} hover:*:fill-login hover:text-login font-medium`}
         >
-            <h1>{course.id}</h1>
+            <h1>{course.course_code}</h1>
         </Link>
     )
 }

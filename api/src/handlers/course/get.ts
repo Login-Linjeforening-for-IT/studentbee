@@ -17,7 +17,7 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
     const { id } = req.params as CourseParam
 
     try {
-        const result = await run('SELECT * FROM courses WHERE id = $1', [id])
+        const result = await run('SELECT * FROM courses WHERE course_code = $1', [id])
         if (!result.rowCount) {
             return res.status(404).send({ error: 'Course not found' })
         }

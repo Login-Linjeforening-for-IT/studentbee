@@ -28,7 +28,7 @@ export default async function SelectCourseList() {
                 <div className='flex flex-col w-full h-full rounded-lg p-2 overflow-auto noscroll gap-2'>
                     <div className='grid gap-2'>
                         {courses.map((course) => <Link
-                            href={`/course/${course.id}`}
+                            href={`/course/${course.course_code}`}
                             key={course.id}
                             className='text-2xs md:text-base bg-login-700 w-full rounded-md p-1 pl-2 md:p-2 h-7 md:h-auto'
                         >
