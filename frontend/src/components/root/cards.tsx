@@ -96,8 +96,12 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
         }
 
         return (
-            <div className='w-full h-full grid place-items-center col-span-6'>
-                <h1 className='text-xl'>{course}</h1>
+            <div className='col-span-6 w-full h-full grid place-items-center'>
+                <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center gap-6 grid place-items-center self-center'>
+                    <h1 className='text-xl font-semibold'>Course Unavailable</h1>
+                    <h1 className='px-16'>The course is currently unavailable. Please try again later.</h1>
+                    <h1 className='text-sm'>Details: {course}</h1>
+                </div>
             </div>
         )
     }
@@ -108,14 +112,14 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
                 <div className='grid place-items-center'>
                     <h1 className='text-lg text-center mb-2'>Course {course.id} has no content yet.</h1>
                     <Link
-                        className='bg-login-900 rounded-xl px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 hover:bg-login'
+                        className='bg-login-900 rounded-lg px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 hover:bg-login'
                         href={`/edit/${course.id}`}
                     >
                         Edit course
                     </Link>
                     <h1 className='text-lg text-center mb-2'>Mark course as learning based (no multiple choice)</h1>
                     <button
-                        className='bg-login rounded-xl px-2 h-[4vh] w-[10vw]'
+                        className='bg-login rounded-lg px-2 h-[4vh] w-[10vw]'
                         onClick={markCourse}
                     >
                         Mark

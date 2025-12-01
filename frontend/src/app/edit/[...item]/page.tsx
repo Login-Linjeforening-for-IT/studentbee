@@ -133,9 +133,9 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     }
 
     return (
-        <div className='w-full h-full rounded-xl gap-2 flex flex-col'>
+        <div className='w-full h-full rounded-lg gap-2 flex flex-col'>
             <div className='w-full h-full grid grid-cols-4 gap-2 min-h-[87vh]'>
-                <div className={'w-full h-full bg-login-900 col-span-3 rounded-xl flex flex-col'}>
+                <div className='w-full h-full bg-login-900 col-span-3 rounded-lg flex flex-col'>
                     <Header
                         clearCard={clearCard}
                         editing={editing}
@@ -147,7 +147,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                             {showText && <textarea
                                 value={editing.notes}
                                 onChange={handleTextChange}
-                                className='w-full h-full overflow-auto noscroll bg-login-700 rounded-xl p-2 resize-none whitespace-pre-wrap outline-hidden caret-orange-500'
+                                className='w-full h-full overflow-auto noscroll bg-login-700 rounded-lg p-2 resize-none whitespace-pre-wrap outline-hidden caret-orange-500'
                             />}
                             <AddCard
                                 courseID={item}
@@ -171,7 +171,7 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
                 <Link
                     href={'/'}
                     onClick={handleSubmit}
-                    className='h-full rounded-xl bg-login px-8 font-bold grid place-items-center'
+                    className='h-full rounded-lg bg-login px-8 font-bold grid place-items-center'
                 >
                     Publish changes
                 </Link>
@@ -240,7 +240,7 @@ function AddCard({
         <div className='w-full h-full overflow-auto noscroll'>
             <h1 className='flex items-center justify-start text-lg h-[4vh]'>Source</h1>
             <input
-                className='bg-login-700 p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500'
+                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-[4vh] outline-hidden caret-orange-500'
                 value={card.source}
                 type='text'
                 placeholder='Exam or learning material source'
@@ -249,14 +249,14 @@ function AddCard({
             <h1 className='flex items-center justify-start text-lg h-[4vh]'>Theme</h1>
             <input
                 ref={inputRef}
-                className='bg-login-700 p-1 pl-2 w-full rounded-xl h-[4vh] outline-hidden caret-orange-500'
+                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-[4vh] outline-hidden caret-orange-500'
                 value={card.theme}
                 type='text'
                 placeholder='Question theme (optional)'
                 onChange={(event) => updateTheme(event.target.value)}
             />
             <h1 className='flex items-center justify-start text-lg col-span-1 h-[4vh]'>Question</h1>
-            <div className='bg-login-700 rounded-xl p-2'>
+            <div className='bg-login-700 rounded-lg p-2'>
                 <Editor
                     placeholder='Enter question...'
                     courseID={courseID}
@@ -312,7 +312,7 @@ function AddCard({
                 setAlternativeIndex={setAlternativeIndex}
             />
             <button
-                className='w-full h-[4vh] text-lg place-self-center bg-login rounded-xl mt-2'
+                className='w-full h-[4vh] text-lg place-self-center bg-login rounded-lg mt-2'
                 onClick={handleSubmit}
             >Add card</button>
         </div>
@@ -361,7 +361,7 @@ function Alternative({ card, setCard, alternativeIndex, setAlternativeIndex }: A
                         value={card.alternatives[alternativeIndex]}
                         onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className='min-h-[5vh] w-full bg-login-700 rounded-xl px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
+                        className='min-h-[5vh] w-full bg-login-700 rounded-lg px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
                     />
                 </div>
             </div>
@@ -382,7 +382,7 @@ function Accepted({ card: editCard, accepted, setAccepted, handleAcceptedIndexCl
     }
 
     return (
-        <div className='w-full h-full bg-login-900 rounded-xl p-2 overflow-auto noscroll'>
+        <div className='w-full h-full bg-login-900 rounded-lg p-2 overflow-auto noscroll'>
             <div className='grid grid-cols-12'>
                 <h1 className='text-xl mb-2 grid grid-row col-span-11'>Accepted</h1>
                 <h1 className='text-login-300'>({accepted.length})</h1>
@@ -397,7 +397,7 @@ function Accepted({ card: editCard, accepted, setAccepted, handleAcceptedIndexCl
                             <button
                                 key={card.question}
                                 onClick={() => handleAcceptedIndexClick(index)}
-                                className={`w-full outline ${outline} hover:outline-white bg-login-700 rounded-xl p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
+                                className={`w-full outline ${outline} hover:outline-white bg-login-700 rounded-lg p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
                             >
                                 <div className='grid grid-cols-12 w-full'>
                                     <h1 className='w-full text-login-300'>{index + 1}</h1>

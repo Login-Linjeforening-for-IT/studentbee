@@ -28,7 +28,7 @@ export default function Edit() {
     function CourseSelector() {
         return (
             <div className='w-full h-full absolute left-0 top-0 grid place-items-center bg-black bg-opacity-90 z-100' onClick={() => setDisplayCourseSelector(false)}>
-                <div className='w-[35vw] h-[45vh] bg-login-900 rounded-xl p-8 overflow-auto noscroll'>
+                <div className='w-[35vw] h-[45vh] bg-login-900 rounded-lg p-8 overflow-auto noscroll'>
                     <h1 className='text-xl text-center font-semibold mb-2'>Edit course</h1>
                     <div className='w-full grid space-y-2'>
                         {courses.map((course) => (
@@ -74,7 +74,7 @@ function Error({text}: { text: string }) {
     }
 
     return (
-        <div className='absolute bg-login-900 bottom-8 right-8 min-h-50 p-2 max-w-[17.6vw] rounded-xl max-h-[19.5vh] overflow-auto'>
+        <div className='absolute bg-login-900 bottom-8 right-8 min-h-50 p-2 max-w-[17.6vw] rounded-lg max-h-[19.5vh] overflow-auto'>
             <h1 className='text-red-500'>{text}</h1>
         </div>
     )

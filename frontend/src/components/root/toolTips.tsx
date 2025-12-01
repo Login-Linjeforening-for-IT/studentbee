@@ -59,7 +59,7 @@ export default function ToolTips() {
 
     return (
         <div className='w-full h-full fixed left-0 top-0 grid place-items-center bg-black bg-opacity-90 z-10' onClick={() => setDisplayTips(false)}>
-            <div className='w-[55vw] h-[63vh] bg-login-800 rounded-xl p-8 overflow-auto noscroll'>
+            <div className='w-[55vw] h-[63vh] bg-login-800 rounded-lg p-8 overflow-auto noscroll'>
                 <h1 className='w-full text-center text-xl font-semibold mb-2'>Tooltips</h1>
                 <div className='grid grid-cols-2'>
                     <div className='w-full'>

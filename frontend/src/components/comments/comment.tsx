@@ -49,7 +49,7 @@ export default function Comment({
 
     return (
         <div key={comment.id}>
-            <div className='bg-login-800 rounded-xl p-2 mt-2 w-full'>
+            <div className='bg-login-800 rounded-lg p-2 mt-2 w-full'>
                 <div className='w-full grid grid-cols-2 text-login-300 mb-2'>
                     <Link href={`/profile/${comment_user}`} className='text-lg text-login-300 underline'>{author}</Link>
                     <h1 className='text-right'>{new Date(comment.time).toLocaleString()}</h1>

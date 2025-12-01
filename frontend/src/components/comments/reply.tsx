@@ -84,7 +84,7 @@ export default function Reply({
         <div className='grid grid-cols-12'>
             <div className='col-span-1' />
             <Editor
-                className='w-full bg-login-700 rounded-xl min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2'
+                className='w-full bg-login-700 rounded-lg min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2'
                 placeholder='Write a comment...'
                 courseID=''
                 value={reply.split('\n')}
@@ -95,7 +95,7 @@ export default function Reply({
             />
             <div className='col-span-10' />
             <button
-                className='col-span-2 justify-end bg-login-700 rounded-xl mt-2 h-[5vh]'
+                className='col-span-2 justify-end bg-login-700 rounded-lg mt-2 h-[5vh]'
                 onClick={send}
             >
                 Add comment
@@ -165,7 +165,7 @@ function ReplyComponent({
 
     return (
         <div>
-            <div className='bg-login-800 rounded-xl p-2 mb-1'>
+            <div className='bg-login-800 rounded-lg p-2 mb-1'>
                 <div className='w-full grid grid-cols-2 text-login-300'>
                     <Link
                         href={`/profile/${reply_user}`}

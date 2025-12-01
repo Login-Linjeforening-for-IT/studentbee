@@ -22,10 +22,10 @@ export default async function SelectCourseList() {
     }
 
     return (
-        <div className='relative h-full rounded-xl overflow-auto noscroll flex justify-center items-center'>
-            <div className='flex flex-col items-center gap-2 py-3 px-4 bg-login-900 rounded-xl h-[calc(100vh-12rem)] xs:h-120 w-[calc(100vw-1rem)] xs:w-96'>
+        <div className='relative h-full rounded-lg overflow-auto noscroll flex justify-center items-center'>
+            <div className='flex flex-col items-center gap-2 py-3 px-4 bg-login-900 rounded-lg h-[calc(100vh-12rem)] xs:h-120 w-[calc(100vw-1rem)] xs:w-96'>
                 <h1 className='text-center font-semibold py-2'>Select course</h1>
-                <div className='flex flex-col w-full h-full rounded-xl p-2 overflow-auto noscroll gap-2'>
+                <div className='flex flex-col w-full h-full rounded-lg p-2 overflow-auto noscroll gap-2'>
                     <div className='grid gap-2'>
                         {courses.map((course) => <Link
                             href={`/course/${course.id}`}
@@ -36,7 +36,7 @@ export default async function SelectCourseList() {
                         </Link>)}
                     </div>
                 </div>
-                <Link href='/add/course' className='bg-login-900 hover:bg-login-800 w-fit px-4 py-2 grid place-items-center rounded-xl text-2xs md:text-lg'>Add course</Link>
+                <Link href='/add/course' className='bg-login-900 hover:bg-login-800 w-fit px-4 py-2 grid place-items-center rounded-lg text-2xs md:text-lg'>Add course</Link>
             </div>
             {typeof config.version !== 'undefined' ? (
                 <Link

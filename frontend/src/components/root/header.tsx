@@ -16,7 +16,7 @@ export default function Header() {
     }, [path])
 
     return (
-        <div className='bg-login-900 md:p-2 rounded-xl'>
+        <div className='bg-login-900 md:p-2 rounded-lg'>
             <div className='grid grid-cols-2 gap-2 justify-items-center pb-2'>
                 <Link
                     href={course && course != 'study' ? `/course/${course}` : '/'}

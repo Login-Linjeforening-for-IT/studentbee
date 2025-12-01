@@ -46,7 +46,7 @@ marked.use({
         code(token) {
             const lang = token.lang
             const language = hljs.getLanguage(typeof lang === 'string' ? lang : 'plaintext') ? lang || 'plaintext' : 'plaintext'
-            return `<pre class='inline-block rounded-xl overflow-auto whitespace-pre-wrap wrap-break-word'><code class='hljs ${language}'>${hljs.highlight(token.text, { language }).value}</code></pre>`
+            return `<pre class='inline-block rounded-lg overflow-auto whitespace-pre-wrap wrap-break-word'><code class='hljs ${language}'>${hljs.highlight(token.text, { language }).value}</code></pre>`
         },
         image(token) {
             const width = 'width="300"'
@@ -185,7 +185,7 @@ export function EditorWithoutLogic({
             </div>
             {edited && !hideSave && !hideSaveButton && <div className='mt-2'>
                 <button
-                    className='text-md bg-login px-8 rounded-xl h-[4vh]'
+                    className='text-md bg-login px-8 rounded-lg h-[4vh]'
                     onClick={handleSave}
                 >
                     Save

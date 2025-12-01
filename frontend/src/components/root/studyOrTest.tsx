@@ -112,7 +112,7 @@ function Files({ studyable }: { studyable: boolean }) {
     }, [])
 
     return (
-        <div className='w-full bg-login-900 p-2 h-full rounded-xl'>
+        <div className='w-full bg-login-900 p-2 h-full rounded-lg'>
             <FileListHeader
                 course={course}
                 studyable={studyable}
@@ -275,7 +275,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
 
 function InnerCourseList({ courses, currentPath }: CoursesProps) {
     return (
-        <div className='h-full bg-login-900 rounded-xl'>
+        <div className='h-full bg-login-900 rounded-lg'>
             <div className='pt-2 pb-24 h-full overflow-auto grow noscroll'>
                 {courses.map((course, index) =>
                     <Course key={course.id} course={course} currentPath={currentPath} index={index} />

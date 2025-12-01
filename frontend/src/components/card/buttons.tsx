@@ -4,8 +4,8 @@ type ButtonsProps = {
     flashColor: string
 }
 
-export default function Buttons({animateAnswer, navigate, flashColor}: ButtonsProps) {
-    const button = 'rounded-xl flex w-full p-2 bg-login-900 text-center justify-center'
+export default function Buttons({ animateAnswer, navigate, flashColor }: ButtonsProps) {
+    const button = 'rounded-lg flex w-full p-2 bg-login-900 text-center justify-center'
 
     return (
         <div className='w-full flex gap-2 h-full'>

@@ -16,7 +16,7 @@ export default async function Profile() {
     const user = await getUser()
 
     if ('error' in user) {
-        return <h1 className='text-xl'>Unable to find</h1>
+        return <h1 className='text-xl'>Unable to find profile.</h1>
     }
 
     return (

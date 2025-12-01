@@ -129,7 +129,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                 </div>
                 <Editor
                     placeholder='Write a comment...'
-                    className='w-full bg-login-700 p-2 rounded-xl min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll'
+                    className='w-full bg-login-700 p-2 rounded-lg min-h-[15vh] max-h-[80vh] mb-2 overflow-auto noscroll'
                     courseID=''
                     value={content.split('\n')}
                     customSaveLogic={true}
@@ -137,7 +137,7 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
                     save={() => {}}
                     onChange={setContent}
                 />
-                <button className='h-[5vh] bg-login-700 px-2 rounded-xl float-right' onClick={sendComment}>Post comment</button>
+                <button className='h-[5vh] bg-login-700 px-2 rounded-lg float-right' onClick={sendComment}>Post comment</button>
             </div>
             {/* not sure what to use this space for */}
             <div className='col-span-2' />
