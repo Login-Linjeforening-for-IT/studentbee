@@ -1,6 +1,6 @@
 'use client'
 
-import { addCourse } from '@parent/src/utils/fetchClient'
+import { postCourse } from '@utils/api'
 import Link from 'next/link'
 import { useState, use } from 'react'
 
@@ -44,7 +44,7 @@ function AddCourse() {
     }
 
     async function handleAddCourse() {
-        const err = await addCourse(course)
+        const err = await postCourse({ data: { id: course.id, name: course.name } })
 
         if (typeof err === 'string') {
             setError(err)

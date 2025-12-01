@@ -20,42 +20,6 @@ type UpdateFileProps = {
     content: string
 }
 
-// Adds a course with the given user id, course name and questions
-export async function addCourse(course: Course): Promise<void | string> {
-    const username = getCookie('user_nickname')
-    const token = getCookie('access_token')
-
-    try {
-        if (username) {
-            const response = await fetch(`${config.url.BROWSER_API}/upload_course`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    username: username,
-                    course: { ...course, id: course.id.trim() }
-                }),
-            })
-
-            if (!response.ok) {
-                const data = await response.json()
-
-                throw Error(data.error)
-            }
-
-            const result = response.json()
-            return result
-        }
-
-        return 'Please log in to add a course'
-    } catch (error: unknown) {
-        const err = error as Error
-        return err.message
-    }
-}
-
 // Adds a question to the course with the given user id
 export async function addCard(courseID: string, card: Card): Promise<void | string> {
     const username = getCookie('user_nickname')

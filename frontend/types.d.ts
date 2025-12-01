@@ -9,6 +9,12 @@ type UserProps = {
     updated_at: string
 }
 
+// Courses
+type PostCourseProps = {
+    id: string
+    name: string
+}
+
 // Scoreboard
 type ScoreboardProps = {
     name: string

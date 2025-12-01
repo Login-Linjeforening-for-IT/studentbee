@@ -15,9 +15,10 @@ type PostCourseProps = {
  */
 export default async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, id, name } = req.body as PostCourseProps ?? {}
-        if (!username || !id || !name) {
-            return res.status(400).send({ error: 'Missing required field (username, id, name)' })
+        const { id, name } = req.body as PostCourseProps ?? {}
+        const { id: userID } = req.user ?? {}
+        if (!id || !name) {
+            return res.status(400).send({ error: 'Missing required field (id, name)' })
         }
 
         const courseResponse = await run('INSERT INTO courses (id) VALUES ($1) RETURNING id', [id])
@@ -27,7 +28,7 @@ export default async function postCourse(req: FastifyRequest, res: FastifyReply)
 
         await run(`
             INSERT INTO files (course_id, name, content, created_by, updated_by) VALUES ($1, $2, $3, $4, $4) RETURNING id;
-        `, [id, 'root', '', username])
+        `, [id, name, '', userID, userID])
 
         return res.status(201).send({ id })
     } catch (error) {
