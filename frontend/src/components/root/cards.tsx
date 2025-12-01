@@ -1,8 +1,9 @@
 'use client'
+
 import { useState, useRef, useEffect } from 'react'
 import { useCardNavigation } from '@parent/src/hooks/cardNavigation'
 import Comments from './comments'
-import { getTotalCommentsLength } from '@parent/src/utils/comments'
+import { getTotalCommentsLength } from '@utils/comments'
 import sendCardVote from '@parent/src/utils/vote'
 import Link from 'next/link'
 import { sendMark } from '@parent/src/utils/fetchClient'

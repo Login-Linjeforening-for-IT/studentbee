@@ -2,9 +2,12 @@ import { getCourses } from '@parent/src/utils/fetch'
 import ToolTipsButton from './toolTipsButton'
 import Header from './header'
 import StudyOrTest from './studyOrTest'
+import { cookies } from 'next/headers'
 
 export default async function CourseList() {
-    const courses = await getCourses('server')
+    const Cookies = await cookies()
+    const token = Cookies.get('access_token')?.value || ''
+    const courses = await getCourses('server', token)
     const headers = new Headers()
     const path = headers.get('x-current-path') || ''
 

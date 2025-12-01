@@ -1,4 +1,4 @@
-import { deleteComment, postComment } from '@parent/src/utils/comments'
+import { deleteComment, postComment } from '@utils/comments'
 import { Dispatch, SetStateAction, useState } from 'react'
 import Editor, { Markdown } from '../editor/editor'
 import Link from 'next/link'

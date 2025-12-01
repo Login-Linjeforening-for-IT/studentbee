@@ -1,4 +1,4 @@
-import { deleteComment, postComment } from '@parent/src/utils/comments'
+import { deleteComment, postComment } from '@utils/comments'
 import { sendVote } from '@parent/src/utils/vote'
 import { useState } from 'react'
 import Editor from '../editor/editor'

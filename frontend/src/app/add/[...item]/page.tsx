@@ -83,7 +83,7 @@ function AddCourse() {
                     type='text'
                     placeholder='Name (Grunnleggende programmering)'
                     className='bg-login-700 rounded-lg overflow-hidden px-2 h-10 w-4/5 outline-hidden caret-login'
-                    maxLength={10}
+                    maxLength={100}
                 />
                 <Link
                     href={navigate}

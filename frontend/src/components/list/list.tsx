@@ -1,9 +1,12 @@
 import { getCourses } from '@parent/src/utils/fetch'
 import Link from 'next/link'
 import config from '@config'
+import { cookies } from 'next/headers'
 
 export default async function SelectCourseList() {
-    const courses = await getCourses('server')
+    const Cookies = await cookies()
+    const token = Cookies.get('access_token')?.value || ''
+    const courses = await getCourses('server', token)
 
     if (typeof courses === 'string') {
         return (

@@ -1,5 +1,5 @@
 import config from '@config'
-import { getCookie } from 'uibee/utils'
+import { getCookie } from 'uibee'
 
 type CommentProps = {
     courseID: string
@@ -10,7 +10,6 @@ type CommentProps = {
 
 export default async function getComments(CourseID: string): Promise<CardComment[][]> {
     const token = getCookie('access_token')
-
     try {
         const response = await fetch(`${config.url.API}/comments/${CourseID}`, {
             next: { revalidate: 10 },

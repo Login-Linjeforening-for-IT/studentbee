@@ -9,7 +9,7 @@ type UpdateCourseProps = {
 
 // Fetches courses from server, different url based on location, therefore the
 // location parameter to ensure all requests are successful
-export async function getCourses(location: 'server' | 'client'): Promise<CourseAsList[] | string> {
+export async function getCourses(location: 'server' | 'client', serverToken?: string): Promise<CourseAsList[] | string> {
     const url = location === 'server' ? `${config.url.API}/courses` : `${config.url.BROWSER_API}/courses`
     const token = getCookie('access_token')
 
@@ -19,14 +19,12 @@ export async function getCourses(location: 'server' | 'client'): Promise<CourseA
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${serverToken || token}`
             },
         })
 
         if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
+            throw new Error(await response.text())
         }
 
         const courses = await response.json()
@@ -40,7 +38,7 @@ export async function getCourses(location: 'server' | 'client'): Promise<CourseA
 // Fetches the requested course from the server if possible.
 // ID - Course ID
 // location - Whether the request is coming from SSR or CSR
-export async function getCourse(id: string, location: 'server' | 'client'): Promise<Course | string> {
+export async function getCourse(id: string, location: 'server' | 'client', serverToken?: string): Promise<Course | string> {
     const url = location === 'server' ? config.url.API : config.url.BROWSER_API
     const token = getCookie('access_token')
 
@@ -50,14 +48,12 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${serverToken || token}`
             },
         })
 
         if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
+            throw new Error(await response.text())
         }
 
         const course = await response.json()
@@ -92,9 +88,7 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
         })
 
         if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
+            throw new Error(await response.text())
         }
 
         const result = await response.json()
@@ -119,9 +113,7 @@ export async function getFile(courseID: string, name: string) {
         })
 
         if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
+            throw new Error(await response.text())
         }
 
         return await response.json()
@@ -145,9 +137,7 @@ export async function getFiles(courseID: string) {
         })
 
         if (!response.ok) {
-            const data = await response.json()
-
-            throw Error(data.error)
+            throw new Error(await response.text())
         }
 
         return await response.json()
@@ -172,8 +162,7 @@ export async function getGrades(course: string): Promise<Grades | string> {
         })
 
         if (!response.ok) {
-            const data = await response.json()
-            throw new Error(data.error)
+            throw new Error(await response.text())
         }
 
         const grades: Grades = await response.json()
