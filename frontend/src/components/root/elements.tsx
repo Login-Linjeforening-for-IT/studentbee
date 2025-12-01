@@ -52,7 +52,7 @@ export default function Elements({ id, current, course }: ElementsProps) {
     }
 
     return (
-        <div className='hidden xl:inline-flex flex-col w-full rounded-lg col-span-2 overflow-hidden'>
+        <div className='hidden xl:inline-flex! flex-col w-full rounded-lg col-span-2 overflow-hidden'>
             <Help />
             <div className='w-full h-full rounded-lg'>
                 <GetQuestions cards={cards} current={current} id={id} />
