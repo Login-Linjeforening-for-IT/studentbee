@@ -1,5 +1,5 @@
 import config from '@config'
-import { getCookie } from 'uibee'
+import { getCookie } from 'uibee/utils'
 
 type CommentProps = {
     courseID: string
