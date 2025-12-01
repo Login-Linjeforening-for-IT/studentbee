@@ -7,8 +7,8 @@ const { env } = process
 
 const config = {
     url: {
-        API: env.API_URL || 'https://api.exam.login.no/api',
-        BROWSER_API: env.NEXT_PUBLIC_BROWSER_API_URL || 'https://api.exam.login.no/api',
+        API: env.API_URL || 'https://studentbee-api.login.no/api',
+        BROWSER_API: env.NEXT_PUBLIC_BROWSER_API_URL || 'https://studentbee-api.login.no/api',
         GITLAB_URL: 'https://gitlab.login.no',
     },
     auth: {
