@@ -1,14 +1,5 @@
-import config from '@config'
-import 'uibee/styles'
-import { LoginPage } from 'uibee/components'
+import SelectCourseList from '@components/list/list'
 
-export default async function Page() {
-    return (
-        <LoginPage
-            title='StudentBee'
-            description=''
-            redirectURL={config.auth.LOGIN_URL}
-            version={config.version}
-        />
-    )
+export default function Page() {
+    return <SelectCourseList />
 }

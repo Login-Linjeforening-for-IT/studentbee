@@ -7,7 +7,7 @@ export async function proxy(req: NextRequest) {
 
     if (!pathIsAllowedWhileUnauthorized(req.nextUrl.pathname)) {
         if (!tokenCookie) {
-            return NextResponse.redirect(new URL('/', req.url))
+            return NextResponse.redirect(new URL('/login', req.url))
         }
 
         const token = tokenCookie.value
@@ -28,7 +28,7 @@ export async function proxy(req: NextRequest) {
 }
 
 function pathIsAllowedWhileUnauthorized(path: string) {
-    if (path === '/' || path === '/favicon.ico') {
+    if (path === '/favicon.ico') {
         return true
     }
 
@@ -36,6 +36,7 @@ function pathIsAllowedWhileUnauthorized(path: string) {
         path.startsWith('/_next/static/') ||
         path.startsWith('/_next/image') ||
         path.startsWith('/images/') ||
+        path.startsWith('/login') ||
         path.startsWith('/api/login') ||
         path.startsWith('/api/callback') ||
         path.startsWith('/api/token') ||
