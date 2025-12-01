@@ -46,7 +46,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/version', version)
 
     // user
-    fastify.get('/user/:id', { preHandler: authMiddleware }, getUser)
+    fastify.get('/user', { preHandler: authMiddleware }, getUser)
     fastify.post('/user', { preHandler: authMiddleware }, postUser)
     fastify.delete('/user', { preHandler: authMiddleware }, deleteUser)
 
