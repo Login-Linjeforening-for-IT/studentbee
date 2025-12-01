@@ -15,10 +15,10 @@ type ApiRequestProps = {
 
 async function apiRequest({ method, path, data, options = {} }: ApiRequestProps) {
     const Cookies = await cookies()
-    const access_token = Cookies.get('access_token')?.value || ''
+    const token = Cookies.get('access_token')?.value || ''
 
     const headers: Record<string, string> = {
-        Authorization: `Bearer ${access_token}`,
+        Authorization: `Bearer ${token}`,
     }
 
     const defaultOptions: RequestInit = {

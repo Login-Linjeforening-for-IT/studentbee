@@ -119,6 +119,8 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
 
 export async function sendMark({ courseID, learningBased }: MarkProps) {
     const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
+
     if (!username) {
         throw Error('You must be logged in to mark a course as learning based')
     }
@@ -127,6 +129,7 @@ export async function sendMark({ courseID, learningBased }: MarkProps) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ courseID, learningBased })
     })
@@ -141,6 +144,7 @@ export async function sendMark({ courseID, learningBased }: MarkProps) {
 
 export async function sendFile({ courseID, name, parent }: SendFileProps) {
     const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
     if (!username) {
         throw Error('You must be logged in to upload a file')
     }
@@ -149,6 +153,7 @@ export async function sendFile({ courseID, name, parent }: SendFileProps) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
             username: username,
@@ -168,6 +173,7 @@ export async function sendFile({ courseID, name, parent }: SendFileProps) {
 
 export async function updateFile({ courseID, name, content }: UpdateFileProps) {
     const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
     if (!username) {
         throw Error('You must be logged in to upload a file')
     }
@@ -176,6 +182,7 @@ export async function updateFile({ courseID, name, content }: UpdateFileProps) {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
             username: username,
@@ -195,6 +202,7 @@ export async function updateFile({ courseID, name, content }: UpdateFileProps) {
 
 export async function deleteFile({ courseID, name }: SendFileProps) {
     const username = getCookie('user_nickname')
+    const token = getCookie('access_token')
     if (!username) {
         throw Error('You must be logged in to delete a file')
     }
@@ -203,6 +211,7 @@ export async function deleteFile({ courseID, name }: SendFileProps) {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
             username: username

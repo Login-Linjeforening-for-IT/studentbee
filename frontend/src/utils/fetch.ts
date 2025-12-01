@@ -11,6 +11,7 @@ type UpdateCourseProps = {
 // location parameter to ensure all requests are successful
 export async function getCourses(location: 'server' | 'client'): Promise<CourseAsList[] | string> {
     const url = location === 'server' ? `${config.url.API}/courses` : `${config.url.BROWSER_API}/courses`
+    const token = getCookie('access_token')
 
     try {
         const response = await fetch(url, {
@@ -18,6 +19,7 @@ export async function getCourses(location: 'server' | 'client'): Promise<CourseA
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         })
 
@@ -40,6 +42,7 @@ export async function getCourses(location: 'server' | 'client'): Promise<CourseA
 // location - Whether the request is coming from SSR or CSR
 export async function getCourse(id: string, location: 'server' | 'client'): Promise<Course | string> {
     const url = location === 'server' ? config.url.API : config.url.BROWSER_API
+    const token = getCookie('access_token')
 
     try {
         const response = await fetch(`${url}/course/${id.toUpperCase()}`, {
@@ -47,6 +50,7 @@ export async function getCourse(id: string, location: 'server' | 'client'): Prom
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         })
 
@@ -102,12 +106,15 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
 }
 
 export async function getFile(courseID: string, name: string) {
+    const token = getCookie('access_token')
+
     try {
         const response = await fetch(`${config.url.API}/file/${courseID}/${name}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         })
 
@@ -125,12 +132,15 @@ export async function getFile(courseID: string, name: string) {
 }
 
 export async function getFiles(courseID: string) {
+    const token = getCookie('access_token')
+
     try {
         const response = await fetch(`${config.url.API}/files/${courseID}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         })
 
@@ -150,11 +160,14 @@ export async function getFiles(courseID: string) {
 // Fetches the requested grades from the server.
 // ID - Course ID
 export async function getGrades(course: string): Promise<Grades | string> {
+    const token = getCookie('access_token')
+
     try {
         const response = await fetch(`${config.url.BROWSER_API}/grades/${course}`, {
             method: 'GET',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
         })
 

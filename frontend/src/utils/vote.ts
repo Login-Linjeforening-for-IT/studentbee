@@ -17,6 +17,7 @@ type CardVoteProps = {
 export default async function sendCardVote({courseID, cardID, vote}: CardVoteProps) {
     try {
         const username = getCookie('user_nickname')
+        const token = getCookie('access_token')
 
         if (!username) {
             throw Error('You must be logged in to vote')
@@ -26,6 +27,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 username: username,
@@ -51,6 +53,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
 export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
     try {
         const username = getCookie('user_nickname')
+        const token = getCookie('access_token')
 
         if (!username) {
             throw Error('You must be logged in to vote')
@@ -60,6 +63,7 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 username: username,

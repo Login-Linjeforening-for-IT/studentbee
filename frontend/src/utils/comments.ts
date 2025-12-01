@@ -9,12 +9,15 @@ type CommentProps = {
 }
 
 export default async function getComments(CourseID: string): Promise<CardComment[][]> {
+    const token = getCookie('access_token')
+
     try {
         const response = await fetch(`${config.url.API}/comments/${CourseID}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
         })
 
@@ -25,15 +28,16 @@ export default async function getComments(CourseID: string): Promise<CardComment
         }
 
         return await response.json()
-    } catch(error) {
+    } catch (error) {
         console.error(error)
         return []
     }
 }
 
-export async function postComment({courseID, cardID, content, parent}: CommentProps) {
+export async function postComment({ courseID, cardID, content, parent }: CommentProps) {
     try {
         const username = getCookie('user_nickname')
+        const token = getCookie('access_token')
 
         if (!username) {
             throw Error('You must be logged in to comment')
@@ -43,6 +47,7 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 username: username,
@@ -60,14 +65,15 @@ export async function postComment({courseID, cardID, content, parent}: CommentPr
         }
 
         return await response.json()
-    } catch(error) {
+    } catch (error) {
         console.error(error)
     }
 }
 
-export async function deleteComment({commentID, courseID}: {commentID: number, courseID: string}) {
+export async function deleteComment({ commentID, courseID }: { commentID: number, courseID: string }) {
     try {
         const username = getCookie('user_nickname')
+        const token = getCookie('access_token')
 
         if (!username) {
             throw Error('You must be logged in to delete a comment')
@@ -77,6 +83,7 @@ export async function deleteComment({commentID, courseID}: {commentID: number, c
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
                 courseID: courseID,
@@ -92,7 +99,7 @@ export async function deleteComment({commentID, courseID}: {commentID: number, c
         }
 
         return await response.json()
-    } catch(error) {
+    } catch (error) {
         console.error(error)
     }
 }

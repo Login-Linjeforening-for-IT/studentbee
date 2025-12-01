@@ -3,7 +3,6 @@ import { setItem } from './localStorage'
 import { getCookie } from 'uibee/utils'
 
 export default async function addScore(){
-
     const token = getCookie('access_token')
     const username = getCookie('user')
 
