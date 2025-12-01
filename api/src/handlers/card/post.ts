@@ -33,9 +33,9 @@ export default async function postCard(req: FastifyRequest, res: FastifyReply): 
 
         const result = await run(`
             INSERT INTO cards (course_id, question, alternatives, correct_answers, created_by, updated_at)
-            VALUES ($1, $2, $3::jsonb, $4::jsonb, $5, NOW())
+            VALUES ($1, $2, $3, $4, $5, NOW())
             RETURNING id
-        `, [courseID, question, JSON.stringify(alternatives), JSON.stringify(correct), username])
+        `, [courseID, question, alternatives, correct, username])
 
         return res.status(201).send({ id: result.rows[0].id })
     } catch (error) {

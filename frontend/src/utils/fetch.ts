@@ -7,63 +7,6 @@ type UpdateCourseProps = {
     editing: Editing
 }
 
-// Fetches courses from server, different url based on location, therefore the
-// location parameter to ensure all requests are successful
-export async function getCourses(location: 'server' | 'client', serverToken?: string): Promise<CourseAsList[] | string> {
-    const url = location === 'server' ? `${config.url.API}/courses` : `${config.url.BROWSER_API}/courses`
-    const token = getCookie('access_token')
-
-    try {
-        const response = await fetch(url, {
-            next: { revalidate: 10 },
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${serverToken || token}`
-            },
-        })
-
-        if (!response.ok) {
-            throw new Error(await response.text())
-        }
-
-        const courses = await response.json()
-        return courses
-    } catch(error) {
-        const err = error as Error
-        return err.message
-    }
-}
-
-// Fetches the requested course from the server if possible.
-// ID - Course ID
-// location - Whether the request is coming from SSR or CSR
-export async function getCourse(id: string, location: 'server' | 'client', serverToken?: string): Promise<Course | string> {
-    const url = location === 'server' ? config.url.API : config.url.BROWSER_API
-    const token = getCookie('access_token')
-
-    try {
-        const response = await fetch(`${url}/course/${id.toUpperCase()}`, {
-            next: { revalidate: 10 },
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${serverToken || token}`
-            },
-        })
-
-        if (!response.ok) {
-            throw new Error(await response.text())
-        }
-
-        const course = await response.json()
-        return course
-    } catch(error) {
-        const err = error as Error
-        return err.message
-    }
-}
-
 // Updates the passed course
 export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
     const username = getCookie('user_nickname')

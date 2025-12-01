@@ -1,20 +1,20 @@
 'use client'
 
-import { getCourses } from '@parent/src/utils/fetch'
+import { getCourses } from '@utils/api'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function Edit() {
-    const [courses, setCourses] = useState<CourseAsList[]>([])
+    const [courses, setCourses] = useState<CoursesProps[]>([])
     const [error, setError] = useState('')
     const [displayCourseSelector, setDisplayCourseSelector] = useState(false)
 
     useEffect(() => {
         (async() => {
-            const newCourses = await getCourses('client')
+            const newCourses = await getCourses()
 
-            if (typeof newCourses === 'string') {
-                setError(newCourses)
+            if ('error' in newCourses) {
+                setError(newCourses.error)
             } else {
                 setCourses(newCourses)
             }

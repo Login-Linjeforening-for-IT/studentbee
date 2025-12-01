@@ -1,15 +1,17 @@
 'use client'
 
+import { setCookie } from 'uibee/utils'
+
 export default function ToolTipsButton() {
     function display() {
-        function setLocalStorageItem(key: string, value: string) {
-            localStorage.setItem(key, value)
+        function setCookieItem(key: string, value: string) {
+            setCookie(key, value)
 
             const event = new CustomEvent('customStorageChange', { detail: { key, value } })
             window.dispatchEvent(event)
         }
 
-        setLocalStorageItem('tooltips', 'true')
+        setCookieItem('tooltips', 'true')
     }
 
     return (

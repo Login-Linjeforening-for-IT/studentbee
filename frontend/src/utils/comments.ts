@@ -8,31 +8,6 @@ type CommentProps = {
     parent?: number
 }
 
-export default async function getComments(CourseID: string): Promise<CardCommentProps[][]> {
-    const token = getCookie('access_token')
-    try {
-        const response = await fetch(`${config.url.API}/comments/${CourseID}`, {
-            next: { revalidate: 10 },
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-        })
-
-        if (!response.ok) {
-            const data = await response.json()
-
-            throw new Error(data.error)
-        }
-
-        return await response.json()
-    } catch (error) {
-        console.error(error)
-        return []
-    }
-}
-
 export async function postComment({ courseID, cardID, content, parent }: CommentProps) {
     try {
         const username = getCookie('user_nickname')

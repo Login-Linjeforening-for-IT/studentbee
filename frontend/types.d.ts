@@ -40,10 +40,8 @@ type GetCardsProps = {
     id: number
     course_id: number
     question: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    alternatives: any
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    correct_answers: any
+    alternatives: string[]
+    correct_answers: number[]
     source: string | null
     help: string | null
     created_by: string | null

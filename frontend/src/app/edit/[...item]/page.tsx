@@ -1,7 +1,8 @@
 'use client'
 
 import Editor from '@parent/src/components/editor/editor'
-import { getCourse, updateCourse } from '@parent/src/utils/fetch'
+import { updateCourse } from '@parent/src/utils/fetch'
+import { getCourse } from '@utils/api'
 import { Trash2 } from 'lucide-react'
 import Link from 'next/link'
 import Script from 'next/script'
@@ -9,24 +10,24 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState, use
 
 type AddCardProps = {
     courseID: string
-    card: Card
-    setCard: Dispatch<SetStateAction<Card>>
+    card: GetCardsProps
+    setCard: Dispatch<SetStateAction<GetCardsProps>>
     addCard: () => void
     alternativeIndex: number
     setAlternativeIndex: Dispatch<SetStateAction<number>>
 }
 
 type AlternativeProps = {
-    card: Card
-    setCard: Dispatch<SetStateAction<Card>>
+    card: GetCardsProps
+    setCard: Dispatch<SetStateAction<GetCardsProps>>
     alternativeIndex: number
     setAlternativeIndex: Dispatch<SetStateAction<number>>
 }
 
 type AcceptedProps = {
-    card: Card
-    accepted: Card[]
-    setAccepted: Dispatch<SetStateAction<Card[]>>
+    card: GetCardsProps
+    accepted: GetCardsProps[]
+    setAccepted: Dispatch<SetStateAction<GetCardsProps[]>>
     handleAcceptedIndexClick: (index: number) => void
 }
 
@@ -41,20 +42,20 @@ export default function Edit(props: { params: Promise<{ item: string[] }> }) {
     const params = use(props.params)
     const [editing, setEditing] = useState<Editing>({ cards: [], notes: '' })
     const [editingIndex, setEditingIndex] = useState(-1)
-    const [accepted, setAccepted] = useState<Card[]>([])
+    const [accepted, setAccepted] = useState<GetCardsProps[]>([])
     const [showText, setShowText] = useState(true)
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
-    const emptyCard: Card = { question: '', alternatives: [''], correct: [], source: '', rating: 0, votes: [] }
-    const [card, setCard] = useState<Card>(emptyCard)
+    const emptyCard: GetCardsProps = { id: 0, course_id: 0, question: '', alternatives: [''], correct_answers: [], source: '', help: '', theme: '', rating: 0, votes: [], created_by: '', created_at: '', updated_at: '' }
+    const [card, setCard] = useState<GetCardsProps>(emptyCard)
     const item = params.item[0].toUpperCase()
 
     useEffect(() => {
         (async () => {
-            const newCourse = await getCourse(item, 'client')
+            const newCourse = await getCourse(item)
 
-            if (newCourse) {
-                if (!editing.cards.length && typeof newCourse === 'object') {
+            if (newCourse && !('error' in newCourse)) {
+                if (!editing.cards.length) {
                     if (!accepted.length) {
                         setAccepted(newCourse.cards)
                     }
@@ -221,18 +222,18 @@ function AddCard({
     }
 
     function addCorrect(index: number) {
-        if (typeof card.correct === 'number') {
-            setCard({ ...card, correct: [card.correct, index] })
+        if (typeof card.correct_answers === 'number') {
+            setCard({ ...card, correct_answers: [card.correct_answers, index] })
         } else {
-            setCard({ ...card, correct: [...card.correct, index] })
+            setCard({ ...card, correct_answers: [...card.correct_answers, index] })
         }
     }
 
     function removeCorrect(index: number) {
-        if (typeof card.correct === 'number') {
-            setCard({ ...card, correct: [] })
+        if (typeof card.correct_answers === 'number') {
+            setCard({ ...card, correct_answers: [] })
         } else {
-            setCard({ ...card, correct: card.correct.filter((correctIndex) => correctIndex !== index) })
+            setCard({ ...card, correct_answers: card.correct_answers.filter((correctIndex) => correctIndex !== index) })
         }
     }
 
@@ -241,7 +242,7 @@ function AddCard({
             <h1 className='flex items-center justify-start text-lg h-[4vh]'>Source</h1>
             <input
                 className='bg-login-700 p-1 pl-2 w-full rounded-lg h-[4vh] outline-hidden caret-orange-500'
-                value={card.source}
+                value={card.source || ''}
                 type='text'
                 placeholder='Exam or learning material source'
                 onChange={(event) => updateSource(event.target.value)}
@@ -250,7 +251,7 @@ function AddCard({
             <input
                 ref={inputRef}
                 className='bg-login-700 p-1 pl-2 w-full rounded-lg h-[4vh] outline-hidden caret-orange-500'
-                value={card.theme}
+                value={card.theme || ''}
                 type='text'
                 placeholder='Question theme (optional)'
                 onChange={(event) => updateTheme(event.target.value)}
@@ -270,7 +271,7 @@ function AddCard({
             <h1 className='flex items-center justify-start text-lg col-span-1 h-[4vh]'>Alternatives</h1>
             <div className='w-full'>
                 {card.alternatives.map((alternative, index) => {
-                    const isCorrect = typeof card.correct === 'number' ? card.correct === index : card.correct.includes(index)
+                    const isCorrect = typeof card.correct_answers === 'number' ? card.correct_answers === index : card.correct_answers.includes(index)
 
                     if (index == card.alternatives.length - 1 && !alternative) {
                         return null
@@ -388,7 +389,7 @@ function Accepted({ card: editCard, accepted, setAccepted, handleAcceptedIndexCl
                 <h1 className='text-login-300'>({accepted.length})</h1>
             </div>
             <div>
-                {accepted.map((card: Card, index: number) => {
+                {accepted.map((card: GetCardsProps, index: number) => {
                     const outline = editCard.question === accepted[index].question
                         ? 'outline-gray-500' : 'outline-hidden'
 

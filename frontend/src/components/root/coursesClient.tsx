@@ -1,6 +1,6 @@
 'use client'
 
-import { getCourses } from '@parent/src/utils/fetch'
+import { getCourses } from '@utils/api'
 import ToolTipsButton from './toolTipsButton'
 import Header from './header'
 import StudyOrTest from './studyOrTest'
@@ -8,15 +8,15 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 
 export default function CourseListClient() {
-    const [courses, setCourses] = useState<CourseAsList[] | string>('Loading...')
+    const [courses, setCourses] = useState<CoursesProps[] | string>('Loading...')
     const path = usePathname()
 
     useEffect(() => {
         (async() => {
-            const response = await getCourses('client')
+            const response = await getCourses()
 
             if (response) {
-                setCourses(response)
+                setCourses('error' in response ? response.error : response)
             }
         })()
     }, [])

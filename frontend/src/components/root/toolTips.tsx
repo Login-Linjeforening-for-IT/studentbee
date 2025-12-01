@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { getCookie, setCookie } from 'uibee/utils'
 
 export default function ToolTips() {
     const [displayTips, setDisplayTips] = useState(false)
@@ -14,7 +15,7 @@ export default function ToolTips() {
 
             if (e.key === 'q' || e.key === 'Q') {
                 setDisplayTips(prevDisplayTips => !prevDisplayTips)
-                localStorage.setItem('tooltips', 'false')
+                setCookie('tooltips', 'false')
             }
 
             // if (e.key === 'n' && ) {
@@ -31,7 +32,7 @@ export default function ToolTips() {
 
     useEffect(() => {
         function checkTooltips() {
-            const tooltips = localStorage.getItem('tooltips')
+            const tooltips = getCookie('tooltips')
             if (tooltips === 'true') {
                 setDisplayTips(true)
             }

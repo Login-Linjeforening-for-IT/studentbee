@@ -1,6 +1,5 @@
 import config from '@config'
-import { setItem } from './localStorage'
-import { getCookie } from 'uibee/utils'
+import { getCookie, setCookie } from 'uibee/utils'
 
 export default async function addScore(){
     const token = getCookie('access_token')
@@ -11,7 +10,7 @@ export default async function addScore(){
             throw Error('Please log in to log your efforts.')
         }
 
-        setItem('user', JSON.stringify(username))
+        setCookie('user', JSON.stringify(username))
 
         const response = await fetch(`${config.url.BROWSER_API}/score/${username}`, {
             method: 'GET',
