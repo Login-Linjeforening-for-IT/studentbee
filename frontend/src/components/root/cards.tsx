@@ -130,7 +130,7 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
 
         return (
             <div className='w-full h-full grid place-items-center col-span-6'>
-                <h1 className='text-xl'>Course {course.id} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
+                <h1 className='text-xl'>Course {course.course_code} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
             </div>
         )
     }
