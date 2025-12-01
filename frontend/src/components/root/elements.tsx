@@ -18,7 +18,7 @@ export default function Elements({ id, current, course }: ElementsProps) {
     if (typeof course === 'string') {
         return (
             <div className='col-span-2 bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center gap-6 grid place-items-center self-center'>
-                <h1 className='text-xl font-semibold'>Questions Unavailable</h1>
+                <h1 className='text-lg font-semibold'>Questions Unavailable</h1>
                 <h1 className='px-8'>The question list is currently unavailable. Please try again later.</h1>
                 <h1 className='text-sm'>Details: {error}</h1>
             </div>
