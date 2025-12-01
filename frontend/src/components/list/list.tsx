@@ -1,14 +1,11 @@
-import { getCourses } from '@parent/src/utils/fetch'
 import Link from 'next/link'
 import config from '@config'
-import { cookies } from 'next/headers'
+import { getCourses } from '@utils/api'
 
 export default async function SelectCourseList() {
-    const Cookies = await cookies()
-    const token = Cookies.get('access_token')?.value || ''
-    const courses = await getCourses('server', token)
+    const courses = await getCourses()
 
-    if (typeof courses === 'string') {
+    if ('error' in courses) {
         return (
             <div className='w-full h-full grid place-items-center p-6'>
                 <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 w-full max-w-md text-center flex flex-col items-center gap-6'>
@@ -35,7 +32,7 @@ export default async function SelectCourseList() {
                             key={course.id}
                             className='text-2xs md:text-base bg-login-700 w-full rounded-md p-1 pl-2 md:p-2 h-7 md:h-auto'
                         >
-                            {course.id}
+                            {course.course_code} - {course.name} ({course.card_count} cards)
                         </Link>)}
                     </div>
                 </div>

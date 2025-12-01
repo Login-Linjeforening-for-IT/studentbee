@@ -7,8 +7,8 @@ import { deleteFile, sendFile } from '@parent/src/utils/fetchClient'
 import { getFiles } from '@parent/src/utils/fetch'
 import { Trash2 } from 'lucide-react'
 
-type CoursesProps = {
-    courses: CourseAsList[]
+type CoursesListProps = {
+    courses: CoursesProps[]
     currentPath: string
 }
 
@@ -40,7 +40,7 @@ type ButtonProps = {
     target?: string
 }
 
-export default function StudyOrTest({ courses }: CoursesProps) {
+export default function StudyOrTest({ courses }: CoursesListProps) {
     const path = usePathname()
     const [study, setStudy] = useState(path.includes('study') || path.includes('files'))
     const [cardCount, setCardCount] = useState(0)
@@ -48,7 +48,7 @@ export default function StudyOrTest({ courses }: CoursesProps) {
     useEffect(() => {
         setStudy(path.includes('study') || path.includes('files'))
         const name = path.split('/')[2] || ''
-        const amountOfCards = courses.find(course => course.id === name)?.cards.length || 0
+        const amountOfCards = courses.find(course => course.id === name)?.card_count || 0
         setCardCount(amountOfCards)
     }, [path])
 
@@ -273,7 +273,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
     )
 }
 
-function InnerCourseList({ courses, currentPath }: CoursesProps) {
+function InnerCourseList({ courses, currentPath }: CoursesListProps) {
     return (
         <div className='h-full bg-login-900 rounded-lg'>
             <div className='pt-2 pb-24 h-full overflow-auto grow noscroll'>
@@ -285,7 +285,13 @@ function InnerCourseList({ courses, currentPath }: CoursesProps) {
     )
 }
 
-function Course({ course, currentPath, index }: CourseProps) {
+type CourseItemProps = {
+    course: CoursesProps
+    currentPath: string
+    index: number
+}
+
+function Course({ course, currentPath, index }: CourseItemProps) {
     const currentCourse = currentPath.includes('/course/') ? currentPath.split('/course/')[1].split('/')[0] : ''
     const current = currentCourse === course.id
     const bg = index % 2 === 0 ? 'bg-login-800' : 'bg-login-900'

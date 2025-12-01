@@ -20,6 +20,10 @@ export async function deleteUser(): Promise<{ id: string } | ErrorResponse> {
 }
 
 // Courses
+export async function getCourses(): Promise<CoursesProps[] | ErrorResponse> {
+    return getWrapper({ path: '/courses' })
+}
+
 export async function postCourse({data}: { data: PostCourseProps }): Promise<{ id: string } | ErrorResponse> {
     return postWrapper({ path: '/course', data })
 }

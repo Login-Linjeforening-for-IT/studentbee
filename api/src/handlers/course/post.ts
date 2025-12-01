@@ -4,7 +4,6 @@ import run from '#db'
 type PostCourseProps = {
     id: string
     name: string
-    username: string
 }
 
 /**
@@ -21,14 +20,14 @@ export default async function postCourse(req: FastifyRequest, res: FastifyReply)
             return res.status(400).send({ error: 'Missing required field (id, name)' })
         }
 
-        const courseResponse = await run('INSERT INTO courses (id) VALUES ($1) RETURNING id', [id])
+        const courseResponse = await run('INSERT INTO courses (course_code, name, notes, created_by, updated_by) VALUES ($1, $2, $3, $4, $5) RETURNING id', [id, name, '', userID, userID])
         if (!courseResponse.rowCount) {
             throw new Error('Failed to create course')
         }
 
-        await run(`
+        /* await run(`
             INSERT INTO files (course_id, name, content, created_by, updated_by) VALUES ($1, $2, $3, $4, $4) RETURNING id;
-        `, [id, name, '', userID, userID])
+        `, [id, name, '', userID, userID]) */
 
         return res.status(201).send({ id })
     } catch (error) {

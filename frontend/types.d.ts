@@ -15,6 +15,13 @@ type PostCourseProps = {
     name: string
 }
 
+type CoursesProps = {
+    id: string
+    name: string
+    course_code: string
+    card_count: number
+}
+
 // Scoreboard
 type ScoreboardProps = {
     name: string
