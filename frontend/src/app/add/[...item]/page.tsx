@@ -57,8 +57,8 @@ function AddCourse() {
 
     return (
         <div className='w-full h-full grid place-items-center'>
-            <div className='bg-login-900 w-[20vw] rounded-xl grid place-items-center gap-3 p-5 max-h-[75vh] overflow-auto'>
-                <div className='grid grid-cols-12 w-full'>
+            <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center flex flex-col items-center gap-6'>
+                <div className='grid grid-cols-12 w-4/5'>
                     {selected != 0 ? <button
                         className='bg-login-900 rounded-md px-2'
                         onClick={handleBack}
@@ -74,7 +74,7 @@ function AddCourse() {
                     onChange={(event) => handleCourseIdChange(event.target.value.toUpperCase())}
                     type='text'
                     placeholder='Course ID (PROG1001)'
-                    className='bg-login-700 rounded-lg overflow-hidden px-2 h-10 w-full outline-hidden caret-orange-500'
+                    className='bg-login-700 rounded-lg overflow-hidden px-2 h-10 w-4/5 outline-hidden caret-login'
                     maxLength={10}
                 />
                 <input
@@ -82,12 +82,12 @@ function AddCourse() {
                     onChange={(event) => handleCourseNameChange(event.target.value.toUpperCase())}
                     type='text'
                     placeholder='Name (Grunnleggende programmering)'
-                    className='bg-login-700 rounded-lg overflow-hidden px-2 h-10 w-full outline-hidden caret-orange-500'
+                    className='bg-login-700 rounded-lg overflow-hidden px-2 h-10 w-4/5 outline-hidden caret-login'
                     maxLength={10}
                 />
                 <Link
                     href={navigate}
-                    className='grid w-full bg-login rounded-lg font-semibold h-10 place-items-center'
+                    className='grid w-4/5 bg-login/70 outline outline-login/90 rounded-lg font-semibold h-10 place-items-center'
                     onClick={handleAddCourse}
                 >
                     Add course

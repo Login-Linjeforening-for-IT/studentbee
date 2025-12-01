@@ -1,4 +1,3 @@
-import React from 'react'
 import { getCourses } from '@parent/src/utils/fetch'
 import Link from 'next/link'
 import config from '@config'
@@ -8,9 +7,16 @@ export default async function SelectCourseList() {
 
     if (typeof courses === 'string') {
         return (
-            <div className='w-full h-full grid grid-rows-12'>
-                <h1 className='w-full grid place-items-center text-lg'>No courses</h1>
-                <Link href={'/add/course'} className='rounded-xl py-3 px-5 bg-login-900 row-span-11 grid place-self-center'>Add course</Link>
+            <div className='w-full h-full grid place-items-center p-6'>
+                <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 w-full max-w-md text-center flex flex-col items-center gap-6'>
+                    <h1 className='text-2xl font-semibold text-login-100/50'>
+                        No Courses
+                    </h1>
+                    <p className='text-gray-300 text-sm px-8'> There are no courses. Add a course, or try again later if you know there are courses.</p>
+                    <Link href='/add/course' className='rounded-lg py-1 px-6 bg-login-500 hover:bg-login-400 font-semibold transition-colors shadow-md text-login-100' >
+                        Add Course
+                    </Link>
+                </div>
             </div>
         )
     }
