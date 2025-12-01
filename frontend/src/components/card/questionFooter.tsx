@@ -44,12 +44,12 @@ export default function QuestionFooter({
                     {card.rating + clientVote > 0 ? '+' : ''}
                     {card.rating + clientVote}
                 </h1>
-                <button className='w-[2.3vh]' onClick={() => handleVote(true)}>
+                <button className='w-[2.3vh] cursor-pointer' onClick={() => handleVote(true)}>
                     <ThumbsUp
                         className={`w-full h-full pt-[0.2vh] ${voteColor('up', card.votes, username, clientVote)}`}
                     />
                 </button>
-                <button className='w-[2.3vh]' onClick={() => handleVote(false)}>
+                <button className='w-[2.3vh] cursor-pointer' onClick={() => handleVote(false)}>
                     <ThumbsDown
                         className={`w-full h-full pt-[0.2vh] ${voteColor('down', card.votes, username, clientVote)}`}
                     />

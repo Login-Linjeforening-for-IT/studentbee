@@ -87,7 +87,7 @@ export default function Alternatives({
                         )
                         setAttempted(prev => [...prev, originalIndex])
                     }}
-                    className={`${getColor(index)} rounded-lg text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
+                    className={`${getColor(index)} cursor-pointer rounded-lg text-sm flex flex-rows-auto text-left p-2 mb-2 w-full`}
                 >
                     <h1
                         className='h-full pr-2 text-md grid place-items-center text-login-300'

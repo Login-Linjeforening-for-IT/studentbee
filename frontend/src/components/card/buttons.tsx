@@ -5,7 +5,7 @@ type ButtonsProps = {
 }
 
 export default function Buttons({ animateAnswer, navigate, flashColor }: ButtonsProps) {
-    const button = 'rounded-lg flex w-full p-2 bg-login-900 text-center justify-center'
+    const button = 'rounded-lg flex w-full p-2 bg-login-900 text-center justify-center cursor-pointer'
 
     return (
         <div className='w-full flex gap-2 h-full'>
