@@ -10,9 +10,17 @@ type UserProps = {
 }
 
 // Courses
-type PostCourseProps = {
-    id: string
+type CourseProps = {
+    id: number
+    course_code: string
     name: string
+    notes: string
+    learning_based: boolean
+    created_by: string | null
+    created_at: string
+    updated_by: string | null
+    updated_at: string
+    cards: GetCardsProps[]
 }
 
 type CoursesProps = {
@@ -21,6 +29,41 @@ type CoursesProps = {
     course_code: string
     card_count: number
 }
+
+type PostCourseProps = {
+    id: string
+    name: string
+}
+
+// Cards
+type GetCardsProps = {
+    id: number
+    course_id: number
+    question: string
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    alternatives: any
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    correct_answers: any
+    source: string | null
+    help: string | null
+    created_by: string | null
+    created_at: string
+    updated_at: string
+}
+
+// Comments
+type CardCommentProps = {
+    id: number
+    card_id: number | null
+    parent_id: number | null
+    user_id: number
+    content: string
+    created_at: string
+    updated_at: string
+    parent: number | null
+    replies: CardCommentProps[]
+}
+
 
 // Scoreboard
 type ScoreboardProps = {
@@ -59,12 +102,6 @@ type Grades = (Status | GradeDistribution)[]
 
 
 // Before rewrite
-type CourseProps = {
-    course: CourseAsList
-    currentPath: string
-    index: number
-}
-
 type Editing = {
     cards: Card[]
     notes: string
@@ -137,18 +174,6 @@ type ScoreBoardUser = {
     seen: string
 }
 
-type CardComment = {
-    id: number
-    courseID: string
-    cardID: number
-    username: string
-    content: string
-    time: string
-    rating: number
-    replies?: CardComment[]
-    votes: Vote[]
-}
-
 type Vote = {
     username: string
     vote: boolean
@@ -171,10 +196,4 @@ type ClientVote = {
     commentID: number
     vote: boolean
     isReply?: true
-}
-
-type RegisterUser = {
-    id: string
-    name: string
-    username: string
 }

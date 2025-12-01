@@ -9,25 +9,25 @@ import { getCookie } from 'uibee/utils'
 type ReplyProps = {
     courseID: string
     cardID: number
-    comment: CardComment
-    comments: CardComment[]
-    setComments: Dispatch<SetStateAction<CardComment[]>>
+    comment: CardCommentProps
+    comments: CardCommentProps[]
+    setComments: Dispatch<SetStateAction<CardCommentProps[]>>
 }
 
 type RepliesProps = {
-    replies: CardComment[]
+    replies: CardCommentProps[]
     vote: ({ commentID, vote }: ClientVote) => void
-    comment: CardComment
-    comments: CardComment[]
-    setComments: Dispatch<SetStateAction<CardComment[]>>
+    comment: CardCommentProps
+    comments: CardCommentProps[]
+    setComments: Dispatch<SetStateAction<CardCommentProps[]>>
 }
 
 type ReplyComponentProps = {
-    reply: CardComment
+    reply: CardCommentProps
     vote: ({ commentID, vote }: ClientVote) => void
-    comment: CardComment
-    comments: CardComment[]
-    setComments: Dispatch<SetStateAction<CardComment[]>>
+    comment: CardCommentProps
+    comments: CardCommentProps[]
+    setComments: Dispatch<SetStateAction<CardCommentProps[]>>
 }
 
 export default function Reply({

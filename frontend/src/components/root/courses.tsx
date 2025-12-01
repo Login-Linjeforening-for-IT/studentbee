@@ -5,7 +5,6 @@ import { getCourses } from '@utils/api'
 
 export default async function CourseList() {
     const courses = await getCourses()
-    console.log(courses)
 
     if ('error' in courses) {
         return (

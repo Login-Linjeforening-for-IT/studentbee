@@ -4,7 +4,7 @@ import voteColor from '../comments/voteColor'
 import { getCookie } from 'uibee/utils'
 
 type QuestionFooterProps = {
-    card: Card
+    card: GetCardsProps
     clientVote: 1 | 0 | -1
     handleVote: (vote: boolean) => void
     showComments: boolean
@@ -32,7 +32,7 @@ export default function QuestionFooter({
         setUsername(username)
     }, [])
 
-    const showAnswer = card.correct.every(answer => remainGreen.includes(answer))
+    const showAnswer = card.correct_answers.every(answer => remainGreen.includes(answer))
     const revealText = showAnswer
         ? 'Hide'
         : 'Reveal'

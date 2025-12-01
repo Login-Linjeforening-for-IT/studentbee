@@ -6,16 +6,16 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 
 type CommentProps = {
-    comment: CardComment
+    comment: CardCommentProps
     user: string | null
     vote: ({commentID, vote}: ClientVote) => void
     parent?: number
     setParent: Dispatch<SetStateAction<number | undefined>>
     courseID: string
     cardID: number
-    clientComments: CardComment[]
-    setClientComments: Dispatch<SetStateAction<CardComment[]>>
-    comments: CardComment[]
+    clientComments: CardCommentProps[]
+    setClientComments: Dispatch<SetStateAction<CardCommentProps[]>>
+    comments: CardCommentProps[]
     handleDelete: ({commentID}: {commentID: number}) => void
 }
 
@@ -33,7 +33,7 @@ export default function Comment({
     handleDelete
 }: CommentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
-    const comment_user = comment.username.split('@')[0]
+    const comment_user = comment.user_id.toString()
     const username = user || ''
     const author = comment_user === username ? 'You' : comment_user
 

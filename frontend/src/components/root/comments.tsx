@@ -6,7 +6,7 @@ import Comment from '../comments/comment'
 import { getCookie } from 'uibee/utils'
 
 type CommentsProps = {
-    comments: CardComment[]
+    comments: CardCommentProps[]
     courseID: string
     cardID: number
     totalCommentsLength: number
@@ -38,14 +38,15 @@ export default function Comments({comments, courseID, cardID, totalCommentsLengt
         })
 
         clientComments.push({
-            id: clientComments.length,
-            courseID,
-            cardID,
-            username: 'You',
+            id: Date.now(),
+            card_id: cardID,
+            parent_id: parent || null,
+            user_id: 0, // placeholder
             content,
-            time: new Date().toISOString(),
-            rating: 0,
-            votes: []
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+            parent: parent || null,
+            replies: []
         })
 
         setContent('')

@@ -4,8 +4,8 @@ import Alternatives from './alternatives'
 import QuestionFooter from './questionFooter'
 
 type QuestionProps = {
-    card: Card
-    cards: Card[]
+    card: GetCardsProps
+    cards: GetCardsProps[]
     current: number | undefined
     selected: number[]
     animateAnswer: string
@@ -60,11 +60,8 @@ export default function Question({
                     {card.source} {(current || 0) + 1} / {cards.length}
                 </h1>
                 <div className='mb-2'>
-                    {card.correct.length > 1 && <h1 className='text-login-300'>
+                    {card.correct_answers.length > 1 && <h1 className='text-login-300'>
                         Multiple choice - Select all correct answers
-                    </h1>}
-                    {card.theme && <h1 className='text-login-300'>
-                        {card.theme}
                     </h1>}
 
                     <Markdown
@@ -77,7 +74,7 @@ export default function Question({
                     selected={selected}
                     animateAnswer={animateAnswer}
                     attempted={attempted}
-                    correct={card.correct}
+                    correct={card.correct_answers}
                     remainGreen={remainGreen}
                     wait={wait}
                     setSelected={setSelected}

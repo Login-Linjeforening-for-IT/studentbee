@@ -14,8 +14,8 @@ import { useRouter } from 'next/navigation'
 type CardsProps = {
     id?: string
     current?: number
-    course: Course | string
-    comments: CardComment[][]
+    course: CourseProps | null
+    comments: CardCommentProps[][]
 }
 
 export default function Cards({ id, current, course, comments }: CardsProps) {
@@ -33,9 +33,9 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
     const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0)
     const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
     const [indexMapping, setIndexMapping] = useState<number[]>([])
-    const cards = typeof course === 'object' ? course.cards as Card[] : []
+    const cards = course !== null ? course.cards : []
     const card = cards[current || 0]
-    const [wait, setWait] = useState(card?.correct.length > 1 ? true : false)
+    const [wait, setWait] = useState(card?.correct_answers.length > 1 ? true : false)
     selectedRef.current = selected
 
     const { navigate, checkAnswer } = useCardNavigation({
@@ -90,12 +90,7 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
         return <></>
     }
 
-    if (typeof course === 'string') {
-        if (course.toLocaleLowerCase().includes('not valid json')) {
-            router.push('/')
-            return <></>
-        }
-
+    if (!course) {
         return (
             <div className='col-span-6 w-full h-full grid place-items-center'>
                 <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center gap-6 grid place-items-center self-center'>
@@ -160,12 +155,12 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
     }
 
     function showAnswers() {
-        if (JSON.stringify(remainGreen) === JSON.stringify(card.correct)) {
+        if (JSON.stringify(remainGreen) === JSON.stringify(card.correct_answers)) {
             setAttempted([])
             setRemainGreen([])
         } else {
-            setAttempted([...card.correct])
-            setRemainGreen([...card.correct])
+            setAttempted([...card.correct_answers])
+            setRemainGreen([...card.correct_answers])
         }
     }
 

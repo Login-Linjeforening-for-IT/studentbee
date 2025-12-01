@@ -8,7 +8,7 @@ type CommentProps = {
     parent?: number
 }
 
-export default async function getComments(CourseID: string): Promise<CardComment[][]> {
+export default async function getComments(CourseID: string): Promise<CardCommentProps[][]> {
     const token = getCookie('access_token')
     try {
         const response = await fetch(`${config.url.API}/comments/${CourseID}`, {
@@ -103,13 +103,13 @@ export async function deleteComment({ commentID, courseID }: { commentID: number
     }
 }
 
-export function getTotalCommentsLength(comments: CardComment[], cardID: number): number {
+export function getTotalCommentsLength(comments: CardCommentProps[], cardID: number): number {
     let length = comments.reduce((acc, comment) => {
-        acc += comment.cardID === cardID ? 1 : 0; return acc
+        acc += (comment.card_id === cardID || comment.card_id === null) ? 1 : 0; return acc
     }, 0)
 
     for (const comment of comments) {
-        if (comment.replies && comment.replies.length > 0 && comment.cardID === cardID) {
+        if (comment.replies && comment.replies.length > 0 && (comment.card_id === cardID || comment.card_id === null)) {
             length += getTotalCommentsLength(comment.replies, cardID)
         }
     }
