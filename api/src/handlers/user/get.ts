@@ -6,7 +6,7 @@ export default async function getUser(req: FastifyRequest, res: FastifyReply) {
         const id = req.user?.id
         const result = await run('SELECT * FROM users WHERE user_id = $1', [id])
         if (!result.rowCount) {
-            res.status(404).send({ error: 'User not found.' })
+            return res.status(404).send({ error: 'User not found.' })
         }
 
         return res.status(200).send(result.rows[0])
