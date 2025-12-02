@@ -12,7 +12,7 @@ export default async function putCourse(req: FastifyRequest, res: FastifyReply):
         }
 
         if (!req.user?.id || !notes) {
-            return res.status(400).send({ error: 'User ID, cards and notes are required.' })
+            return res.status(400).send({ error: 'Cards and notes are required.' })
         }
 
         const updatedCourse = await runInTransaction(async (client) => {
