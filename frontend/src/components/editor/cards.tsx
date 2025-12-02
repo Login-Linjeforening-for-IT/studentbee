@@ -28,15 +28,15 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
                         ? 'outline-gray-500' : 'outline-hidden'
 
                     return (
-                        <div key={index} className='grid grid-cols-12 gap-2'>
+                        <div key={index} className='flex group mb-2'>
                             <button
                                 key={card.question}
                                 onClick={() => handleClick(index)}
                                 className={`
-                                    w-full outline ${outline} 
+                                    flex-1 outline ${outline} 
                                     hover:outline-white bg-login-700 
-                                    rounded-lg p-2 flex flex-rows space-x-2 mb-2
-                                    col-span-11 text-left cursor-pointer
+                                    rounded-lg p-2 flex flex-rows space-x-2
+                                    text-left cursor-pointer
                                 `}
                             >
                                 <div className='grid grid-cols-12 w-full'>
@@ -45,8 +45,8 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
                                     <h1 className='text-login-300 text-right w-full'>{card.alternatives.length}</h1>
                                 </div>
                             </button>
-                            <button className='flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw] cursor-pointer' onClick={() => handleRemove(index)}>
-                                <Trash2 className='w-full h-full place-self-center text-login-50 hover:text-red-500' />
+                            <button className='flex justify-center items-center cursor-pointer w-0 group-hover:w-6 transition-all duration-200' onClick={() => handleRemove(index)}>
+                                <Trash2 className='w-full h-full text-login-50 hover:text-red-500' />
                             </button>
                         </div>
                     )
