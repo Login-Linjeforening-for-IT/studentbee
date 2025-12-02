@@ -22,7 +22,9 @@ export default async function postCourse(req: FastifyRequest, res: FastifyReply)
 
         const courseResponse = await run(`
             INSERT INTO courses (course_code, name, notes, created_by, updated_by)
-            VALUES ($1, $2, $3, $4, $5) RETURNING id
+            VALUES ($1, $2, $3, $4, $5)
+            ON CONFLICT (course_code) DO UPDATE SET course_code = EXCLUDED.course_code
+            RETURNING id
         `, [courseCode.toUpperCase(), name, '', userId, userId])
 
         if (!courseResponse.rowCount) {
@@ -30,11 +32,11 @@ export default async function postCourse(req: FastifyRequest, res: FastifyReply)
         }
 
         const id = courseResponse.rows[0].id
-
-        await run(`
-            INSERT INTO files (name, content, course_id, created_by, updated_by)
+            await run(`
+                INSERT INTO files (name, content, course_id, created_by, updated_by)
             VALUES ('root', '', $1, $2, $2)    
-        `, [id, userId, userId])
+            ON CONFLICT (name, course_id, parent) DO NOTHING
+        `, [id, userId])
 
         return res.status(201).send({ id })
     } catch (error) {

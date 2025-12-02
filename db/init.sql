@@ -72,5 +72,6 @@ CREATE TABLE files (
     created_by TEXT REFERENCES users(user_id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_by TEXT REFERENCES users(user_id) ON DELETE SET NULL,
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    UNIQUE (course_id, name, parent)
 );
