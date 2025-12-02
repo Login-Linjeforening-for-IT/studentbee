@@ -8,11 +8,10 @@ type UpdateCourseProps = {
 
 // Updates the passed course
 export async function updateCourse({ id, editing }: UpdateCourseProps) {
-    const username = getCookie('user_nickname')
     const token = getCookie('access_token')
 
     try {
-        if (!username) {
+        if (!token) {
             throw Error('User not logged in')
         }
 
@@ -22,7 +21,7 @@ export async function updateCourse({ id, editing }: UpdateCourseProps) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ username, editing })
+            body: JSON.stringify({ editing })
         })
 
         if (!response.ok) {
