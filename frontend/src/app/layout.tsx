@@ -3,6 +3,7 @@ import './globals.css'
 import 'uibee/styles'
 import Topbar from '@components/navbar/nav'
 import { cookies } from 'next/headers'
+import { Toaster } from 'sonner'
 
 export const metadata = {
     title: 'Exam',
@@ -22,6 +23,16 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 <main className='row-start-2 p-2 row-span-11 w-full rounded-lg max-h-[calc(100vh-var(--h-navbar))]'>
                     {children}
                 </main>
+                <Toaster
+                    position='bottom-right'
+                    style={
+                        {
+                            '--normal-bg': '#121212',
+                            '--normal-text': 'white',
+                            '--normal-border': '#6b6b6b',
+                        } as React.CSSProperties
+                    }
+                />
             </body>
         </html>
     )
