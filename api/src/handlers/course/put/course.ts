@@ -6,12 +6,13 @@ export default async function putCourse(req: FastifyRequest, res: FastifyReply):
         const { id } = req.params as { id: string }
         const { cards, notes } = req.body as { cards: any[]; notes: string } ?? {}
 
-        console.log('received body', req.body)
-        if (!id) {
+        if (!id || !req.user?.id) {
             return res.status(400).send({ error: 'Course ID is required.' })
         }
 
-        if (!req.user?.id || !notes) {
+        const userId = req.user.id
+
+        if (!Array.isArray(cards) || typeof notes !== 'string') {
             return res.status(400).send({ error: 'Cards and notes are required.' })
         }
 
@@ -26,7 +27,7 @@ export default async function putCourse(req: FastifyRequest, res: FastifyReply):
                 WHERE id = $3
                 RETURNING id;
                 `,
-                [notes, req.user?.id, id]
+                [notes, userId, id]
             )
 
             if (result.rowCount === 0) {

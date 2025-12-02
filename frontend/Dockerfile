@@ -8,19 +8,20 @@ RUN apk add --no-cache python3 make g++ varnish
 WORKDIR /app
 
 # Starts varnish
-COPY default.vcl /etc/varnish/default.vcl
+COPY frontend/default.vcl /etc/varnish/default.vcl
 
 # Copies entrypoint
-COPY entrypoint.sh ./entrypoint.sh
+COPY frontend/entrypoint.sh ./entrypoint.sh
 
 # Copies package versions
-COPY package*.json ./
+COPY frontend/package*.json ./
 
 # Installs dependencies
 RUN npm install
 
 # Copies source code
-COPY . .
+COPY frontend .
+COPY .env .env
 
 # Builds the application
 RUN npm run build

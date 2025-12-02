@@ -5,7 +5,7 @@ import Cards from '@components/editor/cards'
 import Header from '@components/editor/header'
 import { updateCourse } from '@parent/src/utils/fetch'
 import { getCourse } from '@utils/api'
-import Link from 'next/link'
+import { X } from 'lucide-react'
 import { ChangeEvent, useEffect, useRef, useState, use } from 'react'
 
 export default function Edit(props: { params: Promise<{ id: string }> }) {
@@ -14,6 +14,7 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
     const [editing, setEditing] = useState<Editing>({ cards: [], notes: '' })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [cards, setCards] = useState<Card[]>([])
+    const [error, setError] = useState<string>('')
     const [showText, setShowText] = useState(true)
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
@@ -64,8 +65,18 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
         })
     }, [editing.cards])
 
-    function handleSubmit() {
-        updateCourse({ id: courseId, editing })
+    async function handleSubmit() {
+        const response = await updateCourse({ id: courseId, editing })
+        try {
+            const data = JSON.parse(response)
+            if ('error' in data) {
+                setError(data.error)
+            } else {
+                setError(response)
+            }
+        } catch {
+            setError(response)
+        }
     }
 
     function handleTextChange(event: ChangeEvent<HTMLTextAreaElement>) {
@@ -152,14 +163,32 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
                     handleClick={handleClick}
                 />
             </div>
+            {error && <div onClick={() => setError('')} className='absolute w-full h-full top-0 left-0 grid place-items-center bg-login-700/50'>
+                <div className={`
+                        w-md grid place-items-center bg-login-100/10 outline
+                        outline-login-100/20 backdrop-blur-md shadow-lg
+                        rounded-lg h-30 relative'
+                    `}>
+                    <div
+                        onClick={(e) => {e.preventDefault(); setError('')}}
+                        className={`
+                            absolute top-2 right-2 rounded-lg
+                            hover:bg-login-300/10 w-8 h-8 grid
+                            place-items-center cursor-pointer
+                        `}>
+                        <X className='w-4 h-4' />
+                    </div>
+                    <h1 className='font-semibold'>Failed to update course</h1>
+                    <h1>Details: {error}</h1>
+                </div>
+            </div>}
             <div className='w-full h-full grid place-items-center'>
-                <Link
-                    href='/'
+                <button
                     onClick={handleSubmit}
-                    className='h-full rounded-lg bg-login px-8 font-bold grid place-items-center'
+                    className='h-full rounded-lg bg-login px-8 font-bold grid place-items-center cursor-pointer'
                 >
                     Publish changes
-                </Link>
+                </button>
             </div>
         </div>
     )
