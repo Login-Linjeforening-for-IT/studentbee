@@ -4,11 +4,7 @@ import { useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { postCourse } from '@utils/api'
-
-type EmptyCourse = {
-    id: string
-    name: string
-}
+import { toast } from 'sonner'
 
 export default function Add(props: { params: Promise<{ id: string }> }) {
     const params = use(props.params)
@@ -24,78 +20,63 @@ export default function Add(props: { params: Promise<{ id: string }> }) {
 }
 
 function AddCourse() {
-    const [error, setError] = useState('')
     const router = useRouter()
-    const emptyCourse = {
+    const [loading, setLoading] = useState(false)
+    const [formData, setFormData] = useState({
         id: '',
         name: ''
-    }
-    const [course, setCourse] = useState<EmptyCourse>(emptyCourse)
-    const [selected, setSelected] = useState(0)
-    const courseIDspan = selected === 0 ? 'col-span-12' : 'col-span-10'
+    })
 
-    function handleCourseIdChange(id: string) {
-        setCourse({ ...course, id })
-    }
+    async function handleSubmit(e: React.FormEvent) {
+        e.preventDefault()
+        setLoading(true)
 
-    function handleCourseNameChange(name: string) {
-        setCourse({ ...course, name })
-    }
-
-    async function handleAddCourse() {
         try {
-            const result = await postCourse({ courseCode: course.id, name: course.name })
+            const result = await postCourse({ courseCode: formData.id, name: formData.name })
             if ('error' in result) {
-                setError(result.error)
+                toast.error(result.error)
             } else {
-                router.push(course.id ? `/course/${course.id}` : '/add/course/')
+                toast.success('Course added successfully!')
+                router.push(formData.id ? `/course/${formData.id}` : '/add/course/')
             }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-            setError(error.message)
+        } catch (error: unknown) {
+            toast.error((error as Error).message || 'An unexpected error occurred')
+        } finally {
+            setLoading(false)
         }
-    }
-
-    function handleBack() {
-        setSelected(0)
     }
 
     return (
         <div className='w-full h-full grid place-items-center'>
             <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center flex flex-col items-center gap-4'>
-                <div className='grid grid-cols-12 w-4/5'>
-                    {selected != 0 ? <button
-                        className='bg-login-900 rounded-md px-2'
-                        onClick={handleBack}
+                <h1 className='text-lg font-semibold'>Add course</h1>
+                <form onSubmit={handleSubmit} className='space-y-4 w-4/5'>
+                    <input
+                        value={formData.id}
+                        onChange={(e) => setFormData(prev => ({ ...prev, id: e.target.value.toUpperCase().slice(0, 10) }))}
+                        type='text'
+                        placeholder='Course ID (PROG1001)'
+                        className='bg-login-100/10 rounded-lg overflow-hidden px-2 h-8 w-full outline-hidden caret-login'
+                        required
+                    />
+
+                    <input
+                        value={formData.name}
+                        onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value.slice(0, 100) }))}
+                        type='text'
+                        placeholder='Course Name (Grunnleggende programmering)'
+                        className='bg-login-100/10 rounded-lg overflow-hidden px-2 h-8 w-full outline-hidden caret-login'
+                        required
+                    />
+
+                    <button
+                        type='submit'
+                        disabled={loading || !formData.id.trim() || !formData.name.trim()}
+                        className='grid w-full bg-login/70 outline outline-login/90 rounded-lg font-semibold h-8 place-items-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                     >
-                        ⬅️
-                    </button> : null}
-                    <h1 className={`text-lg font-semibold ${courseIDspan} text-center`}>Add course</h1>
-                    <h1 className={`text-md text-red-500 ${courseIDspan} text-center`}>{error}</h1>
-                    {selected != 0 ? <div /> : null}
-                </div>
-                <input
-                    value={course.id}
-                    onChange={(event) => handleCourseIdChange(event.target.value.toUpperCase())}
-                    type='text'
-                    placeholder='Course ID (PROG1001)'
-                    className='bg-login-100/10 rounded-lg overflow-hidden px-2 h-8 w-4/5 outline-hidden caret-login'
-                    maxLength={10}
-                />
-                <input
-                    value={course.name}
-                    onChange={(event) => handleCourseNameChange(event.target.value)}
-                    type='text'
-                    placeholder='Name (Grunnleggende programmering)'
-                    className='bg-login-100/10 rounded-lg overflow-hidden px-2 h-8 w-4/5 outline-hidden caret-login'
-                    maxLength={100}
-                />
-                <button
-                    className='grid w-4/5 bg-login/70 outline outline-login/90 rounded-lg font-semibold h-8 place-items-center cursor-pointer'
-                    onClick={handleAddCourse}
-                >
-                    Add course
-                </button>
+                        {loading ? 'Adding...' : 'Add course'}
+                    </button>
+                </form>
             </div>
         </div>
     )
