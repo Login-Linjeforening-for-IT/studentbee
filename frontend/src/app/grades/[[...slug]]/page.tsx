@@ -50,16 +50,18 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
     grades = transformedData
 
     return (
-        <PageContainer title='Grades'>
-            <div className='mb-4'>
-                <Input course={course} />
-            </div>
-            <div className='w-full h-full'>
-                {error && <p className='pt-8'>{error}</p>}
+        <PageContainer title='Grades' className='h-full'>
+            <div className='flex flex-col w-full overflow-hidden h-[calc(100%-var(--h-pageInfo))]'>
+                <div className='mb-2 shrink-0 flex'>
+                    <Input course={course} />
+                </div>
+                <div className='grow w-full min-h-0'>
+                    {error && <p className='pt-8 text-center'>{error}</p>}
 
-                {grades && selectedYear && years &&
-                    <ClientPage grades={grades} years={years} defaultYear={selectedYear} />
-                }
+                    {grades && selectedYear && years &&
+                        <ClientPage grades={grades} years={years} defaultYear={selectedYear} />
+                    }
+                </div>
             </div>
         </PageContainer>
     )

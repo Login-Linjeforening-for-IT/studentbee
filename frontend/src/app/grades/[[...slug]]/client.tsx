@@ -1,6 +1,6 @@
 'use client'
 
-import Graphs from '@parent/src/components/grades/grahp'
+import GradeChart from '@parent/src/components/grades/gradeChart'
 import Slider from '@parent/src/components/grades/slider'
 import { useState } from 'react'
 
@@ -15,9 +15,13 @@ export default function ClientPage({ grades, years, defaultYear }: ClientPagePro
     const [selectedYear, setSelectedYear] = useState(defaultYear)
 
     return (
-        <div className='w-full max-w-[18rem] xs:max-w-[20rem]'>
-            <Graphs grades={grades} years={years} selectedYear={selectedYear} />
-            <Slider years={[...years].reverse()} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
+        <div className='w-full h-full flex flex-col'>
+            <div className='grow min-h-0 w-full'>
+                <GradeChart grades={grades} years={years} selectedYear={selectedYear} />
+            </div>
+            <div className='shrink-0 w-full pb-1'>
+                <Slider years={[...years].reverse()} selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
+            </div>
         </div>
     )
 }

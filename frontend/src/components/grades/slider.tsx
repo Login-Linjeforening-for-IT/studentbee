@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, ChangeEvent } from 'react'
 
 type SliderProps = {
     years: number[]
@@ -18,7 +18,7 @@ export default function Slider({ years, selectedYear, setSelectedYear }: SliderP
         }
     }, [selectedYear])
 
-    function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    function handleChange(event: ChangeEvent<HTMLInputElement>) {
         const inputValue = Number(event.target.value)
 
         const closestValue = positions.reduce((prev, curr) =>
@@ -33,20 +33,40 @@ export default function Slider({ years, selectedYear, setSelectedYear }: SliderP
     }
 
     return (
-        <div className='flex flex-col items-center w-full max-w-md mt-6'>
-            <input
-                type='range'
-                min={Math.min(...positions)}
-                max={Math.max(...positions)}
-                value={currentValue}
-                onChange={handleChange}
-                step={1}
-                className='w-full h-2 bg-[rgb(60,60,60)] rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[rgb(240,134,64)] [&::-webkit-slider-thumb]:border-[rgb(60,60,60)] [&::-webkit-slider-thumb]:cursor-pointer [&::-moz-range-thumb]:w-5 [&::-moz-range-thumb]:h-5 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[rgb(240,134,64)] [&::-moz-range-thumb]:border-[rgb(60,60,60)] [&::-moz-range-thumb]:cursor-pointer'
-            />
+        <div className='flex flex-col items-center w-full mt-2 px-4'>
+            <div className='relative w-full h-2 bg-login-800 rounded-lg'>
+                <div
+                    className='absolute h-full bg-login rounded-lg'
+                    style={{ width: `${((currentValue - Math.min(...positions)) / (Math.max(...positions) - Math.min(...positions))) * 100}%` }}
+                />
+                <input
+                    type='range'
+                    min={Math.min(...positions)}
+                    max={Math.max(...positions)}
+                    value={currentValue}
+                    onChange={handleChange}
+                    step={1}
+                    className='absolute w-full h-2 opacity-0 cursor-pointer z-10'
+                />
+                <div
+                    className='absolute h-5 w-5 bg-login border-2 border-login-900 rounded-full top-1/2 transform -translate-y-1/2 -translate-x-1/2 pointer-events-none shadow-md transition-transform hover:scale-110'
+                    style={{ left: `${((currentValue - Math.min(...positions)) / (Math.max(...positions) - Math.min(...positions))) * 100}%` }}
+                />
+            </div>
 
-            <div className='flex justify-between w-full mt-2 text-sm text-gray-300'>
+            <div className='flex justify-between w-full mt-2 text-xs text-login-300 font-mono'>
                 {positions.map((pos) => (
-                    <span className={pos === currentValue ? 'font-bold' : ''} key={pos}>{pos}</span>
+                    <span
+                        className={`transition-colors ${pos === currentValue ? 'text-login font-bold scale-110' : 'hover:text-login-200'}`}
+                        key={pos}
+                        onClick={() => {
+                            setCurrentValue(pos)
+                            setSelectedYear(pos)
+                        }}
+                        style={{ cursor: 'pointer' }}
+                    >
+                        {pos}
+                    </span>
                 ))}
             </div>
         </div>

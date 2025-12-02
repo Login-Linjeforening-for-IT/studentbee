@@ -16,11 +16,11 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
     return (
         <html lang='en' className={`h-screen w-screen ${theme}`}>
-            <body className='bg-login-800! grid grid-rows-[var(--h-navbar)_auto] gap-0 w-full h-full noscroll'>
-                <nav className='fixed top-0 row-span-1 w-full h-(--h-navbar)] z-100'>
+            <body className='bg-login-800! grid grid-rows-[var(--h-navbar)_1fr] gap-0 w-full h-full noscroll'>
+                <nav className='fixed top-0 row-span-1 w-full h-(--h-navbar) z-100'>
                     <Topbar />
                 </nav>
-                <main className='row-start-2 p-2 row-span-11 w-full rounded-lg max-h-[calc(100vh-var(--h-navbar))]'>
+                <main className='row-start-2 p-2 row-span-full w-full rounded-lg h-full'>
                     {children}
                 </main>
                 <Toaster
