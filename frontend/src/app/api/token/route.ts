@@ -5,9 +5,8 @@ import { authToken } from 'uibee/utils'
 export async function GET(request: NextRequest) {
     const url = new URL(request.url)
     const token = url.searchParams.get('access_token')
-    const id = url.searchParams.get('id')
 
-    await fetch(`${config.url.API}/user/${id}`, {
+    await fetch(`${config.url.API}/user`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
