@@ -62,20 +62,20 @@ export default function Comment({
             </div>
             <div className='w-full flex flex-rows space-x-2 mt-1'>
                 <h1 className='text-login-300'>{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
-                <button className='w-[1.3vw]' onClick={() => handleVote('up')}>
+                <button className='w-[1.3vw] cursor-pointer' onClick={() => handleVote('up')}>
                     <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', comment.votes, username, clientVote)}`} />
                 </button>
-                <button className='w-[1.3vw]' onClick={() => handleVote('down')}>
+                <button className='w-[1.3vw] cursor-pointer' onClick={() => handleVote('down')}>
                     <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', comment.votes, username, clientVote)}`} />
                 </button>
                 {username === comment_user && <button
-                    className='text-login-300 underline w-[1.4vw]'
+                    className='text-login-300 underline w-[1.4vw] cursor-pointer'
                     onClick={() => handleDelete({ commentId: comment.id })}
                 >
                     <Trash2 className='w-full h-full pt-[0.2vh] text-login-50 hover:text-red-500' />
                 </button>}
                 <button
-                    className='text-login-300 underline'
+                    className='text-login-300 underline cursor-pointer'
                     onClick={() => setParent(parent ? undefined : comment.id)}
                 >
                     Reply

@@ -32,7 +32,12 @@ export default function Cards({ card: editCard, cards, setCards, handleClick }: 
                             <button
                                 key={card.question}
                                 onClick={() => handleClick(index)}
-                                className={`w-full outline ${outline} hover:outline-white bg-login-700 rounded-lg p-2 flex flex-rows space-x-2 mb-2 col-span-11 text-left`}
+                                className={`
+                                    w-full outline ${outline} 
+                                    hover:outline-white bg-login-700 
+                                    rounded-lg p-2 flex flex-rows space-x-2 mb-2
+                                    col-span-11 text-left cursor-pointer
+                                `}
                             >
                                 <div className='grid grid-cols-12 w-full'>
                                     <h1 className='w-full text-login-300'>{index + 1}</h1>
@@ -40,7 +45,7 @@ export default function Cards({ card: editCard, cards, setCards, handleClick }: 
                                     <h1 className='text-login-300 text-right w-full'>{card.alternatives.length}</h1>
                                 </div>
                             </button>
-                            <button className='flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw]' onClick={() => handleRemove(index)}>
+                            <button className='flex justify-center align-items mt-auto mb-auto pb-2 w-[1.5vw] cursor-pointer' onClick={() => handleRemove(index)}>
                                 <Trash2 className='w-full h-full place-self-center text-login-50 hover:text-red-500' />
                             </button>
                         </div>

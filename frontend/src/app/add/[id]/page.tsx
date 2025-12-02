@@ -4,7 +4,7 @@ import { useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { postCourse } from '@utils/fetch'
+import { postCourse } from '@utils/fetchClient'
 
 export default function Add(props: { params: Promise<{ id: string }> }) {
     const params = use(props.params)

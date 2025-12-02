@@ -69,25 +69,25 @@ export default function AddCard({
     }
 
     return (
-        <div className='w-full h-full overflow-auto noscroll'>
-            <h1 className='flex items-center justify-start text-lg h-[4vh]'>Source</h1>
+        <div className='w-full h-full overflow-auto noscroll px-px'>
+            <h1 className='flex items-center justify-start text-lg h-8'>Source</h1>
             <input
-                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-[4vh] outline-hidden caret-orange-500'
+                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-8 outline-hidden caret-orange-500'
                 value={card.source || ''}
                 type='text'
                 placeholder='Exam or learning material source'
                 onChange={(event) => updateSource(event.target.value)}
             />
-            <h1 className='flex items-center justify-start text-lg h-[4vh]'>Theme</h1>
+            <h1 className='flex items-center justify-start text-lg h-8'>Theme</h1>
             <input
                 ref={inputRef}
-                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-[4vh] outline-hidden caret-orange-500'
+                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-8 outline-hidden caret-orange-500'
                 value={card.theme || ''}
                 type='text'
                 placeholder='Question theme (optional)'
                 onChange={(event) => updateTheme(event.target.value)}
             />
-            <h1 className='flex items-center justify-start text-lg col-span-1 h-[4vh]'>Question</h1>
+            <h1 className='flex items-center justify-start text-lg col-span-1 h-8'>Question</h1>
             <div className='bg-login-700 rounded-lg p-2'>
                 <Editor
                     placeholder='Enter question...'
@@ -99,7 +99,7 @@ export default function AddCard({
                     hideSaveButton={true}
                 />
             </div>
-            <h1 className='flex items-center justify-start text-lg col-span-1 h-[4vh]'>Alternatives</h1>
+            <h1 className='flex items-center justify-start text-lg col-span-1 h-8'>Alternatives</h1>
             <div className='w-full'>
                 {card.alternatives.map((alternative, index) => {
                     const isCorrect = typeof card.answers === 'number' ? card.answers === index : card.answers.includes(index)
@@ -114,22 +114,22 @@ export default function AddCard({
                             <button
                                 onClick={() => handleAlternativeClick(index)}
                                 key={alternative}
-                                className='text-left flex flex-rows space-x-2 w-full'
+                                className='text-left flex flex-rows space-x-2 w-full cursor-pointer'
                             >
                                 <h1>{alternative}</h1>
                             </button>
                             <div className='flex flex-rows place-items-start gap-1'>
                                 <h1 className='text-login-400 float-right'>{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
                                 {isCorrect ?
-                                    <button className='text-xl text-login-400 hover:text-red-500' onClick={() => removeCorrect(index)}>
+                                    <button className='text-xl text-login-400 hover:text-red-500 cursor-pointer' onClick={() => removeCorrect(index)}>
                                         ☒
                                     </button>
                                     :
-                                    <button className='text-xl text-login-400 hover:text-green-500' onClick={() => addCorrect(index)}>
+                                    <button className='text-xl text-login-400 hover:text-green-500 cursor-pointer' onClick={() => addCorrect(index)}>
                                         ☑
                                     </button>
                                 }
-                                <button className='w-5' onClick={() => removeAlternative(index)}>
+                                <button className='w-5 cursor-pointer' onClick={() => removeAlternative(index)}>
                                     <Trash2 className='w-full h-full pt-[3.5px] text-login-400 hover:text-red-500' />
                                 </button>
                             </div>
@@ -144,7 +144,11 @@ export default function AddCard({
                 setAlternativeIndex={setAlternativeIndex}
             />
             <button
-                className='w-full h-[4vh] text-lg place-self-center bg-login rounded-lg mt-2'
+                className={`
+                    w-full h-8 text-lg place-self-center bg-login
+                    hover:bg-[#fd934c] outline outline-[#fd934c]
+                    rounded-lg mt-2 cursor-pointer
+                `}
                 onClick={handleSubmit}
             >Add card</button>
         </div>

@@ -3,8 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from 'react'
-import { deleteFile, sendFile } from '@parent/src/utils/fetchClient'
-import { getFiles } from '@parent/src/utils/fetch'
+import { deleteFile, getFiles, sendFile } from '@parent/src/utils/fetchClient'
 import { Trash2 } from 'lucide-react'
 import InnerCourseList from '@components/course/innerCourseList'
 
@@ -132,7 +131,7 @@ function FileListHeader({ course, studyable, displayInputField, setDisplayInputF
             <div className='flex flex-rows group'>
                 <Button text='/ study' href={`/course/${course}/study`} />
                 <button
-                    className='text-xl opacity-0 group-hover:opacity-100 text-end text-login-300'
+                    className='text-xl opacity-0 group-hover:opacity-100 text-end text-login-300 cursor-pointer'
                     onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}
                 >
                     +
@@ -148,7 +147,7 @@ function FileListHeader({ course, studyable, displayInputField, setDisplayInputF
                     onChange={(e) => setInput(e.target.value)}
                 />
                 <button
-                    className='text-end text-login-300'
+                    className='text-end text-login-300 cursor-pointer'
                     onClick={createFile}
                 >
                     Add
@@ -219,7 +218,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
 
     return (
         <div className={className || 'grid space-between'}>
-            <button className='text-login-300 grid grid-cols-5 group' key={file.name}>
+            <button className='text-login-300 grid grid-cols-5 group cursor-pointer' key={file.name}>
                 <Link
                     href={`/course/${course}/files/${file.name}`}
                     className='text-start pl-2 text-lg col-span-4'
@@ -261,7 +260,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                 />
-                <button className='text-end text-login-300' onClick={addFile}>
+                <button className='text-end text-login-300 cursor-pointer' onClick={addFile}>
                     Add
                 </button>
             </div>}

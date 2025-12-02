@@ -40,21 +40,21 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
     }
 
     return (
-        <div className='max-w-full mt-2'>
-            <div className='grid grid-cols-12 mb-2'>
-                <h1 className='flex items-center justify-start text-lg h-[4vh]'>{alternativeIndex + 1}:</h1>
+        <div className='max-w-full'>
+            <div className='grid grid-cols-12'>
+                <h1 className='flex items-center justify-start text-lg h-8'>{alternativeIndex + 1}:</h1>
                 <div className='w-full col-span-11 h-full'>
                     <textarea
                         ref={inputRef}
                         value={card.alternatives[alternativeIndex]}
                         onChange={(event) => handleInput(event.target.value)}
                         placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className='min-h-[5vh] w-full bg-login-700 rounded-lg px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
+                        className='min-h-8 w-full bg-login-700 rounded-lg px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
                     />
                 </div>
             </div>
             {alternativeIndex < 9 && <button
-                className='w-full h-[4vh] bg-login rounded-lg text-xl'
+                className='w-full h-8 bg-login rounded-lg text-xl cursor-pointer'
                 onClick={handleAddAlternative}
             >Add alternative</button>}
         </div>

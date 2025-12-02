@@ -2,13 +2,14 @@ import Script from 'next/script'
 import { ChangeEvent, Dispatch, SetStateAction, useRef } from 'react'
 
 type HeaderProps = {
+    code: string
     clearCard: () => void
     editing: Editing
     setEditing: Dispatch<SetStateAction<Editing>>
     hideText: () => void
 }
 
-export default function Header({ clearCard, editing, setEditing, hideText }: HeaderProps) {
+export default function Header({ code, clearCard, editing, setEditing, hideText }: HeaderProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     async function upload(event: ChangeEvent<HTMLInputElement>) {
@@ -58,9 +59,9 @@ export default function Header({ clearCard, editing, setEditing, hideText }: Hea
     return (
         <div className='w-full p-2 flex flex-rows justify-between'>
             <Script src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.9.359/pdf.min.js' />
-            <h1 className='text-xl'>Editing course</h1>
+            <h1 className='text-xl'>Editing course {code}</h1>
             <div className='space-x-2'>
-                <button className='bg-login-700 rounded-lg p-1 px-2' onClick={hideText}>
+                <button className='bg-login-700 rounded-lg p-1 px-2 cursor-pointer' onClick={hideText}>
                     Hide input area
                 </button>
                 <>
@@ -72,13 +73,13 @@ export default function Header({ clearCard, editing, setEditing, hideText }: Hea
                         onChange={upload}
                     />
                     <button
-                        className='bg-login-700 rounded-lg p-1 px-2'
+                        className='bg-login-700 rounded-lg p-1 px-2 cursor-pointer'
                         onClick={() => fileInputRef.current?.click()}
                     >
                         Upload exam
                     </button>
                 </>
-                <button className='bg-login-700 rounded-lg p-1 px-2' onClick={clearCard}>
+                <button className='bg-login-700 rounded-lg p-1 px-2 cursor-pointer' onClick={clearCard}>
                     Clear
                 </button>
             </div>

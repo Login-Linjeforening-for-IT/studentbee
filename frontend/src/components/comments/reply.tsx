@@ -102,7 +102,7 @@ export default function Reply({
             />
             <div className='col-span-10' />
             <button
-                className='col-span-2 justify-end bg-login-700 rounded-lg mt-2 h-[5vh]'
+                className='col-span-2 justify-end bg-login-700 rounded-lg mt-2 h-[5vh] cursor-pointer'
                 onClick={send}
             >
                 Add comment
@@ -193,19 +193,19 @@ function ReplyComponent({
             <div className='w-full flex flex-rows space-x-2 mb-2'>
                 <h1 className='text-login-300'>{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
                 <button
-                    className='w-[1.3vw]'
+                    className='w-[1.3vw] cursor-pointer'
                     onClick={() => handleVote({ commentId: reply.id, current: true })}
                 >
                     <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', reply.votes, username, clientVote)}`} />
                 </button>
                 <button
-                    className='w-[1.3vw]'
+                    className='w-[1.3vw] cursor-pointer'
                     onClick={() => handleVote({ commentId: reply.id, current: false })}
                 >
                     <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', reply.votes, username, clientVote)}`} />
                 </button>
                 {username === replyUser && <button
-                    className='text-login-300 underline w-[1.3vw]'
+                    className='text-login-300 underline w-[1.3vw] cursor-pointer'
                     onClick={handleDelete}
                 >
                     <Trash2 className='w-full h-full pt-[0.2vh] text-login-300 hover:text-red-500' />

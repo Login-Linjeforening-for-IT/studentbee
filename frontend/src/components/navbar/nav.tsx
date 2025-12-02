@@ -2,9 +2,9 @@ import { cookies } from 'next/headers'
 import { Navbar, NavItem } from 'uibee/components'
 
 export default async function Topbar() {
-    const cookieStore = await cookies()
-    const accessToken = cookieStore.get('access_token')?.value || null
-    const theme = cookieStore.get('theme')?.value || 'dark'
+    const Cookies = await cookies()
+    const accessToken = Cookies.get('access_token')?.value || null
+    const theme = Cookies.get('theme')?.value || 'dark'
 
     return (
         <Navbar

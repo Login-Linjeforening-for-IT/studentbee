@@ -56,7 +56,7 @@ export default function QuestionFooter({
                 </button>
             </div>
             <button
-                className='pb-2 text-login-300 flex items-center justify-center w-full'
+                className='pb-2 text-login-300 flex items-center justify-center w-full cursor-pointer'
                 onClick={() => setShowComments(!showComments)}
             >
                 <h1 className='hidden xs:hidden sm:block mr-2'>
@@ -75,7 +75,7 @@ export default function QuestionFooter({
             </button>
             <div>
                 <button
-                    className='w-full text-end text-login-300'
+                    className='w-full text-end text-login-300 cursor-pointer'
                     onClick={showAnswers}
                 >
                     {revealText}

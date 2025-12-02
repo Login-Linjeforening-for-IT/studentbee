@@ -185,7 +185,7 @@ export function EditorWithoutLogic({
             </div>
             {edited && !hideSave && !hideSaveButton && <div className='mt-2'>
                 <button
-                    className='text-md bg-login px-8 rounded-lg h-[4vh]'
+                    className='text-md bg-login px-8 rounded-lg h-8 cursor-pointer'
                     onClick={handleSave}
                 >
                     Save

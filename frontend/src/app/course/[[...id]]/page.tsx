@@ -1,8 +1,8 @@
-import { getFile } from '@parent/src/utils/fetch'
 import CourseClient from '@parent/src/components/course/courseClient'
 import CourseList from '@parent/src/components/root/courses'
 import SelectCourseList from '@parent/src/components/list/list'
 import { getCourseByCode } from '@utils/api'
+import { getFile } from '@utils/fetchClient'
 
 export default async function Course(props: { params: Promise<{ id?: string[] }> }) {
     const params = await props.params
