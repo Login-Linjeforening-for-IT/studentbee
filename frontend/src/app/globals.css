@@ -38,7 +38,7 @@
 
 :root {
     --w-sidebar:  13rem;
-    --h-navbar:   4rem;
+    --h-navbar:   3.5;
     --h-pageInfo: 5rem;
     transition: background 0.4s, color 0.4s;
 }

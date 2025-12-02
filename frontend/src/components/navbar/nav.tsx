@@ -15,6 +15,7 @@ export default function Topbar() {
             disableLanguageToggle
             theme={theme}
             token={accessToken}
+            innerClassName='p-1!'
         >
             <NavItem href='/course'>
                 Home
