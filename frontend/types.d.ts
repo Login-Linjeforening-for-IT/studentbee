@@ -35,6 +35,11 @@ type PostCourse = {
     name: string
 }
 
+type UpdateCourseProps = {
+    id: string
+    course: Course
+}
+
 // Cards
 type Card = {
     id: number

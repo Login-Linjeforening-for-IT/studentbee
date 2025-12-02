@@ -6,7 +6,7 @@ import Cards from '@components/editor/cards'
 import Header from '@components/editor/header'
 import { getCookie } from 'uibee/utils'
 import { getCourse } from '@parent/src/utils/fetch'
-import { updateCourse } from '@utils/fetchClient'
+import { updateCourse } from '@utils/api'
 import { X } from 'lucide-react'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
@@ -64,21 +64,12 @@ export default function PageClient({ course, id }: { course: Course, id: string 
     async function handleSubmit() {
         const response = await updateCourse({ id, course: editing })
 
-        try {
-            let data = response
-            if (!Object.keys(data).length) {
-                data = JSON.parse(response)
-            }
-
-            if ('error' in data) {
-                return setError(data.error)
-            } else if ('id' in data) {
-                return setMessage('Updated course.')
-            } else {
-                return setError(response)
-            }
-        } catch {
-            return setError(response)
+        if ('error' in response) {
+            setError(response.error)
+        } else if ('id' in response) {
+            setMessage('Updated course.')
+        } else {
+            setError('Unknown error')
         }
     }
 

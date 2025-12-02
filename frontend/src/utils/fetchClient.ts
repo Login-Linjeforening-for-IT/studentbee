@@ -18,11 +18,6 @@ type UpdateFileProps = {
     content: string
 }
 
-type UpdateCourseProps = {
-    id: string
-    course: Course
-}
-
 // Adds a question to the course with the given user id
 export async function addCard(courseId: string, card: Card): Promise<void | string> {
     const username = getCookie('user_nickname')
@@ -212,36 +207,6 @@ export async function postCourse({ id, name }: { id: string, name: string }) {
     } catch (error) {
         console.log(error)
         return JSON.stringify(error)
-    }
-}
-
-// Updates the passed course
-export async function updateCourse({ id, course }: UpdateCourseProps) {
-    const token = getCookie('access_token')
-
-    try {
-        if (!token) {
-            throw Error('User not logged in')
-        }
-
-        const response = await fetch(`${config.url.BROWSER_API}/course/${id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ ...course })
-        })
-
-        if (!response.ok) {
-            throw new Error(await response.text())
-        }
-
-        const result = await response.json()
-        return result
-    } catch (error: unknown) {
-        const err = error as Error
-        return err.message
     }
 }
 
