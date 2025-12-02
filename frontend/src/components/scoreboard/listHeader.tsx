@@ -1,10 +1,12 @@
 export default function ListHeader() {
     return (
-        <div className='grid bg-login-900 mb-2 pt-2 pb-2 grid-cols-4 place-items-center rounded-md font-semibold'>
-            <h1>Place</h1>
-            <h1>User</h1>
-            <h1>Time</h1>
-            <h1>Score</h1>
-        </div>
+        <thead className='text-login-300 text-sm uppercase tracking-wider font-semibold bg-login-900 border-b border-login-700'>
+            <tr>
+                <th className='px-6 py-4 text-center w-24'>Rank</th>
+                <th className='px-6 py-4 text-left'>User</th>
+                <th className='px-6 py-4 text-center w-40'>Time</th>
+                <th className='px-6 py-4 text-center w-24'>Score</th>
+            </tr>
+        </thead>
     )
 }
