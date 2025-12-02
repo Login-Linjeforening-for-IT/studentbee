@@ -41,7 +41,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     // health
     fastify.get('/health', ping)
     fastify.get('/ping', ping)
-    
+
     // version
     fastify.get('/version', version)
 
@@ -62,19 +62,19 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.put('/course/:id', { preHandler }, putCourse)
     fastify.put('/course/:id/notes', { preHandler }, putCourseNotes)
     fastify.put('/learningBased', { preHandler }, putCourseLearningBased)
-    
+
     // files
     fastify.get('/files/:id', { preHandler }, filesHandler)
     fastify.get('/file/:id', { preHandler }, fileHandler)
     fastify.put('/file', { preHandler }, putFile)
     fastify.post('/file', { preHandler }, postFile)
     fastify.delete('/file/:id', { preHandler }, deleteFile)
-    
+
     // comments
     fastify.get('/comments/:cardId', { preHandler }, commentsHandler)
     fastify.post('/comment', { preHandler }, postComment)
     fastify.delete('/comment', { preHandler }, deleteComment)
-    
+
     // grades
     fastify.get('/grades/:course', { preHandler }, gradeHandler)
 

@@ -154,7 +154,7 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
             </div>
             <div className='w-full h-full grid place-items-center'>
                 <Link
-                    href={'/'}
+                    href='/'
                     onClick={handleSubmit}
                     className='h-full rounded-lg bg-login px-8 font-bold grid place-items-center'
                 >
