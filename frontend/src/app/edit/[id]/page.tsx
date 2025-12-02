@@ -1,5 +1,6 @@
 'use client'
 
+import useClearStateAfter from '@/hooks/useClearStateAfter'
 import AddCard from '@components/card/addCard'
 import Cards from '@components/editor/cards'
 import Header from '@components/editor/header'
@@ -15,6 +16,7 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
     const [editingIndex, setEditingIndex] = useState(-1)
     const [cards, setCards] = useState<Card[]>([])
     const [error, setError] = useState<string>('')
+    const { condition: message, setCondition: setMessage } = useClearStateAfter()
     const [showText, setShowText] = useState(true)
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
@@ -68,14 +70,21 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
     async function handleSubmit() {
         const response = await updateCourse({ id: courseId, editing })
         try {
-            const data = JSON.parse(response)
-            if ('error' in data) {
-                setError(data.error)
-            } else {
-                setError(response)
+            let data = response
+            if (!Object.keys(data).length) {
+                data = JSON.parse(response)
             }
-        } catch {
-            setError(response)
+
+            if ('error' in data) {
+                return setError(data.error)
+            } else if ('id' in data) {
+                return setMessage('Updated course.')
+            } else {
+                return setError(response)
+            }
+        } catch (error) {
+            console.log('error', error)
+            return setError(response)
         }
     }
 
@@ -163,8 +172,13 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
                     handleClick={handleClick}
                 />
             </div>
-            {error && <div onClick={() => setError('')} className='absolute w-full h-full top-0 left-0 grid place-items-center bg-login-700/50'>
-                <div className={`
+            {(error || message) && <div
+                onClick={() => setError('')}
+                className={`
+                    absolute ${message && 'top-17.5 right-5'}
+                    ${error && 'bg-login-700/50 grid top-0 left-0 place-items-center w-full h-full'}
+                `}>
+                {error ? <div className={`
                         w-md grid place-items-center bg-login-100/10 outline
                         outline-login-100/20 backdrop-blur-md shadow-lg
                         rounded-lg h-30 relative'
@@ -179,8 +193,14 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
                         <X className='w-4 h-4' />
                     </div>
                     <h1 className='font-semibold'>Failed to update course</h1>
-                    <h1>Details: {error}</h1>
-                </div>
+                    <h1>Details: {typeof error === 'string' ? error : JSON.stringify(error)}</h1>
+                </div> : <div className={`
+                    w-xs grid place-items-center bg-green-500/10 outline
+                    outline-green-500/20 backdrop-blur-md shadow-lg
+                    rounded-lg h-10 relative'
+                `}>
+                    <h1 className='font-semibold'>{message}</h1>
+                </div>}
             </div>}
             <div className='w-full h-full grid place-items-center'>
                 <button

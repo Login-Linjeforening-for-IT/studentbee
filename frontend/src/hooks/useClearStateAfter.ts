@@ -1,0 +1,43 @@
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+
+type ClearStateAfterInputProps = {
+    initialState?: string | boolean | null
+    timeout?: number
+    onClear?: () => void
+}
+
+type ClearStateAfterProps = {
+    condition: string | boolean | null
+    setCondition: Dispatch<SetStateAction<string | boolean | null>>
+}
+
+/**
+ * Generic function to clear any variable after x seconds.
+ * @param initialState The initial value of the variable. Defaults to null
+ * @param timeout How long the variable should stay before being cleared
+ * @param onClear Function to call when clearing the variable
+ * @returns object: { condition: string | boolean | null, setCondition: Dispatch<SetStateAction<string | boolean | null>> }
+ */
+export default function useClearStateAfter({
+    initialState = null,
+    timeout: passedTimeout = 5000,
+    onClear
+}: ClearStateAfterInputProps = {}): ClearStateAfterProps {
+    const [condition, setCondition] = useState<string | null | boolean>(initialState)
+    useEffect(() => {
+        if (!condition) {
+            return
+        }
+
+        const timeout = setTimeout(() => {
+            setCondition(null)
+            if (onClear) {
+                onClear()
+            }
+        }, passedTimeout)
+
+        return () => clearTimeout(timeout)
+    }, [condition, setCondition, passedTimeout, onClear])
+
+    return { condition, setCondition }
+}
