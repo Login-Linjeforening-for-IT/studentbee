@@ -28,7 +28,7 @@ export async function getCourse(id: string): Promise<CourseProps | ErrorResponse
     return await getWrapper({ path: `/course/${id}` })
 }
 
-export async function postCourse({ data }: { data: PostCourse }): Promise<{ id: string } | ErrorResponse> {
+export async function postCourse(data: PostCourse): Promise<{ id: string } | ErrorResponse> {
     return await postWrapper({ path: '/course', data })
 }
 

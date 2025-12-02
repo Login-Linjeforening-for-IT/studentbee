@@ -1,9 +1,9 @@
 'use client'
 
-import { postCourse } from '@utils/api'
 import { useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { postCourse } from '@utils/api'
 
 type EmptyCourse = {
     id: string
@@ -43,13 +43,16 @@ function AddCourse() {
     }
 
     async function handleAddCourse() {
-        console.log('posting course', { data: { id: course.id, name: course.name } }, course)
-        const response = await postCourse({ data: { courseCode: course.id, name: course.name } })
-        console.log('handleAddCourse', response)
-        if ('error' in response) {
-            setError(response.error)
-        } else {
-            router.push(course.id ? `/course/${course.id}` : '/add/course/')
+        try {
+            const result = await postCourse({ courseCode: course.id, name: course.name })
+            if ('error' in result) {
+                setError(result.error)
+            } else {
+                router.push(course.id ? `/course/${course.id}` : '/add/course/')
+            }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+            setError(error.message)
         }
     }
 
