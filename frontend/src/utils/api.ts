@@ -24,6 +24,10 @@ export async function getCourses(): Promise<Courses[] | ErrorResponse> {
     return await getWrapper({ path: '/courses' })
 }
 
+export async function getCourseByCode(id: string): Promise<CourseProps | ErrorResponse> {
+    return await getWrapper({ path: `/course/code/${id}` })
+}
+
 export async function getCourse(id: string): Promise<CourseProps | ErrorResponse> {
     return await getWrapper({ path: `/course/${id}` })
 }

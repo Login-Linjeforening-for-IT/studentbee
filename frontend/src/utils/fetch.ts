@@ -6,6 +6,61 @@ type UpdateCourseProps = {
     editing: Editing
 }
 
+export async function getCourse(id: string) {
+    const token = getCookie('access_token')
+
+    if (!token) {
+        return 'You need to log in.'
+    }
+
+    try {
+        const response = await fetch(`${config.url.BROWSER_API}/course/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+
+        if (!response.ok) {
+            throw new Error(await response.text())
+        }
+
+        const data = await response.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return JSON.stringify(error)
+    }
+}
+
+export async function postCourse({ id, name }: { id: string, name: string }) {
+    const token = getCookie('access_token')
+
+    if (!token) {
+        return 'You need to log in.'
+    }
+
+    try {
+        const response = await fetch(`${config.url.BROWSER_API}/course`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ courseCode: id, name })
+        })
+
+        if (!response.ok) {
+            throw new Error(await response.text())
+        }
+
+        const data = await response.json()
+        return data
+    } catch (error) {
+        console.log(error)
+        return JSON.stringify(error)
+    }
+}
+
 // Updates the passed course
 export async function updateCourse({ id, editing }: UpdateCourseProps) {
     const token = getCookie('access_token')
@@ -15,7 +70,6 @@ export async function updateCourse({ id, editing }: UpdateCourseProps) {
             throw Error('User not logged in')
         }
 
-        console.log('this one')
         const response = await fetch(`${config.url.BROWSER_API}/course/${id}`, {
             method: 'PUT',
             headers: {

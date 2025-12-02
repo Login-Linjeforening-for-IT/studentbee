@@ -45,7 +45,7 @@ async function apiRequest({ method, path, data, options = {} }: ApiRequestProps)
         }
 
         return await response.json()
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
         console.log(error)
         return { error: error.message || 'Unknown error' }

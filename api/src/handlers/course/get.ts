@@ -5,7 +5,8 @@ import run from '#db'
  * CourseParam type, used for type specification when handling course parameters
  */
 type CourseParam = {
-    id: string
+    id?: string
+    code?: string
 }
 
 /**
@@ -14,7 +15,7 @@ type CourseParam = {
  * @param res Response
  */
 export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
-    const { id } = req.params as CourseParam
+    const { id, code } = req.params as CourseParam
 
     try {
         const result = await run(`
@@ -27,9 +28,9 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
             FROM courses c
             LEFT JOIN cards ON c.id = cards.course_id
             LEFT JOIN card_votes cv ON cards.id = cv.card_id
-            WHERE c.course_code = $1
+            WHERE ${id ? 'c.id' : 'c.course_code'} = $1
             GROUP BY c.id, cards.id
-        `, [id])
+        `, [id || code?.toUpperCase()])
 
         if (!result.rowCount) {
             return res.status(404).send({ error: 'Course not found' })

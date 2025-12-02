@@ -13,7 +13,6 @@ type CourseClientProps = {
     fileContent: string[]
 }
 
-// Client main page for extra functionality
 export default function CourseClient({
     course,
     id,

@@ -56,6 +56,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     // course
     fastify.get('/courses', { preHandler }, coursesHandler)
     fastify.get('/course/:id', { preHandler }, courseHandler)
+    fastify.get('/course/code/:code', { preHandler }, courseHandler)
     fastify.post('/course', { preHandler }, postCourse)
     fastify.put('/course/:id', { preHandler }, putCourse)
     fastify.put('/course/:id/notes', { preHandler }, putCourseNotes)

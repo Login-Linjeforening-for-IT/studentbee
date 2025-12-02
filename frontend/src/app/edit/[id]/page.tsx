@@ -4,8 +4,7 @@ import useClearStateAfter from '@/hooks/useClearStateAfter'
 import AddCard from '@components/card/addCard'
 import Cards from '@components/editor/cards'
 import Header from '@components/editor/header'
-import { updateCourse } from '@parent/src/utils/fetch'
-import { getCourse } from '@utils/api'
+import { getCourse, updateCourse } from '@parent/src/utils/fetch'
 import { X } from 'lucide-react'
 import { ChangeEvent, useEffect, useRef, useState, use } from 'react'
 
@@ -54,7 +53,7 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
                 }
             }
         })()
-    }, [courseId])
+    }, [])
 
     useEffect(() => {
         editing.cards.forEach((card, cardIndex) => {
@@ -97,7 +96,6 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
             return
         }
 
-
         if (editingIndex !== -1) {
             const tempCards = [...cards]
             tempCards[editingIndex] = card
@@ -114,6 +112,7 @@ export default function Edit(props: { params: Promise<{ id: string }> }) {
             alternatives: card.alternatives.filter((alternative) => alternative.length)
         }])
         setCard({ ...emptyCard, source: card.source })
+        setEditing({ ...editing, cards })
     }
 
     function handleClick(index: number) {
