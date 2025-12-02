@@ -31,6 +31,7 @@ CREATE TABLE cards (
     help TEXT,
     created_by TEXT REFERENCES users(user_id) ON DELETE SET NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_by TEXT REFERENCES users(user_id) ON DELETE SET NULL,
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
