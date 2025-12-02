@@ -13,7 +13,7 @@ export async function coursesHandler(_: FastifyRequest, res: FastifyReply) {
                 c.id, 
                 c.course_code AS "courseCode", 
                 c.name, 
-                COUNT(cards.id) AS "cardCount"
+                COUNT(cards.id)::INT AS "cardCount"
             FROM courses c
             LEFT JOIN cards ON cards.course_id = c.id
             GROUP BY c.id
