@@ -34,7 +34,7 @@ export default async function postCourse(req: FastifyRequest, res: FastifyReply)
         await run(`
             INSERT INTO files (name, content, course_id, created_by, updated_by)
             VALUES ('root', '', $1, $2, $2)    
-        `, [id, userId])
+        `, [id, userId, userId])
 
         return res.status(201).send({ id })
     } catch (error) {

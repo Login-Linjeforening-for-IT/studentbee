@@ -19,15 +19,14 @@ import run from '#db'
  */
 export default async function postCard(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, courseId, question, alternatives, correct } = req.body as {
-            username: string
+        const { courseId, question, alternatives, correct } = req.body as {
             courseId: number
             question: string
             alternatives: string[]
             correct: number[]
         } ?? {}
 
-        if (!username || !courseId || !question || !alternatives || correct === undefined) {
+        if (!req.user?.id || !courseId || !question || !alternatives || correct === undefined) {
             return res.status(400).send({ error: 'Missing required fields' })
         }
 
@@ -35,7 +34,7 @@ export default async function postCard(req: FastifyRequest, res: FastifyReply): 
             INSERT INTO cards (course_id, question, alternatives, answers, created_by, updated_at)
             VALUES ($1, $2, $3, $4, $5, NOW())
             RETURNING id
-        `, [courseId, question, alternatives, correct, username])
+        `, [courseId, question, alternatives, correct, req.user.id])
 
         return res.status(201).send({ id: result.rows[0].id })
     } catch (error) {

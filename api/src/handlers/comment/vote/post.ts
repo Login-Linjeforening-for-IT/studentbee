@@ -6,7 +6,6 @@ import run from '#db'
  */
 type PostCommentVoteProps = {
     courseId: string
-    username: string
     commentId: number
     vote: boolean
 }
@@ -20,9 +19,9 @@ type PostCommentVoteProps = {
 
 export default async function postCommentVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, commentId, vote } = req.body as PostCommentVoteProps ?? {}
-        if (!username || typeof commentId !== 'number' || vote == null) {
-            return res.status(400).send({ error: 'Missing required field (username, commentId, vote)' })
+        const { commentId, vote } = req.body as PostCommentVoteProps ?? {}
+        if (!req.user?.id || typeof commentId !== 'number' || vote == null) {
+            return res.status(400).send({ error: 'Missing required field (commentId, vote)' })
         }
 
         const comment = await run('SELECT id FROM comments WHERE id = $1', [commentId])
@@ -35,7 +34,7 @@ export default async function postCommentVote(req: FastifyRequest, res: FastifyR
             VALUES ($1, $2, $3, NOW())
             ON CONFLICT (comment_id, user_id)
             DO UPDATE SET is_upvote = $3, voted_at = NOW();
-        `, [commentId, username, vote])
+        `, [commentId, req.user.id, vote])
 
         const ratingResult = await run(`
             SELECT

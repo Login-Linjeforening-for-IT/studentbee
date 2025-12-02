@@ -6,7 +6,6 @@ import run from '#db'
  */
 type PostCardVoteProps = {
     courseId: string
-    username: string
     cardId: number
     vote: boolean
 }
@@ -20,9 +19,9 @@ type PostCardVoteProps = {
 
 export default async function postCardVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, cardId, vote } = req.body as PostCardVoteProps ?? {}
-        if (!username || typeof cardId !== 'number' || vote == null) {
-            return res.status(400).send({ error: 'Missing required field (username, cardId, vote)' })
+        const { cardId, vote } = req.body as PostCardVoteProps ?? {}
+        if (!req.user?.id || typeof cardId !== 'number' || vote == null) {
+            return res.status(400).send({ error: 'Missing required field (cardId, vote)' })
         }
 
         const card = await run('SELECT id FROM cards WHERE id = $1', [cardId])
@@ -35,7 +34,7 @@ export default async function postCardVote(req: FastifyRequest, res: FastifyRepl
             VALUES ($1, $2, $3, NOW())
             ON CONFLICT (card_id, user_id)
             DO UPDATE SET is_upvote = $3, voted_at = NOW();
-        `, [cardId, username, vote])
+        `, [cardId, req.user.id, vote])
 
         const ratingResult = await run(`
             SELECT

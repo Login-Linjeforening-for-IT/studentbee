@@ -2,7 +2,6 @@ import run from '#db'
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
 type PutCourseNotesBody = {
-    username: string
     notes: string
 }
 
@@ -15,14 +14,14 @@ type PutCourseNotesBody = {
 export default async function putCourseNotes(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { id } = req.params as { id: string }
-        const { username, notes } = req.body as PutCourseNotesBody ?? {}
+        const { notes } = req.body as PutCourseNotesBody ?? {}
 
         if (!id) {
             return res.status(400).send({ error: 'Missing id in query' })
         }
 
-        if (!username || !notes) {
-            return res.status(400).send({ error: 'Missing required field (username, notes)' })
+        if (!req.user?.id || !notes) {
+            return res.status(400).send({ error: 'Missing required field (user ID, notes)' })
         }
 
         const result = await run(`
@@ -32,7 +31,7 @@ export default async function putCourseNotes(req: FastifyRequest, res: FastifyRe
                 updated_at = NOW()
             WHERE id = $3
             RETURNING id;
-        `, [notes, username, id])
+        `, [notes, req.user.id, id])
         if (result.rowCount === 0) {
             return res.status(404).send({ error: 'Course not found' })
         }

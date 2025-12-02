@@ -6,7 +6,6 @@ import run from '#db'
  */
 type DeleteCommentProps = {
     courseId: string
-    username: string
     commentId: number
 }
 
@@ -18,16 +17,16 @@ type DeleteCommentProps = {
  */
 export default async function deleteComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, commentId } = req.body as DeleteCommentProps ?? {}
-        if (!username || typeof commentId !== 'number') {
-            return res.status(400).send({ error: 'Missing required field (username, commentId)' })
+        const { commentId } = req.body as DeleteCommentProps ?? {}
+        if (!req.user?.id || typeof commentId !== 'number') {
+            return res.status(400).send({ error: 'Missing required field (commentId)' })
         }
 
         const result = await run(
             `DELETE FROM comments
              WHERE id = $1 AND user_id = $2
              RETURNING id;`,
-            [commentId, username]
+            [commentId, req.user.id]
         )
 
         if (result.rowCount === 0) {
