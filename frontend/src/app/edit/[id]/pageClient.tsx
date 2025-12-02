@@ -4,7 +4,7 @@ import useClearStateAfter from '@/hooks/useClearStateAfter'
 import AddCard from '@components/card/addCard'
 import Cards from '@components/editor/cards'
 import Header from '@components/editor/header'
-import { getCookie } from '@utils/cookies'
+import { getCookie } from 'uibee/utils'
 import { getCourse } from '@parent/src/utils/fetch'
 import { updateCourse } from '@utils/fetchClient'
 import { X } from 'lucide-react'
@@ -141,8 +141,8 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
 
     return (
         <div className='w-full h-full rounded-lg gap-2 flex flex-col mt-6'>
-            <div className='w-full grid grid-cols-4 gap-2'>
-                <div className='w-full h-full bg-login-900 col-span-3 rounded-lg flex flex-col'>
+            <div className='w-full h-full grid grid-cols-4 gap-2'>
+                <div className='w-full h-[calc(100%-1.5rem)] bg-login-900 col-span-3 rounded-lg flex flex-col'>
                     <Header
                         code={courseCode}
                         clearCard={clearCard}
