@@ -31,7 +31,7 @@ type Courses = {
 }
 
 type PostCourse = {
-    courseId: string
+    courseCode: string
     name: string
 }
 

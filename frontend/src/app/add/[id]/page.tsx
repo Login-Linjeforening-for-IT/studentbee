@@ -45,7 +45,7 @@ function AddCourse() {
 
     async function handleAddCourse() {
         console.log('posting course', { data: { id: course.id, name: course.name } }, course)
-        const response = await postCourse({ data: { courseId: course.id, name: course.name } })
+        const response = await postCourse({ data: { courseCode: course.id, name: course.name } })
         console.log('handleAddCourse', response)
         if (typeof response === 'string') {
             setError(response)
