@@ -23,16 +23,21 @@ export default async function SelectCourseList() {
 
     return (
         <div className='relative h-full rounded-lg overflow-auto noscroll flex justify-center items-center'>
-            <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg py-3 px-4 w-full max-w-md text-center flex flex-col items-center gap-2 h-[calc(100vh-20rem)] xs:h-120 xs:w-96'>
+            <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg py-3 px-4 w-full max-w-lg text-center flex flex-col items-center gap-2 h-[calc(100vh-20rem)] xs:h-120 xs:w-96'>
                 <h1 className='text-center font-semibold py-2'>Select course</h1>
-                <div className='flex flex-col w-full h-full rounded-lg p-2 overflow-auto noscroll gap-2'>
+                <div className='flex flex-col w-full h-full rounded-md p-2 overflow-auto noscroll gap-2'>
                     <div className='grid gap-2'>
                         {courses.map((course) => <Link
                             href={`/course/${course.courseCode}`}
                             key={course.id}
-                            className='text-2xs md:text-base bg-login-700 w-full rounded-md p-1 pl-2 md:p-2 h-7 md:h-auto'
+                            className='text-2xs md:text-base bg-login-300/10 hover:bg-login-300/20 w-full rounded-md p-1 px-2 md:p-2 h-7 md:h-auto flex justify-between items-center'
                         >
-                            {course.courseCode} - {course.name} ({course.cardCount} cards)
+                            <div className='flex gap-1'>
+                                <h1>{course.courseCode}</h1>
+                                <h1>-</h1>
+                                <h1>{course.name}</h1>
+                            </div>
+                            <h1 className='text-login-100/30'>({course.cardCount} cards)</h1>
                         </Link>)}
                     </div>
                 </div>
