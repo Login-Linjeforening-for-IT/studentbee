@@ -2,7 +2,7 @@ import Link from 'next/link'
 import config from '@config'
 import { getCourses } from '@utils/api'
 
-export default async function SelectCourseList() {
+export default async function SelectCourseList({ isEdit }: { isEdit?: boolean }) {
     const courses = await getCourses()
 
     if ('error' in courses) {
@@ -28,7 +28,7 @@ export default async function SelectCourseList() {
                 <div className='flex flex-col w-full h-full rounded-md p-2 overflow-auto noscroll gap-2'>
                     <div className='grid gap-2'>
                         {courses.map((course) => <Link
-                            href={`/course/${course.courseCode}`}
+                            href={`${isEdit ? '/edit' : '/course'}/${course.courseCode}`}
                             key={course.id}
                             className='text-2xs md:text-base bg-login-300/10 hover:bg-login-300/20 w-full rounded-md p-1 px-2 md:p-2 h-7 md:h-auto flex justify-between items-center'
                         >
@@ -47,7 +47,7 @@ export default async function SelectCourseList() {
                         bg-login-100/10 hover:bg-login-100/20 w-fit text-2xs 
                         px-6 py-0.5 grid place-items-center rounded-lg shadow-lg
                         md:text-base backdrop-blur-md outline outline-login-100/30
-                    `}
+                `}
                 >
                     Add course
                 </Link>
