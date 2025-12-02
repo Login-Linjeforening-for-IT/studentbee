@@ -101,20 +101,17 @@ type GradeDistribution = {
 
 type Grades = (Status | GradeDistribution)[]
 
-
-
-// Before rewrite
-type Editing = {
-    cards: Card[]
-    notes: string
-}
-
 type Course = {
     id: string
+    courseCode: string
     name: string
     cards: Card[]
     notes: string
     learningBased: boolean
+    createdAt: string
+    createdBy: string
+    updatedAt: string
+    updatedBy: string
 }
 
 type CourseAsList = {

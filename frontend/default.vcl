@@ -6,6 +6,14 @@ backend default {
 }
 
 sub vcl_recv {
+    if (req.method == "POST" || req.method == "PUT" || req.method == "HEAD" || req.method == "OPTIONS" || req.method == "DELETE") {
+        return (pass);
+    }
+
+    if (req.url ~ "^/(edit)(/.*)?$") {
+        return (pass);
+    }
+
     return (hash);
 }
 

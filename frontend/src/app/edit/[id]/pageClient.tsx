@@ -10,11 +10,10 @@ import { updateCourse } from '@utils/fetchClient'
 import { X } from 'lucide-react'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
-export default function PageClient({ code, id }: { code: string, id: string }) {
-    const [courseCode, setCourseCode] = useState(code)
-    const [editing, setEditing] = useState<Editing>({ cards: [], notes: '' })
+export default function PageClient({ course, id }: { course: Course, id: string }) {
+    const [courseCode, setCourseCode] = useState(course.courseCode)
+    const [editing, setEditing] = useState<Course>({ ...course })
     const [editingIndex, setEditingIndex] = useState(-1)
-    const [cards, setCards] = useState<Card[]>([])
     const [error, setError] = useState<string>('')
     const { condition: message, setCondition: setMessage } = useClearStateAfter()
     const [showText, setShowText] = useState(true)
@@ -42,17 +41,10 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
             const token = getCookie('access_token') || ''
             const newCourse = await getCourse('client', id, token)
 
-            if (newCourse && !('error' in newCourse)) {
+            if (typeof newCourse !== 'string') {
                 setCourseCode(newCourse.courseCode)
-                if (!editing.cards.length) {
-                    if (!cards.length) {
-                        setCards(newCourse.cards)
-                    }
-
-                    setEditing({
-                        notes: newCourse.notes,
-                        cards: newCourse.cards,
-                    } as Editing)
+                if (!editing.cards.length && newCourse.cards.length) {
+                    setEditing({ ...newCourse })
                 }
             }
         })()
@@ -70,7 +62,8 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
     }, [editing.cards])
 
     async function handleSubmit() {
-        const response = await updateCourse({ id, editing })
+        const response = await updateCourse({ id, course: editing })
+
         try {
             let data = response
             if (!Object.keys(data).length) {
@@ -84,8 +77,7 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
             } else {
                 return setError(response)
             }
-        } catch (error) {
-            console.log('error', error)
+        } catch {
             return setError(response)
         }
     }
@@ -100,27 +92,28 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
         }
 
         if (editingIndex !== -1) {
-            const tempCards = [...cards]
+            const tempCards = [...editing.cards]
             tempCards[editingIndex] = card
             tempCards[editingIndex].alternatives = card.alternatives.filter((alternative) => alternative.length)
-            setCards(tempCards)
+            setEditing((prev) => ({ ...prev, cards: tempCards }))
             setCard(emptyCard)
             setEditingIndex(-1)
             return
         }
 
         setAlternativeIndex(0)
-        setCards([...cards, {
-            ...card,
-            alternatives: card.alternatives.filter((alternative) => alternative.length)
-        }])
+        setEditing(prev => ({
+            ...prev, cards: [...prev.cards, {
+                ...card,
+                alternatives: card.alternatives.filter((alternative) => alternative.length)
+            }]
+        }))
         setCard({ ...emptyCard, source: card.source })
-        setEditing({ ...editing, cards })
     }
 
     function handleClick(index: number) {
-        setCard(cards[index])
-        setAlternativeIndex(cards[index].alternatives.length - 1)
+        setCard(editing.cards[index])
+        setAlternativeIndex(editing.cards[index].alternatives.length - 1)
         setEditingIndex(index)
     }
 
@@ -140,9 +133,9 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
     }
 
     return (
-        <div className='w-full h-full rounded-lg gap-2 flex flex-col mt-6'>
-            <div className='w-full h-full grid grid-cols-4 gap-2'>
-                <div className='w-full h-[calc(100%-1.5rem)] bg-login-900 col-span-3 rounded-lg flex flex-col'>
+        <div className='w-full h-[calc(100%-1rem)] rounded-lg gap-2 flex flex-col mt-4 overflow-hidden'>
+            <div className='w-full h-[calc(100%-1rem)] grid grid-cols-4 gap-2'>
+                <div className='w-full h-full bg-login-900 col-span-3 rounded-lg flex flex-col pb-2'>
                     <Header
                         code={courseCode}
                         clearCard={clearCard}
@@ -170,8 +163,8 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
                 </div>
                 <Cards
                     card={card}
-                    cards={cards}
-                    setCards={setCards}
+                    cards={editing.cards}
+                    setEditing={setEditing}
                     handleClick={handleClick}
                 />
             </div>
@@ -187,7 +180,7 @@ export default function PageClient({ code, id }: { code: string, id: string }) {
                         rounded-lg h-30 relative'
                     `}>
                     <div
-                        onClick={(e) => {e.preventDefault(); setError('')}}
+                        onClick={(e) => { e.preventDefault(); setError('') }}
                         className={`
                             absolute top-2 right-2 rounded-lg
                             hover:bg-login-300/10 w-8 h-8 grid

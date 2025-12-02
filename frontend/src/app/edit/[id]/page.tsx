@@ -9,5 +9,17 @@ export default async function Page(props: { params: Promise<{ id: string }> }) {
     const token = Cookies.get('access_token')?.value || ''
     const course = await getCourse('server', courseId, token)
 
-    return <PageClient code={course.courseCode} id={courseId} />
+    if (typeof course === 'string') {
+        return (
+            <div className={`
+                bg-login-100/10 backdrop-blur-md border border-login-100/20
+                rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center
+                flex flex-col items-center gap-4'
+            `}>
+                <h1>Course not found.</h1>
+            </div>
+        )
+    }
+
+    return <PageClient course={course} id={courseId} />
 }

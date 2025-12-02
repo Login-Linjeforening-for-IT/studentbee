@@ -20,16 +20,32 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
     try {
         const result = await run(`
             SELECT c.*,
-                   COALESCE(json_agg(
-                       json_build_object('username', cv.user_id, 'vote', cv.is_upvote)
-                   ) FILTER (WHERE cv.id IS NOT NULL), '[]'::json) as votes,
-                   COALESCE(count(CASE WHEN cv.is_upvote THEN 1 END) - count(CASE WHEN cv.is_upvote = false THEN 1 END), 0)::INT as rating,
-                   COALESCE(json_agg(cards.*) FILTER (WHERE cards.id IS NOT NULL), '[]'::json) as cards
+                COALESCE(json_agg(
+                    DISTINCT jsonb_build_object(
+                        'id', cards.id,
+                        'courseId', cards.course_id,
+                        'question', cards.question,
+                        'alternatives', cards.alternatives,
+                        'answers', cards.answers,
+                        'theme', cards.theme,
+                        'source', cards.source,
+                        'help', cards.help,
+                        'createdBy', cards.created_by,
+                        'createdAt', cards.created_at,
+                        'updatedBy', cards.updated_by,
+                        'updatedAt', cards.updated_at
+                    )
+                ) FILTER (WHERE cards.id IS NOT NULL), '[]') as cards,
+                COALESCE(json_agg(
+                    DISTINCT jsonb_build_object('username', cv.user_id, 'vote', cv.is_upvote)
+                ) FILTER (WHERE cv.id IS NOT NULL), '[]') as votes,
+                COALESCE(count(CASE WHEN cv.is_upvote THEN 1 END) 
+                            - count(CASE WHEN cv.is_upvote = false THEN 1 END), 0)::INT as rating
             FROM courses c
             LEFT JOIN cards ON c.id = cards.course_id
             LEFT JOIN card_votes cv ON cards.id = cv.card_id
             WHERE ${id ? 'c.id' : 'c.course_code'} = $1
-            GROUP BY c.id, cards.id
+            GROUP BY c.id
         `, [id || code?.toUpperCase()])
 
         if (!result.rowCount) {

@@ -1,6 +1,6 @@
 import config from '@config'
 
-export async function getCourse(location: 'server' | 'client', id: string, token: string) {
+export async function getCourse(location: 'server' | 'client', id: string, token: string): Promise<Course | string> {
     if (!token) {
         return 'You need to log in.'
     }
@@ -10,7 +10,8 @@ export async function getCourse(location: 'server' | 'client', id: string, token
         const response = await fetch(`${url}/course/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
-            }
+            },
+            cache: 'no-store'
         })
 
         if (!response.ok) {

@@ -4,8 +4,8 @@ import { ChangeEvent, Dispatch, SetStateAction, useRef } from 'react'
 type HeaderProps = {
     code: string
     clearCard: () => void
-    editing: Editing
-    setEditing: Dispatch<SetStateAction<Editing>>
+    editing: Course
+    setEditing: Dispatch<SetStateAction<Course>>
     hideText: () => void
 }
 

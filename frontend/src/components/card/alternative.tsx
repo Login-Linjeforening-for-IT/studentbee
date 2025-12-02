@@ -54,7 +54,7 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
                 </div>
             </div>
             {alternativeIndex < 9 && <button
-                className='w-full h-8 bg-login rounded-lg text-xl cursor-pointer'
+                className='w-full h-8 bg-login rounded-lg text-lg cursor-pointer'
                 onClick={handleAddAlternative}
             >Add alternative</button>}
         </div>

@@ -1,5 +1,3 @@
-'use server'
-
 import config from '@config'
 import { getCookie } from 'uibee/utils'
 
@@ -22,7 +20,7 @@ type UpdateFileProps = {
 
 type UpdateCourseProps = {
     id: string
-    editing: Editing
+    course: Course
 }
 
 // Adds a question to the course with the given user id
@@ -218,7 +216,7 @@ export async function postCourse({ id, name }: { id: string, name: string }) {
 }
 
 // Updates the passed course
-export async function updateCourse({ id, editing }: UpdateCourseProps) {
+export async function updateCourse({ id, course }: UpdateCourseProps) {
     const token = getCookie('access_token')
 
     try {
@@ -232,7 +230,7 @@ export async function updateCourse({ id, editing }: UpdateCourseProps) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ ...editing })
+            body: JSON.stringify({ ...course })
         })
 
         if (!response.ok) {

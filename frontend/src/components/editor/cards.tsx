@@ -4,16 +4,16 @@ import { Dispatch, SetStateAction } from 'react'
 type CardsProps = {
     card: Card,
     cards: Card[],
-    setCards: Dispatch<SetStateAction<Card[]>>
+    setEditing: Dispatch<SetStateAction<Course>>
     handleClick: (index: number) => void
 }
 
-export default function Cards({ card: editCard, cards, setCards, handleClick }: CardsProps) {
+export default function Cards({ card: editCard, cards, setEditing, handleClick }: CardsProps) {
 
     function handleRemove(index: number) {
-        const tempCards = [...cards]
-        tempCards.splice(index, 1)
-        setCards(tempCards)
+        const updatedCards = [...cards]
+        updatedCards.splice(index, 1)
+        setEditing(prev => ({ ...prev, cards: updatedCards }))
     }
 
     return (
