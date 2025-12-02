@@ -22,7 +22,7 @@ export async function updateCourse({ id, editing }: UpdateCourseProps) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ editing })
+            body: JSON.stringify({ ...editing })
         })
 
         if (!response.ok) {

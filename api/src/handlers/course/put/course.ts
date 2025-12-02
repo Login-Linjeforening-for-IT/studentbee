@@ -4,7 +4,7 @@ import { runInTransaction } from '#db'
 export default async function putCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { id } = req.params as { id: string }
-        const { cards, notes } = req.body as { cards: any[]; notes: string }
+        const { cards, notes } = req.body as { cards: any[]; notes: string } ?? {}
 
         console.log('received body', req.body)
         if (!id) {
