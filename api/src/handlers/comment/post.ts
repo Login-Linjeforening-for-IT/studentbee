@@ -6,9 +6,9 @@ import run from '#db'
  */
 type ReplyProps = {
     username: string
-    courseID: string
-    cardID: number
-    commentID: number
+    courseId: string
+    cardId: number
+    commentId: number
     content: string
     parent?: number
 }
@@ -21,11 +21,11 @@ type ReplyProps = {
  */
 export default async function postComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, courseID, cardID, content, parent } = req.body as ReplyProps ?? {}
+        const { username, courseId, cardId, content, parent } = req.body as ReplyProps ?? {}
 
-        if (!username || !courseID || typeof cardID !== 'number' || !content) {
+        if (!username || !courseId || typeof cardId !== 'number' || !content) {
             return res.status(400).send({
-                error: 'Missing required field (username, courseID, cardID, content)'
+                error: 'Missing required field (username, courseId, card_id, content)'
             })
         }
 
@@ -38,7 +38,7 @@ export default async function postComment(req: FastifyRequest, res: FastifyReply
                 content
             ) VALUES ($1, $2, $3, $4, $5)
             RETURNING id;
-        `, [courseID, cardID, parent ?? null, username, content])
+        `, [courseId, cardId, parent ?? null, username, content])
 
         return res.status(201).send({ id: result.rows[0].id })
     } catch (error) {

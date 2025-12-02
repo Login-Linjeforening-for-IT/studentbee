@@ -11,9 +11,9 @@ export async function coursesHandler(_: FastifyRequest, res: FastifyReply) {
         const result = await run(`
             SELECT 
                 c.id, 
-                c.course_code, 
+                c.course_code AS "courseCode", 
                 c.name, 
-                COUNT(cards.id) AS card_count
+                COUNT(cards.id) AS "cardCount"
             FROM courses c
             LEFT JOIN cards ON cards.course_id = c.id
             GROUP BY c.id

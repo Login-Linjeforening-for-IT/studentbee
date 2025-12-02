@@ -23,20 +23,29 @@ export default async function SelectCourseList() {
 
     return (
         <div className='relative h-full rounded-lg overflow-auto noscroll flex justify-center items-center'>
-            <div className='flex flex-col items-center gap-2 py-3 px-4 bg-login-900 rounded-lg h-[calc(100vh-12rem)] xs:h-120 w-[calc(100vw-1rem)] xs:w-96'>
+            <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg py-3 px-4 w-full max-w-md text-center flex flex-col items-center gap-2 h-[calc(100vh-20rem)] xs:h-120 xs:w-96'>
                 <h1 className='text-center font-semibold py-2'>Select course</h1>
                 <div className='flex flex-col w-full h-full rounded-lg p-2 overflow-auto noscroll gap-2'>
                     <div className='grid gap-2'>
                         {courses.map((course) => <Link
-                            href={`/course/${course.course_code}`}
+                            href={`/course/${course.courseCode}`}
                             key={course.id}
                             className='text-2xs md:text-base bg-login-700 w-full rounded-md p-1 pl-2 md:p-2 h-7 md:h-auto'
                         >
-                            {course.course_code} - {course.name} ({course.card_count} cards)
+                            {course.courseCode} - {course.name} ({course.cardCount} cards)
                         </Link>)}
                     </div>
                 </div>
-                <Link href='/add/course' className='bg-login-900 hover:bg-login-800 w-fit px-4 py-2 grid place-items-center rounded-lg text-2xs md:text-lg'>Add course</Link>
+                <Link
+                    href='/add/course'
+                    className={`
+                        bg-login-100/10 hover:bg-login-100/20 w-fit text-2xs 
+                        px-6 py-0.5 grid place-items-center rounded-lg shadow-lg
+                        md:text-base backdrop-blur-md outline outline-login-100/30
+                    `}
+                >
+                    Add course
+                </Link>
             </div>
             {typeof config.version !== 'undefined' ? (
                 <Link

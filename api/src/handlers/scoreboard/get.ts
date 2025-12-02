@@ -1,10 +1,10 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import db from '#db'
+import run from '#db'
 
 export default async function getScoreboard(_: FastifyRequest, res: FastifyReply) {
     try {
-        const scoreboard = await db(
-            'SELECT name, score, total_time FROM users ORDER BY score DESC LIMIT 10'
+        const scoreboard = await run(
+            'SELECT name, score, time FROM users ORDER BY score DESC LIMIT 10'
         )
 
         return res.status(200).send(scoreboard.rows)

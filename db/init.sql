@@ -3,7 +3,7 @@ CREATE TABLE users (
     email TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     score INTEGER NOT NULL DEFAULT 0,
-    total_time INTEGER NOT NULL DEFAULT 0,
+    time INTEGER NOT NULL DEFAULT 0,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
@@ -25,7 +25,8 @@ CREATE TABLE cards (
     course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     question TEXT NOT NULL,
     alternatives TEXT[] NOT NULL,
-    correct_answers INTEGER[] NOT NULL,
+    answers INTEGER[] NOT NULL,
+    theme TEXT,
     source TEXT,
     help TEXT,
     created_by TEXT REFERENCES users(user_id) ON DELETE SET NULL,
@@ -44,13 +45,12 @@ CREATE TABLE card_votes (
 
 CREATE TABLE comments (
     id SERIAL PRIMARY KEY,
-    course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
     card_id INTEGER NOT NULL REFERENCES cards(id) ON DELETE CASCADE,
     parent_id INTEGER REFERENCES comments(id),
     user_id TEXT REFERENCES users(user_id) ON DELETE SET NULL,
     content TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMP NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE comment_votes (

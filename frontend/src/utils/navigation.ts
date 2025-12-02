@@ -62,7 +62,7 @@ export default function handleCardsNavigation({
         checkAnswer([originalIndex], attempted, setAttempted)
 
         // Updates the selected state with the original index
-        setSelected((prev) => card.correct.length > 1 ? [...prev, originalIndex] : [originalIndex])
+        setSelected((prev) => card.answers.length > 1 ? [...prev, originalIndex] : [originalIndex])
     }
 
     switch (direction) {
@@ -113,7 +113,7 @@ export default function handleCardsNavigation({
                 const newSelected = [...prev]
                 const newIndex = (prev[0] === card.alternatives.length - 1) ? 0 : prev[0] + 1
 
-                if (card.correct.length <= 1) {
+                if (card.answers.length <= 1) {
                     return [newIndex]
                 }
 
@@ -126,7 +126,7 @@ export default function handleCardsNavigation({
                 const newSelected = [...prev]
                 const newIndex = (prev[0] === 0) ? card.alternatives.length - 1 : prev[0] - 1
 
-                if (card.correct.length <= 1) {
+                if (card.answers.length <= 1) {
                     return [newIndex]
                 }
 

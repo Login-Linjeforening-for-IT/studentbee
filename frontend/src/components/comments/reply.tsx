@@ -7,36 +7,37 @@ import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 import { getCookie } from 'uibee/utils'
 
 type ReplyProps = {
-    courseID: string
-    cardID: number
-    comment: CardCommentProps
-    comments: CardCommentProps[]
-    setComments: Dispatch<SetStateAction<CardCommentProps[]>>
+    courseId: string
+    cardId: number
+    comment: CardComment
+    comments: CardComment[]
+    setComments: Dispatch<SetStateAction<CardComment[]>>
 }
 
 type RepliesProps = {
-    replies: CardCommentProps[]
-    vote: ({ commentID, vote }: ClientVote) => void
-    comment: CardCommentProps
-    comments: CardCommentProps[]
-    setComments: Dispatch<SetStateAction<CardCommentProps[]>>
+    replies: CardComment[]
+    vote: ({ commentId, vote }: ClientVote) => void
+    comment: CardComment
+    comments: CardComment[]
+    setComments: Dispatch<SetStateAction<CardComment[]>>
 }
 
 type ReplyComponentProps = {
-    reply: CardCommentProps
-    vote: ({ commentID, vote }: ClientVote) => void
-    comment: CardCommentProps
-    comments: CardCommentProps[]
-    setComments: Dispatch<SetStateAction<CardCommentProps[]>>
+    reply: CardComment
+    vote: ({ commentId, vote }: ClientVote) => void
+    comment: CardComment
+    comments: CardComment[]
+    setComments: Dispatch<SetStateAction<CardComment[]>>
 }
 
 export default function Reply({
-    courseID,
-    cardID,
+    courseId,
+    cardId,
     comment,
     comments,
     setComments
 }: ReplyProps) {
+    const userId = Number(getCookie('user_id')) || 0
     const [reply, setReply] = useState('')
 
     function send() {
@@ -45,8 +46,8 @@ export default function Reply({
         }
 
         postComment({
-            courseID,
-            cardID,
+            courseId,
+            cardId,
             content: reply,
             parent: comment.id
         })
@@ -57,22 +58,28 @@ export default function Reply({
             ...comment,
             replies: comment.replies ? [...comment.replies, {
                 id: comment.replies.length,
-                courseID,
-                cardID,
+                cardId,
                 username: 'You',
                 content: reply,
-                time: new Date().toISOString(),
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
                 rating: 0,
-                votes: []
+                votes: [] as Vote[],
+                replies: [] as CardComment[],
+                parentId: comment.id,
+                userId
             }] : [{
                 id: 0,
-                courseID,
-                cardID,
+                cardId,
+                userId,
                 username: 'You',
                 content: reply,
-                time: new Date().toISOString(),
-                rating: 0,
-                votes: []
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                parentId: comment.id,
+                replies: [],
+                votes: [],
+                rating: 0
             }]
         }
         setComments(temp)
@@ -86,7 +93,7 @@ export default function Reply({
             <Editor
                 className='w-full bg-login-700 rounded-lg min-h-[7.5vh] max-h-[60vh] col-span-11 overflow-auto noscroll mt-2 p-2'
                 placeholder='Write a comment...'
-                courseID=''
+                courseId=''
                 value={reply.split('\n')}
                 customSaveLogic={true}
                 hideSaveButton={true}
@@ -136,13 +143,13 @@ function ReplyComponent({
     setComments
 }: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
-    const username = getCookie('user_nickname') as string | undefined || ''
-    const reply_author = reply.username.split('@')[0]
-    const author = reply_author === username ? 'You' : reply_author
-    const reply_user = reply.username.split('@')[0]
+    const username = getCookie('user_name') as string | undefined || ''
+    const replyAuthor = reply.username.split('@')[0]
+    const author = replyAuthor === username ? 'You' : replyAuthor
+    const replyUser = reply.username.split('@')[0]
 
     function handleDelete() {
-        deleteComment({ commentID: reply.id, courseID: comment.courseID })
+        deleteComment(reply.id)
 
         const temp = [...comments]
         const index = temp.indexOf(comment)
@@ -153,14 +160,14 @@ function ReplyComponent({
         setComments(temp)
     }
 
-    function handleVote({ current }: { commentID: number, current: boolean }) {
+    function handleVote({ current }: { commentId: number, current: boolean }) {
         if (clientVote === 1 && current || clientVote === -1 && !current) {
             setClientVote(0)
         } else {
             setClientVote(current ? 1 : -1)
         }
 
-        vote({ commentID: reply.id, vote: current, isReply: true })
+        vote({ commentId: reply.id, vote: current, isReply: true })
     }
 
     return (
@@ -168,13 +175,13 @@ function ReplyComponent({
             <div className='bg-login-800 rounded-lg p-2 mb-1'>
                 <div className='w-full grid grid-cols-2 text-login-300'>
                     <Link
-                        href={`/profile/${reply_user}`}
+                        href={`/profile/${replyUser}`}
                         className='text-lg text-login-300 underline'
                     >
                         {author}
                     </Link>
                     <h1 className='text-right pr-2'>
-                        {new Date(reply.time).toLocaleString()}
+                        {new Date(reply.createdAt).toLocaleString()}
                     </h1>
                 </div>
                 <Markdown
@@ -187,17 +194,17 @@ function ReplyComponent({
                 <h1 className='text-login-300'>{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
                 <button
                     className='w-[1.3vw]'
-                    onClick={() => handleVote({ commentID: reply.id, current: true })}
+                    onClick={() => handleVote({ commentId: reply.id, current: true })}
                 >
                     <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', reply.votes, username, clientVote)}`} />
                 </button>
                 <button
                     className='w-[1.3vw]'
-                    onClick={() => handleVote({ commentID: reply.id, current: false })}
+                    onClick={() => handleVote({ commentId: reply.id, current: false })}
                 >
                     <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', reply.votes, username, clientVote)}`} />
                 </button>
-                {username === reply_user && <button
+                {username === replyUser && <button
                     className='text-login-300 underline w-[1.3vw]'
                     onClick={handleDelete}
                 >

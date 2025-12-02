@@ -1,5 +1,5 @@
 import type { FastifyInstance, FastifyPluginOptions } from 'fastify'
-import authMiddleware from '#utils/authMiddleware.ts'
+import preHandler from '#utils/authMiddleware.ts'
 import getIndex from './handlers/index.ts'
 import ping from './handlers/health/get.ts'
 import version from './handlers/version/get.ts'
@@ -46,39 +46,39 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/version', version)
 
     // user
-    fastify.get('/user', { preHandler: authMiddleware }, getUser)
-    fastify.post('/user', { preHandler: authMiddleware }, postUser)
-    fastify.delete('/user', { preHandler: authMiddleware }, deleteUser)
+    fastify.get('/user', { preHandler }, getUser)
+    fastify.post('/user', { preHandler }, postUser)
+    fastify.delete('/user', { preHandler }, deleteUser)
 
     // score
-    fastify.get('/score/:id', { preHandler: authMiddleware }, getUserScore)
-    fastify.get('/scoreboard', { preHandler: authMiddleware }, getScoreboard)
+    fastify.get('/score/:id', { preHandler }, getUserScore)
+    fastify.get('/scoreboard', { preHandler }, getScoreboard)
 
     // course
-    fastify.get('/courses', { preHandler: authMiddleware }, coursesHandler)
-    fastify.get('/course/:id', { preHandler: authMiddleware }, courseHandler)
-    fastify.post('/course', { preHandler: authMiddleware }, postCourse)
-    fastify.post('/card', { preHandler: authMiddleware }, postCard)
-    fastify.put('/course/:id', { preHandler: authMiddleware }, putCourse)
-    fastify.put('/course/:id/notes', { preHandler: authMiddleware }, putCourseNotes)
-    fastify.put('/learningBased', { preHandler: authMiddleware }, putCourseLearningBased)
+    fastify.get('/courses', { preHandler }, coursesHandler)
+    fastify.get('/course/:id', { preHandler }, courseHandler)
+    fastify.post('/course', { preHandler }, postCourse)
+    fastify.post('/card', { preHandler }, postCard)
+    fastify.put('/course/:id', { preHandler }, putCourse)
+    fastify.put('/course/:id/notes', { preHandler }, putCourseNotes)
+    fastify.put('/learningBased', { preHandler }, putCourseLearningBased)
     
     // files
-    fastify.get('/files/:id', { preHandler: authMiddleware }, filesHandler)
-    fastify.get('/file/:id', { preHandler: authMiddleware }, fileHandler)
-    fastify.put('/file', { preHandler: authMiddleware }, putFile)
-    fastify.post('/file', { preHandler: authMiddleware }, postFile)
-    fastify.delete('/file/:id', { preHandler: authMiddleware }, deleteFile)
+    fastify.get('/files/:id', { preHandler }, filesHandler)
+    fastify.get('/file/:id', { preHandler }, fileHandler)
+    fastify.put('/file', { preHandler }, putFile)
+    fastify.post('/file', { preHandler }, postFile)
+    fastify.delete('/file/:id', { preHandler }, deleteFile)
     
     // comments
-    fastify.get('/comments/:courseID', { preHandler: authMiddleware }, commentsHandler)
-    fastify.post('/comment', { preHandler: authMiddleware }, postComment)
-    fastify.delete('/comment', { preHandler: authMiddleware }, deleteComment)
+    fastify.get('/comments/:cardId', { preHandler }, commentsHandler)
+    fastify.post('/comment', { preHandler }, postComment)
+    fastify.delete('/comment', { preHandler }, deleteComment)
     
     // grades
-    fastify.get('/grades/:course', { preHandler: authMiddleware }, gradeHandler)
+    fastify.get('/grades/:course', { preHandler }, gradeHandler)
 
     // votes
-    fastify.post('/vote/comment', { preHandler: authMiddleware }, postCommentVote)
-    fastify.post('/vote/card', { preHandler: authMiddleware }, postCardVote)
+    fastify.post('/vote/comment', { preHandler }, postCommentVote)
+    fastify.post('/vote/card', { preHandler }, postCardVote)
 }

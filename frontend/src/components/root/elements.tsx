@@ -7,7 +7,7 @@ type ElementsProps = {
 }
 
 type QuestionsProps = {
-    cards: GetCardsProps[]
+    cards: Card[]
     current?: number
     id?: string
 }

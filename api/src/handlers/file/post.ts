@@ -5,7 +5,7 @@ import run from '#db'
  * Defines the PostFileProps type, used for type specification when posting files
  */
 type PostFileProps = {
-    courseID?: string
+    courseId?: string
     name?: string
     content?: string
     parent?: string
@@ -18,16 +18,16 @@ type PostFileProps = {
  */
 export default async function postFile(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { courseID, name, content, parent } = req.body as PostFileProps ?? {}
-        if (!courseID || !name) {
-            return res.status(400).send({ error: 'Missing required field (courseID, name)' })
+        const { courseId, name, content, parent } = req.body as PostFileProps ?? {}
+        if (!courseId || !name) {
+            return res.status(400).send({ error: 'Missing required field (courseId, name)' })
         }
 
         const result = await run(`
             INSERT INTO files (course_id, name, content, parent)
             VALUES ($1, $2, $3, $4)
             RETURNING id, name;
-        `, [courseID, name, content || '', parent || null])
+        `, [courseId, name, content || '', parent || null])
 
         return res.status(201).send({ id: result.rows[0].id, name: result.rows[0].name })
     } catch (error) {

@@ -5,9 +5,9 @@ import run from '#db'
  * Used for type specification when posting comment votes
  */
 type PostCommentVoteProps = {
-    courseID: string
+    courseId: string
     username: string
-    commentID: number
+    commentId: number
     vote: boolean
 }
 
@@ -20,12 +20,12 @@ type PostCommentVoteProps = {
 
 export default async function postCommentVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, commentID, vote } = req.body as PostCommentVoteProps ?? {}
-        if (!username || typeof commentID !== 'number' || vote == null) {
-            return res.status(400).send({ error: 'Missing required field (username, commentID, vote)' })
+        const { username, commentId, vote } = req.body as PostCommentVoteProps ?? {}
+        if (!username || typeof commentId !== 'number' || vote == null) {
+            return res.status(400).send({ error: 'Missing required field (username, commentId, vote)' })
         }
 
-        const comment = await run('SELECT id FROM comments WHERE id = $1', [commentID])
+        const comment = await run('SELECT id FROM comments WHERE id = $1', [commentId])
         if (comment.rowCount === 0) {
             return res.status(404).send({ error: 'Comment not found' })
         }
@@ -35,17 +35,17 @@ export default async function postCommentVote(req: FastifyRequest, res: FastifyR
             VALUES ($1, $2, $3, NOW())
             ON CONFLICT (comment_id, user_id)
             DO UPDATE SET is_upvote = $3, voted_at = NOW();
-        `, [commentID, username, vote])
+        `, [commentId, username, vote])
 
         const ratingResult = await run(`
             SELECT
                 SUM(CASE WHEN is_upvote THEN 1 ELSE -1 END) AS rating
             FROM comment_votes
             WHERE comment_id = $1
-        `, [commentID])
+        `, [commentId])
 
         const rating = ratingResult.rows[0].rating ?? 0
-        return res.status(200).send({ commentID, rating })
+        return res.status(200).send({ commentId, rating })
     } catch (error) {
         return res.status(500).send({ error: (error as Error).message })
     }

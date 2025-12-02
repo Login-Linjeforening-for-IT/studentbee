@@ -1,11 +1,11 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import db from '#db'
+import run from '#db'
 
 export default async function postUser(req: FastifyRequest, res: FastifyReply) {
     try {
         const { id, name, email } = req.user!
 
-        await db(
+        await run(
             'INSERT INTO users (user_id, email, name) VALUES ($1, $2, $3) ON CONFLICT (user_id) DO NOTHING',
             [id, email, name]
         )

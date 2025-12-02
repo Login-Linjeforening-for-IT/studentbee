@@ -5,9 +5,9 @@ import run from '#db'
  *  Defines the DeleteCommentProps type, used for type specification when deleting comments
  */
 type DeleteCommentProps = {
-    courseID: string
+    courseId: string
     username: string
-    commentID: number
+    commentId: number
 }
 
 /**
@@ -18,16 +18,16 @@ type DeleteCommentProps = {
  */
 export default async function deleteComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, commentID } = req.body as DeleteCommentProps ?? {}
-        if (!username || typeof commentID !== 'number') {
-            return res.status(400).send({ error: 'Missing required field (username, commentID)' })
+        const { username, commentId } = req.body as DeleteCommentProps ?? {}
+        if (!username || typeof commentId !== 'number') {
+            return res.status(400).send({ error: 'Missing required field (username, commentId)' })
         }
 
         const result = await run(
             `DELETE FROM comments
              WHERE id = $1 AND user_id = $2
              RETURNING id;`,
-            [commentID, username]
+            [commentId, username]
         )
 
         if (result.rowCount === 0) {

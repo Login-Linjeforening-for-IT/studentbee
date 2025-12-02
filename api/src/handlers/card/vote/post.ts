@@ -5,9 +5,9 @@ import run from '#db'
  * Used for type specification when posting card votes
  */
 type PostCardVoteProps = {
-    courseID: string
+    courseId: string
     username: string
-    cardID: number
+    cardId: number
     vote: boolean
 }
 
@@ -20,12 +20,12 @@ type PostCardVoteProps = {
 
 export default async function postCardVote(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { username, cardID, vote } = req.body as PostCardVoteProps ?? {}
-        if (!username || typeof cardID !== 'number' || vote == null) {
-            return res.status(400).send({ error: 'Missing required field (username, cardID, vote)' })
+        const { username, cardId, vote } = req.body as PostCardVoteProps ?? {}
+        if (!username || typeof cardId !== 'number' || vote == null) {
+            return res.status(400).send({ error: 'Missing required field (username, cardId, vote)' })
         }
 
-        const card = await run('SELECT id FROM cards WHERE id = $1', [cardID])
+        const card = await run('SELECT id FROM cards WHERE id = $1', [cardId])
         if (card.rowCount === 0) {
             return res.status(404).send({ error: 'Card not found' })
         }
@@ -35,17 +35,17 @@ export default async function postCardVote(req: FastifyRequest, res: FastifyRepl
             VALUES ($1, $2, $3, NOW())
             ON CONFLICT (card_id, user_id)
             DO UPDATE SET is_upvote = $3, voted_at = NOW();
-        `, [cardID, username, vote])
+        `, [cardId, username, vote])
 
         const ratingResult = await run(`
             SELECT
                 SUM(CASE WHEN is_upvote THEN 1 ELSE -1 END) AS rating
             FROM card_votes
             WHERE card_id = $1
-        `, [cardID])
+        `, [cardId])
 
         const rating = ratingResult.rows[0].rating ?? 0
-        return res.status(200).send({ cardID, rating })
+        return res.status(200).send({ cardId, rating })
     } catch (error) {
         return res.status(500).send({ error: (error as Error).message })
     }

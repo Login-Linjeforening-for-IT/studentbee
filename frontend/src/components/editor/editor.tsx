@@ -8,7 +8,7 @@ import { sendText } from '@parent/src/utils/fetchClient'
 import './editor.css'
 
 type EditorProps = {
-    courseID: string
+    courseId: string
     value: string[]
     customSaveLogic?: true
     hideSaveButton?: true
@@ -62,7 +62,7 @@ marked.use({
 })
 
 export default function Editor({
-    courseID,
+    courseId,
     value,
     customSaveLogic,
     hideSaveButton,
@@ -98,7 +98,7 @@ export default function Editor({
         if (customSaveLogic && save) {
             save()
         } else {
-            sendText(courseID, markdown.split('\n'))
+            sendText(courseId, markdown.split('\n'))
         }
 
         setDisplayEditor(false)

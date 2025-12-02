@@ -9,8 +9,8 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
  */
 export default async function putCourseLearningBased(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { courseID, learningBased } = req.body as { courseID: string, learningBased: boolean }
-        if (!courseID) {
+        const { courseId, learningBased } = req.body as { courseId: string, learningBased: boolean }
+        if (!courseId) {
             return res.status(400).send({ error: 'Course ID is required.' })
         }
 
@@ -23,7 +23,7 @@ export default async function putCourseLearningBased(req: FastifyRequest, res: F
             SET learning_based = $1, updated_at = NOW()
             WHERE id = $2
             RETURNING id, learning_based;
-        `, [learningBased, courseID])
+        `, [learningBased, courseId])
 
         if (result.rowCount === 0) {
             return res.status(404).send({ error: 'Course not found' })

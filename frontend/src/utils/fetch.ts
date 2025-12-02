@@ -2,13 +2,12 @@ import config from '@config'
 import { getCookie } from 'uibee/utils'
 
 type UpdateCourseProps = {
-    courseID: string
-    accepted: Card[]
+    id: string
     editing: Editing
 }
 
 // Updates the passed course
-export async function updateCourse({courseID, accepted, editing}: UpdateCourseProps) {
+export async function updateCourse({ id, editing }: UpdateCourseProps) {
     const username = getCookie('user_nickname')
     const token = getCookie('access_token')
 
@@ -17,17 +16,13 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
             throw Error('User not logged in')
         }
 
-        const response = await fetch(`${config.url.BROWSER_API}/course/${courseID}`, {
+        const response = await fetch(`${config.url.BROWSER_API}/course/${id}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({
-                username: username,
-                accepted,
-                editing
-            })
+            body: JSON.stringify({ username, editing })
         })
 
         if (!response.ok) {
@@ -36,17 +31,17 @@ export async function updateCourse({courseID, accepted, editing}: UpdateCoursePr
 
         const result = await response.json()
         return result
-    } catch(error: unknown) {
+    } catch (error: unknown) {
         const err = error as Error
         return err.message
     }
 }
 
-export async function getFile(courseID: string, name: string) {
+export async function getFile(courseId: string, name: string) {
     const token = getCookie('access_token')
 
     try {
-        const response = await fetch(`${config.url.API}/file/${courseID}/${name}`, {
+        const response = await fetch(`${config.url.API}/file/${courseId}/${name}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -60,17 +55,17 @@ export async function getFile(courseID: string, name: string) {
         }
 
         return await response.json()
-    } catch(error: unknown) {
+    } catch (error: unknown) {
         const err = error as Error
         return err.message
     }
 }
 
-export async function getFiles(courseID: string) {
+export async function getFiles(courseId: string) {
     const token = getCookie('access_token')
 
     try {
-        const response = await fetch(`${config.url.API}/files/${courseID}`, {
+        const response = await fetch(`${config.url.API}/files/${courseId}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -84,7 +79,7 @@ export async function getFiles(courseID: string) {
         }
 
         return await response.json()
-    } catch(error: unknown) {
+    } catch (error: unknown) {
         const err = error as Error
         return err.message
     }
@@ -110,7 +105,7 @@ export async function getGrades(course: string): Promise<Grades | string> {
 
         const grades: Grades = await response.json()
         return grades
-    } catch(error: unknown) {
+    } catch (error: unknown) {
         const err = error as Error
         return err.message
     }

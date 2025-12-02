@@ -33,15 +33,15 @@ export default async function Profile() {
                 </div>
                 <div className='grid grid-cols-[auto_1fr] gap-4'>
                     <span className='text-xl font-semibold'>Total Time: </span>
-                    <span className='text-xl'>{user.total_time}</span>
+                    <span className='text-xl'>{user.time}</span>
                 </div>
                 <div className='grid grid-cols-[auto_1fr] gap-4'>
                     <span className='text-xl font-semibold'>Created At: </span>
-                    <span className='text-xl'>{new Date(user.created_at).toLocaleString('nb-NO')}</span>
+                    <span className='text-xl'>{new Date(user.createdAt).toLocaleString('nb-NO')}</span>
                 </div>
                 <div className='grid grid-cols-[auto_1fr] gap-4'>
                     <span className='text-xl font-semibold'>Updated At: </span>
-                    <span className='text-xl'>{new Date(user.updated_at).toLocaleString('nb-NO')}</span>
+                    <span className='text-xl'>{new Date(user.updatedAt).toLocaleString('nb-NO')}</span>
                 </div>
             </div>
             <form action={deleteUserAction} className='mt-8'>

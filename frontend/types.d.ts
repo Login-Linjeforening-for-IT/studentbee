@@ -1,73 +1,77 @@
 // User
 type UserProps = {
-    user_id: string
+    userId: string
     email: string
     name: string
     score: number
-    total_time: number
-    created_at: string
-    updated_at: string
+    time: number
+    createdAt: string
+    updatedAt: string
 }
 
 // Courses
 type CourseProps = {
     id: number
-    course_code: string
+    courseCode: string
     name: string
     notes: string
-    learning_based: boolean
-    created_by: string | null
-    created_at: string
-    updated_by: string | null
-    updated_at: string
-    cards: GetCardsProps[]
+    learningBased: boolean
+    createdBy: string | null
+    createdAt: string
+    updatedBy: string | null
+    updatedAt: string
+    cards: Card[]
 }
 
-type CoursesProps = {
+type Courses = {
     id: string
     name: string
-    course_code: string
-    card_count: number
+    courseCode: string
+    cardCount: number
 }
 
-type PostCourseProps = {
-    id: string
+type PostCourse = {
+    courseId: string
     name: string
 }
 
 // Cards
-type GetCardsProps = {
+type Card = {
     id: number
-    course_id: number
+    courseId: number
     question: string
     alternatives: string[]
-    correct_answers: number[]
+    answers: number[]
+    votes: Vote[]
     source: string | null
+    theme: string | null
+    rating: number
     help: string | null
-    created_by: string | null
-    created_at: string
-    updated_at: string
+    createdBy: string | null
+    createdAt: string
+    updatedAt: string
 }
 
 // Comments
-type CardCommentProps = {
+type CardComment = {
     id: number
-    card_id: number | null
-    parent_id: number | null
-    user_id: number
+    cardId: number | null
+    parentId: number | null
+    userId: number
+    rating: number
+    username: string
     content: string
-    created_at: string
-    updated_at: string
-    parent: number | null
-    replies: CardCommentProps[]
+    createdAt: string
+    updatedAt: string
+    replies: CardComment[]
+    votes: Vote[]
 }
-
 
 // Scoreboard
 type ScoreboardProps = {
     name: string
     score: number
-    total_time: number
+    time: number
 }
 
 // Exam Grades
@@ -117,17 +121,6 @@ type CourseAsList = {
     id: string
     cards: Card[]
     count: number
-}
-
-type Card = {
-    question: string
-    alternatives: string[]
-    source: string
-    correct: number[]
-    help?: string
-    theme?: string
-    rating: number
-    votes: Vote[]
 }
 
 type CardAsText = {
@@ -191,7 +184,12 @@ type FileListProps = {
 }
 
 type ClientVote = {
-    commentID: number
+    commentId: number
     vote: boolean
     isReply?: true
+}
+
+type CoursesListProps = {
+    courses: Courses[]
+    currentPath: string
 }

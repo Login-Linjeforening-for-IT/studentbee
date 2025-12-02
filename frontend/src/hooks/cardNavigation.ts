@@ -12,8 +12,8 @@ import {
 type UseCardNavigationProps = {
     current: number | undefined
     id: string
-    card: GetCardsProps
-    cards: GetCardsProps[]
+    card: Card
+    cards: Card[]
     setAnimate: Dispatch<SetStateAction<string>>
     setAnimateAnswer: Dispatch<SetStateAction<string>>
     setSelected: Dispatch<SetStateAction<number[]>>
@@ -48,7 +48,7 @@ export const useCardNavigation = ({
 
     const checkAnswer = useCallback(
         (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>, next?: boolean) => {
-            if (card.correct_answers.every(answer => input.includes(answer)) || card.correct_answers.every(answer => attempted.includes(answer)) || (remainGreen[0] === card.correct_answers[0] && card.correct_answers.length <= 1)) {
+            if (card.answers.every(answer => input.includes(answer)) || card.answers.every(answer => attempted.includes(answer)) || (remainGreen[0] === card.answers[0] && card.answers.length <= 1)) {
                 if (current != undefined) {
                     const nextCard = current + 2 <= cards.length ? current + 2 : 0
                     if (next && !wait) {
@@ -61,7 +61,7 @@ export const useCardNavigation = ({
                     }
                 }
             } else {
-                if (!(card.correct_answers.length > 1)) {
+                if (!(card.answers.length > 1)) {
                     setAttempted(prev => [...prev, ...input])
                 }
                 if (!attempted.every(answer => input.includes(answer))) {

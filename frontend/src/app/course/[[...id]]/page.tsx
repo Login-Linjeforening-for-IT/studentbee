@@ -2,7 +2,7 @@ import { getFile } from '@parent/src/utils/fetch'
 import CourseClient from '@parent/src/components/course/courseClient'
 import CourseList from '@parent/src/components/root/courses'
 import SelectCourseList from '@parent/src/components/list/list'
-import { getCourse, getComments } from '@utils/api'
+import { getCourse } from '@utils/api'
 
 export default async function Course(props: { params: Promise<{ id?: string[] }> }) {
     const params = await props.params
@@ -17,8 +17,6 @@ export default async function Course(props: { params: Promise<{ id?: string[] }>
     const current = Number(IDasString) - 1
     const course = await getCourse(id)
     const fileContent = await getFile(id, idArray[2] || 'root')
-    const comments = await getComments(id)
-
 
     return (
         <div className='grid grid-cols-10 gap-2 w-full h-full max-h-full'>
@@ -30,7 +28,6 @@ export default async function Course(props: { params: Promise<{ id?: string[] }>
                     course={'error' in course ? null : course}
                     id={id}
                     current={current}
-                    comments={'error' in comments ? [] : comments}
                     fileContent={fileContent.split('\n')}
                 />
             </div>

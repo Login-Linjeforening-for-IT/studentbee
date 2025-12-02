@@ -4,12 +4,12 @@ import voteColor from '../comments/voteColor'
 import { getCookie } from 'uibee/utils'
 
 type QuestionFooterProps = {
-    card: GetCardsProps
+    card: Card
     clientVote: 1 | 0 | -1
     handleVote: (vote: boolean) => void
     showComments: boolean
     setShowComments: Dispatch<SetStateAction<boolean>>
-    totalCommentsLength: number
+    comments: CardComment[]
     showAnswers: () => void
     remainGreen: number[]
 }
@@ -20,7 +20,7 @@ export default function QuestionFooter({
     handleVote,
     showComments,
     setShowComments,
-    totalCommentsLength,
+    comments,
     showAnswers,
     remainGreen
 }: QuestionFooterProps) {
@@ -32,7 +32,7 @@ export default function QuestionFooter({
         setUsername(username)
     }, [])
 
-    const showAnswer = card.correct_answers.every(answer => remainGreen.includes(answer))
+    const showAnswer = card.answers.every(answer => remainGreen.includes(answer))
     const revealText = showAnswer
         ? 'Hide'
         : 'Reveal'
@@ -60,14 +60,14 @@ export default function QuestionFooter({
                 onClick={() => setShowComments(!showComments)}
             >
                 <h1 className='hidden xs:hidden sm:block mr-2'>
-                    {totalCommentsLength
-                        ? `View comments (${totalCommentsLength})`
+                    {comments.length
+                        ? `View comments (${comments.length})`
                         : 'Add comment'
                     }
                 </h1>
                 <h1 className='hidden xs:block sm:hidden mr-2'>
-                    {totalCommentsLength
-                        ? `Chat (${totalCommentsLength})`
+                    {comments.length
+                        ? `Chat (${comments.length})`
                         : 'Comment'
                     }
                 </h1>

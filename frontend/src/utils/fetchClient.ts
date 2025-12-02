@@ -4,24 +4,24 @@ import config from '@config'
 import { getCookie } from 'uibee/utils'
 
 type MarkProps = {
-    courseID: string
+    courseId: string
     learningBased: boolean
 }
 
 type SendFileProps = {
-    courseID: string
+    courseId: string
     name: string
     parent?: string
 }
 
 type UpdateFileProps = {
-    courseID: string
+    courseId: string
     name: string
     content: string
 }
 
 // Adds a question to the course with the given user id
-export async function addCard(courseID: string, card: Card): Promise<void | string> {
+export async function addCard(courseId: string, card: Card): Promise<void | string> {
     const username = getCookie('user_nickname')
     const token = getCookie('access_token')
 
@@ -32,11 +32,7 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({
-                courseID,
-                username: username,
-                card
-            }),
+            body: JSON.stringify({ courseId, username, card }),
         })
 
         if (!response.ok) {
@@ -51,7 +47,7 @@ export async function addCard(courseID: string, card: Card): Promise<void | stri
 }
 
 // Adds a textinput to the course with the given user id
-export async function sendText(courseID: string, text: string[]): Promise<void | string> {
+export async function sendText(courseId: string, text: string[]): Promise<void | string> {
     const username = getCookie('user_nickname')
     const token = getCookie('access_token')
 
@@ -62,11 +58,7 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({
-                username: username,
-                courseID,
-                text
-            }),
+            body: JSON.stringify({ username, courseId, text }),
         })
 
         if (!response.ok) {
@@ -81,7 +73,7 @@ export async function sendText(courseID: string, text: string[]): Promise<void |
     return 'Please log in to add input'
 }
 
-export async function sendMark({ courseID, learningBased }: MarkProps) {
+export async function sendMark({ courseId, learningBased }: MarkProps) {
     const username = getCookie('user_nickname')
     const token = getCookie('access_token')
 
@@ -95,7 +87,7 @@ export async function sendMark({ courseID, learningBased }: MarkProps) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({ courseID, learningBased })
+        body: JSON.stringify({ courseId, learningBased })
     })
 
     if (!response.ok) {
@@ -106,7 +98,7 @@ export async function sendMark({ courseID, learningBased }: MarkProps) {
     return await response.json()
 }
 
-export async function sendFile({ courseID, name, parent }: SendFileProps) {
+export async function sendFile({ courseId, name, parent }: SendFileProps) {
     const username = getCookie('user_nickname')
     const token = getCookie('access_token')
     if (!username) {
@@ -121,7 +113,7 @@ export async function sendFile({ courseID, name, parent }: SendFileProps) {
         },
         body: JSON.stringify({
             username: username,
-            courseID,
+            courseId,
             name,
             parent
         })
@@ -135,7 +127,7 @@ export async function sendFile({ courseID, name, parent }: SendFileProps) {
     return await response.json()
 }
 
-export async function updateFile({ courseID, name, content }: UpdateFileProps) {
+export async function updateFile({ courseId, name, content }: UpdateFileProps) {
     const username = getCookie('user_nickname')
     const token = getCookie('access_token')
     if (!username) {
@@ -149,8 +141,8 @@ export async function updateFile({ courseID, name, content }: UpdateFileProps) {
             'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-            username: username,
-            courseID,
+            username,
+            courseId,
             name,
             content
         })
@@ -164,14 +156,14 @@ export async function updateFile({ courseID, name, content }: UpdateFileProps) {
     return await response.json()
 }
 
-export async function deleteFile({ courseID, name }: SendFileProps) {
+export async function deleteFile({ courseId, name }: SendFileProps) {
     const username = getCookie('user_nickname')
     const token = getCookie('access_token')
     if (!username) {
         throw Error('You must be logged in to delete a file')
     }
 
-    const response = await fetch(`${config.url.BROWSER_API}/file/${courseID}/${name}`, {
+    const response = await fetch(`${config.url.BROWSER_API}/file/${courseId}/${name}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',

@@ -2,9 +2,9 @@
 
 import { sendMark } from '@parent/src/utils/fetchClient'
 
-export default function MarkAsMultipleChoice({ courseID }: { courseID: string }) {
+export default function MarkAsMultipleChoice({ courseId }: { courseId: string }) {
     function markCourse() {
-        sendMark({ courseID, learningBased: false })
+        sendMark({ courseId, learningBased: false })
     }
 
     return (

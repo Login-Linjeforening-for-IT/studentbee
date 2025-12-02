@@ -5,7 +5,7 @@ const { DBH_API } = config
 
 export default async function gradeHandler(req: FastifyRequest, res: FastifyReply): Promise<object | string> {
     const { course } = req.params as { course: string }
-    const courseID = `${course.toUpperCase()}-1`
+    const courseId = `${course.toUpperCase()}-1`
     const queryBody = {
         'tabell_id': 308,
         'api_versjon': 1,
@@ -21,7 +21,7 @@ export default async function gradeHandler(req: FastifyRequest, res: FastifyRepl
                 'selection': {
                     'filter': 'item',
                     'values': [
-                        courseID
+                        courseId
                     ]
                 }
             },

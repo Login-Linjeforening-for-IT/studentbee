@@ -2,13 +2,13 @@ import config from '@config'
 import { getCookie } from 'uibee/utils'
 
 type CommentProps = {
-    courseID: string
-    cardID: number
+    courseId: string
+    cardId: number
     content: string
     parent?: number
 }
 
-export async function postComment({ courseID, cardID, content, parent }: CommentProps) {
+export async function postComment({ courseId, cardId, content, parent }: CommentProps) {
     try {
         const username = getCookie('user_nickname')
         const token = getCookie('access_token')
@@ -24,9 +24,9 @@ export async function postComment({ courseID, cardID, content, parent }: Comment
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                username: username,
-                courseID,
-                cardID,
+                username,
+                courseId,
+                cardId,
                 content,
                 parent
             })
@@ -44,26 +44,19 @@ export async function postComment({ courseID, cardID, content, parent }: Comment
     }
 }
 
-export async function deleteComment({ commentID, courseID }: { commentID: number, courseID: string }) {
+export async function deleteComment(id: number) {
     try {
-        const username = getCookie('user_nickname')
         const token = getCookie('access_token')
-
-        if (!username) {
+        if (!token) {
             throw Error('You must be logged in to delete a comment')
         }
 
-        const response = await fetch(`${config.url.API}/comment`, {
+        const response = await fetch(`${config.url.API}/comment/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                courseID: courseID,
-                username: username,
-                commentID
-            })
+            }
         })
 
         if (!response.ok) {
@@ -76,18 +69,4 @@ export async function deleteComment({ commentID, courseID }: { commentID: number
     } catch (error) {
         console.error(error)
     }
-}
-
-export function getTotalCommentsLength(comments: CardCommentProps[], cardID: number): number {
-    let length = comments.reduce((acc, comment) => {
-        acc += (comment.card_id === cardID || comment.card_id === null) ? 1 : 0; return acc
-    }, 0)
-
-    for (const comment of comments) {
-        if (comment.replies && comment.replies.length > 0 && (comment.card_id === cardID || comment.card_id === null)) {
-            length += getTotalCommentsLength(comment.replies, cardID)
-        }
-    }
-
-    return length
 }

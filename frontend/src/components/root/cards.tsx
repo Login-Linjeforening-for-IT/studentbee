@@ -3,22 +3,21 @@
 import { useState, useRef, useEffect } from 'react'
 import { useCardNavigation } from '@parent/src/hooks/cardNavigation'
 import Comments from './comments'
-import { getTotalCommentsLength } from '@utils/comments'
 import sendCardVote from '@parent/src/utils/vote'
 import Link from 'next/link'
 import { sendMark } from '@parent/src/utils/fetchClient'
 import Buttons from '../card/buttons'
 import Question from '../card/question'
 import { useRouter } from 'next/navigation'
+import { getComments } from '@utils/api'
 
 type CardsProps = {
     id?: string
     current?: number
     course: CourseProps | null
-    comments: CardCommentProps[][]
 }
 
-export default function Cards({ id, current, course, comments }: CardsProps) {
+export default function Cards({ id, current, course }: CardsProps) {
 
     const router = useRouter()
     const [animate, setAnimate] = useState('-1')
@@ -28,14 +27,13 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
     const [showComments, setShowComments] = useState(false)
     const [attempted, setAttempted] = useState<number[]>([])
     const selectedRef = useRef(selected)
-    const relevantComments = comments[Number(id) || 0] || []
+    const [comments, setComments] = useState<CardComment[]>([])
     const [remainGreen, setRemainGreen] = useState<number[]>([])
-    const totalCommentsLength = getTotalCommentsLength(relevantComments, current || 0)
     const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
     const [indexMapping, setIndexMapping] = useState<number[]>([])
     const cards = course !== null ? course.cards : []
     const card = cards[current || 0]
-    const [wait, setWait] = useState(card?.correct_answers.length > 1 ? true : false)
+    const [wait, setWait] = useState(card?.answers.length > 1 ? true : false)
     selectedRef.current = selected
 
     const { navigate, checkAnswer } = useCardNavigation({
@@ -63,7 +61,7 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
 
 
     function markCourse() {
-        sendMark({ courseID: id || 'PROG1001', learningBased: true })
+        sendMark({ courseId: id || 'PROG1001', learningBased: true })
     }
 
     useEffect(() => {
@@ -84,6 +82,15 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
         setShuffledAlternatives(shuffled)
         setIndexMapping(mapping)
     }, [card?.alternatives])
+
+    useEffect(() => {
+        (async() => {
+            const response = await getComments(card.id)
+            if (Array.isArray(response)) {
+                setComments(response)
+            }
+        })()
+    }, [card])
 
     if (current && current >= cards.length) {
         router.push(`/course/${id}/1`)
@@ -106,16 +113,21 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
         return (
             <div className='w-full h-full col-span-6 grid place-items-center'>
                 <div className='grid place-items-center'>
-                    <h1 className='text-lg text-center mb-2'>Course <span className='font-bold'>{course.course_code}</span> has no content yet.</h1>
+                    <h1 className='text-lg text-center mb-2 opacity-80'>
+                        Course <span className='font-bold'>{course.courseCode}</span> has no content yet.
+                    </h1>
                     <Link
-                        className='bg-login-900 rounded-lg px-2 h-[4vh] w-[10vw] grid place-items-center mb-2 hover:bg-login'
+                        className='bg-login-300/10 outline outline-login-300/20 rounded-lg px-2 h-8 w-40 grid place-items-center mb-2 hover:bg-login-300/30'
                         href={`/edit/${course.id}`}
                     >
                         Edit course
                     </Link>
-                    <h1 className='text-lg text-center mb-2'>Mark course as learning based (no multiple choice)</h1>
+                    <h1 className='text-lg text-center mb-2 opacity-80'>Mark course as learning based (no multiple choice)</h1>
                     <button
-                        className='bg-login rounded-lg px-2 h-[4vh] w-[10vw]'
+                        className={`
+                            bg-login/50 hover:bg-login/70 outline h-8 w-40 
+                            outline-login/70 rounded-lg px-2 cursor-pointer
+                        `}
                         onClick={markCourse}
                     >
                         Mark
@@ -130,7 +142,7 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
 
         return (
             <div className='w-full h-full grid place-items-center col-span-6'>
-                <h1 className='text-xl'>Course {course.course_code} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
+                <h1 className='text-xl'>Course {course.courseCode} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
             </div>
         )
     }
@@ -151,16 +163,16 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
             setClientVote(vote ? 1 : -1)
         }
 
-        sendCardVote({ courseID: id, cardID: current || 0, vote })
+        sendCardVote({ courseId: id, cardId: current || 0, vote })
     }
 
     function showAnswers() {
-        if (JSON.stringify(remainGreen) === JSON.stringify(card.correct_answers)) {
+        if (JSON.stringify(remainGreen) === JSON.stringify(card.answers)) {
             setAttempted([])
             setRemainGreen([])
         } else {
-            setAttempted([...card.correct_answers])
-            setRemainGreen([...card.correct_answers])
+            setAttempted([...card.answers])
+            setRemainGreen([...card.answers])
         }
     }
 
@@ -169,6 +181,7 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
             {id && <Question
                 card={card}
                 cards={cards}
+                comments={comments}
                 current={current}
                 selected={selected}
                 animateAnswer={animateAnswer}
@@ -177,10 +190,9 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
                 wait={wait}
                 clientVote={clientVote}
                 showComments={showComments}
-                totalCommentsLength={totalCommentsLength}
                 indexMapping={indexMapping}
                 shuffledAlternatives={shuffledAlternatives}
-                courseID={id}
+                courseId={id}
                 checkAnswer={checkAnswer}
                 handleVote={handleVote}
                 setSelected={setSelected}
@@ -195,10 +207,9 @@ export default function Cards({ id, current, course, comments }: CardsProps) {
                 flashColor={flashColor}
             />
             {showComments && id && <Comments
-                courseID={id}
-                cardID={current || 0}
-                comments={relevantComments}
-                totalCommentsLength={totalCommentsLength}
+                courseId={id}
+                cardId={current || 0}
+                comments={comments}
             />}
         </div>
     )

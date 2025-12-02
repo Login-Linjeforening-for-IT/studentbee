@@ -4,8 +4,8 @@ import Alternatives from './alternatives'
 import QuestionFooter from './questionFooter'
 
 type QuestionProps = {
-    card: GetCardsProps
-    cards: GetCardsProps[]
+    card: Card
+    cards: Card[]
     current: number | undefined
     selected: number[]
     animateAnswer: string
@@ -13,11 +13,11 @@ type QuestionProps = {
     remainGreen: number[]
     wait: boolean
     clientVote: 1 | 0 | -1
+    comments: CardComment[]
     showComments: boolean
-    totalCommentsLength: number
     indexMapping: number[]
     shuffledAlternatives: string[]
-    courseID: string
+    courseId: string
     setAttempted: Dispatch<SetStateAction<number[]>>
     setSelected: Dispatch<SetStateAction<number[]>>
     setRemainGreen: Dispatch<SetStateAction<number[]>>
@@ -41,7 +41,7 @@ export default function Question({
     remainGreen,
     selected,
     showComments,
-    totalCommentsLength,
+    comments,
     wait,
     checkAnswer,
     handleVote,
@@ -60,7 +60,7 @@ export default function Question({
                     {card.source} {(current || 0) + 1} / {cards.length}
                 </h1>
                 <div className='mb-2'>
-                    {card.correct_answers.length > 1 && <h1 className='text-login-300'>
+                    {card.answers.length > 1 && <h1 className='text-login-300'>
                         Multiple choice - Select all correct answers
                     </h1>}
 
@@ -74,7 +74,7 @@ export default function Question({
                     selected={selected}
                     animateAnswer={animateAnswer}
                     attempted={attempted}
-                    correct={card.correct_answers}
+                    answers={card.answers}
                     remainGreen={remainGreen}
                     wait={wait}
                     setSelected={setSelected}
@@ -89,7 +89,7 @@ export default function Question({
                 card={card}
                 clientVote={clientVote}
                 showComments={showComments}
-                totalCommentsLength={totalCommentsLength}
+                comments={comments}
                 remainGreen={remainGreen}
                 handleVote={handleVote}
                 setShowComments={setShowComments}

@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function Edit() {
-    const [courses, setCourses] = useState<CoursesProps[]>([])
+    const [courses, setCourses] = useState<Courses[]>([])
     const [error, setError] = useState('')
     const [displayCourseSelector, setDisplayCourseSelector] = useState(false)
 
@@ -47,16 +47,16 @@ export default function Edit() {
     }
 
     if (typeof courses === 'string') {
-        return <h1 className='hidden lg:grid w-full h-full place-items-center'>{courses}</h1>
+        return <h1 className='hidden lg:grid! w-full h-full place-items-center'>{courses}</h1>
     }
 
     return (
-        <div className='hidden lg:grid'>
+        <div className='hidden lg:grid!'>
             {displayCourseSelector && <CourseSelector />}
             <div className='flex flex-rows'>
                 <Link
                     onClick={handleReview}
-                    className='text-base rounded-md self-center bg-login-700 lg:px-2 2xl:px-4'
+                    className='text-base rounded-md self-center bg-login-300/10 lg:px-2 2xl:px-4'
                     href={''}>
                     Edit
                 </Link>

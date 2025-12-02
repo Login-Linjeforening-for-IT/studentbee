@@ -21,7 +21,7 @@ export default async function CourseList() {
             <div className='w-full row-span-12 grid grid-rows-[auto_1fr_auto] h-full overflow-hidden gap-2'>
                 <Header />
                 <div className='overflow-auto'>
-                    <StudyOrTest courses={courses as CoursesProps[]} currentPath={''} />
+                    <StudyOrTest courses={courses as Courses[]} currentPath={''} />
                 </div>
                 <ToolTipsButton />
             </div>

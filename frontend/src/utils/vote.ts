@@ -2,19 +2,19 @@ import config from '@config'
 import { getCookie } from 'uibee/utils'
 
 type VoteProps = {
-    courseID: string
-    cardID: number
-    commentID: number
+    courseId: string
+    cardId: number
+    commentId: number
     vote: boolean
 }
 
 type CardVoteProps = {
-    courseID: string
-    cardID: number
+    courseId: string
+    cardId: number
     vote: boolean
 }
 
-export default async function sendCardVote({courseID, cardID, vote}: CardVoteProps) {
+export default async function sendCardVote({ courseId, cardId, vote }: CardVoteProps) {
     try {
         const username = getCookie('user_nickname')
         const token = getCookie('access_token')
@@ -29,12 +29,7 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({
-                username: username,
-                courseID,
-                cardID,
-                vote
-            })
+            body: JSON.stringify({ username, courseId, cardId, vote })
         })
 
         if (!response.ok) {
@@ -44,13 +39,13 @@ export default async function sendCardVote({courseID, cardID, vote}: CardVotePro
         }
 
         return await response.json()
-    } catch(error: unknown) {
+    } catch (error: unknown) {
         const err = error as Error
         console.error(err.message)
     }
 }
 
-export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
+export async function sendVote({ courseId, cardId, commentId, vote }: VoteProps) {
     try {
         const username = getCookie('user_nickname')
         const token = getCookie('access_token')
@@ -67,9 +62,9 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
             },
             body: JSON.stringify({
                 username: username,
-                courseID,
-                cardID,
-                commentID,
+                courseId,
+                cardId,
+                commentId,
                 vote
             })
         })
@@ -81,7 +76,7 @@ export async function sendVote({courseID, cardID, commentID, vote}: VoteProps) {
         }
 
         return await response.json()
-    } catch(error) {
+    } catch (error) {
         console.error(error)
     }
 }

@@ -28,7 +28,7 @@ type Card = {
     correct: number[]
     source: string
     rating: number
-    votes: number[]
+    votes: Vote[]
     help?: string
     theme?: string
 }

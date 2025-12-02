@@ -11,7 +11,7 @@ type AlternativesProps = {
     ) => void
     attempted: number[]
     setAttempted: Dispatch<SetStateAction<number[]>>
-    correct: number[]
+    answers: number[]
     remainGreen: number[]
     setRemainGreen: Dispatch<SetStateAction<number[]>>
     wait: boolean
@@ -25,7 +25,7 @@ export default function Alternatives({
     checkAnswer,
     attempted,
     setAttempted,
-    correct,
+    answers,
     setSelected,
     remainGreen,
     setRemainGreen,
@@ -42,20 +42,20 @@ export default function Alternatives({
 
         if (!wait) {
             for (let i = 0; i < attempted.length; i++) {
-                if (correct.includes(originalIndex) && attempted.includes(originalIndex)) {
+                if (answers.includes(originalIndex) && attempted.includes(originalIndex)) {
                     return 'bg-green-500'
                 }
             }
         }
 
         if (!wait) {
-            if (attempted.includes(originalIndex) && !correct.includes(originalIndex)) {
+            if (attempted.includes(originalIndex) && !answers.includes(originalIndex)) {
                 return 'bg-red-800'
             }
         }
 
         if (animateAnswer === originalIndex.toString()) {
-            if (animateAnswer === correct.toString()) {
+            if (animateAnswer === answers.toString()) {
                 if (!remainGreen.includes(originalIndex)) {
                     setRemainGreen([...remainGreen, originalIndex])
                 }
@@ -79,7 +79,7 @@ export default function Alternatives({
                         const originalIndex = indexMapping[index]
                         checkAnswer([originalIndex], attempted, setAttempted)
                         setSelected(
-                            correct.length > 1
+                            answers.length > 1
                                 ? selected.includes(originalIndex)
                                     ? selected.filter(alternative => alternative !== originalIndex)
                                     : [...selected, originalIndex]

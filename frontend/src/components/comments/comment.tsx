@@ -6,17 +6,17 @@ import { Dispatch, SetStateAction, useState } from 'react'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 
 type CommentProps = {
-    comment: CardCommentProps
+    comment: CardComment
     user: string | null
-    vote: ({commentID, vote}: ClientVote) => void
+    vote: ({ commentId, vote }: ClientVote) => void
     parent?: number
     setParent: Dispatch<SetStateAction<number | undefined>>
-    courseID: string
-    cardID: number
-    clientComments: CardCommentProps[]
-    setClientComments: Dispatch<SetStateAction<CardCommentProps[]>>
-    comments: CardCommentProps[]
-    handleDelete: ({commentID}: {commentID: number}) => void
+    courseId: string
+    cardId: number
+    clientComments: CardComment[]
+    setClientComments: Dispatch<SetStateAction<CardComment[]>>
+    comments: CardComment[]
+    handleDelete: ({ commentId }: { commentId: number }) => void
 }
 
 export default function Comment({
@@ -25,15 +25,15 @@ export default function Comment({
     vote,
     parent,
     setParent,
-    courseID,
-    cardID,
+    courseId,
+    cardId,
     clientComments,
     setClientComments,
     comments,
     handleDelete
 }: CommentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
-    const comment_user = comment.user_id.toString()
+    const comment_user = comment.userId.toString()
     const username = user || ''
     const author = comment_user === username ? 'You' : comment_user
 
@@ -44,7 +44,7 @@ export default function Comment({
             setClientVote(direction === 'up' ? 1 : -1)
         }
 
-        vote({commentID: comment.id, vote: direction === 'up' ? true : false})
+        vote({ commentId: comment.id, vote: direction === 'up' ? true : false })
     }
 
     return (
@@ -52,11 +52,11 @@ export default function Comment({
             <div className='bg-login-800 rounded-lg p-2 mt-2 w-full'>
                 <div className='w-full grid grid-cols-2 text-login-300 mb-2'>
                     <Link href={`/profile/${comment_user}`} className='text-lg text-login-300 underline'>{author}</Link>
-                    <h1 className='text-right'>{new Date(comment.time).toLocaleString()}</h1>
+                    <h1 className='text-right'>{new Date(comment.createdAt).toLocaleString()}</h1>
                 </div>
                 <Markdown
                     displayEditor={false}
-                    handleDisplayEditor={() => {}}
+                    handleDisplayEditor={() => { }}
                     markdown={comment.content}
                 />
             </div>
@@ -70,7 +70,7 @@ export default function Comment({
                 </button>
                 {username === comment_user && <button
                     className='text-login-300 underline w-[1.4vw]'
-                    onClick={() => handleDelete({commentID: comment.id})}
+                    onClick={() => handleDelete({ commentId: comment.id })}
                 >
                     <Trash2 className='w-full h-full pt-[0.2vh] text-login-50 hover:text-red-500' />
                 </button>}
@@ -82,8 +82,8 @@ export default function Comment({
                 </button>
             </div>
             {parent === comment.id && <Reply
-                courseID={courseID}
-                cardID={cardID}
+                courseId={courseId}
+                cardId={cardId}
                 comment={comment}
                 comments={clientComments}
                 setComments={setClientComments}

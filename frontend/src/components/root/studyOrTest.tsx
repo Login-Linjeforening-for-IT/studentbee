@@ -6,11 +6,7 @@ import { Dispatch, RefObject, SetStateAction, useEffect, useRef, useState } from
 import { deleteFile, sendFile } from '@parent/src/utils/fetchClient'
 import { getFiles } from '@parent/src/utils/fetch'
 import { Trash2 } from 'lucide-react'
-
-type CoursesListProps = {
-    courses: CoursesProps[]
-    currentPath: string
-}
+import InnerCourseList from '@components/course/innerCourseList'
 
 type FileProps = {
     file: Files
@@ -48,7 +44,7 @@ export default function StudyOrTest({ courses }: CoursesListProps) {
     useEffect(() => {
         setStudy(path.includes('study') || path.includes('files'))
         const name = path.split('/')[2] || ''
-        const amountOfCards = courses.find(course => course.course_code === name)?.card_count || 0
+        const amountOfCards = courses.find(course => course.courseCode === name)?.cardCount || 0
         setCardCount(amountOfCards)
     }, [path])
 
@@ -73,7 +69,7 @@ function Files({ studyable }: { studyable: boolean }) {
             return
         }
 
-        sendFile({ courseID: course, name: input })
+        sendFile({ courseId: course, name: input })
         setDisplayInputField('')
 
         if (inputRef.current) {
@@ -112,7 +108,7 @@ function Files({ studyable }: { studyable: boolean }) {
     }, [])
 
     return (
-        <div className='w-full bg-login-900 p-2 h-full rounded-lg'>
+        <div className='w-full bg-login-300 p-2 h-full rounded-lg'>
             <FileListHeader
                 course={course}
                 studyable={studyable}
@@ -210,7 +206,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
     }
 
     function addFile() {
-        sendFile({ courseID: course, name: input, parent: file.name })
+        sendFile({ courseId: course, name: input, parent: file.name })
         setDisplayInputField('')
         if (inputRef.current) {
             inputRef.current.value = ''
@@ -218,7 +214,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
     }
 
     function handleDelete() {
-        deleteFile({ courseID: course, name: file.name })
+        deleteFile({ courseId: course, name: file.name })
     }
 
     return (
@@ -270,38 +266,5 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
                 </button>
             </div>}
         </div>
-    )
-}
-
-function InnerCourseList({ courses, currentPath }: CoursesListProps) {
-    return (
-        <div className='h-full bg-login-900 rounded-lg'>
-            <div className='pt-2 pb-24 h-full overflow-auto grow noscroll'>
-                {courses.map((course, index) =>
-                    <Course key={course.id} course={course} currentPath={currentPath} index={index} />
-                )}
-            </div>
-        </div>
-    )
-}
-
-type CourseItemProps = {
-    course: CoursesProps
-    currentPath: string
-    index: number
-}
-
-function Course({ course, currentPath, index }: CourseItemProps) {
-    const currentCourse = currentPath.includes('/course/') ? currentPath.split('/course/')[1].split('/')[0] : ''
-    const current = currentCourse === course.course_code
-    const bg = index % 2 === 0 ? 'bg-login-800' : 'bg-login-900'
-
-    return (
-        <Link
-            href={`/course/${course.course_code}`}
-            className={`${bg} lg:bg-transparent rounded-lg lg:rounded-none flex flex-row px-4 items-center gap-2 py-[0.8rem] hover:pl-6 duration-500 transition-[padding] ${current ? '*:fill-login text-login pl-[1.2rem] border-l-[0.3rem]' : ''} hover:*:fill-login hover:text-login font-medium`}
-        >
-            <h1>{course.course_code}</h1>
-        </Link>
     )
 }
