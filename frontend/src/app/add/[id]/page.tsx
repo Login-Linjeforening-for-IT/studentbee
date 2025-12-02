@@ -4,6 +4,11 @@ import { postCourse } from '@utils/api'
 import Link from 'next/link'
 import { useState, use } from 'react'
 
+type EmptyCourse = {
+    id: string
+    name: string
+}
+
 export default function Add(props: { params: Promise<{ id: string }> }) {
     const params = use(props.params)
     const id = params.id.toUpperCase()
@@ -21,12 +26,9 @@ function AddCourse() {
     const [error, setError] = useState('')
     const emptyCourse = {
         id: '',
-        name: '',
-        cards: [],
-        notes: '',
-        learningBased: false
+        name: ''
     }
-    const [course, setCourse] = useState<Course>(emptyCourse)
+    const [course, setCourse] = useState<EmptyCourse>(emptyCourse)
     const [selected, setSelected] = useState(0)
     const courseIDspan = selected === 0 ? 'col-span-12' : 'col-span-10'
     const navigate = error.length

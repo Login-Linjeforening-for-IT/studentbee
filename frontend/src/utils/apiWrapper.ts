@@ -55,24 +55,24 @@ async function apiRequest({ method, path, data, options = {} }: ApiRequestProps)
 
 // Wrapper functions for backward compatibility
 async function getWrapper({ path, options = {} }: { path: string; options?: RequestInit }) {
-    return apiRequest({ method: 'GET', path, options })
+    return await apiRequest({ method: 'GET', path, options })
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function postWrapper({ path, data }: { path: string; data: any }) {
-    return apiRequest({ method: 'POST', path, data })
+    return await apiRequest({ method: 'POST', path, data })
 }
 
 async function putWrapper({ path, data }: { path: string; data: unknown }) {
-    return apiRequest({ method: 'PUT', path, data })
+    return await apiRequest({ method: 'PUT', path, data })
 }
 
 async function deleteWrapper({ path, options }: { path: string; options?: RequestInit }) {
-    return apiRequest({ method: 'DELETE', path, options })
+    return await apiRequest({ method: 'DELETE', path, options })
 }
 
 async function patchWrapper({ path, data = {}, options = {} }: { path: string; data?: unknown; options?: RequestInit }) {
-    return apiRequest({ method: 'PATCH', path, data, options })
+    return await apiRequest({ method: 'PATCH', path, data, options })
 }
 
 export { apiRequest, getWrapper, postWrapper, putWrapper, deleteWrapper, patchWrapper }
