@@ -15,6 +15,7 @@ export async function updateCourse({ id, editing }: UpdateCourseProps) {
             throw Error('User not logged in')
         }
 
+        console.log('this one')
         const response = await fetch(`${config.url.BROWSER_API}/course/${id}`, {
             method: 'PUT',
             headers: {

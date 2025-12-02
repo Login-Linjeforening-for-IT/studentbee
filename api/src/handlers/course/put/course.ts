@@ -1,34 +1,76 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
-import run from '#db'
+import { runInTransaction } from '#db'
 
 export default async function putCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
         const { id } = req.params as { id: string }
-        const { notes } = req.body as { username: string; notes: string } ?? {}
+        const { cards, notes } = req.body as { cards: any[]; notes: string }
 
+        console.log('received body', req.body)
         if (!id) {
             return res.status(400).send({ error: 'Course ID is required.' })
         }
 
         if (!req.user?.id || !notes) {
-            return res.status(400).send({ error: 'User ID and notes are required.' })
+            return res.status(400).send({ error: 'User ID, cards and notes are required.' })
         }
 
-        const result = await run(`
-            UPDATE courses
-            SET
-                notes = $1,
-                updated_by = $2,
-                updated_at = NOW()
-            WHERE id = $3
-            RETURNING id;
-        `, [notes, req.user.id, id])
+        const updatedCourse = await runInTransaction(async (client) => {
+            const result = await client.query(
+                `
+                UPDATE courses
+                SET
+                    notes = $1,
+                    updated_by = $2,
+                    updated_at = NOW()
+                WHERE id = $3
+                RETURNING id;
+                `,
+                [notes, req.user?.id, id]
+            )
 
-        if (result.rowCount === 0) {
-            return res.status(404).send({ error: 'Course not found' })
-        }
+            if (result.rowCount === 0) {
+                return res.status(404).send({ error: 'Course not found' })
+            }
 
-        return res.status(200).send({ id: result.rows[0].id })
+            if (Array.isArray(cards)) {
+                await client.query(`DELETE FROM cards WHERE course_id = $1`, [id])
+
+                for (const card of cards) {
+                    const { question, alternatives, answers, theme, source, help } = card
+
+                    await client.query(
+                        `
+                        INSERT INTO cards (
+                            course_id,
+                            question,
+                            alternatives,
+                            answers,
+                            theme,
+                            source,
+                            help,
+                            created_by,
+                            updated_by
+                        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $8);
+                        `,
+                        [
+                            id,
+                            question,
+                            alternatives,
+                            answers,
+                            theme ?? null,
+                            source ?? null,
+                            help ?? null,
+                            req.user?.id,
+                        ]
+                    )
+                }
+            }
+
+            return result.rows[0]
+        })
+
+        return res.status(200).send({ id: updatedCourse.id })
     } catch (error) {
         return res.status(500).send({ error: (error as Error).message })
     }

@@ -11,7 +11,7 @@ sub vcl_recv {
 
 sub vcl_backend_response {
     unset beresp.http.Cache-Control;
-    set beresp.http.Cache-Control = "login-cache, max-age=3600";
+    set beresp.http.Cache-Control = "login-cache, max-age=10";
     set beresp.ttl = 1h;
     return (deliver);
 }

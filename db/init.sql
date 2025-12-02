@@ -23,7 +23,7 @@ CREATE TABLE courses (
 CREATE TABLE cards (
     id SERIAL PRIMARY KEY,
     course_id INTEGER NOT NULL REFERENCES courses(id) ON DELETE CASCADE,
-    question TEXT NOT NULL,
+    question TEXT UNIQUE NOT NULL,
     alternatives TEXT[] NOT NULL,
     answers INTEGER[] NOT NULL,
     theme TEXT,

@@ -12,7 +12,6 @@ import { courseHandler } from './handlers/course/get.ts'
 import commentsHandler from './handlers/comment/get.ts'
 import gradeHandler from './handlers/grades/get.ts'
 import postFile from './handlers/file/post.ts'
-import postCard from './handlers/card/post.ts'
 import postCourse from './handlers/course/post.ts'
 import postComment from './handlers/comment/post.ts'
 import putFile from './handlers/file/put.ts'
@@ -58,7 +57,6 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/courses', { preHandler }, coursesHandler)
     fastify.get('/course/:id', { preHandler }, courseHandler)
     fastify.post('/course', { preHandler }, postCourse)
-    fastify.post('/card', { preHandler }, postCard)
     fastify.put('/course/:id', { preHandler }, putCourse)
     fastify.put('/course/:id/notes', { preHandler }, putCourseNotes)
     fastify.put('/learningBased', { preHandler }, putCourseLearningBased)
