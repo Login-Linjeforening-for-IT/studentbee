@@ -1,8 +1,9 @@
 'use client'
 
 import { postCourse } from '@utils/api'
-import Link from 'next/link'
 import { useState, use } from 'react'
+import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 
 type EmptyCourse = {
     id: string
@@ -24,6 +25,7 @@ export default function Add(props: { params: Promise<{ id: string }> }) {
 
 function AddCourse() {
     const [error, setError] = useState('')
+    const router = useRouter()
     const emptyCourse = {
         id: '',
         name: ''
@@ -31,11 +33,6 @@ function AddCourse() {
     const [course, setCourse] = useState<EmptyCourse>(emptyCourse)
     const [selected, setSelected] = useState(0)
     const courseIDspan = selected === 0 ? 'col-span-12' : 'col-span-10'
-    const navigate = error.length
-        ? '/add/course/'
-        : course.id.length
-            ? `/course/${course.id}`
-            : '/add/course/'
 
     function handleCourseIdChange(id: string) {
         setCourse({ ...course, id })
@@ -49,8 +46,10 @@ function AddCourse() {
         console.log('posting course', { data: { id: course.id, name: course.name } }, course)
         const response = await postCourse({ data: { courseCode: course.id, name: course.name } })
         console.log('handleAddCourse', response)
-        if (typeof response === 'string') {
-            setError(response)
+        if ('error' in response) {
+            setError(response.error)
+        } else {
+            router.push(course.id ? `/course/${course.id}` : '/add/course/')
         }
     }
 
@@ -88,13 +87,12 @@ function AddCourse() {
                     className='bg-login-100/10 rounded-lg overflow-hidden px-2 h-8 w-4/5 outline-hidden caret-login'
                     maxLength={100}
                 />
-                <Link
-                    href={navigate}
-                    className='grid w-4/5 bg-login/70 outline outline-login/90 rounded-lg font-semibold h-8 place-items-center'
+                <button
+                    className='grid w-4/5 bg-login/70 outline outline-login/90 rounded-lg font-semibold h-8 place-items-center cursor-pointer'
                     onClick={handleAddCourse}
                 >
                     Add course
-                </Link>
+                </button>
             </div>
         </div>
     )
