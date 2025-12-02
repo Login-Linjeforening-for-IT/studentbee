@@ -4,6 +4,7 @@ import {
     deleteWrapper,
     getWrapper,
     postWrapper,
+    putWrapper,
 } from './apiWrapper'
 
 type ErrorResponse = {
@@ -37,7 +38,7 @@ export async function postCourse(data: PostCourse): Promise<{ id: string } | Err
 }
 
 export async function updateCourse({ id, course }: UpdateCourseProps): Promise<{ id: string } | ErrorResponse> {
-    return await postWrapper({ path: `/course/${id}`, data: { ...course } })
+    return await putWrapper({ path: `/course/${id}`, data: { ...course } })
 }
 
 // Comments
