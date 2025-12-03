@@ -50,7 +50,11 @@ function pathIsAllowedWhileUnauthorized(path: string) {
     return false
 }
 
-async function tokenIsValid(token: string): Promise<boolean> {
+async function tokenIsValid(token: string | undefined): Promise<boolean> {
+    if (!token) {
+        return false
+    }
+
     try {
         const userInfo = await fetch(appConfig.authentik.USERINFO_URL, {
             headers: { Authorization: `Bearer ${token}` },
