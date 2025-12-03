@@ -17,12 +17,12 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
     }
 
     return (
-        <div className='w-full h-full bg-login-900 rounded-lg p-2 overflow-auto noscroll'>
+        <div className='w-full h-full bg-login-900 rounded-lg p-2'>
             <div className='grid grid-cols-12'>
                 <h1 className='text-xl mb-2 grid grid-row col-span-11'>Cards</h1>
                 <h1 className='text-login-300'>({cards.length})</h1>
             </div>
-            <div>
+            <div className='max-h-full overflow-auto noscroll'>
                 {cards.reverse().map((card: Card, index: number) => {
                     const outline = editCard.question === cards[index].question
                         ? 'outline-gray-500' : 'outline-hidden'
