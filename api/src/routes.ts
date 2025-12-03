@@ -25,6 +25,7 @@ import putCourseNotes from './handlers/course/put/notes.ts'
 import putCourseLearningBased from './handlers/course/put/learningBased.ts'
 import postCardVote from './handlers/card/vote/post.ts'
 import { coursesHandler } from './handlers/course/get/courses.ts'
+import deleteCourse from './handlers/course/delete.ts'
 
 /**
  * Defines the routes available in the API.
@@ -61,6 +62,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.put('/course/:id', { preHandler }, putCourse)
     fastify.put('/course/:id/notes', { preHandler }, putCourseNotes)
     fastify.put('/learningBased', { preHandler }, putCourseLearningBased)
+    fastify.delete('/course/:id', { preHandler }, deleteCourse)
 
     // files
     fastify.get('/files/:id', { preHandler }, filesHandler)

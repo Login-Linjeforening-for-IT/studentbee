@@ -2,9 +2,10 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import { runInTransaction } from '#db'
 
 export default async function putCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
+    const { id } = req.params as { id: string } ?? {}
+    const { cards, notes } = req.body as { cards: any[]; notes: string } ?? {}
+
     try {
-        const { id } = req.params as { id: string }
-        const { cards, notes } = req.body as { cards: any[]; notes: string } ?? {}
 
         if (!id || !req.user?.id) {
             return res.status(400).send({ error: 'Course ID is required.' })
@@ -73,6 +74,8 @@ export default async function putCourse(req: FastifyRequest, res: FastifyReply):
 
         return res.status(200).send({ id: updatedCourse.id })
     } catch (error) {
+        console.error(`Error occured while editing course ${id}`)
+        console.log(`The input was { "cards": ${JSON.stringify(cards)}, "notes": ${notes} }`)
         return res.status(500).send({ error: (error as Error).message })
     }
 }
