@@ -6,7 +6,6 @@ import { LoginPage } from 'uibee/components'
 
 export default async function Page() {
     const accessToken = (await cookies()).get('access_token')?.value
-    console.error('Access Token:', accessToken)
     if (accessToken) {
         redirect('/')
     }
