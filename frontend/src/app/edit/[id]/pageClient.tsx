@@ -62,7 +62,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
     }, [editing.cards])
 
     async function handleSubmit() {
-        const response = await updateCourse({ id, course: editing })
+        const response = await updateCourse({ course: editing })
 
         if ('error' in response) {
             setError(response.error)
