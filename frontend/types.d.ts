@@ -9,20 +9,6 @@ type UserProps = {
     updatedAt: string
 }
 
-// Courses
-type CourseProps = {
-    id: number
-    code: string
-    name: string
-    notes: string
-    learningBased: boolean
-    createdBy: string | null
-    createdAt: string
-    updatedBy: string | null
-    updatedAt: string
-    cards: Card[]
-}
-
 type Courses = {
     id: string
     name: string
@@ -33,11 +19,6 @@ type Courses = {
 type PostCourse = {
     code: string
     name: string
-}
-
-type UpdateCourseProps = {
-    id: string
-    course: Course
 }
 
 // Cards

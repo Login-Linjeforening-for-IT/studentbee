@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation'
 type ElementsProps = {
     id?: string
     current?: number
-    course: CourseProps | null
+    course: Course | null
 }
 
 type QuestionsProps = {

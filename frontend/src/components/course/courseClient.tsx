@@ -7,7 +7,7 @@ import Study from '@parent/src/components/root/study'
 import { usePathname } from 'next/navigation'
 
 type CourseClientProps = {
-    course: CourseProps | null
+    course: Course | null
     id: string
     current: number
     fileContent: string[]

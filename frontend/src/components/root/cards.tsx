@@ -14,7 +14,7 @@ import { getComments } from '@utils/api'
 type CardsProps = {
     id?: string
     current?: number
-    course: CourseProps | null
+    course: Course | null
 }
 
 export default function Cards({ id, current, course }: CardsProps) {

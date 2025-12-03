@@ -5,7 +5,7 @@ import run from '#db'
  * CourseParam type, used for type specification when handling course parameters
  */
 type CourseParam = {
-    id?: string
+    id?: number
     code?: string
 }
 
@@ -16,6 +16,12 @@ type CourseParam = {
  */
 export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
     const { id, code } = req.params as CourseParam
+    if (isNaN(id || 0)) {
+        return res.status(400).send({ error: `
+            ID must be a number. To use a code use the course/code/id endpoint
+            instead of this one (course/id).
+        ` })
+    }
 
     try {
         const result = await run(`

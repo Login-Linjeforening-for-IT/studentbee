@@ -25,11 +25,11 @@ export async function getCourses(): Promise<Courses[] | ErrorResponse> {
     return await getWrapper({ path: '/courses' })
 }
 
-export async function getCourseByCode(id: string): Promise<CourseProps | ErrorResponse> {
+export async function getCourseByCode(id: string): Promise<Course | ErrorResponse> {
     return await getWrapper({ path: `/course/code/${id}` })
 }
 
-export async function getCourse(id: string): Promise<CourseProps | ErrorResponse> {
+export async function getCourse(id: string): Promise<Course | ErrorResponse> {
     return await getWrapper({ path: `/course/${id}` })
 }
 
@@ -37,7 +37,7 @@ export async function postCourse(data: PostCourse): Promise<{ id: string } | Err
     return await postWrapper({ path: '/course', data })
 }
 
-export async function updateCourse({ course }: UpdateCourseProps): Promise<{ id: string } | ErrorResponse> {
+export async function updateCourse({ course }: { course: Course }): Promise<{ id: string } | ErrorResponse> {
     return await putWrapper({ path: `/course/${course.id}`, data: { ...course } })
 }
 

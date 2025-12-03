@@ -1,15 +1,12 @@
+import { getCourseByCode } from '@utils/api'
 import PageClient from './pageClient'
-import { getCourse } from '@utils/fetch'
-import { cookies } from 'next/headers'
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {
     const params = await props.params
     const courseId = params.id.toUpperCase()
-    const Cookies = await cookies()
-    const token = Cookies.get('access_token')?.value || ''
-    const course = await getCourse('server', courseId, token)
+    const course = await getCourseByCode(courseId)
 
-    if (typeof course === 'string') {
+    if (typeof course === 'string' || 'error' in course) {
         return (
             <div className='w-full h-full flex items-center justify-center'>
                 <div className={`
