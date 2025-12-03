@@ -84,7 +84,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
 
         setTimeout(() => {
             router.push('/edit')
-        }, 3000)
+        }, 1500)
     }
 
     async function handleSubmit() {
