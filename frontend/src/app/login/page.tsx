@@ -1,29 +1,15 @@
-'use client'
-
 import config from '@config'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { LoginPage } from 'uibee/components'
-import { getCookie } from 'uibee/utils'
 
 
-export default function Page() {
-    const router = useRouter()
-    const token = getCookie('access_token')
-    if (token) {
-        router.push('/')
+export default async function Page() {
+    const accessToken = (await cookies()).get('access_token')?.value
+    console.error('Access Token:', accessToken)
+    if (accessToken) {
+        redirect('/')
     }
-
-    useEffect(() => {
-        const loginInterval = setInterval(() => {
-            const token = getCookie('access_token')
-            if (token) {
-                router.push('/')
-            }
-        }, 1000)
-
-        return () => clearInterval(loginInterval)
-    }, [])
 
     return (
         <LoginPage
