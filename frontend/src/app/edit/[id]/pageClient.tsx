@@ -11,7 +11,7 @@ import { X } from 'lucide-react'
 import { ChangeEvent, useEffect, useRef, useState } from 'react'
 
 export default function PageClient({ course, id }: { course: Course, id: string }) {
-    const [courseCode, setCourseCode] = useState(course.courseCode)
+    const [code, setCode] = useState(course.code)
     const [editing, setEditing] = useState<Course>({ ...course })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [error, setError] = useState<string>('')
@@ -42,7 +42,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
             const newCourse = await getCourse('client', id, token)
 
             if (typeof newCourse !== 'string') {
-                setCourseCode(newCourse.courseCode)
+                setCode(newCourse.code)
                 if (!editing.cards.length && newCourse.cards.length) {
                     setEditing({ ...newCourse })
                 }
@@ -128,7 +128,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
             <div className='w-full h-[calc(100%-1rem)] grid grid-cols-4 gap-2'>
                 <div className='w-full h-full bg-login-900 col-span-3 rounded-lg flex flex-col pb-2'>
                     <Header
-                        code={courseCode}
+                        code={code}
                         clearCard={clearCard}
                         editing={editing}
                         setEditing={setEditing}

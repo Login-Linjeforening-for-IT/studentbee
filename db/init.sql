@@ -10,7 +10,7 @@ CREATE TABLE users (
 
 CREATE TABLE courses (
     id SERIAL PRIMARY KEY,
-    course_code TEXT UNIQUE NOT NULL,
+    code TEXT UNIQUE NOT NULL,
     name TEXT NOT NULL,
     notes TEXT NOT NULL,
     learning_based BOOLEAN NOT NULL DEFAULT false,

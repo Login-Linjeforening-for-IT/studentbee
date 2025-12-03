@@ -2,7 +2,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 import run from '#db'
 
 type PostCourse = {
-    courseCode: string
+    code: string
     name: string
 }
 
@@ -14,18 +14,18 @@ type PostCourse = {
  */
 export default async function postCourse(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { courseCode, name } = req.body as PostCourse ?? {}
+        const { code, name } = req.body as PostCourse ?? {}
         const { id: userId } = req.user ?? {}
-        if (!courseCode || !name) {
-            return res.status(400).send({ error: 'Missing required field (courseCode, name)' })
+        if (!code || !name) {
+            return res.status(400).send({ error: 'Missing required field (code, name)' })
         }
 
         const courseResponse = await run(`
-            INSERT INTO courses (course_code, name, notes, created_by, updated_by)
+            INSERT INTO courses (code, name, notes, created_by, updated_by)
             VALUES ($1, $2, $3, $4, $5)
-            ON CONFLICT (course_code) DO UPDATE SET course_code = EXCLUDED.course_code
+            ON CONFLICT (code) DO UPDATE SET code = EXCLUDED.code
             RETURNING id
-        `, [courseCode.toUpperCase(), name, '', userId, userId])
+        `, [code.toUpperCase(), name, '', userId, userId])
 
         if (!courseResponse.rowCount) {
             throw new Error('Failed to create course')

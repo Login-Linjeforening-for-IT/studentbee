@@ -44,7 +44,7 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
             FROM courses c
             LEFT JOIN cards ON c.id = cards.course_id
             LEFT JOIN card_votes cv ON cards.id = cv.card_id
-            WHERE ${id ? 'c.id' : 'c.course_code'} = $1
+            WHERE ${id ? 'c.id' : 'c.code'} = $1
             GROUP BY c.id
         `, [id || code?.toUpperCase()])
 
@@ -55,7 +55,7 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
         const rows = result.rows
         const course = {
             id: rows[0].id,
-            courseCode: rows[0].course_code,
+            code: rows[0].code,
             name: rows[0].name,
             notes: rows[0].notes,
             learningBased: rows[0].learning_based,

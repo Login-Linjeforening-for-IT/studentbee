@@ -195,7 +195,7 @@ export async function postCourse({ id, name }: { id: string, name: string }) {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ courseCode: id, name })
+            body: JSON.stringify({ code: id, name })
         })
 
         if (!response.ok) {

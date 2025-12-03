@@ -114,11 +114,11 @@ export default function Cards({ id, current, course }: CardsProps) {
             <div className='w-full h-full col-span-6 grid place-items-center'>
                 <div className='grid place-items-center'>
                     <h1 className='text-lg text-center mb-2 opacity-80'>
-                        Course <span className='font-bold'>{course.courseCode}</span> has no content yet.
+                        Course <span className='font-bold'>{course.code}</span> has no content yet.
                     </h1>
                     <Link
                         className='bg-login-300/10 outline outline-login-300/20 rounded-lg px-2 h-8 w-40 grid place-items-center mb-2 hover:bg-login-300/30'
-                        href={`/edit/${course.id}`}
+                        href={`/edit/${course.code}`}
                     >
                         Edit course
                     </Link>
@@ -142,7 +142,7 @@ export default function Cards({ id, current, course }: CardsProps) {
 
         return (
             <div className='w-full h-full grid place-items-center col-span-6'>
-                <h1 className='text-xl'>Course {course.courseCode} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
+                <h1 className='text-xl'>Course {course.code} completed ({length} {length > 1 ? 'cards' : 'card'}).</h1>
             </div>
         )
     }

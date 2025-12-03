@@ -28,12 +28,12 @@ export default async function SelectCourseList({ isEdit }: { isEdit?: boolean })
                 <div className='flex flex-col w-full h-full rounded-md p-2 overflow-auto noscroll gap-2'>
                     <div className='grid gap-2'>
                         {courses.map((course) => <Link
-                            href={`${isEdit ? '/edit' : '/course'}/${course.courseCode}`}
+                            href={`${isEdit ? '/edit' : '/course'}/${course.code}`}
                             key={course.id}
                             className='text-2xs md:text-base bg-login-300/10 hover:bg-login-300/20 w-full rounded-md p-1 px-2 md:p-2 h-7 md:h-auto flex justify-between items-center overflow-hidden'
                         >
                             <div className='flex gap-1 whitespace-nowrap min-w-0 flex-1'>
-                                <h1 className='truncate'>{course.courseCode} - {course.name}</h1>
+                                <h1 className='truncate'>{course.code} - {course.name}</h1>
                             </div>
                             <h1 className='text-login-100/30'>({course.cardCount} cards)</h1>
                         </Link>)}

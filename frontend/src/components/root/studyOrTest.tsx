@@ -43,7 +43,7 @@ export default function StudyOrTest({ courses }: CoursesListProps) {
     useEffect(() => {
         setStudy(path.includes('study') || path.includes('files'))
         const name = path.split('/')[2] || ''
-        const amountOfCards = courses.find(course => course.courseCode === name)?.cardCount || 0
+        const amountOfCards = courses.find(course => course.code === name)?.cardCount || 0
         setCardCount(amountOfCards)
     }, [path])
 

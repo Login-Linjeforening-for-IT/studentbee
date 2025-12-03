@@ -11,7 +11,7 @@ export async function coursesHandler(_: FastifyRequest, res: FastifyReply) {
         const result = await run(`
             SELECT 
                 c.id, 
-                c.course_code AS "courseCode", 
+                c.code, 
                 c.name, 
                 COUNT(cards.id)::INT AS "cardCount"
             FROM courses c

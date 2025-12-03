@@ -12,7 +12,7 @@ type UserProps = {
 // Courses
 type CourseProps = {
     id: number
-    courseCode: string
+    code: string
     name: string
     notes: string
     learningBased: boolean
@@ -26,12 +26,12 @@ type CourseProps = {
 type Courses = {
     id: string
     name: string
-    courseCode: string
+    code: string
     cardCount: number
 }
 
 type PostCourse = {
-    courseCode: string
+    code: string
     name: string
 }
 
@@ -108,7 +108,7 @@ type Grades = (Status | GradeDistribution)[]
 
 type Course = {
     id: string
-    courseCode: string
+    code: string
     name: string
     cards: Card[]
     notes: string
