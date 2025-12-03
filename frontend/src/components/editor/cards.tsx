@@ -23,7 +23,7 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
                 <h1 className='text-login-300'>({cards.length})</h1>
             </div>
             <div>
-                {cards.map((card: Card, index: number) => {
+                {cards.reverse().map((card: Card, index: number) => {
                     const outline = editCard.question === cards[index].question
                         ? 'outline-gray-500' : 'outline-hidden'
 
