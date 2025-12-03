@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import Edit from './edit'
 import { Menu, Pencil } from 'lucide-react'
 
 export default function Header() {
@@ -48,7 +47,12 @@ function CourseHeader() {
             >
                 Add
             </Link>
-            <Edit />
+            <Link
+                href='/edit'
+                className='hidden rounded-md lg:grid! text-base self-center bg-login-300/10 lg:px-2 2xl:px-4'
+            >
+                Edit
+            </Link>
         </div>
     )
 }
