@@ -217,7 +217,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
             {(error || message) && <div
                 onClick={() => setError('')}
                 className={`
-                    absolute ${message && 'top-17.5 right-5'}
+                    absolute ${message && 'bottom-5 right-5'}
                     ${error && 'bg-login-700/50 grid top-0 left-0 place-items-center w-full h-full z-50'}
                 `}>
                 {error ? <div className={`
