@@ -28,7 +28,7 @@ export async function proxy(req: NextRequest) {
 }
 
 function pathIsAllowedWhileUnauthorized(path: string) {
-    if (path === '/favicon.ico' || path === '/') {
+    if (path === '/favicon.ico') {
         return true
     }
 
