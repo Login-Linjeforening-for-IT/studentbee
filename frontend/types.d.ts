@@ -88,7 +88,7 @@ type GradeDistribution = {
 type Grades = (Status | GradeDistribution)[]
 
 type Course = {
-    id: string
+    id: number
     code: string
     name: string
     cards: Card[]

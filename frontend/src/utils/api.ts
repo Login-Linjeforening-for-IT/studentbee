@@ -41,6 +41,10 @@ export async function updateCourse({ course }: { course: Course }): Promise<{ id
     return await putWrapper({ path: `/course/${course.id}`, data: { ...course } })
 }
 
+export async function deleteCourse({ id }: { id: number }): Promise<{ id: string } | ErrorResponse> {
+    return await deleteWrapper({ path: `/course/${id}` })
+}
+
 // Comments
 export async function getComments(cardId: number): Promise<CardComment[] | ErrorResponse> {
     return await getWrapper({ path: `/comments/${cardId}` })

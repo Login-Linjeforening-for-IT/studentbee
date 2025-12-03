@@ -6,18 +6,28 @@ import Cards from '@components/editor/cards'
 import Header from '@components/editor/header'
 import { getCookie } from 'uibee/utils'
 import { getCourse } from '@parent/src/utils/fetch'
-import { updateCourse } from '@utils/api'
+import { deleteCourse, updateCourse } from '@utils/api'
 import { X } from 'lucide-react'
-import { ChangeEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef, useState } from 'react'
+import { useRouter } from 'next/navigation'
+
+type DeleteCourseProps = {
+    display: boolean
+    setDisplay: Dispatch<SetStateAction<boolean>>
+    course: Course
+    handleDelete: () => void
+}
 
 export default function PageClient({ course, id }: { course: Course, id: string }) {
     const [code, setCode] = useState(course.code)
     const [editing, setEditing] = useState<Course>({ ...course })
     const [editingIndex, setEditingIndex] = useState(-1)
+    const [displayDelete, setDisplayDelete] = useState(false)
     const [error, setError] = useState<string>('')
     const { condition: message, setCondition: setMessage } = useClearStateAfter()
     const [showText, setShowText] = useState(true)
     const [alternativeIndex, setAlternativeIndex] = useState(0)
+    const router = useRouter()
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
     const emptyCard: Card = {
         id: 0,
@@ -60,6 +70,22 @@ export default function PageClient({ course, id }: { course: Course, id: string 
             })
         })
     }, [editing.cards])
+
+    async function handleDelete() {
+        const response = await deleteCourse({ id: course.id })
+
+        if ('error' in response) {
+            setError(response.error)
+        } else if ('message' in response) {
+            setMessage('Deleted course.')
+        } else {
+            setError('Unknown error')
+        }
+
+        setTimeout(() => {
+            router.push('/edit')
+        }, 3000)
+    }
 
     async function handleSubmit() {
         const response = await updateCourse({ course: editing })
@@ -124,8 +150,8 @@ export default function PageClient({ course, id }: { course: Course, id: string 
     }
 
     return (
-        <div className='w-full h-[calc(100%-1rem)] rounded-lg gap-2 flex flex-col mt-4 overflow-hidden'>
-            <div className='w-full h-[calc(100%-1rem)] grid grid-cols-4 gap-2'>
+        <div className='w-full h-[calc(100%-1.2rem)] rounded-lg gap-2 flex flex-col mt-4 overflow-hidden'>
+            <div className='w-full h-[calc(100%-1.2rem)] grid grid-cols-4 gap-2'>
                 <div className='w-full h-full bg-login-900 col-span-3 rounded-lg flex flex-col pb-2'>
                     <Header
                         code={code}
@@ -179,7 +205,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                         `}>
                         <X className='w-4 h-4' />
                     </div>
-                    <h1 className='font-semibold'>Failed to update course</h1>
+                    <h1 className='font-semibold'>Failed to {displayDelete ? 'delete' : 'update'} course</h1>
                     <h1>Details: {typeof error === 'string' ? error : JSON.stringify(error)}</h1>
                 </div> : <div className={`
                     w-xs grid place-items-center bg-green-500/10 outline
@@ -189,13 +215,80 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                     <h1 className='font-semibold'>{message}</h1>
                 </div>}
             </div>}
-            <div className='w-full h-8 grid place-items-center'>
+            <DeleteCourse
+                display={displayDelete}
+                setDisplay={setDisplayDelete}
+                course={course}
+                handleDelete={handleDelete}
+            />
+            <div className='w-full h-9 relative p-2 items-center'>
+                <button
+                    onClick={() => setDisplayDelete(true)}
+                    className={`
+                        h-8 rounded-lg bg-login-300/10 outline
+                        font-bold outline-login-300/20 hover:bg-red-500/40
+                        px-8 hover:outline-red-500/50 grid place-items-center 
+                        cursor-pointer w-fit self-center text-login-50
+                        absolute left-1 bottom-1
+                    `}
+                >
+                    Delete course
+                </button>
                 <button
                     onClick={handleSubmit}
-                    className='h-8 rounded-lg bg-login px-8 font-bold grid place-items-center cursor-pointer'
+                    className={`
+                        h-8 rounded-lg bg-login px-8 font-bold grid
+                        place-items-center cursor-pointer w-fit text-login-50
+                        absolute left-1/2 transform -translate-x-1/2 bottom-1
+                    `}
                 >
                     Publish changes
                 </button>
+            </div>
+        </div>
+    )
+}
+
+function DeleteCourse({ display, setDisplay, course, handleDelete }: DeleteCourseProps) {
+    const buttonStyle = `
+        rounded-md w-full bg-login-500/60 outline outline-login-500/70
+        hover:bg-login-500/70 col-span-2 cursor-pointer
+    `
+    const buttonStyleRed = `
+        rounded-md w-full bg-red-500/40 outline outline-red-500/50
+        hover:bg-red-500/50 cursor-pointer
+    `
+    if (!display) {
+        return <></>
+    }
+
+    return (
+        <div
+            onClick={() => setDisplay(false)}
+            className={`
+                absolute bg-login-700/50 grid top-0 left-0 place-items-center
+                w-full h-full
+            `}>
+            <div className={`
+                    w-md grid place-items-center bg-login-300/30 outline
+                    outline-login-300/40 backdrop-blur-md shadow-lg
+                    rounded-lg h-50 relative px-8
+                `}>
+                <div
+                    onClick={(e) => { e.preventDefault(); setDisplay(false) }}
+                    className={`
+                        absolute top-2 right-2 rounded-lg
+                        hover:bg-login-300/20 w-8 h-8 grid
+                        place-items-center cursor-pointer gap-2
+                    `}>
+                    <X className='w-4 h-4' />
+                </div>
+                <h1 className='font-semibold'>Delete course {course.code}</h1>
+                <h1 className='max-w-xs'>Are you sure you want to delete course {course.code}, including all related cards and comments?</h1>
+                <div className='w-full rounded-lg gap-2 grid grid-cols-3 items-center'>
+                    <button className={buttonStyle} onClick={() => setDisplay(false)}>Cancel</button>
+                    <button className={buttonStyleRed} onClick={handleDelete}>Delete</button>
+                </div>
             </div>
         </div>
     )
