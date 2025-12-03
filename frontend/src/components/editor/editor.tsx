@@ -17,6 +17,7 @@ type EditorProps = {
     className?: string
     placeholder?: string
     placeholderClassName?: string
+    forceEditMode?: boolean
 }
 
 type EditorWithoutLogicProps = {
@@ -70,10 +71,12 @@ export default function Editor({
     onChange,
     className,
     placeholder,
-    placeholderClassName
+    placeholderClassName,
+    forceEditMode
 }: EditorProps) {
     const [markdown, setMarkdown] = useState(value.join('\n'))
-    const [displayEditor, setDisplayEditor] = useState(false)
+    const [displayEditorState, setDisplayEditorState] = useState(false)
+    const displayEditor = forceEditMode || displayEditorState
     const [hideSave, setHideSave] = useState(false)
     const textareaRef = useRef<HTMLTextAreaElement>(null)
     const edited = value.join('\n') !== markdown
@@ -81,7 +84,7 @@ export default function Editor({
     function handleMarkdownChange(event: ChangeEvent<HTMLTextAreaElement>) {
         if (customSaveLogic && onChange) {
             if (!displayEditor) {
-                setDisplayEditor(true)
+                setDisplayEditorState(true)
             }
 
             onChange(event.target.value)
@@ -90,7 +93,9 @@ export default function Editor({
             setMarkdown(event.target.value)
         }
 
-        setDisplayEditor(true)
+        if (!forceEditMode) {
+            setDisplayEditorState(true)
+        }
         autoResize(event.target)
     }
 
@@ -101,7 +106,9 @@ export default function Editor({
             sendText(courseId, markdown.split('\n'))
         }
 
-        setDisplayEditor(false)
+        if (!forceEditMode) {
+            setDisplayEditorState(false)
+        }
         setHideSave(true)
     }
 
@@ -111,7 +118,9 @@ export default function Editor({
     }
 
     function handleDisplayEditor() {
-        setDisplayEditor(!displayEditor)
+        if (!forceEditMode) {
+            setDisplayEditorState(!displayEditorState)
+        }
         setHideSave(false)
         if (textareaRef.current) {
             autoResize(textareaRef.current)
@@ -170,7 +179,7 @@ export function EditorWithoutLogic({
                 </div>}
                 <div className={`markdown-editor space-x-2 h-full ${displayEditor && 'grid grid-cols-2'}`}>
                     {(displayEditor || !markdown.length) && <textarea
-                        className={`w-full h-full rounded-sm text-white bg-transparent focus:outline-hidden resize-none overflow-hidden outline-hidden caret-orange-500 ${placeholderClassName}`}
+                        className={`w-full h-full rounded-sm text-white bg-transparent focus:outline-hidden resize-none overflow-hidden outline-hidden caret-login ${placeholderClassName}`}
                         value={markdown}
                         onChange={handleMarkdownChange}
                         placeholder={placeholder || 'Write your markdown here...'}
@@ -203,7 +212,7 @@ export function Markdown({
 }: MarkdownProps) {
     return (
         <div
-            className={`markdown-preview ${displayEditor && 'pl-2 border-l-2 border-orange-500'} text-foreground h-full wrap-break-word ${className}`}
+            className={`markdown-preview ${displayEditor && 'pl-2 border-l-2 border-login'} text-foreground h-full wrap-break-word ${className}`}
             onClick={handleDisplayEditor}
             dangerouslySetInnerHTML={{ __html: marked(markdown) }}
         />

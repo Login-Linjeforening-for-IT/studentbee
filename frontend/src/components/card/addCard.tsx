@@ -1,5 +1,5 @@
 import Editor from '@components/editor/editor'
-import { Trash2 } from 'lucide-react'
+import { Trash2, CheckSquare, Square } from 'lucide-react'
 import { Dispatch, SetStateAction, useRef } from 'react'
 import Alternative from './alternative'
 
@@ -69,88 +69,110 @@ export default function AddCard({
     }
 
     return (
-        <div className='w-full h-full overflow-auto noscroll px-px'>
-            <h1 className='flex items-center justify-start text-lg h-8'>Source</h1>
-            <input
-                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-8 outline-hidden caret-orange-500'
-                value={card.source || ''}
-                type='text'
-                placeholder='Exam or learning material source'
-                onChange={(event) => updateSource(event.target.value)}
-            />
-            <h1 className='flex items-center justify-start text-lg h-8'>Theme</h1>
-            <input
-                ref={inputRef}
-                className='bg-login-700 p-1 pl-2 w-full rounded-lg h-8 outline-hidden caret-orange-500'
-                value={card.theme || ''}
-                type='text'
-                placeholder='Question theme (optional)'
-                onChange={(event) => updateTheme(event.target.value)}
-            />
-            <h1 className='flex items-center justify-start text-lg col-span-1 h-8'>Question</h1>
-            <div className='bg-login-700 rounded-lg p-2'>
-                <Editor
-                    placeholder='Enter question...'
-                    courseId={courseId}
-                    value={card.question.split('\n')}
-                    customSaveLogic={true}
-                    save={() => { }}
-                    onChange={updateQuestion}
-                    hideSaveButton={true}
-                />
+        <div className='w-full h-full overflow-auto noscroll px-2 flex flex-col gap-4'>
+            <div className='flex gap-4'>
+                <div className='w-1/2'>
+                    <h1 className='text-sm text-login-300 mb-1'>Source</h1>
+                    <input
+                        className='bg-login-800 p-2 w-full rounded-lg outline-hidden caret-login text-white border border-login-700 focus:border-login transition-colors'
+                        value={card.source || ''}
+                        type='text'
+                        placeholder='Exam or learning material source'
+                        onChange={(event) => updateSource(event.target.value)}
+                    />
+                </div>
+                <div className='w-1/2'>
+                    <h1 className='text-sm text-login-300 mb-1'>Theme</h1>
+                    <input
+                        ref={inputRef}
+                        className='bg-login-800 p-2 w-full rounded-lg outline-hidden caret-login text-white border border-login-700 focus:border-login transition-colors'
+                        value={card.theme || ''}
+                        type='text'
+                        placeholder='Question theme (optional)'
+                        onChange={(event) => updateTheme(event.target.value)}
+                    />
+                </div>
             </div>
-            <h1 className='flex items-center justify-start text-lg col-span-1 h-8'>Alternatives</h1>
-            <div className='w-full'>
-                {card.alternatives.map((alternative, index) => {
-                    const isCorrect = typeof card.answers === 'number' ? card.answers === index : card.answers.includes(index)
 
-                    if (index == card.alternatives.length - 1 && !alternative) {
-                        return null
-                    }
+            <div>
+                <h1 className='text-sm text-login-300 mb-1'>Question</h1>
+                <div className='bg-login-800 rounded-lg p-2 border border-login-700'>
+                    <Editor
+                        placeholder='Enter question...'
+                        courseId={courseId}
+                        value={card.question.split('\n')}
+                        customSaveLogic={true}
+                        save={() => { }}
+                        onChange={updateQuestion}
+                        hideSaveButton={true}
+                        forceEditMode={true}
+                    />
+                </div>
+            </div>
 
-                    return (
-                        <div key={index} className='flex flex-rows max-w-full w-full'>
-                            <h1 className='w-10 text-login-400'>{index + 1}</h1>
-                            <button
-                                onClick={() => handleAlternativeClick(index)}
-                                key={alternative}
-                                className='text-left flex flex-rows space-x-2 w-full cursor-pointer'
-                            >
-                                <h1>{alternative}</h1>
-                            </button>
-                            <div className='flex flex-rows place-items-start gap-1'>
-                                <h1 className='text-login-400 float-right'>{`${isCorrect ? '(correct)' : '(wrong)'}`}</h1>
-                                {isCorrect ?
-                                    <button className='text-xl text-login-400 hover:text-red-500 cursor-pointer' onClick={() => removeCorrect(index)}>
-                                        ☒
-                                    </button>
-                                    :
-                                    <button className='text-xl text-login-400 hover:text-green-500 cursor-pointer' onClick={() => addCorrect(index)}>
-                                        ☑
-                                    </button>
-                                }
-                                <button className='w-5 cursor-pointer' onClick={() => removeAlternative(index)}>
-                                    <Trash2 className='w-full h-full pt-[3.5px] text-login-400 hover:text-red-500' />
+            <div>
+                <h1 className='text-sm text-login-300 mb-1'>Alternatives</h1>
+                <div className='flex flex-col gap-2'>
+                    {card.alternatives.map((alternative, index) => {
+                        const isCorrect = typeof card.answers === 'number' ? card.answers === index : card.answers.includes(index)
+
+                        if (index == card.alternatives.length - 1 && !alternative) {
+                            return null
+                        }
+
+                        return (
+                            <div key={index} className='flex items-center gap-2 bg-login-800 p-2 rounded-lg border border-login-700 group hover:border-login-600 transition-colors'>
+                                <span className='text-login-400 w-6 text-center'>{index + 1}</span>
+                                <button
+                                    onClick={() => handleAlternativeClick(index)}
+                                    className='flex-1 text-left text-white truncate'
+                                >
+                                    {alternative}
                                 </button>
+                                <div className='flex items-center gap-2'>
+                                    {isCorrect ?
+                                        <button
+                                            className='text-green-500 hover:text-green-400 transition-colors'
+                                            onClick={() => removeCorrect(index)}
+                                        >
+                                            <CheckSquare size={20} />
+                                        </button>
+                                        :
+                                        <button
+                                            className='text-login-400 hover:text-login-300 transition-colors'
+                                            onClick={() => addCorrect(index)}
+                                        >
+                                            <Square size={20} />
+                                        </button>
+                                    }
+                                    <button
+                                        className='text-login-400 hover:text-red-500 transition-colors'
+                                        onClick={() => removeAlternative(index)}
+                                    >
+                                        <Trash2 size={20} />
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    )
-                })}
+                        )
+                    })}
+
+                    <div className='bg-login-800 p-2 rounded-lg border border-login-700 border-dashed'>
+                        <Alternative
+                            card={card}
+                            setCard={setCard}
+                            alternativeIndex={alternativeIndex}
+                            setAlternativeIndex={setAlternativeIndex}
+                        />
+                    </div>
+                </div>
             </div>
-            <Alternative
-                card={card}
-                setCard={setCard}
-                alternativeIndex={alternativeIndex}
-                setAlternativeIndex={setAlternativeIndex}
-            />
+
             <button
-                className={`
-                    w-full h-8 text-lg place-self-center bg-login
-                    hover:bg-[#fd934c] outline outline-[#fd934c]
-                    rounded-lg mt-2 cursor-pointer
-                `}
+                className='w-full py-3 bg-login hover:bg-login/80 text-white font-bold rounded-lg transition-colors mt-4'
                 onClick={handleSubmit}
-            >Add card</button>
+            >
+                Add Card
+            </button>
         </div>
     )
 }

@@ -26,6 +26,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
     const [error, setError] = useState<string>('')
     const { condition: message, setCondition: setMessage } = useClearStateAfter()
     const [showText, setShowText] = useState(true)
+    const [onlyNotes, setOnlyNotes] = useState(false)
     const [alternativeIndex, setAlternativeIndex] = useState(0)
     const router = useRouter()
     const textareaRefs = useRef<(HTMLTextAreaElement | null)[]>([])
@@ -147,26 +148,50 @@ export default function PageClient({ course, id }: { course: Course, id: string 
 
     function hideText() {
         setShowText(!showText)
+        if (onlyNotes) {
+            setOnlyNotes(false)
+        }
+    }
+
+    function toggleOnlyNotes() {
+        if (!onlyNotes) {
+            setShowText(true)
+        }
+        setOnlyNotes(!onlyNotes)
     }
 
     return (
-        <div className='w-full h-[calc(100%-1.2rem)] rounded-lg gap-2 flex flex-col mt-4 overflow-hidden'>
-            <div className='w-full h-[calc(100%-1.2rem)] grid grid-cols-4 gap-2'>
-                <div className='w-full h-full bg-login-900 col-span-3 rounded-lg flex flex-col pb-2'>
-                    <Header
-                        code={code}
-                        clearCard={clearCard}
-                        editing={editing}
-                        setEditing={setEditing}
-                        hideText={hideText}
-                    />
-                    <div className='w-full h-full px-2'>
-                        <div className={`w-full h-full ${showText ? 'grid grid-cols-2 gap-2' : ''}`}>
-                            {showText && <textarea
-                                value={editing.notes}
-                                onChange={handleTextChange}
-                                className='w-full h-full overflow-auto noscroll bg-login-700 rounded-lg p-2 resize-none whitespace-pre-wrap outline-hidden caret-orange-500'
-                            />}
+        <div className='w-full h-[calc(100%-1.2rem)] flex flex-col gap-2 mt-4 overflow-hidden'>
+            <Header
+                code={code}
+                clearCard={clearCard}
+                editing={editing}
+                setEditing={setEditing}
+                hideText={hideText}
+                handlePublish={handleSubmit}
+                handleDelete={() => setDisplayDelete(true)}
+                toggleOnlyNotes={toggleOnlyNotes}
+                onlyNotes={onlyNotes}
+                cardCount={editing.cards.length}
+            />
+
+            <div className='flex-1 grid grid-cols-10 gap-2 overflow-hidden'>
+                {showText && (
+                    <div className={`${onlyNotes ? 'col-span-10' : 'col-span-3'} bg-login-900 rounded-lg p-4 flex flex-col h-full`}>
+                        <h1 className='text-sm text-login-300 mb-4 uppercase tracking-wider font-semibold'>Notes</h1>
+                        <textarea
+                            value={editing.notes}
+                            onChange={handleTextChange}
+                            className='w-full flex-1 overflow-auto noscroll bg-login-800 rounded-lg p-3 resize-none whitespace-pre-wrap outline-hidden caret-login text-login-100 text-sm leading-relaxed'
+                            placeholder='Add notes here...'
+                        />
+                    </div>
+                )}
+
+                {!onlyNotes && (
+                    <>
+                        <div className={`${showText ? 'col-span-5' : 'col-span-8'} bg-login-900 rounded-lg p-4 flex flex-col h-full overflow-hidden`}>
+                            <h1 className='text-sm text-login-300 mb-4 uppercase tracking-wider font-semibold'>Card Editor</h1>
                             <AddCard
                                 courseId={id}
                                 card={card}
@@ -176,43 +201,47 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                                 setAlternativeIndex={setAlternativeIndex}
                             />
                         </div>
-                    </div>
-                </div>
-                <Cards
-                    card={card}
-                    cards={editing.cards}
-                    setEditing={setEditing}
-                    handleClick={handleClick}
-                />
+
+                        <div className='col-span-2 h-full overflow-hidden'>
+                            <Cards
+                                card={card}
+                                cards={editing.cards}
+                                setEditing={setEditing}
+                                handleClick={handleClick}
+                            />
+                        </div>
+                    </>
+                )}
             </div>
+
             {(error || message) && <div
                 onClick={() => setError('')}
                 className={`
                     absolute ${message && 'top-17.5 right-5'}
-                    ${error && 'bg-login-700/50 grid top-0 left-0 place-items-center w-full h-full'}
+                    ${error && 'bg-login-700/50 grid top-0 left-0 place-items-center w-full h-full z-50'}
                 `}>
                 {error ? <div className={`
-                        w-md grid place-items-center bg-login-100/10 outline
-                        outline-login-100/20 backdrop-blur-md shadow-lg
+                        w-md grid place-items-center bg-login-900 outline
+                        outline-login-700 shadow-2xl
                         rounded-lg h-30 relative'
                     `}>
                     <div
                         onClick={(e) => { e.preventDefault(); setError('') }}
                         className={`
                             absolute top-2 right-2 rounded-lg
-                            hover:bg-login-300/10 w-8 h-8 grid
+                            hover:bg-login-800 w-8 h-8 grid
                             place-items-center cursor-pointer
                         `}>
                         <X className='w-4 h-4' />
                     </div>
-                    <h1 className='font-semibold'>Failed to {displayDelete ? 'delete' : 'update'} course</h1>
-                    <h1>Details: {typeof error === 'string' ? error : JSON.stringify(error)}</h1>
+                    <h1 className='font-semibold text-red-400'>Failed to {displayDelete ? 'delete' : 'update'} course</h1>
+                    <h1 className='text-login-200'>Details: {typeof error === 'string' ? error : JSON.stringify(error)}</h1>
                 </div> : <div className={`
-                    w-xs grid place-items-center bg-green-500/10 outline
-                    outline-green-500/20 backdrop-blur-md shadow-lg
+                    w-xs grid place-items-center bg-green-500/20 outline
+                    outline-green-500/30 backdrop-blur-md shadow-lg
                     rounded-lg h-10 relative'
                 `}>
-                    <h1 className='font-semibold'>{message}</h1>
+                    <h1 className='font-semibold text-green-400'>{message}</h1>
                 </div>}
             </div>}
             <DeleteCourse
@@ -221,42 +250,18 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                 course={course}
                 handleDelete={handleDelete}
             />
-            <div className='w-full h-9 relative p-2 items-center'>
-                <button
-                    onClick={() => setDisplayDelete(true)}
-                    className={`
-                        h-8 rounded-lg bg-login-300/10 outline
-                        font-bold outline-login-300/20 hover:bg-red-500/40
-                        px-8 hover:outline-red-500/50 grid place-items-center 
-                        cursor-pointer w-fit self-center text-login-50
-                        absolute left-1 bottom-1
-                    `}
-                >
-                    Delete course
-                </button>
-                <button
-                    onClick={handleSubmit}
-                    className={`
-                        h-8 rounded-lg bg-login px-8 font-bold grid
-                        place-items-center cursor-pointer w-fit text-login-50
-                        absolute left-1/2 transform -translate-x-1/2 bottom-1
-                    `}
-                >
-                    Publish changes
-                </button>
-            </div>
         </div>
     )
 }
 
 function DeleteCourse({ display, setDisplay, course, handleDelete }: DeleteCourseProps) {
     const buttonStyle = `
-        rounded-md w-full bg-login-500/60 outline outline-login-500/70
-        hover:bg-login-500/70 col-span-2 cursor-pointer
+        rounded-md w-full bg-login-700 outline outline-login-600
+        hover:bg-login-600 col-span-2 cursor-pointer text-white py-2 transition-colors
     `
     const buttonStyleRed = `
-        rounded-md w-full bg-red-500/40 outline outline-red-500/50
-        hover:bg-red-500/50 cursor-pointer
+        rounded-md w-full bg-red-500/20 outline outline-red-500/40
+        hover:bg-red-500/30 cursor-pointer text-red-200 py-2 transition-colors
     `
     if (!display) {
         return <></>
@@ -266,26 +271,26 @@ function DeleteCourse({ display, setDisplay, course, handleDelete }: DeleteCours
         <div
             onClick={() => setDisplay(false)}
             className={`
-                absolute bg-login-700/50 grid top-0 left-0 place-items-center
-                w-full h-full
+                absolute bg-login-900/80 grid top-0 left-0 place-items-center
+                w-full h-full z-50 backdrop-blur-sm
             `}>
             <div className={`
-                    w-md grid place-items-center bg-login-300/30 outline
-                    outline-login-300/40 backdrop-blur-md shadow-lg
-                    rounded-lg h-50 relative px-8
+                    w-md grid place-items-center bg-login-900 outline
+                    outline-login-700 shadow-2xl
+                    rounded-lg p-6 relative gap-4
                 `}>
                 <div
                     onClick={(e) => { e.preventDefault(); setDisplay(false) }}
                     className={`
                         absolute top-2 right-2 rounded-lg
-                        hover:bg-login-300/20 w-8 h-8 grid
-                        place-items-center cursor-pointer gap-2
+                        hover:bg-login-800 w-8 h-8 grid
+                        place-items-center cursor-pointer
                     `}>
-                    <X className='w-4 h-4' />
+                    <X className='w-4 h-4 text-login-300' />
                 </div>
-                <h1 className='font-semibold'>Delete course {course.code}</h1>
-                <h1 className='max-w-xs'>Are you sure you want to delete course {course.code}, including all related cards and comments?</h1>
-                <div className='w-full rounded-lg gap-2 grid grid-cols-3 items-center'>
+                <h1 className='font-bold text-xl text-white'>Delete course {course.code}</h1>
+                <p className='text-login-300 text-center'>Are you sure you want to delete course {course.code}, including all related cards and comments?</p>
+                <div className='w-full rounded-lg gap-3 grid grid-cols-3 items-center mt-2'>
                     <button className={buttonStyle} onClick={() => setDisplay(false)}>Cancel</button>
                     <button className={buttonStyleRed} onClick={handleDelete}>Delete</button>
                 </div>

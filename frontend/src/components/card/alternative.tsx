@@ -1,3 +1,4 @@
+import { Plus } from 'lucide-react'
 import { Dispatch, SetStateAction, useRef } from 'react'
 
 type AlternativeProps = {
@@ -40,23 +41,27 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
     }
 
     return (
-        <div className='max-w-full'>
-            <div className='grid grid-cols-12'>
-                <h1 className='flex items-center justify-start text-lg h-8'>{alternativeIndex + 1}:</h1>
-                <div className='w-full col-span-11 h-full'>
-                    <textarea
-                        ref={inputRef}
-                        value={card.alternatives[alternativeIndex]}
-                        onChange={(event) => handleInput(event.target.value)}
-                        placeholder={`Alternative ${alternativeIndex + 1}`}
-                        className='min-h-8 w-full bg-login-700 rounded-lg px-2 outline-hidden overflow-hidden resize-none whitespace-pre-wrap caret-orange-500'
-                    />
-                </div>
+        <div className='flex flex-col gap-2'>
+            <div className='flex items-center gap-2'>
+                <span className='text-login-400 w-6 text-center'>{alternativeIndex + 1}</span>
+                <textarea
+                    ref={inputRef}
+                    value={card.alternatives[alternativeIndex]}
+                    onChange={(event) => handleInput(event.target.value)}
+                    placeholder={`Enter alternative ${alternativeIndex + 1}...`}
+                    className='flex-1 min-h-10 bg-transparent text-white placeholder-login-500 outline-hidden resize-none overflow-hidden py-2'
+                    rows={1}
+                />
             </div>
-            {alternativeIndex < 9 && <button
-                className='w-full h-8 bg-login rounded-lg text-lg cursor-pointer'
-                onClick={handleAddAlternative}
-            >Add alternative</button>}
+            {alternativeIndex < 9 && (
+                <button
+                    className='flex items-center justify-center gap-2 w-full py-2 text-login-400 hover:text-white hover:bg-login-700 rounded-lg transition-colors text-sm'
+                    onClick={handleAddAlternative}
+                >
+                    <Plus size={16} />
+                    Add another alternative
+                </button>
+            )}
         </div>
     )
 }

@@ -17,36 +17,46 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
     }
 
     return (
-        <div className='w-full h-full bg-login-900 rounded-lg p-2'>
-            <div className='grid grid-cols-12'>
-                <h1 className='text-xl mb-2 grid grid-row col-span-11'>Cards</h1>
-                <h1 className='text-login-300'>({cards.length})</h1>
+        <div className='w-full h-full bg-login-900 rounded-lg p-4 flex flex-col'>
+            <div className='flex justify-between items-center mb-4'>
+                <h1 className='text-xl font-bold text-white'>Cards</h1>
+                <span className='bg-login-800 text-login-300 px-2 py-1 rounded-full text-sm'>{cards.length}</span>
             </div>
-            <div className='max-h-full overflow-auto noscroll'>
+            <div className='flex-1 overflow-auto noscroll space-y-2'>
                 {cards.reverse().map((card: Card, index: number) => {
-                    const outline = editCard.question === cards[index].question
-                        ? 'outline-gray-500' : 'outline-hidden'
+                    const isSelected = editCard.question === card.question
 
                     return (
-                        <div key={index} className='flex group mb-2'>
-                            <button
-                                key={card.question}
-                                onClick={() => handleClick(index)}
-                                className={`
-                                    flex-1 outline ${outline} 
-                                    hover:outline-white bg-login-700 
-                                    rounded-lg p-2 flex flex-rows space-x-2
-                                    text-left cursor-pointer
-                                `}
-                            >
-                                <div className='grid grid-cols-12 w-full'>
-                                    <h1 className='w-full text-login-300'>{index + 1}</h1>
-                                    <h1 className='w-full col-span-10'>{card.question.slice(0, 60)}{card.question.length > 60 && '...'}</h1>
-                                    <h1 className='text-login-300 text-right w-full'>{card.alternatives.length}</h1>
+                        <div
+                            key={index}
+                            className={`
+                                group relative flex items-center p-3 rounded-lg cursor-pointer transition-all
+                                ${isSelected ? 'bg-login-800 border border-login' : 'bg-login-800 border border-transparent hover:border-login-600'}
+                            `}
+                            onClick={() => handleClick(index)}
+                        >
+                            <div className='flex flex-col w-full gap-1 pr-8'>
+                                <div className='flex items-center gap-2'>
+                                    <span className='text-login font-mono text-sm font-bold'>
+                                        {(index + 1).toString().padStart(2, '0')}
+                                    </span>
+                                    <span className='text-xs text-login-400'>
+                                        {card.alternatives.length} alternatives
+                                    </span>
                                 </div>
-                            </button>
-                            <button className='flex justify-center items-center cursor-pointer w-0 group-hover:w-6 transition-all duration-200' onClick={() => handleRemove(index)}>
-                                <Trash2 className='w-full h-full text-login-50 hover:text-red-500' />
+                                <p className='text-sm text-login-200 line-clamp-2'>
+                                    {card.question || 'No question text'}
+                                </p>
+                            </div>
+
+                            <button
+                                className='absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-2 text-login-400 hover:text-red-500 hover:bg-login-700 rounded-lg transition-all'
+                                onClick={(e) => {
+                                    e.stopPropagation()
+                                    handleRemove(index)
+                                }}
+                            >
+                                <Trash2 size={18} />
                             </button>
                         </div>
                     )
