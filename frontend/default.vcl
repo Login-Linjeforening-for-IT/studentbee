@@ -14,6 +14,10 @@ sub vcl_recv {
         return (pass);
     }
 
+    if (req.url ~ "^/(api/login|api/callback|api/logout|api/token|login)(/.*)?$") {
+        return (pass);
+    }
+
     return (hash);
 }
 
