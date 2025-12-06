@@ -45,6 +45,11 @@ export async function deleteCourse({ id }: { id: number }): Promise<{ id: string
     return await deleteWrapper({ path: `/course/${id}` })
 }
 
+// Cards
+export async function sendCardVote(data: { cardId: number, vote: boolean }) {
+    return await postWrapper({ path: '/vote/card', data })
+}
+
 // Comments
 export async function getComments(cardId: number): Promise<CardComment[] | ErrorResponse> {
     return await getWrapper({ path: `/comments/${cardId}` })

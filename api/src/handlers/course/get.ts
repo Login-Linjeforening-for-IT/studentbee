@@ -39,7 +39,9 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
                         'createdBy', cards.created_by,
                         'createdAt', cards.created_at,
                         'updatedBy', cards.updated_by,
-                        'updatedAt', cards.updated_at
+                        'updatedAt', cards.updated_at,
+                        'vote', (SELECT cv2.is_upvote FROM card_votes cv2 WHERE cv2.card_id = cards.id AND cv2.user_id = $2),
+                        'rating', COALESCE((SELECT SUM(CASE WHEN cv2.is_upvote THEN 1 ELSE -1 END) FROM card_votes cv2 WHERE cv2.card_id = cards.id), 0)
                     )
                 ) FILTER (WHERE cards.id IS NOT NULL), '[]') as cards,
                 COALESCE(json_agg(
@@ -52,7 +54,7 @@ export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
             LEFT JOIN card_votes cv ON cards.id = cv.card_id
             WHERE ${id ? 'c.id' : 'c.code'} = $1
             GROUP BY c.id
-        `, [id || code?.toUpperCase()])
+        `, [id || code?.toUpperCase(), req.user?.id])
 
         if (!result.rowCount) {
             return res.status(404).send({ error: 'Course not found' })

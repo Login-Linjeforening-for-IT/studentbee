@@ -1,7 +1,6 @@
-import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 import { ChevronDown, ChevronUp, ThumbsDown, ThumbsUp } from 'lucide-react'
 import voteColor from '../comments/voteColor'
-import { getCookie } from 'uibee/utils'
 
 type QuestionFooterProps = {
     card: Card
@@ -24,13 +23,6 @@ export default function QuestionFooter({
     showAnswers,
     remainGreen
 }: QuestionFooterProps) {
-    const [username, setUsername] = useState('')
-
-    useEffect(() => {
-        const user = getCookie('user_nickname') as string | null
-        const username = user || ''
-        setUsername(username)
-    }, [])
 
     const showAnswer = card.answers.every(answer => remainGreen.includes(answer))
     const revealText = showAnswer
@@ -41,17 +33,17 @@ export default function QuestionFooter({
         <div className='absolute bottom-0 w-full grid grid-cols-3 px-4'>
             <div className='flex flex-row space-x-2'>
                 <h1 className='text-login-300'>
-                    {card.rating + clientVote > 0 ? '+' : ''}
-                    {card.rating + clientVote}
+                    {card.rating > 0 ? '+' : ''}
+                    {card.rating}
                 </h1>
                 <button className='size-5 cursor-pointer' onClick={() => handleVote(true)}>
                     <ThumbsUp
-                        className={`w-full h-full ${voteColor('up', card.votes, username, clientVote)}`}
+                        className={`w-full h-full ${voteColor('up', clientVote)}`}
                     />
                 </button>
                 <button className='size-5 cursor-pointer' onClick={() => handleVote(false)}>
                     <ThumbsDown
-                        className={`w-full h-full ${voteColor('down', card.votes, username, clientVote)}`}
+                        className={`w-full h-full ${voteColor('down', clientVote)}`}
                     />
                 </button>
             </div>

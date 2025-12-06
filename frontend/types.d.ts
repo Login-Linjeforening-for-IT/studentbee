@@ -28,7 +28,7 @@ type Card = {
     question: string
     alternatives: string[]
     answers: number[]
-    votes: Vote[]
+    vote?: boolean | null
     source: string | null
     theme: string | null
     rating: number

@@ -3,13 +3,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { useCardNavigation } from '@parent/src/hooks/cardNavigation'
 import Comments from './comments'
-import sendCardVote from '@parent/src/utils/vote'
 import Link from 'next/link'
 import { sendMark } from '@parent/src/utils/fetchClient'
 import Buttons from '../card/buttons'
 import Question from '../card/question'
 import { useRouter } from 'next/navigation'
-import { getComments } from '@utils/api'
+import { getComments, sendCardVote } from '@utils/api'
 
 type CardsProps = {
     id?: string
@@ -31,7 +30,7 @@ export default function Cards({ id, current, course }: CardsProps) {
     const [remainGreen, setRemainGreen] = useState<number[]>([])
     const [shuffledAlternatives, setShuffledAlternatives] = useState<string[]>([])
     const [indexMapping, setIndexMapping] = useState<number[]>([])
-    const cards = course !== null ? course.cards : []
+    const [cards, setCards] = useState<Card[]>(course !== null ? course.cards : [])
     const card = cards[current || 0]
     const [wait, setWait] = useState(card?.answers.length > 1 ? true : false)
     selectedRef.current = selected
@@ -82,6 +81,14 @@ export default function Cards({ id, current, course }: CardsProps) {
         setShuffledAlternatives(shuffled)
         setIndexMapping(mapping)
     }, [card?.alternatives])
+
+    useEffect(() => {
+        if (typeof card?.vote === 'boolean') {
+            setClientVote(card.vote ? 1 : -1)
+        } else {
+            setClientVote(0)
+        }
+    }, [card])
 
     useEffect(() => {
         (async() => {
@@ -152,18 +159,26 @@ export default function Cards({ id, current, course }: CardsProps) {
         return <></>
     }
 
-    function handleVote(vote: boolean) {
+    async function handleVote(vote: boolean) {
         if (!id) {
             return
         }
 
-        if (clientVote === 1 && vote || clientVote === -1 && !vote) {
-            setClientVote(0)
-        } else {
-            setClientVote(vote ? 1 : -1)
-        }
+        try {
+            const result = await sendCardVote({ cardId: card.id, vote })
+            if ('eror' in result) {
+                console.error('Failed to send vote:', result.eror)
+                return
+            }
 
-        sendCardVote({ courseId: id, cardId: current || 0, vote })
+            const prevVote = clientVote
+            setClientVote(vote ? 1 : -1)
+            setCards(prev => prev.map(c => c.id === card.id ?
+                { ...c, rating: c.rating + (vote ? (prevVote === -1 ? 2 : prevVote === 0 ? 1 : 0)
+                    : -(prevVote === 1 ? 2 : prevVote === 0 ? 1 : 0)), vote } : c))
+        } catch {
+            console.error('Failed to send vote')
+        }
     }
 
     function showAnswers() {
