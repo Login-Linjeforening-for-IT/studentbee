@@ -199,6 +199,9 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                                 addCard={addCard}
                                 alternativeIndex={alternativeIndex}
                                 setAlternativeIndex={setAlternativeIndex}
+                                isEditing={editingIndex !== -1}
+                                isSaved={editingIndex !== -1 && JSON.stringify(card) === JSON.stringify(editing.cards[editingIndex])}
+                                isEmpty={JSON.stringify(card) === JSON.stringify(emptyCard)}
                             />
                         </div>
 

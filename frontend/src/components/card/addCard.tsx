@@ -10,6 +10,9 @@ type AddCardProps = {
     addCard: () => void
     alternativeIndex: number
     setAlternativeIndex: Dispatch<SetStateAction<number>>
+    isEditing?: boolean
+    isSaved?: boolean
+    isEmpty?: boolean
 }
 
 export default function AddCard({
@@ -18,7 +21,10 @@ export default function AddCard({
     setCard,
     addCard,
     alternativeIndex,
-    setAlternativeIndex
+    setAlternativeIndex,
+    isEditing,
+    isSaved,
+    isEmpty
 }: AddCardProps) {
     const inputRef = useRef<HTMLInputElement | null>(null)
     function updateQuestion(question: string) {
@@ -168,10 +174,10 @@ export default function AddCard({
             </div>
 
             <button
-                className='w-full py-3 bg-login hover:bg-login/80 text-white font-bold rounded-lg transition-colors mt-4'
+                className={(isSaved || isEmpty || !card.question) ? 'w-full py-3 text-white font-bold rounded-lg transition-colors mt-4 bg-login-700 hover:bg-login-700/90' : 'w-full py-3 text-white font-bold rounded-lg transition-colors mt-4 bg-login hover:bg-login/80'}
                 onClick={handleSubmit}
             >
-                Add Card
+                {isEditing ? 'Update Card' : 'Add Card'}
             </button>
         </div>
     )
