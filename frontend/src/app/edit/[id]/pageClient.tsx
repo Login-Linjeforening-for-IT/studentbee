@@ -21,6 +21,7 @@ type DeleteCourseProps = {
 export default function PageClient({ course, id }: { course: Course, id: string }) {
     const [code, setCode] = useState(course.code)
     const [editing, setEditing] = useState<Course>({ ...course })
+    const [savedCourse, setSavedCourse] = useState<Course>({ ...course })
     const [editingIndex, setEditingIndex] = useState(-1)
     const [displayDelete, setDisplayDelete] = useState(false)
     const [error, setError] = useState<string>('')
@@ -47,6 +48,8 @@ export default function PageClient({ course, id }: { course: Course, id: string 
     }
     const [card, setCard] = useState<Card>(emptyCard)
 
+    const isSaveDisabled = JSON.stringify(editing) === JSON.stringify(savedCourse)
+
     useEffect(() => {
         (async () => {
             const token = getCookie('access_token') || ''
@@ -57,9 +60,14 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                 if (!editing.cards.length && newCourse.cards.length) {
                     setEditing({ ...newCourse })
                 }
+                setSavedCourse({ ...newCourse })
             }
         })()
     }, [])
+
+    useEffect(() => {
+        setSavedCourse({ ...course })
+    }, [course])
 
     useEffect(() => {
         editing.cards.forEach((card, cardIndex) => {
@@ -95,6 +103,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
             setError(response.error)
         } else if ('id' in response) {
             setMessage('Updated course.')
+            setSavedCourse({ ...editing })
         } else {
             setError('Unknown error')
         }
@@ -178,6 +187,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                 toggleOnlyNotes={toggleOnlyNotes}
                 onlyNotes={onlyNotes}
                 cardCount={editing.cards.length}
+                publishDisabled={isSaveDisabled}
             />
 
             <div className='flex-1 grid grid-cols-10 gap-2 overflow-hidden'>

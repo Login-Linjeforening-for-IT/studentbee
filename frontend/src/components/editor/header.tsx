@@ -13,19 +13,21 @@ type HeaderProps = {
     toggleOnlyNotes: () => void
     onlyNotes: boolean
     cardCount: number
+    publishDisabled?: boolean
 }
 
-export default function Header({ 
-    code, 
-    clearCard, 
-    editing, 
-    setEditing, 
-    hideText, 
-    handlePublish, 
-    handleDelete, 
+export default function Header({
+    code,
+    clearCard,
+    editing,
+    setEditing,
+    hideText,
+    handlePublish,
+    handleDelete,
     toggleOnlyNotes,
     onlyNotes,
-    cardCount 
+    cardCount,
+    publishDisabled = false
 }: HeaderProps) {
     const fileInputRef = useRef<HTMLInputElement | null>(null)
 
@@ -126,8 +128,11 @@ export default function Header({
                     Delete Course
                 </button>
                 <button
-                    className='flex items-center gap-2 bg-login hover:bg-login/80 text-white px-4 py-2 rounded-lg font-semibold transition-colors ml-2'
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold transition-colors ml-2 ${publishDisabled ? 'bg-login-700/40 text-login-300 cursor-not-allowed opacity-60' : 'bg-login hover:bg-login/80 text-white'}`}
                     onClick={handlePublish}
+                    disabled={publishDisabled}
+                    aria-disabled={publishDisabled}
+                    title={publishDisabled ? 'No changes to publish' : undefined}
                 >
                     <Save size={16} />
                     Publish Changes
