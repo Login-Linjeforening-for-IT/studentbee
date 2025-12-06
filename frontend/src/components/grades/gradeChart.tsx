@@ -45,22 +45,12 @@ export default function GradeChart({ grades, years, selectedYear }: GradesProps)
                 <div className='grow min-h-0 w-full'>
                     {totalCandidatesAlp > 0 ? (
                         <BarChart
-                            data={[
-                                { label: 'A', value: currentGrades.A || 0, color: '#4ade80B3' }, // Green 400 70%
-                                { label: 'B', value: currentGrades.B || 0, color: '#a3e635B3' }, // Lime 400 70%
-                                { label: 'C', value: currentGrades.C || 0, color: '#facc15B3' }, // Yellow 400 70%
-                                { label: 'D', value: currentGrades.D || 0, color: '#fb923cB3' }, // Orange 400 70%
-                                { label: 'E', value: currentGrades.E || 0, color: '#f87171B3' }, // Red 400 70%
-                                { label: 'F', value: currentGrades.F || 0, color: '#ef4444B3' }, // Red 500 70%
-                            ]}
+                            data={getGradeData('alp', currentGrades)}
                             total={totalCandidatesAlp}
                         />
                     ) : totalCandidatesBin > 0 ? (
                         <BarChart
-                            data={[
-                                { label: 'Pass', value: currentGrades.G || 0, color: '#4ade80B3' },
-                                { label: 'Fail', value: currentGrades.H || 0, color: '#ef4444B3' },
-                            ]}
+                            data={getGradeData('bin', currentGrades)}
                             total={totalCandidatesBin}
                         />
                     ) : (
@@ -104,6 +94,35 @@ export default function GradeChart({ grades, years, selectedYear }: GradesProps)
     )
 }
 
+function getGradeData(type: 'alp' | 'bin', currentGrades: GradeProp) {
+    const colors = {
+        A: '#2F6F3A',
+        B: '#567A1E',
+        C: '#A9730D',
+        D: '#B85E2E',
+        E: '#B0463C',
+        F: '#7A1E1E',
+        G: '#2F6F3A',
+        H: '#7A1E1E'
+    } as Record<string, string>
+
+    if (type === 'alp') {
+        return [
+            { label: 'A', value: currentGrades.A || 0, color: colors.A },
+            { label: 'B', value: currentGrades.B || 0, color: colors.B },
+            { label: 'C', value: currentGrades.C || 0, color: colors.C },
+            { label: 'D', value: currentGrades.D || 0, color: colors.D },
+            { label: 'E', value: currentGrades.E || 0, color: colors.E },
+            { label: 'F', value: currentGrades.F || 0, color: colors.F },
+        ]
+    }
+
+    return [
+        { label: 'Pass', value: currentGrades.G || 0, color: colors.G },
+        { label: 'Fail', value: currentGrades.H || 0, color: colors.H },
+    ]
+}
+
 function BarChart({ data, total }: { data: { label: string, value: number, color: string }[], total: number }) {
     const maxVal = Math.max(...data.map(d => d.value))
 
@@ -127,7 +146,9 @@ function BarChart({ data, total }: { data: { label: string, value: number, color
                                 style={{
                                     height: `${heightPct}%`,
                                     backgroundColor: d.color,
-                                    minHeight: d.value > 0 ? '4px' : '0'
+                                    minHeight: d.value > 0 ? '4px' : '0',
+                                    boxShadow: 'inset 0 -6px 12px rgba(0,0,0,0.35)',
+                                    border: '1px solid rgba(255,255,255,0.04)'
                                 }}
                             />
                         </div>
@@ -249,7 +270,7 @@ function LineChart({
                         const y = getY(val)
                         return (
                             <g key={t}>
-                                <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke='#333' strokeWidth='1' strokeDasharray='4 4' />
+                                <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke={'#2b2b2b'} strokeWidth='1' strokeDasharray='4 4' />
                                 <text x={padding.left - 5} y={y + 4} textAnchor='end' className='text-[10px] fill-login-200 font-mono'>
                                     {formatY(val)}
                                 </text>
