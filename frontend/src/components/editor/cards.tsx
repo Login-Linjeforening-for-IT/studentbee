@@ -24,7 +24,7 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
             </div>
             <div className='flex-1 overflow-auto noscroll space-y-2'>
                 {cards.reverse().map((card: Card, index: number) => {
-                    const isSelected = editCard.question === card.question
+                    const isSelected = editCard === cards[index]
 
                     return (
                         <div
