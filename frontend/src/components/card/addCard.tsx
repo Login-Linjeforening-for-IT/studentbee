@@ -126,6 +126,10 @@ export default function AddCard({
                             return null
                         }
 
+                        if (index === alternativeIndex) {
+                            return null
+                        }
+
                         return (
                             <div key={index} className='flex items-center gap-2 bg-login-800 p-2 rounded-lg border border-login-700 group hover:border-login-600 transition-colors'>
                                 <span className='text-login-400 w-6 text-center'>{index + 1}</span>

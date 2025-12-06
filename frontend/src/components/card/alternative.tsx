@@ -15,10 +15,26 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
 
     // Updates the alternative in the course object
     function handleInput(input: string) {
+        const tempAlternatives = [...card.alternatives]
         if (isNewPlaceholder) {
             setDraft(input)
+
+            if (alternativeIndex >= tempAlternatives.length) {
+                tempAlternatives.push(input)
+                if (tempAlternatives.length < 10) {
+                    tempAlternatives.push('')
+                }
+                setCard({ ...card, alternatives: tempAlternatives })
+                return
+            }
+
+            tempAlternatives[alternativeIndex] = input
+            const lastIndex = tempAlternatives.length - 1
+            if (alternativeIndex === lastIndex && input !== '' && tempAlternatives[lastIndex] !== '' && tempAlternatives.length < 10) {
+                tempAlternatives.push('')
+            }
+            setCard({ ...card, alternatives: tempAlternatives })
         } else {
-            const tempAlternatives = [...card.alternatives]
             tempAlternatives[alternativeIndex] = input
             setCard({ ...card, alternatives: tempAlternatives })
         }
@@ -33,17 +49,16 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
         }
 
         if (isNewPlaceholder) {
-            if (!draft) return
+            if (!draft && alternativeIndex >= card.alternatives.length) return
 
             const tempAlternatives = [...card.alternatives]
             if (alternativeIndex < tempAlternatives.length) {
-                tempAlternatives[alternativeIndex] = draft
+                if (tempAlternatives[tempAlternatives.length - 1] !== '' && tempAlternatives.length < 10) {
+                    tempAlternatives.push('')
+                }
             } else {
                 tempAlternatives.push(draft)
-            }
-
-            if (tempAlternatives.length < 10) {
-                tempAlternatives.push('')
+                if (tempAlternatives.length < 10) tempAlternatives.push('')
             }
 
             setCard({ ...card, alternatives: tempAlternatives })
@@ -52,7 +67,12 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
             return
         }
 
-        setAlternativeIndex(card.alternatives.length)
+        const lastIndex = card.alternatives.length - 1
+        if (lastIndex >= 0 && card.alternatives[lastIndex] === '') {
+            setAlternativeIndex(lastIndex)
+        } else {
+            setAlternativeIndex(card.alternatives.length)
+        }
     }
 
     useEffect(() => {
