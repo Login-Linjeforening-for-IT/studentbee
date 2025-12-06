@@ -1,5 +1,5 @@
 import { Plus } from 'lucide-react'
-import { Dispatch, SetStateAction, useRef } from 'react'
+import { Dispatch, SetStateAction, useRef, useEffect, useState } from 'react'
 
 type AlternativeProps = {
     card: Card
@@ -10,30 +10,58 @@ type AlternativeProps = {
 
 export default function Alternative({ card, setCard, alternativeIndex, setAlternativeIndex }: AlternativeProps) {
     const inputRef = useRef<HTMLTextAreaElement | null>(null)
+    const [draft, setDraft] = useState('')
+    const isNewPlaceholder = alternativeIndex >= card.alternatives.length || (alternativeIndex === card.alternatives.length - 1 && card.alternatives[alternativeIndex] === '')
 
     // Updates the alternative in the course object
     function handleInput(input: string) {
-        const tempAlternatives = [...card.alternatives]
-        tempAlternatives[alternativeIndex] = input
-        setCard({ ...card, alternatives: tempAlternatives })
+        if (isNewPlaceholder) {
+            setDraft(input)
+        } else {
+            const tempAlternatives = [...card.alternatives]
+            tempAlternatives[alternativeIndex] = input
+            setCard({ ...card, alternatives: tempAlternatives })
+        }
+
         autoResizeTextarea(inputRef.current as HTMLTextAreaElement)
     }
 
     // Adds a new alternative to the current card
     function handleAddAlternative() {
-        // Aborts if the current alternative is empty
-        if (!card.alternatives[alternativeIndex]) {
+        if (card.alternatives.length >= 10) {
             return
         }
 
-        // Max 10 alternatives
-        if (alternativeIndex >= 9) {
+        if (isNewPlaceholder) {
+            if (!draft) return
+
+            const tempAlternatives = [...card.alternatives]
+            if (alternativeIndex < tempAlternatives.length) {
+                tempAlternatives[alternativeIndex] = draft
+            } else {
+                tempAlternatives.push(draft)
+            }
+
+            if (tempAlternatives.length < 10) {
+                tempAlternatives.push('')
+            }
+
+            setCard({ ...card, alternatives: tempAlternatives })
+            setDraft('')
+            setAlternativeIndex(tempAlternatives.length - 1)
             return
         }
 
-        card.alternatives.push('')
-        setAlternativeIndex(alternativeIndex + 1)
+        setAlternativeIndex(card.alternatives.length)
     }
+
+    useEffect(() => {
+        if (isNewPlaceholder) {
+            setDraft('')
+        } else {
+            setDraft(card.alternatives[alternativeIndex] || '')
+        }
+    }, [alternativeIndex, card.alternatives, isNewPlaceholder])
 
     function autoResizeTextarea(textarea: HTMLTextAreaElement) {
         textarea.style.height = 'auto'
@@ -46,7 +74,7 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
                 <span className='text-login-400 w-6 text-center'>{alternativeIndex + 1}</span>
                 <textarea
                     ref={inputRef}
-                    value={card.alternatives[alternativeIndex]}
+                    value={isNewPlaceholder ? draft : (card.alternatives[alternativeIndex] || '')}
                     onChange={(event) => handleInput(event.target.value)}
                     placeholder={`Enter alternative ${alternativeIndex + 1}...`}
                     className='flex-1 min-h-10 bg-transparent text-white placeholder-login-500 outline-hidden resize-none overflow-hidden py-2'
@@ -59,7 +87,7 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
                     onClick={handleAddAlternative}
                 >
                     <Plus size={16} />
-                    Add another alternative
+                    Add alternative
                 </button>
             )}
         </div>
