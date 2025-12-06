@@ -8,7 +8,7 @@ export default function Buttons({ animateAnswer, navigate, flashColor }: Buttons
     const button = 'rounded-lg flex w-full p-2 bg-login-900 text-center justify-center cursor-pointer'
 
     return (
-        <div className='w-full flex gap-2 h-full'>
+        <div className='w-full flex gap-2'>
             <button
                 className={`${button} ${animateAnswer === 'back' ? 'bg-login-700' : 'bg-login-900'}`}
                 onClick={() => navigate('back')}

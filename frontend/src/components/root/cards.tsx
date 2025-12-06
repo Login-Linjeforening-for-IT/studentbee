@@ -177,7 +177,7 @@ export default function Cards({ id, current, course }: CardsProps) {
     }
 
     return (
-        <div className='w-full h-full max-h-[87vh] flex flex-col gap-2 col-span-6'>
+        <div className='w-full h-full flex flex-col gap-2 col-span-6'>
             {id && <Question
                 card={card}
                 cards={cards}
@@ -201,11 +201,11 @@ export default function Cards({ id, current, course }: CardsProps) {
                 setShowComments={setShowComments}
                 showAnswers={showAnswers}
             />}
-            <Buttons
+            {<Buttons
                 animateAnswer={animateAnswer}
                 navigate={navigate}
                 flashColor={flashColor}
-            />
+            />}
             {showComments && id && <Comments
                 courseId={id}
                 cardId={current || 0}

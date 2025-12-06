@@ -38,34 +38,34 @@ export default function QuestionFooter({
         : 'Reveal'
 
     return (
-        <div className='grid grid-cols-3'>
-            <div className='flex flex-rows space-x-2 mb-2'>
+        <div className='absolute bottom-0 w-full grid grid-cols-3 px-4'>
+            <div className='flex flex-row space-x-2'>
                 <h1 className='text-login-300'>
                     {card.rating + clientVote > 0 ? '+' : ''}
                     {card.rating + clientVote}
                 </h1>
-                <button className='w-[2.3vh] cursor-pointer' onClick={() => handleVote(true)}>
+                <button className='size-5 cursor-pointer' onClick={() => handleVote(true)}>
                     <ThumbsUp
-                        className={`w-full h-full pt-[0.2vh] ${voteColor('up', card.votes, username, clientVote)}`}
+                        className={`w-full h-full ${voteColor('up', card.votes, username, clientVote)}`}
                     />
                 </button>
-                <button className='w-[2.3vh] cursor-pointer' onClick={() => handleVote(false)}>
+                <button className='size-5 cursor-pointer' onClick={() => handleVote(false)}>
                     <ThumbsDown
-                        className={`w-full h-full pt-[0.2vh] ${voteColor('down', card.votes, username, clientVote)}`}
+                        className={`w-full h-full ${voteColor('down', card.votes, username, clientVote)}`}
                     />
                 </button>
             </div>
             <button
-                className='pb-2 text-login-300 flex items-center justify-center w-full cursor-pointer'
+                className='text-login-300 flex items-center justify-center w-full h-5 cursor-pointer'
                 onClick={() => setShowComments(!showComments)}
             >
-                <h1 className='hidden xs:hidden sm:block mr-2'>
+                <h1 className='hidden xs:hidden sm:block pr-2'>
                     {comments.length
                         ? `View comments (${comments.length})`
                         : 'Add comment'
                     }
                 </h1>
-                <h1 className='hidden xs:block sm:hidden mr-2'>
+                <h1 className='hidden xs:block sm:hidden pr-2'>
                     {comments.length
                         ? `Chat (${comments.length})`
                         : 'Comment'

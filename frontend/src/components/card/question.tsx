@@ -54,8 +54,8 @@ export default function Question({
     shuffledAlternatives
 }: QuestionProps) {
     return (
-        <div className='w-full h-full min-h-[85vh] bg-login-900 rounded-lg pt-1 px-2 pb-2'>
-            <div className='w-full h-full overflow-auto mb-2 noscroll'>
+        <div className='w-full h-full bg-login-900 rounded-lg pt-1 px-2 pb-2'>
+            <div className='relative w-full h-full overflow-auto mb-2 noscroll'>
                 <h1 className='text-right text-login-300 float-right'>
                     {card.source} {(current || 0) + 1} / {cards.length}
                 </h1>
@@ -84,17 +84,17 @@ export default function Question({
                     indexMapping={indexMapping}
                     shuffledAlternatives={shuffledAlternatives}
                 />
+                <QuestionFooter
+                    card={card}
+                    clientVote={clientVote}
+                    showComments={showComments}
+                    comments={comments}
+                    remainGreen={remainGreen}
+                    handleVote={handleVote}
+                    setShowComments={setShowComments}
+                    showAnswers={showAnswers}
+                />
             </div>
-            <QuestionFooter
-                card={card}
-                clientVote={clientVote}
-                showComments={showComments}
-                comments={comments}
-                remainGreen={remainGreen}
-                handleVote={handleVote}
-                setShowComments={setShowComments}
-                showAnswers={showAnswers}
-            />
         </div>
     )
 }
