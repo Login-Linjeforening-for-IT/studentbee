@@ -130,6 +130,11 @@ export default function PageClient({ course, id }: { course: Course, id: string 
     }
 
     function handleClick(index: number) {
+        if (editingIndex === index) {
+            clearCard()
+            return
+        }
+
         setCard(editing.cards[index])
         setAlternativeIndex(editing.cards[index].alternatives.length)
         setEditingIndex(index)
