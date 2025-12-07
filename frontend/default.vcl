@@ -17,17 +17,29 @@ sub vcl_recv {
     if (req.url ~ "^/(api/login|api/callback|api/logout|api/token|login)(/.*)?$") {
         return (pass);
     }
+    
+    if (req.http.Cookie && req.http.Cookie ~ "(^|; )access_token=") {
+        set req.http.X-Authenticated = "1";
+    } else if (req.http.Authorization) {
+        set req.http.X-Authenticated = "1";
+    } else {
+        set req.http.X-Authenticated = "0";
+    }
 
     return (hash);
 }
 
-sub vcl_backend_response {
-    if (beresp.http.Set-Cookie) {
-        set beresp.ttl = 0s;
-        set beresp.http.Cache-Control = "private, no-store, no-cache, must-revalidate";
-        return (deliver);
-    }
+sub vcl_hash {
+    hash_data(req.http.host);
+    hash_data(req.url);
 
+    if (req.http.X-Authenticated) {
+        hash_data(req.http.X-Authenticated);
+        return;
+    }
+}
+
+sub vcl_backend_response {
     unset beresp.http.Cache-Control;
     set beresp.ttl = 10m;
     return (deliver);
