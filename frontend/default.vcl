@@ -32,10 +32,8 @@ sub vcl_recv {
 sub vcl_hash {
     hash_data(req.http.host);
     hash_data(req.url);
-
     if (req.http.X-Authenticated) {
         hash_data(req.http.X-Authenticated);
-        return;
     }
 }
 
