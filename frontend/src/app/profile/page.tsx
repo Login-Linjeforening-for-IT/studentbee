@@ -8,7 +8,7 @@ async function deleteUserAction() {
     if ('error' in result) {
         throw new Error(result.error)
     } else {
-        redirect('/')
+        redirect('/api/logout')
     }
 }
 
@@ -37,11 +37,11 @@ export default async function Profile() {
                 </div>
                 <div className='grid grid-cols-[auto_1fr] gap-4'>
                     <span className='text-xl font-semibold'>Created At: </span>
-                    <span className='text-xl'>{new Date(user.createdAt).toLocaleString('nb-NO')}</span>
+                    <span className='text-xl'>{user.createdAt ? new Date(user.createdAt).toLocaleString('nb-NO') : '—'}</span>
                 </div>
                 <div className='grid grid-cols-[auto_1fr] gap-4'>
                     <span className='text-xl font-semibold'>Updated At: </span>
-                    <span className='text-xl'>{new Date(user.updatedAt).toLocaleString('nb-NO')}</span>
+                    <span className='text-xl'>{user.updatedAt ? new Date(user.updatedAt).toLocaleString('nb-NO') : '—'}</span>
                 </div>
             </div>
             <form action={deleteUserAction} className='mt-8'>

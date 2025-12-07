@@ -6,7 +6,7 @@ export default async function deleteUser(req: FastifyRequest, res: FastifyReply)
         const userId = req.user!.id
 
         // Delete the user; foreign keys will SET NULL automatically
-        const result = await run('DELETE FROM users WHERE user_id = $1 RETURNING user_id', [userId])
+        const result = await run('DELETE FROM users WHERE user_id = $1 RETURNING user_id AS "userId"', [userId])
 
         if (result.rowCount === 0) {
             return res.status(404).send({ error: 'User not found' })
