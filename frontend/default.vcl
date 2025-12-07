@@ -22,6 +22,12 @@ sub vcl_recv {
 }
 
 sub vcl_backend_response {
+    if (beresp.http.Set-Cookie) {
+        set beresp.ttl = 0s;
+        set beresp.http.Cache-Control = "private, no-store, no-cache, must-revalidate";
+        return (deliver);
+    }
+
     unset beresp.http.Cache-Control;
     set beresp.http.Cache-Control = "login-cache, max-age=600";
     set beresp.ttl = 10m;
