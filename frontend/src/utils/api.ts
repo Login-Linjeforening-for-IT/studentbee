@@ -55,6 +55,18 @@ export async function getComments(cardId: number): Promise<CardComment[] | Error
     return await getWrapper({ path: `/comments/${cardId}` })
 }
 
+export async function postComment(data: { cardId: number, content: string, parent?: number }) {
+    return await postWrapper({ path: '/comment', data })
+}
+
+export async function deleteComment({ id }: { id: number }) {
+    return await deleteWrapper({ path: '/comment', data: { commentId: id } })
+}
+
+export async function sendCommentVote(data: { cardId?: number, commentId: number, vote: boolean }) {
+    return await postWrapper({ path: '/vote/comment', data })
+}
+
 // Scoreboard
 export async function getScoreboard(): Promise<ScoreboardProps[] | ErrorResponse> {
     return await getWrapper({ path: '/scoreboard' })

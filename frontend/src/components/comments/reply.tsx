@@ -1,4 +1,4 @@
-import { deleteComment, postComment } from '@utils/comments'
+import { deleteComment, postComment } from '@utils/api'
 import { Dispatch, SetStateAction, useState } from 'react'
 import Editor, { Markdown } from '../editor/editor'
 import Link from 'next/link'
@@ -31,26 +31,33 @@ type ReplyComponentProps = {
 }
 
 export default function Reply({
-    courseId,
     cardId,
     comment,
     comments,
     setComments
 }: ReplyProps) {
-    const userId = Number(getCookie('user_id')) || 0
     const [reply, setReply] = useState('')
 
-    function send() {
+    async function send() {
         if (!reply.length) {
             return
         }
 
-        postComment({
-            courseId,
-            cardId,
-            content: reply,
-            parent: comment.id
-        })
+        try {
+            const response = await postComment({
+                cardId,
+                content: reply,
+                parent: comment.id
+
+            })
+            if ('error' in response) {
+                console.error('Failed to post reply:', response)
+                return
+            }
+        } catch (err) {
+            console.error('Failed to post reply:', err)
+            return
+        }
 
         const temp = [...comments]
         const index = temp.indexOf(comment)
@@ -67,11 +74,9 @@ export default function Reply({
                 votes: [] as Vote[],
                 replies: [] as CardComment[],
                 parentId: comment.id,
-                userId
             }] : [{
                 id: 0,
                 cardId,
-                userId,
                 username: 'You',
                 content: reply,
                 createdAt: new Date().toISOString(),
@@ -148,8 +153,15 @@ function ReplyComponent({
     const author = replyAuthor === username ? 'You' : replyAuthor
     const replyUser = reply.username.split('@')[0]
 
-    function handleDelete() {
-        deleteComment(reply.id)
+    async function handleDelete() {
+        try {
+            const response = await deleteComment({ id: reply.id })
+            if ('error' in response) {
+                console.error('Failed to delete reply:', response)
+            }
+        } catch (err) {
+            console.error('Failed to delete reply:', err)
+        }
 
         const temp = [...comments]
         const index = temp.indexOf(comment)
@@ -181,7 +193,9 @@ function ReplyComponent({
                         {author}
                     </Link>
                     <h1 className='text-right pr-2'>
-                        {new Date(reply.createdAt).toLocaleString()}
+                        {new Date(comment.createdAt).toLocaleString([],
+                            { year: 'numeric', month: 'numeric', day: 'numeric', hour: '2-digit', minute: '2-digit' }
+                        )}
                     </h1>
                 </div>
                 <Markdown
@@ -196,13 +210,13 @@ function ReplyComponent({
                     className='w-[1.3vw] cursor-pointer'
                     onClick={() => handleVote({ commentId: reply.id, current: true })}
                 >
-                    <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', reply.votes, username, clientVote)}`} />
+                    <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', clientVote)}`} />
                 </button>
                 <button
                     className='w-[1.3vw] cursor-pointer'
                     onClick={() => handleVote({ commentId: reply.id, current: false })}
                 >
-                    <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', reply.votes, username, clientVote)}`} />
+                    <ThumbsDown className={`w-full h-full pt-[0.2vh] ${voteColor('down', clientVote)}`} />
                 </button>
                 {username === replyUser && <button
                     className='text-login-300 underline w-[1.3vw] cursor-pointer'

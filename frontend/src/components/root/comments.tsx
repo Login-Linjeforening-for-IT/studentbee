@@ -1,5 +1,4 @@
-import { deleteComment, postComment } from '@utils/comments'
-import { sendVote } from '@parent/src/utils/vote'
+import { deleteComment, postComment, sendCommentVote } from '@utils/api'
 import { useState } from 'react'
 import Editor from '../editor/editor'
 import Comment from '../comments/comment'
@@ -22,26 +21,32 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
     const [parent, setParent] = useState<number | undefined>()
     const [clientComments, setClientComments] = useState(comments)
     const [voted, setVoted] = useState<ClientVote[]>([])
-    const user = getCookie('user_nickname')
     const username = getCookie('user_name') || ''
 
-    function sendComment() {
+    async function sendComment() {
         if (!content.length) {
             return
         }
 
-        postComment({
-            courseId,
-            cardId,
-            content,
-            parent
-        })
+        try {
+            const response = await postComment({
+                cardId,
+                content,
+                parent
+            })
+            if ('error' in response) {
+                console.error('Failed to post comment:', response)
+                return
+            }
+        } catch (error) {
+            console.error('Failed to post comment:', error)
+            return
+        }
 
         clientComments.push({
             id: Date.now(),
             cardId,
             parentId: parent || null,
-            userId: 0,
             content,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
@@ -54,10 +59,17 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
         setContent('')
     }
 
-    function handleDelete({ commentId }: { commentId: number }) {
+    async function handleDelete({ commentId }: { commentId: number }) {
         const updatedComments = clientComments.filter(comment => comment.id !== commentId)
         setClientComments(updatedComments)
-        deleteComment(commentId)
+        try {
+            const res = await deleteComment({ id: commentId })
+            if ('error' in res) {
+                console.error('Failed to delete comment:', res)
+            }
+        } catch (error) {
+            console.error('Failed to delete comment:', error)
+        }
     }
 
     function vote({ commentId, vote, isReply }: VoteProps) {
@@ -89,7 +101,16 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
             return
         }
 
-        sendVote({ courseId, cardId, commentId, vote })
+        (async () => {
+            try {
+                const res = await sendCommentVote({ cardId, commentId, vote })
+                if ('error' in res) {
+                    console.error('Failed to send comment vote:', res)
+                }
+            } catch (err) {
+                console.error('Failed to send comment vote:', err)
+            }
+        })()
 
         if (!isReply) {
             const temp = [...clientComments]
@@ -113,7 +134,6 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
                     {clientComments.map(comment => <Comment
                         key={comment.id}
                         comment={comment}
-                        user={user}
                         vote={vote}
                         parent={parent}
                         setParent={setParent}

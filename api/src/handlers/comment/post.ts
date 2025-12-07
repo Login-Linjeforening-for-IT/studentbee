@@ -5,7 +5,6 @@ import run from '#db'
  * Defines the ReplyProps type, used for type specification when posting replies
  */
 type ReplyProps = {
-    courseId: string
     cardId: number
     commentId: number
     content: string
@@ -20,24 +19,23 @@ type ReplyProps = {
  */
 export default async function postComment(req: FastifyRequest, res: FastifyReply): Promise<void> {
     try {
-        const { courseId, cardId, content, parent } = req.body as ReplyProps ?? {}
+        const { cardId, content, parent } = req.body as ReplyProps ?? {}
 
-        if (!req.user?.id || !courseId || typeof cardId !== 'number' || !content) {
+        if (!req.user?.id || typeof cardId !== 'number' || !content) {
             return res.status(400).send({
-                error: 'Missing required field (courseId, card_id, content)'
+                error: 'Missing required field (cardId, content)'
             })
         }
 
         const result = await run(`
             INSERT INTO comments (
-                course_id,
                 card_id,
                 parent_id,
                 user_id,
                 content
-            ) VALUES ($1, $2, $3, $4, $5)
+            ) VALUES ($1, $2, $3, $4)
             RETURNING id;
-        `, [courseId, cardId, parent ?? null, req.user.id, content])
+        `, [cardId, parent ?? null, req.user.id, content])
 
         return res.status(201).send({ id: result.rows[0].id })
     } catch (error) {

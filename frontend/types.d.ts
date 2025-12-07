@@ -43,7 +43,7 @@ type CardComment = {
     id: number
     cardId: number | null
     parentId: number | null
-    userId: number
+    username: string
     rating: number
     username: string
     content: string

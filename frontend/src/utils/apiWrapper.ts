@@ -24,7 +24,7 @@ async function apiRequest({ method, path, data, options = {} }: ApiRequestProps)
         headers,
     }
 
-    if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH')) {
+    if (data && (method === 'POST' || method === 'PUT' || method === 'PATCH' || method === 'DELETE')) {
         headers['Content-Type'] = 'application/json'
         defaultOptions.body = JSON.stringify(data)
     }
@@ -35,6 +35,7 @@ async function apiRequest({ method, path, data, options = {} }: ApiRequestProps)
         const response = await fetch(`${baseUrl}${path}`, finalOptions)
 
         if (!response.ok) {
+            console.error('API request failed:', await response.text())
             throw new Error(`API request failed with status ${response.status}`)
         }
 
@@ -45,7 +46,7 @@ async function apiRequest({ method, path, data, options = {} }: ApiRequestProps)
         return await response.json()
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-        console.log(error)
+        console.error('API request error:', error)
         return { error: error.message || 'Unknown error' }
     }
 }
@@ -64,8 +65,8 @@ async function putWrapper({ path, data }: { path: string; data: unknown }) {
     return await apiRequest({ method: 'PUT', path, data })
 }
 
-async function deleteWrapper({ path, options }: { path: string; options?: RequestInit }) {
-    return await apiRequest({ method: 'DELETE', path, options })
+async function deleteWrapper({ path, data, options }: { path: string; data?: unknown; options?: RequestInit }) {
+    return await apiRequest({ method: 'DELETE', path, data, options })
 }
 
 async function patchWrapper({ path, data = {}, options = {} }: { path: string; data?: unknown; options?: RequestInit }) {

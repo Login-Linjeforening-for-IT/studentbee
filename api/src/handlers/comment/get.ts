@@ -6,9 +6,17 @@ export default async function commentsHandler(req: FastifyRequest, res: FastifyR
 
     try {
         const result = await run(`
-            SELECT * FROM comments
-            WHERE card_id = $1
-            ORDER BY created_at ASC;
+            SELECT c.id,
+                   c.card_id AS "cardId",
+                   c.parent_id AS "parentId",
+                   c.content,
+                   c.created_at AS "createdAt",
+                   c.updated_at AS "updatedAt",
+                   COALESCE(u.name, c.user_id) AS "username"
+            FROM comments c
+            LEFT JOIN users u ON u.user_id = c.user_id
+            WHERE c.card_id = $1
+            ORDER BY c.created_at ASC;
         `, [cardId])
 
         const rows = result.rows

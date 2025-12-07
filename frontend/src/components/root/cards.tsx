@@ -223,7 +223,7 @@ export default function Cards({ id, current, course }: CardsProps) {
             />}
             {showComments && id && <Comments
                 courseId={id}
-                cardId={current || 0}
+                cardId={card.id}
                 comments={comments}
             />}
         </div>

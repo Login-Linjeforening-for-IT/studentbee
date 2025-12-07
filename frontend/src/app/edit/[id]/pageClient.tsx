@@ -41,7 +41,7 @@ export default function PageClient({ course, id }: { course: Course, id: string 
         help: '',
         theme: '',
         rating: 0,
-        votes: [],
+        vote: null,
         createdBy: '',
         createdAt: '',
         updatedAt: ''
