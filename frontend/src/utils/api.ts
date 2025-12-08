@@ -20,6 +20,14 @@ export async function deleteUser(): Promise<{ id: string } | ErrorResponse> {
     return await deleteWrapper({ path: '/user' })
 }
 
+export async function updateScore(): Promise<{ id: string } | ErrorResponse> {
+    return await putWrapper({ path: '/user/score', data: { score: 1 } })
+}
+
+export async function updateTime(time: number): Promise<{ id: string } | ErrorResponse> {
+    return await putWrapper({ path: '/user/time', data: { time } })
+}
+
 // Courses
 export async function getCourses(): Promise<Courses[] | ErrorResponse> {
     return await getWrapper({ path: '/courses' })
