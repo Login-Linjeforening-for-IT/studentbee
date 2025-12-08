@@ -4,6 +4,7 @@ import 'uibee/styles'
 import Topbar from '@components/navbar/nav'
 import { cookies } from 'next/headers'
 import { Toaster } from 'sonner'
+import TimeTracker from '@components/root/timeTracker'
 
 export const metadata = {
     title: 'Exam',
@@ -33,6 +34,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                         } as React.CSSProperties
                     }
                 />
+                <TimeTracker />
             </body>
         </html>
     )

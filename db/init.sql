@@ -4,6 +4,7 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     score INTEGER NOT NULL DEFAULT 0,
     time INTEGER NOT NULL DEFAULT 0,
+    last_time_update TIMESTAMP DEFAULT NOW(),
     created_at TIMESTAMP NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMP NOT NULL DEFAULT NOW()
 );

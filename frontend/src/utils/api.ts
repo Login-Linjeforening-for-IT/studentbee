@@ -24,8 +24,8 @@ export async function updateScore(): Promise<{ id: string } | ErrorResponse> {
     return await putWrapper({ path: '/user/score', data: { score: 1 } })
 }
 
-export async function updateTime(time: number): Promise<{ id: string } | ErrorResponse> {
-    return await putWrapper({ path: '/user/time', data: { time } })
+export async function updateTime(duration: number): Promise<{ id: string } | ErrorResponse> {
+    return await putWrapper({ path: '/user/time', data: { duration } })
 }
 
 // Courses

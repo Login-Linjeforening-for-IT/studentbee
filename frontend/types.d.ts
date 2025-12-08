@@ -1,3 +1,6 @@
+declare module '*.css'
+declare module 'uibee/styles'
+
 // User
 type UserProps = {
     userId: string

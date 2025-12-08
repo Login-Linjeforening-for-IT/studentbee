@@ -1,4 +1,5 @@
 import { getUser, deleteUser } from '@utils/api'
+import { humanizeTime } from '@utils/time'
 import { redirect } from 'next/navigation'
 import { PageContainer } from 'uibee/components'
 
@@ -33,7 +34,7 @@ export default async function Profile() {
                 </div>
                 <div className='grid grid-cols-[auto_1fr] gap-4'>
                     <span className='text-xl font-semibold'>Total Time: </span>
-                    <span className='text-xl'>{user.time}</span>
+                    <span className='text-xl'>{humanizeTime(user.time)}</span>
                 </div>
                 <div className='grid grid-cols-[auto_1fr] gap-4'>
                     <span className='text-xl font-semibold'>Created At: </span>

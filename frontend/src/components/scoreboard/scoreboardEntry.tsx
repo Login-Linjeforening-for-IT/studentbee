@@ -1,3 +1,4 @@
+import { humanizeTime } from '@utils/time'
 import type { JSX } from 'react'
 
 type ScoreBoardEntryProps = {
@@ -23,19 +24,4 @@ export default function ScoreBoardEntry({ user, index }: ScoreBoardEntryProps): 
             <td className='px-6 py-4 font-bold text-login text-lg text-center'>{user.score}</td>
         </tr>
     )
-}
-
-function humanizeTime(time: number): string {
-    const days = Math.floor(time / 86400000)
-    const hours = Math.floor((time % 86400000) / 3600000)
-    const minutes = Math.floor((time % 3600000) / 60000)
-    const seconds = Math.floor((time % 60000) / 1000)
-
-    if (days > 0) {
-        return `${days}d ${hours}h`
-    } else if (hours > 0) {
-        return `${hours}h ${minutes}m`
-    } else {
-        return `${minutes}m ${seconds}s`
-    }
 }
