@@ -257,29 +257,3 @@ export async function getFiles(courseId: string) {
         return err.message
     }
 }
-
-// Fetches the requested grades from the server.
-// ID - Course ID
-export async function getGrades(course: string): Promise<Grades | string> {
-    const token = getCookie('access_token')
-
-    try {
-        const response = await fetch(`${config.url.BROWSER_API}/grades/${course}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            }
-        })
-
-        if (!response.ok) {
-            throw new Error(await response.text())
-        }
-
-        const grades: Grades = await response.json()
-        return grades
-    } catch (error: unknown) {
-        const err = error as Error
-        return err.message
-    }
-}
