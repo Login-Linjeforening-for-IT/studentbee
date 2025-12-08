@@ -149,9 +149,9 @@ function ReplyComponent({
 }: ReplyComponentProps) {
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
     const username = getCookie('user_name') as string | undefined || ''
-    const replyAuthor = reply.username.split('@')[0]
+    const replyAuthor = reply.username || '(Deleted user)'
     const author = replyAuthor === username ? 'You' : replyAuthor
-    const replyUser = reply.username.split('@')[0]
+    const replyUser = reply.username || '(Deleted user)'
 
     async function handleDelete() {
         try {

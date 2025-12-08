@@ -33,7 +33,7 @@ export default function Comment({
 }: CommentProps) {
     const username = getCookie('user_name') || ''
     const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
-    const comment_user = comment.username
+    const comment_user = comment.username || '(Deleted user)'
     const author = comment_user === username ? 'You' : comment_user
 
     function handleVote(direction: 'up' | 'down') {
