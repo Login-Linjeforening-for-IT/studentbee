@@ -3,6 +3,7 @@ import run from '#db'
 
 export default async function commentsHandler(req: FastifyRequest, res: FastifyReply) {
     const { cardId } = req.params as { cardId : string }
+    const userId = req.user?.id ?? null
 
     try {
         const result = await run(`
@@ -12,16 +13,20 @@ export default async function commentsHandler(req: FastifyRequest, res: FastifyR
                    c.content,
                    c.created_at AS "createdAt",
                    c.updated_at AS "updatedAt",
-                   COALESCE(u.name, c.user_id) AS "username"
+                   COALESCE(u.name, c.user_id) AS "username",
+                   COALESCE(SUM(CASE WHEN cv.is_upvote THEN 1 ELSE -1 END), 0)::int AS "rating",
+                   MAX(CASE WHEN cv.user_id = $2 THEN cv.is_upvote::int ELSE NULL END)::boolean AS "vote"
             FROM comments c
             LEFT JOIN users u ON u.user_id = c.user_id
+            LEFT JOIN comment_votes cv ON cv.comment_id = c.id
             WHERE c.card_id = $1
+            GROUP BY c.id, u.name
             ORDER BY c.created_at ASC;
-        `, [cardId])
+        `, [cardId, userId])
 
         const rows = result.rows
         const commentById: Record<number, any> = {}
-        rows.forEach(row => {
+        rows.forEach((row: any) => {
             commentById[row.id] = {
                 ...row,
                 parent: row.parentId ?? null,
@@ -30,7 +35,7 @@ export default async function commentsHandler(req: FastifyRequest, res: FastifyR
         })
 
         const comments: any[] = []
-        rows.forEach(row => {
+        rows.forEach((row: any) => {
             const comment = commentById[row.id]
 
             if (row.parentId) {
@@ -42,6 +47,7 @@ export default async function commentsHandler(req: FastifyRequest, res: FastifyR
 
         return res.send(comments)
     } catch (error) {
+        console.error('Error in commentsHandler:', error)
         return res.status(500).send({ error: (error as Error).message })
     }
 }

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Markdown } from '../editor/editor'
 import voteColor from './voteColor'
 import Reply, { Replies } from './reply'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
 import { getCookie } from 'uibee/utils'
 
@@ -32,9 +32,18 @@ export default function Comment({
     handleDelete
 }: CommentProps) {
     const username = getCookie('user_name') || ''
-    const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
+    const [clientVote, setClientVote] = useState<1 | 0 | -1>(
+        comment.vote === true ? 1 : comment.vote === false ? -1 : 0
+    )
     const comment_user = comment.username || '(Deleted user)'
     const author = comment_user === username ? 'You' : comment_user
+
+    useEffect(() => {
+        setClientVote(comment.vote === true ? 1 : comment.vote === false ? -1 : 0)
+    }, [comment.vote])
+
+    const initialVote = comment.vote === true ? 1 : comment.vote === false ? -1 : 0
+    const displayedRating = comment.rating - initialVote + clientVote
 
     function handleVote(direction: 'up' | 'down') {
         if (clientVote === (direction === 'up' ? 1 : -1)) {
@@ -64,7 +73,7 @@ export default function Comment({
                 />
             </div>
             <div className='w-full flex flex-rows space-x-2 mt-1'>
-                <h1 className='text-login-300'>{comment.rating > 0 ? '+' : ''}{comment.rating}</h1>
+                <h1 className='text-login-300'>{displayedRating > 0 ? '+' : ''}{displayedRating}</h1>
                 <button className='w-[1.3vw] cursor-pointer' onClick={() => handleVote('up')}>
                     <ThumbsUp className={`w-full h-full pt-[0.2vh] ${voteColor('up', clientVote)}`} />
                 </button>

@@ -50,7 +50,7 @@ type CardComment = {
     createdAt: string
     updatedAt: string
     replies: CardComment[]
-    votes: Vote[]
+    vote: boolean | null
 }
 
 // Scoreboard

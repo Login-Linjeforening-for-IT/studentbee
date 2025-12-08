@@ -63,7 +63,7 @@ export async function deleteComment({ id }: { id: number }) {
     return await deleteWrapper({ path: '/comment', data: { commentId: id } })
 }
 
-export async function sendCommentVote(data: { cardId?: number, commentId: number, vote: boolean }) {
+export async function postCommentVote(data: { commentId: number, vote: boolean }) {
     return await postWrapper({ path: '/vote/comment', data })
 }
 

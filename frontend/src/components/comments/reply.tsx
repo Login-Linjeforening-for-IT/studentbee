@@ -1,5 +1,5 @@
 import { deleteComment, postComment } from '@utils/api'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import Editor, { Markdown } from '../editor/editor'
 import Link from 'next/link'
 import voteColor from './voteColor'
@@ -71,7 +71,7 @@ export default function Reply({
                 createdAt: new Date().toISOString(),
                 updatedAt: new Date().toISOString(),
                 rating: 0,
-                votes: [] as Vote[],
+                vote: null,
                 replies: [] as CardComment[],
                 parentId: comment.id,
             }] : [{
@@ -83,7 +83,7 @@ export default function Reply({
                 updatedAt: new Date().toISOString(),
                 parentId: comment.id,
                 replies: [],
-                votes: [],
+                vote: null,
                 rating: 0
             }]
         }
@@ -147,11 +147,20 @@ function ReplyComponent({
     comments,
     setComments
 }: ReplyComponentProps) {
-    const [clientVote, setClientVote] = useState<1 | 0 | -1>(0)
+    const [clientVote, setClientVote] = useState<1 | 0 | -1>(
+        reply.vote === true ? 1 : reply.vote === false ? -1 : 0
+    )
     const username = getCookie('user_name') as string | undefined || ''
     const replyAuthor = reply.username || '(Deleted user)'
     const author = replyAuthor === username ? 'You' : replyAuthor
     const replyUser = reply.username || '(Deleted user)'
+
+    useEffect(() => {
+        setClientVote(reply.vote === true ? 1 : reply.vote === false ? -1 : 0)
+    }, [reply.vote])
+
+    const initialVote = reply.vote === true ? 1 : reply.vote === false ? -1 : 0
+    const displayedRating = reply.rating - initialVote + clientVote
 
     async function handleDelete() {
         try {
@@ -205,7 +214,7 @@ function ReplyComponent({
                 />
             </div>
             <div className='w-full flex flex-rows space-x-2 mb-2'>
-                <h1 className='text-login-300'>{reply.rating > 0 ? '+' : ''}{reply.rating + clientVote}</h1>
+                <h1 className='text-login-300'>{displayedRating > 0 ? '+' : ''}{displayedRating}</h1>
                 <button
                     className='w-[1.3vw] cursor-pointer'
                     onClick={() => handleVote({ commentId: reply.id, current: true })}

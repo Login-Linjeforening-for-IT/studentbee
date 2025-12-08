@@ -1,5 +1,5 @@
-import { deleteComment, postComment, sendCommentVote } from '@utils/api'
-import { useState } from 'react'
+import { deleteComment, postComment, postCommentVote } from '@utils/api'
+import { useState, useEffect } from 'react'
 import Editor from '../editor/editor'
 import Comment from '../comments/comment'
 import { getCookie } from 'uibee/utils'
@@ -20,8 +20,13 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
     const [content, setContent] = useState('')
     const [parent, setParent] = useState<number | undefined>()
     const [clientComments, setClientComments] = useState(comments)
-    const [voted, setVoted] = useState<ClientVote[]>([])
     const username = getCookie('user_name') || ''
+
+    useEffect(() => {
+        setClientComments(comments)
+    }, [comments])
+
+    console.log(comments)
 
     async function sendComment() {
         if (!content.length) {
@@ -53,7 +58,7 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
             replies: [],
             rating: 0,
             username,
-            votes: []
+            vote: null
         })
 
         setContent('')
@@ -72,38 +77,10 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
         }
     }
 
-    function vote({ commentId, vote, isReply }: VoteProps) {
-        const foundVote = voted.find(vote => vote.commentId === commentId)
-
-        if (foundVote && !isReply) {
-            if (foundVote.vote === vote) {
-                const temp = [...clientComments]
-                const index = temp.findIndex(comment => comment.id === commentId)
-                temp[index] = {
-                    ...temp[index],
-                    rating: vote ? temp[index].rating - 1 : temp[index].rating + 1
-                }
-
-                setClientComments(temp)
-                setVoted(voted.filter(vote => vote.commentId !== commentId))
-                return
-            }
-
-            const temp = [...clientComments]
-            const index = temp.findIndex(comment => comment.id === commentId)
-            temp[index] = {
-                ...temp[index],
-                rating: vote ? temp[index].rating + 2 : temp[index].rating - 2
-            }
-
-            setClientComments(temp)
-            setVoted(voted.map(inner => inner.commentId === commentId ? { commentId, vote } : inner))
-            return
-        }
-
+    function vote({ commentId, vote }: VoteProps) {
         (async () => {
             try {
-                const res = await sendCommentVote({ cardId, commentId, vote })
+                const res = await postCommentVote({ commentId, vote })
                 if ('error' in res) {
                     console.error('Failed to send comment vote:', res)
                 }
@@ -111,17 +88,6 @@ export default function Comments({ comments, courseId, cardId }: CommentsProps) 
                 console.error('Failed to send comment vote:', err)
             }
         })()
-
-        if (!isReply) {
-            const temp = [...clientComments]
-            const index = temp.findIndex(comment => comment.id === commentId)
-            temp[index] = {
-                ...temp[index],
-                rating: vote ? temp[index].rating + 1 : temp[index].rating - 1
-            }
-            setClientComments(temp)
-            setVoted([...voted, { commentId, vote }])
-        }
     }
 
     return (

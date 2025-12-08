@@ -5,7 +5,6 @@ import run from '#db'
  * Used for type specification when posting comment votes
  */
 type PostCommentVoteProps = {
-    courseId: string
     commentId: number
     vote: boolean
 }
