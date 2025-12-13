@@ -13,35 +13,35 @@
   "dependencies": {
     "dotenv": "^17.2.3",
     "highlight.js": "^11.11.1",
-    "lucide-react": "^0.555.0",
+    "lucide-react": "^0.561.0",
     "marked-highlight": "^2.2.3",
-    "next": "^16.0.7",
+    "next": "^16.0.10",
     "pdfjs-dist": "^5.4.449",
     "postcss": "8.5.6",
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
     "remark-gfm": "^4.0.1",
     "sonner": "^2.0.7",
-    "uibee": "^2.4.6"
+    "uibee": "^2.4.12"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
-    "@next/eslint-plugin-next": "^16.0.7",
+    "@next/eslint-plugin-next": "^16.0.10",
     "@stylistic/eslint-plugin": "^5.6.1",
-    "@tailwindcss/postcss": "^4.1.17",
+    "@tailwindcss/postcss": "^4.1.18",
     "@types/jsdom": "^27.0.0",
-    "@types/node": "^24.10.1",
+    "@types/node": "^25.0.1",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",
-    "baseline-browser-mapping": "^2.9.2",
-    "eslint": "^9.39.1",
-    "eslint-config-next": "^16.0.7",
-    "tailwindcss": "^4.1.17",
+    "baseline-browser-mapping": "^2.9.7",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.0.10",
+    "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.48.1"
+    "typescript-eslint": "^8.49.0"
   },
   "overrides": {
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3"
   }
