@@ -31,7 +31,7 @@ services:
 
   studentbee_postgres:
     image: postgres:18
-    container_name: studentbee_postgres
+    container_name: studentbee_database
     restart: always
     env_file: .env
     volumes:
