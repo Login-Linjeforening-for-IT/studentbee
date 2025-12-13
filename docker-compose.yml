@@ -33,10 +33,7 @@ services:
     image: postgres:18
     container_name: studentbee_postgres
     restart: always
-    environment:
-      POSTGRES_USER: ${DB_USER:-studentbee}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_DB: ${DB:-studentbee}
+    env_file: .env
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
