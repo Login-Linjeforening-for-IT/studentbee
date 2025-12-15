@@ -34,6 +34,10 @@ services:
     container_name: studentbee_database
     restart: always
     env_file: .env
+    environment:
+      POSTGRES_USER: ${DB_USER:-studentbee}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB:-studentbee}
     volumes:
       - postgres_data:/var/lib/postgresql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
