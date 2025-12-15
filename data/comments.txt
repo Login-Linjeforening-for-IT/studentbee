@@ -1,0 +1,7 @@
+cardID 15 (number)
+content "6 er riktig svar." (string)
+courseID "IDATG2202" (string)
+id 8 (number)
+rating 0 (number)
+time "2024-11-23T18:06:09.086Z" (string)
+username "isakbrod@stud.ntnu.no" (string)

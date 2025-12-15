@@ -1,0 +1,37 @@
+[
+    {
+        "username": "akwpeder@stud.ntnu.no",
+        "name": "andkris",
+        "score": 670,
+        "time": 2092536,
+        "seen": 1762459897937
+    },
+    {
+        "username": "nikolos@stud.ntnu.no",
+        "name": "Nikko",
+        "score": 310,
+        "time": 447468,
+        "seen": 1764172891719
+    },
+    {
+        "username": "eirimhan@stud.ntnu.no",
+        "name": "Eirik Hanasand",
+        "score": 280,
+        "time": 80716,
+        "seen": 1755990433954
+    },
+    {
+        "username": "hermanpe@stud.ntnu.no",
+        "name": "Herman Pettersen",
+        "score": 120,
+        "time": 89978,
+        "seen": 1755286994746
+    },
+    {
+        "username": "olemgl@stud.ntnu.no",
+        "name": "Ole Marius Glomsrud",
+        "score": -9999998289,
+        "time": 6252189,
+        "seen": 1765552486170
+    }
+]

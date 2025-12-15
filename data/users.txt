@@ -1,0 +1,39 @@
+email "akwpeder@stud.ntnu.no" (string)
+id "2a3ebf2680c638d367734f37411012ab72cf0d5dacb78698a46e4b94a70ccf25" (string)
+last_updated 1762459897937 (number)
+name "andkris" (string)
+score 670 (number)
+solved 0 (number)
+time 2092536
+
+email "eirimhan@stud.ntnu.no" (string)
+id "e87f538d6d843e5eb8cade51690eb498a80524bfb58dd6b4c56c8a0fe5f3327e" (string)
+last_updated 1755990433954 (number)
+name "Eirik Hanasand" (string)
+score 280 (number)
+solved 0 (number)
+time 80716
+
+email "hermanpe@stud.ntnu.no" (string)
+id "c7e72b4fe30ff1172bd4066b43b8558fcc1638f99cdb63b68f558676a84c9388" (string)
+last_updated 1755286994746 (number)
+name "Herman Pettersen" (string)
+score 120 (number)
+solved 0 (number)
+time 89978
+
+email "nikolos@stud.ntnu.no" (string)
+id "709a8cde33099755378163e3e22d7e193e902634d5e9ebaa4c0f5d42d7f2c4ef" (string)
+last_updated 1764172891719 (number)
+name "Nikko" (string)
+score 310 (number)
+solved 0 (number)
+time 447468
+
+email "olemgl@stud.ntnu.no" (string)
+id "9494bd70c706aa8564c89373127df1cd79e3d86958a09093992770148b61050e" (string)
+last_updated 1765552486170 (number)
+name "Ole Marius Glomsrud" (string)
+score -9999998289 (number)
+solved 0 (number)
+time 6252189
