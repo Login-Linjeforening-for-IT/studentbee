@@ -180,36 +180,6 @@ export async function deleteFile({ courseId, name }: SendFileProps) {
     return await response.json()
 }
 
-
-export async function postCourse({ id, name }: { id: string, name: string }) {
-    const token = getCookie('access_token')
-
-    if (!token) {
-        return 'You need to log in.'
-    }
-
-    try {
-        const response = await fetch(`${config.url.BROWSER_API}/course`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({ code: id, name })
-        })
-
-        if (!response.ok) {
-            throw new Error(await response.text())
-        }
-
-        const data = await response.json()
-        return data
-    } catch (error) {
-        console.log(error)
-        return JSON.stringify(error)
-    }
-}
-
 export async function getFile(courseId: string, name: string) {
     const token = getCookie('access_token')
 

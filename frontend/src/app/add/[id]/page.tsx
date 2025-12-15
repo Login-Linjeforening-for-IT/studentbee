@@ -4,7 +4,7 @@ import { useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { postCourse } from '@utils/fetchClient'
+import { postCourse } from '@utils/api'
 
 export default function Add(props: { params: Promise<{ id: string }> }) {
     const params = use(props.params)
@@ -32,7 +32,7 @@ function AddCourse() {
         setLoading(true)
 
         try {
-            const result = await postCourse({ id: formData.id, name: formData.name })
+            const result = await postCourse({ code: formData.id, name: formData.name })
             if ('error' in result) {
                 toast.error(result.error)
             } else {
