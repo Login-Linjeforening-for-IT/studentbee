@@ -25,11 +25,11 @@ services:
       - "8401:8080"
     env_file: .env
     depends_on:
-      - studentbee_postgres
+      - studentbee_database
     mem_limit: 1g
     cpus: "2.0"
 
-  studentbee_postgres:
+  studentbee_database:
     image: postgres:18
     container_name: studentbee_database
     restart: always
