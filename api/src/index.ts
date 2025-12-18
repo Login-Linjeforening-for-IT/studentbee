@@ -3,6 +3,8 @@ import Fastify from 'fastify'
 import apiRoutes from './routes.ts'
 import getIndex from './handlers/index.ts'
 import getFavicon from './handlers/favicon/getFavicon.ts'
+import fs from 'fs'
+import path from 'path'
 
 const fastify = Fastify({
     logger: true
@@ -15,6 +17,7 @@ fastify.register(cors, {
 
 const port = Number(process.env.PORT) || 8080
 
+fastify.decorate('favicon', fs.readFileSync(path.join(process.cwd(), 'public', 'favicon.ico')))
 fastify.register(apiRoutes, { prefix: '/api' })
 fastify.get('/', getIndex)
 fastify.get('/favicon.ico', getFavicon)
