@@ -1,6 +1,6 @@
 'use client'
 
-import { setCookie } from 'uibee/utils'
+import { setCookie } from 'utilbee/utils'
 
 export default function ToolTipsButton() {
     function display() {

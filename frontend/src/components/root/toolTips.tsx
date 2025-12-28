@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { getCookie, setCookie } from 'uibee/utils'
+import { getCookie, setCookie } from 'utilbee/utils'
 
 export default function ToolTips() {
     const [displayTips, setDisplayTips] = useState(false)

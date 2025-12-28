@@ -4,7 +4,7 @@ import voteColor from './voteColor'
 import Reply, { Replies } from './reply'
 import { Dispatch, SetStateAction, useState, useEffect } from 'react'
 import { ThumbsDown, ThumbsUp, Trash2 } from 'lucide-react'
-import { getCookie } from 'uibee/utils'
+import { getCookie } from 'utilbee/utils'
 
 type CommentProps = {
     comment: CardComment

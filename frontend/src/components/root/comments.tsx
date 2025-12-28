@@ -2,7 +2,7 @@ import { deleteComment, postComment, postCommentVote } from '@utils/api'
 import { useState, useEffect } from 'react'
 import Editor from '../editor/editor'
 import Comment from '../comments/comment'
-import { getCookie } from 'uibee/utils'
+import { getCookie } from 'utilbee/utils'
 
 type CommentsProps = {
     comments: CardComment[]
