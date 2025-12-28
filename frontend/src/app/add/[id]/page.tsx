@@ -3,7 +3,7 @@
 import { useState, use } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { toast } from 'sonner'
+import { toast } from 'uibee/components'
 import { postCourse } from '@utils/api'
 
 export default function Add(props: { params: Promise<{ id: string }> }) {

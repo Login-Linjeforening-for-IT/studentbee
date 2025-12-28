@@ -3,7 +3,7 @@ import './globals.css'
 import 'uibee/styles'
 import Topbar from '@components/navbar/nav'
 import { cookies } from 'next/headers'
-import { Toaster } from 'sonner'
+import { Toaster } from 'uibee/components'
 import TimeTracker from '@components/root/timeTracker'
 
 export const metadata = {
@@ -24,16 +24,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
                 <main className='row-start-2 p-2 row-span-full w-full rounded-lg h-full'>
                     {children}
                 </main>
-                <Toaster
-                    position='bottom-right'
-                    style={
-                        {
-                            '--normal-bg': '#121212',
-                            '--normal-text': 'white',
-                            '--normal-border': '#6b6b6b',
-                        } as React.CSSProperties
-                    }
-                />
+                <Toaster />
                 <TimeTracker />
             </body>
         </html>
