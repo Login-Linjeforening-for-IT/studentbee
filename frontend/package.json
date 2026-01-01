@@ -16,13 +16,13 @@
     "lucide-react": "^0.562.0",
     "marked-highlight": "^2.2.3",
     "next": "^16.1.1",
-    "pdfjs-dist": "^5.4.449",
+    "pdfjs-dist": "^5.4.530",
     "postcss": "8.5.6",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
     "remark-gfm": "^4.0.1",
-    "uibee": "^2.6.0",
-    "utilbee": "^1.1.0"
+    "uibee": "^2.7.9",
+    "utilbee": "^1.1.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.3",
@@ -38,7 +38,7 @@
     "eslint-config-next": "^16.1.1",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.50.1"
+    "typescript-eslint": "^8.51.0"
   },
   "overrides": {
     "eslint": "^9.39.2",
