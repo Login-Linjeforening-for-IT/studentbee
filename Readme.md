@@ -13,7 +13,6 @@ To start the frontend run `docker compose up --build`. This will start the websi
 `API_URL` - Server side URL to the location hosting the API
 `NEXT_PUBLIC_BROWSER_API_URL` - Client side URL to the location hosting the API
 
-
 #### API
 `DB_PASSWORD` - Strong password used to protect the database
 `AUTHENTIK_URL` - Base Authentik path
