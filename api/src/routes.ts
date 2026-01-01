@@ -59,8 +59,11 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.get('/scoreboard', { preHandler }, getScoreboard)
 
     // course
-    fastify.get('/courses', { preHandler }, coursesHandler)
-    fastify.get('/course/:id', { preHandler }, courseHandler)
+    // disabled since the app does not implement auth
+    // fastify.get('/courses', { preHandler }, coursesHandler)
+    // fastify.get('/course/:id', { preHandler }, courseHandler)
+    fastify.get('/courses', coursesHandler)
+    fastify.get('/course/:id', courseHandler)
     fastify.get('/course/code/:code', { preHandler }, courseHandler)
     fastify.post('/course', { preHandler }, postCourse)
     fastify.put('/course/:id', { preHandler }, putCourse)
