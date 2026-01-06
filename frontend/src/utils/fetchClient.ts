@@ -1,5 +1,5 @@
 import config from '@config'
-import { getCookie } from 'utilbee/utils'
+import { getCookie } from 'utilbee'
 
 type MarkProps = {
     courseId: string

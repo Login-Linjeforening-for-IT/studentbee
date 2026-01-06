@@ -1,7 +1,4 @@
-import dotenv from 'dotenv'
 import packageInfo from './package.json'
-
-dotenv.config({ path: '../.env', quiet: true })
 
 const { env } = process
 

@@ -1,6 +1,6 @@
-import dotenv from 'dotenv'
+import { envLoad } from 'utilbee'
 
-dotenv.config({ path: ['.env', '../.env'] })
+envLoad({ path: ['.env', '../.env'] })
 
 const requiredEnvironmentVariables = [
     'AUTHENTIK_URL',
