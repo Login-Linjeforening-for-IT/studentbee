@@ -7,11 +7,12 @@ export async function GET(request: NextRequest) {
     const token = url.searchParams.get('access_token')
 
     await fetch(`${config.url.API}/user`, {
-        method: 'GET',
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
+        body: JSON.stringify({}),
     })
 
     const data = await authToken({

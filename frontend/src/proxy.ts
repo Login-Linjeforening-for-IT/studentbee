@@ -2,6 +2,14 @@ import appConfig from '@config'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function proxy(req: NextRequest) {
+    const visitedCookie = req.cookies.get('visited')
+
+    if (!visitedCookie && req.nextUrl.pathname !== '/login') {
+        const res = NextResponse.redirect(new URL('/login', req.url))
+        res.cookies.set('visited', 'true', { maxAge: 8 * 60 * 60 })
+        return res
+    }
+
     const tokenCookie = req.cookies.get('access_token')
     let validToken = false
 
@@ -28,26 +36,15 @@ export async function proxy(req: NextRequest) {
 }
 
 function pathIsAllowedWhileUnauthorized(path: string) {
-    if (path === '/favicon.ico') {
-        return true
-    }
-
     if (
-        path.startsWith('/_next/static/') ||
-        path.startsWith('/_next/image') ||
-        path.startsWith('/images/') ||
-        path.startsWith('/login') ||
-        path.startsWith('/api/login') ||
-        path.startsWith('/api/callback') ||
-        path.startsWith('/api/token') ||
-        path.startsWith('/api/logout') ||
-        path.startsWith('/_next/webpack-hmr') ||
-        path.startsWith('/course/')
+        path.startsWith('/add') ||
+        path.startsWith('/edit') ||
+        path.startsWith('/profile')
     ) {
-        return true
+        return false
     }
 
-    return false
+    return true
 }
 
 async function tokenIsValid(token: string | undefined): Promise<boolean> {

@@ -56,15 +56,12 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
 
     // score
     fastify.get('/score/:id', { preHandler }, getUserScore)
-    fastify.get('/scoreboard', { preHandler }, getScoreboard)
+    fastify.get('/scoreboard', getScoreboard)
 
     // course
-    // disabled since the app does not implement auth
-    // fastify.get('/courses', { preHandler }, coursesHandler)
-    // fastify.get('/course/:id', { preHandler }, courseHandler)
     fastify.get('/courses', coursesHandler)
     fastify.get('/course/:id', courseHandler)
-    fastify.get('/course/code/:code', { preHandler }, courseHandler)
+    fastify.get('/course/code/:code', courseHandler)
     fastify.post('/course', { preHandler }, postCourse)
     fastify.put('/course/:id', { preHandler }, putCourse)
     fastify.put('/course/:id/notes', { preHandler }, putCourseNotes)
@@ -72,19 +69,19 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     fastify.delete('/course/:id', { preHandler }, deleteCourse)
 
     // files
-    fastify.get('/files/:id', { preHandler }, filesHandler)
-    fastify.get('/file/:id', { preHandler }, fileHandler)
+    fastify.get('/files/:id', filesHandler)
+    fastify.get('/file/:id', fileHandler)
     fastify.put('/file', { preHandler }, putFile)
     fastify.post('/file', { preHandler }, postFile)
     fastify.delete('/file/:id', { preHandler }, deleteFile)
 
     // comments
-    fastify.get('/comments/:cardId', { preHandler }, commentsHandler)
+    fastify.get('/comments/:cardId', commentsHandler)
     fastify.post('/comment', { preHandler }, postComment)
     fastify.delete('/comment', { preHandler }, deleteComment)
 
     // grades
-    fastify.get('/grades/:course', { preHandler }, gradeHandler)
+    fastify.get('/grades/:course', gradeHandler)
 
     // votes
     fastify.post('/vote/comment', { preHandler }, postCommentVote)
