@@ -23,7 +23,7 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
                 <span className='bg-login-800 text-login-300 px-2 py-1 rounded-full text-sm'>{cards.length}</span>
             </div>
             <div className='flex-1 overflow-auto noscroll space-y-2'>
-                {cards.reverse().map((card: Card, index: number) => {
+                {cards.map((card: Card, index: number) => {
                     const isSelected = editCard === cards[index]
 
                     return (
