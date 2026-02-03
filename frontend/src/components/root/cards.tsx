@@ -192,7 +192,7 @@ export default function Cards({ id, current, course }: CardsProps) {
     }
 
     return (
-        <div className='w-full h-full flex flex-col gap-2 col-span-6'>
+        <div className='w-full h-full flex flex-col gap-4 col-span-6'>
             {id && <Question
                 card={card}
                 cards={cards}

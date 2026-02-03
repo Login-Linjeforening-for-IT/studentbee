@@ -24,9 +24,9 @@ export default function CourseClient({
     const study = course?.learningBased || isStudy
 
     return (
-        <div className='w-full grid grid-cols-6 xl:grid-cols-8 gap-2 h-full max-h-full rounded-lg overflow-auto'>
+        <div className='w-full grid grid-cols-6 xl:grid-cols-8 gap-4 h-full max-h-full rounded-lg overflow-hidden'>
             {study && <Study courseId={id} value={fileContent} />}
-            {!study && <div className={'w-full col-span-6 max-h-full overflow-auto noscroll'}>
+            {!study && <div className={'w-full col-span-6 max-h-full overflow-hidden flex flex-col'}>
                 <Cards course={course} id={id} current={current} />
             </div>}
             {!study && <Elements id={id} current={current} course={course} />}

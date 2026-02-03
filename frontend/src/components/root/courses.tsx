@@ -17,10 +17,10 @@ export default async function CourseList() {
     }
 
     return (
-        <div className='w-full h-full overflow-hidden grid grid-rows-12'>
-            <div className='w-full row-span-12 grid grid-rows-[auto_1fr_auto] h-full overflow-hidden gap-2'>
+        <div className='w-full h-full overflow-hidden flex flex-col'>
+            <div className='w-full h-full flex flex-col gap-4 overflow-hidden'>
                 <Header />
-                <div className='overflow-auto'>
+                <div className='overflow-auto flex-1 rounded-2xl'>
                     <StudyOrTest courses={courses as Courses[]} currentPath={''} />
                 </div>
                 <ToolTipsButton />

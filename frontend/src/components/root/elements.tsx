@@ -39,9 +39,9 @@ export default function Elements({ id, current, course }: ElementsProps) {
     function Help() {
         if (help) {
             return (
-                <div className='w-full h-full bg-login-900 rounded-lg p-2 overflow-auto noscroll'>
-                    <h1 className='text-xl'>Info</h1>
-                    <div className='h-full w-full'>
+                <div className='w-full h-full bg-login-900 rounded-2xl p-6 overflow-auto noscroll border border-login-800 shadow-sm'>
+                    <h1 className='text-xl font-bold text-login-100 mb-4'>Info</h1>
+                    <div className='h-full w-full text-login-300 leading-relaxed'>
                         {help}
                     </div>
                 </div>
@@ -76,21 +76,29 @@ function GetQuestions({ cards, current, id }: QuestionsProps) {
     }
 
     return (
-        <div className='flex flex-col gap-[0.2rem]'>
-            <h1 className='text-lg'>Questions</h1>
+        <div className='flex flex-col gap-4 p-1'>
+            <h1 className='text-lg font-semibold text-login-100 pl-1'>Questions</h1>
             <div className='flex flex-col gap-2'>
                 {relevant.map((card, i) => {
                     const index = i + 1 + cards.length - relevant.length
-                    const outline = current === index - 1 ? 'outline-gray-500 scale-[0.99]' : 'outline-hidden'
+                    const isActive = current === index - 1
+
                     return (
                         <button
                             onClick={() => router.push(`/course/${id}/${index}`)}
                             key={i}
-                            className={`relative w-full px-3 py-[0.52rem] bg-login-900 cursor-pointer rounded-lg outline-1 ${outline} hover:outline-white flex items-center ${index === cards.length ? '-top-px' : ''}`}
+                            className={`
+                                group relative w-full px-4 py-3 cursor-pointer rounded-xl flex items-center transition-all duration-200
+                                ${isActive ? 'bg-login-800 border-l-4 border-l-login shadow-md' : 'bg-login-900/50 hover:bg-login-800/80 hover:pl-5'}
+                            `}
                         >
-                            <div className='grid grid-cols-12 w-full'>
-                                <h1 className='text-md text-left w-full col-span-11'>{card.question.slice(0, 25)}{card.question.length > 25 && '...'}</h1>
-                                <h1 className='text-login-500 text-right w-full'>{index}</h1>
+                            <div className='flex justify-between w-full items-center gap-4'>
+                                <span className={`text-sm text-left truncate flex-1 ${isActive ? 'text-login-50 font-medium' : 'text-login-300 group-hover:text-login-100'}`}>
+                                    {card.question}
+                                </span>
+                                <span className={`text-xs font-mono min-w-6 text-right ${isActive ? 'text-login' : 'text-login-600'}`}>
+                                    {index}
+                                </span>
                             </div>
                         </button>
                     )
