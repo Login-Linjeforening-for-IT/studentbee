@@ -6,7 +6,7 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
  * @param _ Request, not used
  * @param res Response, used to send the response to the user
  */
-export async function coursesHandler(_: FastifyRequest, res: FastifyReply) {
+export default async function coursesHandler(_: FastifyRequest, res: FastifyReply) {
     try {
         const result = await run(`
             SELECT 

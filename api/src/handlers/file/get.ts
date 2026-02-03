@@ -13,7 +13,7 @@ type FileProps = {
  * @param req Request
  * @param res Response
  */
-export async function fileHandler(req: FastifyRequest, res: FastifyReply) {
+export default async function fileHandler(req: FastifyRequest, res: FastifyReply) {
     const { id } = req.params as FileProps
 
     try {

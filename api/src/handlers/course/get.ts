@@ -14,7 +14,7 @@ type CourseParam = {
  * @param req Request
  * @param res Response
  */
-export async function courseHandler(req: FastifyRequest, res: FastifyReply) {
+export default async function courseHandler(req: FastifyRequest, res: FastifyReply) {
     const { id, code } = req.params as CourseParam
     if (isNaN(id || 0)) {
         return res.status(400).send({ error: `
