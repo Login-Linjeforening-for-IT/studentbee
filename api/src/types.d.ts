@@ -4,7 +4,6 @@
 type Course = {
     id: string
     cards: Card[]
-    unreviewed: Card[]
     notes: string
     files: Files
 }
