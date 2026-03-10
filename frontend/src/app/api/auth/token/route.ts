@@ -17,7 +17,6 @@ export async function GET(request: NextRequest) {
 
     const data = await authToken({
         req: request,
-        frontendURL: config.auth.BASE_URL,
     })
 
     return data

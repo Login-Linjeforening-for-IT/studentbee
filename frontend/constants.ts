@@ -8,12 +8,11 @@ const config = {
         BROWSER_API: env.NEXT_PUBLIC_BROWSER_API_URL || 'https://studentbee-api.login.no/api',
         GITLAB_URL: 'https://gitlab.login.no',
     },
-    auth: {
-        BASE_URL: env.BASE_URL,
-        LOGIN_URL: `${env.BASE_URL}/api/login`,
-        REDIRECT_URL: `${env.BASE_URL}/api/callback`,
-        TOKEN_URL: `${env.BASE_URL}/api/token`,
-        LOGOUT_URL: `${env.BASE_URL}/api/logout`,
+    authPath: {
+        login: '/api/auth/login',
+        callback: '/api/auth/callback',
+        token: '/api/auth/token',
+        logout: '/api/auth/logout',
     },
     authentik: {
         CLIENT_ID: env.CLIENT_ID,

@@ -1,3 +1,4 @@
+import config from '@config'
 import { cookies } from 'next/headers'
 import { Navbar, NavItem } from 'uibee/components'
 
@@ -12,6 +13,8 @@ export default async function Topbar() {
             disableLanguageToggle
             theme={theme}
             token={accessToken}
+            loginPath={config.authPath.login}
+            logoutPath={config.authPath.logout}
             innerClassName='p-1!'
         >
             <NavItem href='/course'>
