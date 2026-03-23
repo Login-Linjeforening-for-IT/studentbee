@@ -20,8 +20,10 @@ export default function Header() {
                 <Link
                     href={course && course != 'study' ? `/course/${course}` : '/'}
                     className={`
-                        w-full rounded-xl px-4 py-2 content-center flex text-lg items-center gap-2 justify-center transition-all duration-200
-                        ${isStudy ? 'bg-transparent text-login-400 hover:text-login-200 hover:bg-login-800/50' : 'bg-login-800 text-login-50 shadow-sm border border-login-700/50 cursor-default'}
+                        w-full rounded-xl px-4 py-2 content-center flex text-lg items-center gap-2
+                        justify-center transition-all duration-200
+                        ${isStudy ? 'bg-transparent text-login-400 hover:text-login-200 hover:bg-login-800/50' :
+            'bg-login-800 text-login-50 shadow-sm border border-login-700/50 cursor-default'}
                     `}
                 >
                     <Menu className='w-5 h-5'/>
@@ -31,7 +33,9 @@ export default function Header() {
                     href={`/course/${course}/study`}
                     className={`
                         w-full rounded-xl px-4 py-2 flex text-lg items-center gap-2 justify-center transition-all duration-200
-                        ${!isStudy ? 'bg-transparent text-login-400 hover:text-login-200 hover:bg-login-800/50' : 'bg-login-800 text-login-50 shadow-sm border border-login-700/50 cursor-default'}
+                        ${!isStudy ?
+            'bg-transparent text-login-400 hover:text-login-200 hover:bg-login-800/50' :
+            'bg-login-800 text-login-50 shadow-sm border border-login-700/50 cursor-default'}
                     `}
                 >
                     <Pencil className='w-5 h-5'/>

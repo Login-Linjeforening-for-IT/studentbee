@@ -37,7 +37,9 @@ export default function Slider({ years, selectedYear, setSelectedYear }: SliderP
             <div className='relative w-full h-2 bg-login-800 rounded-lg'>
                 <div
                     className='absolute h-full bg-login rounded-lg'
-                    style={{ width: `${((currentValue - Math.min(...positions)) / (Math.max(...positions) - Math.min(...positions))) * 100}%` }}
+                    style={{
+                        width: `${((currentValue - Math.min(...positions)) / (Math.max(...positions) - Math.min(...positions))) * 100}%`
+                    }}
                 />
                 <input
                     type='range'
@@ -49,8 +51,11 @@ export default function Slider({ years, selectedYear, setSelectedYear }: SliderP
                     className='absolute w-full h-2 opacity-0 cursor-pointer z-10'
                 />
                 <div
-                    className='absolute h-5 w-5 bg-login border-2 border-login-900 rounded-full top-1/2 transform -translate-y-1/2 -translate-x-1/2 pointer-events-none shadow-md transition-transform hover:scale-110'
-                    style={{ left: `${((currentValue - Math.min(...positions)) / (Math.max(...positions) - Math.min(...positions))) * 100}%` }}
+                    className='absolute h-5 w-5 bg-login border-2 border-login-900 rounded-full top-1/2 transform -translate-y-1/2
+                        -translate-x-1/2 pointer-events-none shadow-md transition-transform hover:scale-110'
+                    style={{
+                        left: `${((currentValue - Math.min(...positions)) / (Math.max(...positions) - Math.min(...positions))) * 100}%`
+                    }}
                 />
             </div>
 

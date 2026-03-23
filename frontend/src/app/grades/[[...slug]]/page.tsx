@@ -8,8 +8,6 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
 
     const course = slug && slug[0] ? slug[0] : ''
 
-    let grades = null
-    let years = null
     let error = null
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -25,7 +23,7 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
         }
     }
 
-    years = availableYears.reverse()
+    const years = availableYears.reverse()
     const selectedYear = availableYears[0]
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -47,7 +45,7 @@ export default async function Grades({ params }: { params: Promise<{ slug: strin
         }
     }
 
-    grades = transformedData
+    const grades = transformedData
 
     return (
         <PageContainer title='Grades' className='h-full'>

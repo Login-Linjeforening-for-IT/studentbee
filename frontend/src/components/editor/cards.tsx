@@ -31,7 +31,8 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
                             key={index}
                             className={`
                                 group relative flex items-center p-3 rounded-lg cursor-pointer transition-all
-                                ${isSelected ? 'bg-login-800 border border-login' : 'bg-login-800 border border-transparent hover:border-login-600'}
+                                ${isSelected ? 'bg-login-800 border border-login' :
+                            'bg-login-800 border border-transparent hover:border-login-600'}
                             `}
                             onClick={() => handleClick(index)}
                         >
@@ -50,7 +51,8 @@ export default function Cards({ card: editCard, cards, setEditing, handleClick }
                             </div>
 
                             <button
-                                className='absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-2 text-login-400 hover:text-red-500 hover:bg-login-700 rounded-lg transition-all'
+                                className='absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 p-2 text-login-400
+                                    hover:text-red-500 hover:bg-login-700 rounded-lg transition-all'
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     handleRemove(index)

@@ -11,7 +11,8 @@ type AlternativeProps = {
 export default function Alternative({ card, setCard, alternativeIndex, setAlternativeIndex }: AlternativeProps) {
     const inputRef = useRef<HTMLTextAreaElement | null>(null)
     const [draft, setDraft] = useState('')
-    const isNewPlaceholder = alternativeIndex >= card.alternatives.length || (alternativeIndex === card.alternatives.length - 1 && card.alternatives[alternativeIndex] === '')
+    const isNewPlaceholder = alternativeIndex >= card.alternatives.length ||
+        (alternativeIndex === card.alternatives.length - 1 && card.alternatives[alternativeIndex] === '')
 
     // Updates the alternative in the course object
     function handleInput(input: string) {
@@ -97,13 +98,15 @@ export default function Alternative({ card, setCard, alternativeIndex, setAltern
                     value={isNewPlaceholder ? draft : (card.alternatives[alternativeIndex] || '')}
                     onChange={(event) => handleInput(event.target.value)}
                     placeholder={`Enter alternative ${alternativeIndex + 1}...`}
-                    className='flex-1 min-h-10 bg-transparent text-white placeholder-login-500 outline-hidden resize-none overflow-hidden py-2'
+                    className='flex-1 min-h-10 bg-transparent text-white placeholder-login-500
+                        outline-hidden resize-none overflow-hidden py-2'
                     rows={1}
                 />
             </div>
             {alternativeIndex < 9 && (
                 <button
-                    className='flex items-center justify-center gap-2 w-full py-2 text-login-400 hover:text-white hover:bg-login-700 rounded-lg transition-colors text-sm'
+                    className='flex items-center justify-center gap-2 w-full py-2 text-login-400 hover:text-white
+                        hover:bg-login-700 rounded-lg transition-colors text-sm'
                     onClick={handleAddAlternative}
                 >
                     <Plus size={16} />

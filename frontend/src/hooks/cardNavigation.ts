@@ -48,7 +48,10 @@ export const useCardNavigation = ({
 
     const checkAnswer = useCallback(
         (input: number[], attempted: number[], setAttempted: Dispatch<SetStateAction<number[]>>, next?: boolean) => {
-            if (card.answers.every(answer => input.includes(answer)) || card.answers.every(answer => attempted.includes(answer)) || (remainGreen[0] === card.answers[0] && card.answers.length <= 1)) {
+            if (card.answers.every(answer => input.includes(answer)) ||
+                card.answers.every(answer => attempted.includes(answer)) ||
+                (remainGreen[0] === card.answers[0] && card.answers.length <= 1))
+            {
                 if (current != undefined) {
                     const nextCard = current + 2 <= cards.length ? current + 2 : 0
                     if (next && !wait) {
@@ -91,7 +94,9 @@ export const useCardNavigation = ({
             indexMapping
         })
     },
-    [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted, wait, setWait, indexMapping]
+    [current, router, setAnimateAnswer, setSelected, checkAnswer, id, card, cards, selectedRef, attempted, setAttempted, wait, setWait,
+        indexMapping
+    ]
     )
 
     useEffect(() => {

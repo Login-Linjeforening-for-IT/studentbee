@@ -47,14 +47,16 @@ marked.use({
         code(token) {
             const lang = token.lang
             const language = hljs.getLanguage(typeof lang === 'string' ? lang : 'plaintext') ? lang || 'plaintext' : 'plaintext'
-            return `<pre class='inline-block rounded-lg overflow-auto whitespace-pre-wrap wrap-break-word'><code class='hljs ${language}'>${hljs.highlight(token.text, { language }).value}</code></pre>`
+            return `<pre class='inline-block rounded-lg overflow-auto whitespace-pre-wrap wrap-break-word'>
+                <code class='hljs ${language}'>${hljs.highlight(token.text, { language }).value}</code></pre>`
         },
         image(token) {
             const width = 'width="300"'
             return `<img src='${token.href}' alt='${token.title}' ${width} />`
         },
         link(token) {
-            return `<a href='${token.href}' title='${token.title}' target='_blank' rel='noopener noreferrer' class='text-blue-500 underline'>${token.text}</a>`
+            return `<a href='${token.href}' title='${token.title}' target='_blank' rel='noopener noreferrer' 
+            class='text-blue-500 underline'>${token.text}</a>`
         },
         codespan(token) {
             return `<code class='break-all bg-login-500 p-0.3 rounded-xs'>${token.text}</code>`
@@ -179,7 +181,8 @@ export function EditorWithoutLogic({
                 </div>}
                 <div className={`markdown-editor space-x-2 h-full ${displayEditor && 'grid grid-cols-2'}`}>
                     {(displayEditor || !markdown.length) && <textarea
-                        className={`w-full h-full rounded-sm text-white bg-transparent focus:outline-hidden resize-none overflow-hidden outline-hidden caret-login ${placeholderClassName}`}
+                        className={`w-full h-full rounded-sm text-white bg-transparent focus:outline-hidden resize-none overflow-hidden
+                            outline-hidden caret-login ${placeholderClassName}`}
                         value={markdown}
                         onChange={handleMarkdownChange}
                         placeholder={placeholder || 'Write your markdown here...'}
@@ -212,7 +215,8 @@ export function Markdown({
 }: MarkdownProps) {
     return (
         <div
-            className={`markdown-preview ${displayEditor && 'pl-2 border-l-2 border-login'} text-foreground h-full wrap-break-word ${className}`}
+            className={`markdown-preview
+                ${displayEditor && 'pl-2 border-l-2 border-login'} text-foreground h-full wrap-break-word ${className}`}
             onClick={handleDisplayEditor}
             dangerouslySetInnerHTML={{ __html: marked(markdown) }}
         />

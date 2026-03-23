@@ -80,7 +80,8 @@ export default function AddCard({
                 <div className='w-1/2'>
                     <h1 className='text-sm text-login-300 mb-1'>Source</h1>
                     <input
-                        className='bg-login-800 p-2 w-full rounded-lg outline-hidden caret-login text-white border border-login-700 focus:border-login transition-colors'
+                        className='bg-login-800 p-2 w-full rounded-lg outline-hidden caret-login text-white border
+                            border-login-700 focus:border-login transition-colors'
                         value={card.source || ''}
                         type='text'
                         placeholder='Exam or learning material source'
@@ -91,7 +92,8 @@ export default function AddCard({
                     <h1 className='text-sm text-login-300 mb-1'>Theme</h1>
                     <input
                         ref={inputRef}
-                        className='bg-login-800 p-2 w-full rounded-lg outline-hidden caret-login text-white border border-login-700 focus:border-login transition-colors'
+                        className='bg-login-800 p-2 w-full rounded-lg outline-hidden caret-login text-white
+                            border border-login-700 focus:border-login transition-colors'
                         value={card.theme || ''}
                         type='text'
                         placeholder='Question theme (optional)'
@@ -131,7 +133,9 @@ export default function AddCard({
                         }
 
                         return (
-                            <div key={index} className='flex items-center gap-2 bg-login-800 p-2 rounded-lg border border-login-700 group hover:border-login-600 transition-colors'>
+                            <div key={index} className='flex items-center gap-2 bg-login-800 p-2 rounded-lg border
+                                border-login-700 group hover:border-login-600 transition-colors'
+                            >
                                 <span className='text-login-400 w-6 text-center'>{index + 1}</span>
                                 <button
                                     onClick={() => handleAlternativeClick(index)}
@@ -178,7 +182,9 @@ export default function AddCard({
             </div>
 
             <button
-                className={(isSaved || isEmpty || !card.question) ? 'w-full py-3 text-white font-bold rounded-lg transition-colors mt-4 bg-login-700 hover:bg-login-700/90' : 'w-full py-3 text-white font-bold rounded-lg transition-colors mt-4 bg-login hover:bg-login/80'}
+                className={(isSaved || isEmpty || !card.question) ?
+                    'w-full py-3 text-white font-bold rounded-lg transition-colors mt-4 bg-login-700 hover:bg-login-700/90' :
+                    'w-full py-3 text-white font-bold rounded-lg transition-colors mt-4 bg-login hover:bg-login/80'}
                 onClick={handleSubmit}
             >
                 {isEditing ? 'Update Card' : 'Add Card'}

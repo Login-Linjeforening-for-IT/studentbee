@@ -125,7 +125,9 @@ function Files({ studyable }: { studyable: boolean }) {
     )
 }
 
-function FileListHeader({ course, studyable, displayInputField, setDisplayInputField, input, setInput, inputRef, createFile }: FileListHeaderProps) {
+function FileListHeader({ course, studyable, displayInputField, setDisplayInputField, input, setInput, inputRef, createFile }:
+FileListHeaderProps)
+{
     return (
         <div className='flex flex-col gap-2 border-b border-login-800/50 pb-4'>
             {studyable && <Button text='/ test' href={`/course/${course}`} />}
@@ -133,16 +135,19 @@ function FileListHeader({ course, studyable, displayInputField, setDisplayInputF
             <div className='flex items-center justify-between group rounded-lg hover:bg-login-800/30 pr-2 transition-colors'>
                 <Button text='/ study' href={`/course/${course}/study`} className='mb-0!' />
                 <button
-                    className='w-6 h-6 flex items-center justify-center rounded-md text-login-400 hover:text-login-50 hover:bg-login-700 transition-all opacity-0 group-hover:opacity-100'
+                    className='w-6 h-6 flex items-center justify-center rounded-md text-login-400
+                        hover:text-login-50 hover:bg-login-700 transition-all opacity-0 group-hover:opacity-100'
                     onClick={() => setDisplayInputField(displayInputField.length ? '' : 'root')}
                 >
                     <span className='text-lg leading-none pb-0.5'>+</span>
                 </button>
             </div>
-            {displayInputField === 'root' && <div className='flex items-center gap-2 mt-2 bg-login-950/50 p-2 rounded-lg border border-login-800/50 animation-fade-in'>
+            {displayInputField === 'root' &&
+            <div className='flex items-center gap-2 mt-2 bg-login-950/50 p-2 rounded-lg border border-login-800/50 animation-fade-in'>
                 <input
                     ref={inputRef}
-                    className='bg-transparent flex-1 border-b border-login-700 text-login-200 text-sm px-1 py-0.5 outline-hidden focus:border-login-400 placeholder-login-700'
+                    className='bg-transparent flex-1 border-b border-login-700 text-login-200 text-sm
+                        px-1 py-0.5 outline-hidden focus:border-login-400 placeholder-login-700'
                     maxLength={20}
                     type='text'
                     placeholder='New file name...'
@@ -164,7 +169,9 @@ function Button({ text, href, target, className }: ButtonProps & { className?: s
     return (
         <Link
             href={href}
-            className={`block text-md font-medium text-login-300 hover:text-login-100 px-2 py-1.5 rounded-lg hover:bg-login-800/50 transition-colors ${className || ''}`}
+            className={`block text-md font-medium text-login-300 hover:text-login-100 px-2 py-1.5
+                rounded-lg hover:bg-login-800/50 transition-colors ${className || ''}`
+            }
             target={target}
         >
             {text}
@@ -221,10 +228,14 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
 
     return (
         <div className={className || 'flex flex-col'}>
-            <div className='flex items-center justify-between group rounded-lg hover:bg-login-800/30 pr-2 transition-colors py-0.5' key={file.name}>
+            <div
+                className='flex items-center justify-between group rounded-lg hover:bg-login-800/30 pr-2 transition-colors py-0.5'
+                key={file.name}
+            >
                 <Link
                     href={`/course/${course}/files/${file.name}`}
-                    className='text-left px-2 py-1.5 text-sm font-medium text-login-300 hover:text-login-100 flex-1 truncate transition-colors'
+                    className='text-left px-2 py-1.5 text-sm font-medium text-login-300
+                        hover:text-login-100 flex-1 truncate transition-colors'
                 >
                     / {file.name}
                 </Link>
@@ -257,10 +268,14 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
                     displayInputField={displayInputField}
                     setDisplayInputField={setDisplayInputField}
                 />)}
-                {displayInputField === file.name && <div className='flex items-center gap-2 mt-1 mb-2 ml-2 bg-login-950/50 p-1.5 rounded-lg border border-login-800/50 animation-fade-in'>
+                {displayInputField === file.name &&
+                <div className='flex items-center gap-2 mt-1 mb-2 ml-2 bg-login-950/50 p-1.5 rounded-lg border
+                    border-login-800/50 animation-fade-in'
+                >
                     <input
                         ref={inputRef}
-                        className='bg-transparent flex-1 border-b border-login-700 text-login-200 text-sm px-1 outline-hidden focus:border-login-400 placeholder-login-700'
+                        className='bg-transparent flex-1 border-b border-login-700 text-login-200 text-sm px-1
+                            outline-hidden focus:border-login-400 placeholder-login-700'
                         maxLength={20}
                         type='text'
                         placeholder='Subfile name...'

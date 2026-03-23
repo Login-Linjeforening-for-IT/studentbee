@@ -15,7 +15,7 @@ export default async function Page() {
             title='StudentBee'
             description=''
             redirectPath={config.authPath.login}
-            guestRedirectURL={'/'}
+            guestRedirectPath={'/'}
             version={config.version}
         />
     )

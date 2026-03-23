@@ -17,7 +17,9 @@ export default function Elements({ id, current, course }: ElementsProps) {
 
     if (!course) {
         return (
-            <div className='col-span-2 bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center gap-6 grid place-items-center self-center'>
+            <div className='col-span-2 bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100
+                w-full max-w-md text-center gap-6 grid place-items-center self-center'
+            >
                 <h1 className='text-lg font-semibold'>Questions Unavailable</h1>
                 <h1 className='px-8'>The question list is currently unavailable. Please try again later.</h1>
                 <h1 className='text-sm'>Details: {error}</h1>
@@ -89,11 +91,14 @@ function GetQuestions({ cards, current, id }: QuestionsProps) {
                             key={i}
                             className={`
                                 group relative w-full px-4 py-3 cursor-pointer rounded-xl flex items-center transition-all duration-200
-                                ${isActive ? 'bg-login-800 border-l-4 border-l-login shadow-md' : 'bg-login-900/50 hover:bg-login-800/80 hover:pl-5'}
+                                ${isActive ?
+                            'bg-login-800 border-l-4 border-l-login shadow-md' : 'bg-login-900/50 hover:bg-login-800/80 hover:pl-5'}
                             `}
                         >
                             <div className='flex justify-between w-full items-center gap-4'>
-                                <span className={`text-sm text-left truncate flex-1 ${isActive ? 'text-login-50 font-medium' : 'text-login-300 group-hover:text-login-100'}`}>
+                                <span className={`text-sm text-left truncate flex-1
+                                        ${isActive ? 'text-login-50 font-medium' : 'text-login-300 group-hover:text-login-100'}`}
+                                >
                                     {card.question}
                                 </span>
                                 <span className={`text-xs font-mono min-w-6 text-right ${isActive ? 'text-login' : 'text-login-600'}`}>

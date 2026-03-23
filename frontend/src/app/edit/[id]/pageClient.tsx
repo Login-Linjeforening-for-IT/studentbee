@@ -197,7 +197,8 @@ export default function PageClient({ course, id }: { course: Course, id: string 
                         <textarea
                             value={editing.notes}
                             onChange={handleTextChange}
-                            className='w-full flex-1 overflow-auto noscroll bg-login-800 rounded-lg p-3 resize-none whitespace-pre-wrap outline-hidden caret-login text-login-100 text-sm leading-relaxed'
+                            className='w-full flex-1 overflow-auto noscroll bg-login-800 rounded-lg p-3 resize-none whitespace-pre-wrap
+                                outline-hidden caret-login text-login-100 text-sm leading-relaxed'
                             placeholder='Add notes here...'
                         />
                     </div>
@@ -205,7 +206,9 @@ export default function PageClient({ course, id }: { course: Course, id: string 
 
                 {!onlyNotes && (
                     <>
-                        <div className={`${showText ? 'col-span-5' : 'col-span-8'} bg-login-900 rounded-lg p-4 flex flex-col h-full overflow-hidden`}>
+                        <div className={`${showText ? 'col-span-5' : 'col-span-8'}
+                            bg-login-900 rounded-lg p-4 flex flex-col h-full overflow-hidden`}
+                        >
                             <h1 className='text-sm text-login-300 mb-4 uppercase tracking-wider font-semibold'>Card Editor</h1>
                             <AddCard
                                 courseId={id}
@@ -307,7 +310,9 @@ function DeleteCourse({ display, setDisplay, course, handleDelete }: DeleteCours
                     <X className='w-4 h-4 text-login-300' />
                 </div>
                 <h1 className='font-bold text-xl text-white'>Delete course {course.code}</h1>
-                <p className='text-login-300 text-center'>Are you sure you want to delete course {course.code}, including all related cards and comments?</p>
+                <p className='text-login-300 text-center'>
+                    Are you sure you want to delete course {course.code}, including all related cards and comments?
+                </p>
                 <div className='w-full rounded-lg gap-3 grid grid-cols-3 items-center mt-2'>
                     <button className={buttonStyle} onClick={() => setDisplay(false)}>Cancel</button>
                     <button className={buttonStyleRed} onClick={handleDelete}>Delete</button>

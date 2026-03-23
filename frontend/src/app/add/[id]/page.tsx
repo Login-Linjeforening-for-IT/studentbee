@@ -48,7 +48,9 @@ function AddCourse() {
 
     return (
         <div className='w-full h-full grid place-items-center'>
-            <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100 w-full max-w-md text-center flex flex-col items-center gap-4'>
+            <div className='bg-login-100/10 backdrop-blur-md border border-login-100/20 rounded-2xl shadow-lg p-8 px-100
+                 w-full max-w-md text-center flex flex-col items-center gap-4'
+            >
                 <h1 className='text-lg font-semibold'>Add course</h1>
                 <form onSubmit={handleSubmit} className='space-y-4 w-4/5'>
                     <input
@@ -72,7 +74,8 @@ function AddCourse() {
                     <button
                         type='submit'
                         disabled={loading || !formData.id.trim() || !formData.name.trim()}
-                        className='grid w-full bg-login/70 outline outline-login/90 rounded-lg font-semibold h-8 place-items-center cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
+                        className='grid w-full bg-login/70 outline outline-login/90 rounded-lg font-semibold h-8 place-items-center
+                            cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed'
                     >
                         {loading ? 'Adding...' : 'Add course'}
                     </button>

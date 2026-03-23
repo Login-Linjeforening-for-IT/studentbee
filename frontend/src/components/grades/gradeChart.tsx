@@ -12,7 +12,8 @@ type GradesProps = {
 
 export default function GradeChart({ grades, years, selectedYear }: GradesProps) {
     const currentGrades = grades[selectedYear]
-    const totalCandidatesAlp = (currentGrades.A || 0) + (currentGrades.B || 0) + (currentGrades.C || 0) + (currentGrades.D || 0) + (currentGrades.E || 0) + (currentGrades.F || 0)
+    const totalCandidatesAlp = (currentGrades.A || 0) + (currentGrades.B || 0) + (currentGrades.C || 0) +
+        (currentGrades.D || 0) + (currentGrades.E || 0) + (currentGrades.F || 0)
     const totalCandidatesBin = (currentGrades.G || 0) + (currentGrades.H || 0)
 
     const sortedYears = [...years].reverse()
@@ -38,10 +39,16 @@ export default function GradeChart({ grades, years, selectedYear }: GradesProps)
     })
 
     return (
-        <div className='grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[1.5fr_1fr] gap-2 w-full h-full overflow-y-auto lg:overflow-hidden p-1'>
+        <div className='grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-[1.5fr_1fr] gap-2 w-full
+            h-full overflow-y-auto lg:overflow-hidden p-1'
+        >
             {/* Bar Chart Section */}
-            <div className='w-full bg-login-900 p-2 rounded-lg border border-login-800 lg:col-span-2 flex flex-col min-h-[140px] lg:min-h-0 lg:h-full'>
-                <h3 className='text-login-100 text-[10px] font-semibold mb-1 text-center uppercase tracking-wider shrink-0'>Grade Distribution ({selectedYear})</h3>
+            <div className='w-full bg-login-900 p-2 rounded-lg border border-login-800 lg:col-span-2 flex
+                flex-col min-h-35 lg:min-h-0 lg:h-full'
+            >
+                <h3 className='text-login-100 text-[10px] font-semibold mb-1 text-center uppercase tracking-wider shrink-0'>
+                    Grade Distribution ({selectedYear})
+                </h3>
                 <div className='grow min-h-0 w-full'>
                     {totalCandidatesAlp > 0 ? (
                         <BarChart
@@ -61,7 +68,9 @@ export default function GradeChart({ grades, years, selectedYear }: GradesProps)
 
             {/* Line Charts Section */}
             <div className='w-full bg-login-900 p-2 rounded-lg border border-login-800 flex flex-col min-h-[120px] lg:min-h-0 lg:h-full'>
-                <h3 className='text-login-100 text-[10px] font-semibold mb-1 text-center uppercase tracking-wider shrink-0'>Fail Percentage</h3>
+                <h3 className='text-login-100 text-[10px] font-semibold mb-1 text-center uppercase tracking-wider shrink-0'>
+                    Fail Percentage
+                </h3>
                 <div className='grow min-h-0'>
                     <LineChart
                         data={failRatioData}
@@ -74,7 +83,9 @@ export default function GradeChart({ grades, years, selectedYear }: GradesProps)
             </div>
 
             <div className='w-full bg-login-900 p-2 rounded-lg border border-login-800 flex flex-col min-h-[120px] lg:min-h-0 lg:h-full'>
-                <h3 className='text-login-100 text-[10px] font-semibold mb-1 text-center uppercase tracking-wider shrink-0'>Average Grade</h3>
+                <h3 className='text-login-100 text-[10px] font-semibold mb-1 text-center uppercase tracking-wider shrink-0'>
+                    Average Grade
+                </h3>
                 <div className='grow min-h-0'>
                     <LineChart
                         data={avgGradeData}
@@ -137,7 +148,9 @@ function BarChart({ data, total }: { data: { label: string, value: number, color
                         {/* Bar Container */}
                         <div className='w-full grow flex items-end justify-center relative'>
                             {/* Tooltip */}
-                            <div className='absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-login-800 text-login-50 text-xs px-2 py-1 rounded pointer-events-none whitespace-nowrap border border-login-700 z-10'>
+                            <div className='absolute bottom-full mb-2 opacity-0 group-hover:opacity-100 transition-opacity bg-login-800
+                                text-login-50 text-xs px-2 py-1 rounded pointer-events-none whitespace-nowrap border border-login-700 z-10'
+                            >
                                 {d.value} ({Math.round(percentage)}%)
                             </div>
 
@@ -270,7 +283,13 @@ function LineChart({
                         const y = getY(val)
                         return (
                             <g key={t}>
-                                <line x1={padding.left} y1={y} x2={width - padding.right} y2={y} stroke={'#2b2b2b'} strokeWidth='1' strokeDasharray='4 4' />
+                                <line
+                                    x1={padding.left}
+                                    y1={y} x2={width - padding.right}
+                                    y2={y} stroke={'#2b2b2b'}
+                                    strokeWidth='1'
+                                    strokeDasharray='4 4'
+                                />
                                 <text x={padding.left - 5} y={y + 4} textAnchor='end' className='text-[10px] fill-login-200 font-mono'>
                                     {formatY(val)}
                                 </text>
@@ -283,7 +302,11 @@ function LineChart({
                         if (i % step !== 0 && i !== labels.length - 1) return null
 
                         return (
-                            <text key={year} x={getX(i)} y={height - 5} textAnchor='middle' className='text-[10px] fill-login-200 font-mono'>
+                            <text
+                                key={year}
+                                x={getX(i)} y={height - 5}
+                                textAnchor='middle'
+                                className='text-[10px] fill-login-200 font-mono'>
                                 {year}
                             </text>
                         )
