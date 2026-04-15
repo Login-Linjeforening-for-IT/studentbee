@@ -1,11 +1,11 @@
 {
   "name": "studentbee-api",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "main": "src/index.ts",
   "type": "module",
   "scripts": {
-    "start": "node src/index.ts",
-    "debug": "node --inspect --trace-deprecation src/index.ts"
+    "start": "bun src/index.ts",
+    "debug": "bun --inspect --trace-deprecation src/index.ts"
   },
   "keywords": [],
   "author": "Login - Linjeforeningen for IT - TekKom",

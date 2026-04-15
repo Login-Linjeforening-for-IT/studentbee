@@ -1,17 +1,17 @@
-# Uses latest node alpine image for apk package manager
-FROM node:alpine
+# Uses latest bun alpine image for apk package manager
+FROM oven/bun:alpine
 
 # Sets the working directory
 WORKDIR /usr/src/app
 
 # Copies package.json and package-lock.json to the Docker environment
-COPY package.json package-lock.json ./
+COPY package.json bun.lock ./
 
 # Installs required dependencies
-RUN npm install
+RUN bun install --frozen-lockfile
 
 # Copies contents
 COPY . .
 
 # Starts the application
-CMD npm start
+CMD bun src/index.ts

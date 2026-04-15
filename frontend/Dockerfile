@@ -1,5 +1,5 @@
-# Latest node base image
-FROM node:alpine
+# Latest bun base image
+FROM oven/bun:alpine
 
 # Installs dependencies
 RUN apk add --no-cache python3 make g++ varnish
@@ -14,17 +14,17 @@ COPY frontend/default.vcl /etc/varnish/default.vcl
 COPY frontend/entrypoint.sh ./entrypoint.sh
 
 # Copies package versions
-COPY frontend/package*.json ./
+COPY frontend/package.json frontend/bun.lock ./
 
 # Installs dependencies
-RUN npm install
+RUN bun install --frozen-lockfile
 
 # Copies source code
 COPY frontend .
 COPY .env .env
 
 # Builds the application
-RUN npm run build
+RUN bun run build
 
 # Exposes port 3000
 EXPOSE 3000

@@ -12,4 +12,4 @@ echo ""
 echo "-------------------- NOTE --------------------"
 
 # Starts API
-npm start
+bun start
