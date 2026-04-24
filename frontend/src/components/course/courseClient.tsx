@@ -10,6 +10,8 @@ type CourseClientProps = {
     course: Course | null
     id: string
     current: number
+    courseId: number | null
+    fileId: number | null
     fileContent: string[]
 }
 
@@ -17,6 +19,8 @@ export default function CourseClient({
     course,
     id,
     current,
+    courseId,
+    fileId,
     fileContent
 }: CourseClientProps) {
     const path = usePathname()
@@ -25,7 +29,7 @@ export default function CourseClient({
 
     return (
         <div className='w-full grid grid-cols-6 xl:grid-cols-8 gap-4 h-full max-h-full rounded-lg overflow-hidden'>
-            {study && <Study courseId={id} value={fileContent} />}
+            {study && <Study courseCode={id} courseId={courseId} fileId={fileId} value={fileContent} />}
             {!study && <div className={'w-full col-span-6 max-h-full overflow-hidden flex flex-col'}>
                 <Cards course={course} id={id} current={current} />
             </div>}

@@ -11,6 +11,7 @@ type FileProps = {
     file: Files
     className?: string
     path: string
+    courseId: number | null
     input: string
     setInput: Dispatch<SetStateAction<string>>
     inputRef: RefObject<HTMLInputElement | null>
@@ -39,23 +40,24 @@ export default function StudyOrTest({ courses }: CoursesListProps) {
     const path = usePathname()
     const [study, setStudy] = useState(path.includes('study') || path.includes('files'))
     const [cardCount, setCardCount] = useState(0)
+    const courseCode = path.split('/')[2] || ''
+    const currentCourse = courses.find((course) => course.code === courseCode) || null
 
     useEffect(() => {
         setStudy(path.includes('study') || path.includes('files'))
-        const name = path.split('/')[2] || ''
-        const amountOfCards = courses.find(course => course.code === name)?.cardCount || 0
+        const amountOfCards = courses.find(course => course.code === courseCode)?.cardCount || 0
         setCardCount(amountOfCards)
-    }, [path])
+    }, [courseCode, courses, path])
 
     return (
         <div className='h-full'>
-            {study && <Files studyable={cardCount > 0} />}
+            {study && <Files courseId={currentCourse?.id ? Number(currentCourse.id) : null} studyable={cardCount > 0} />}
             {!study && <InnerCourseList courses={courses} currentPath={path} />}
         </div>
     )
 }
 
-function Files({ studyable }: { studyable: boolean }) {
+function Files({ courseId, studyable }: { courseId: number | null, studyable: boolean }) {
     const [files, setFiles] = useState<Files[]>([])
     const inputRef = useRef<HTMLInputElement | null>(null)
     const path = usePathname()
@@ -64,11 +66,11 @@ function Files({ studyable }: { studyable: boolean }) {
     const [input, setInput] = useState('')
 
     function createFile() {
-        if (!course || !input) {
+        if (!course || !input || !courseId) {
             return
         }
 
-        sendFile({ courseId: course, name: input })
+        sendFile({ courseId, name: input })
         setDisplayInputField('')
 
         if (inputRef.current) {
@@ -78,14 +80,19 @@ function Files({ studyable }: { studyable: boolean }) {
 
     useEffect(() => {
         async function fetchFiles() {
-            const response = await getFiles(course)
-            if (response) {
+            if (!courseId) {
+                setFiles([])
+                return
+            }
+
+            const response = await getFiles(courseId)
+            if (Array.isArray(response)) {
                 setFiles(response)
             }
         }
 
         fetchFiles()
-    }, [])
+    }, [courseId])
 
     useEffect(() => {
         function handleKeyDown(e: KeyboardEvent) {
@@ -119,7 +126,7 @@ function Files({ studyable }: { studyable: boolean }) {
                 createFile={createFile}
             />
             <div className='flex-1 overflow-auto noscroll mt-4 -mx-2 px-2'>
-                <FileList files={files} path={path} inputRef={inputRef} />
+                <FileList files={files} path={path} courseId={courseId} inputRef={inputRef} />
             </div>
         </div>
     )
@@ -179,7 +186,7 @@ function Button({ text, href, target, className }: ButtonProps & { className?: s
     )
 }
 
-function FileList({ files, path, inputRef }: FileListProps) {
+function FileList({ files, path, courseId, inputRef }: FileListProps) {
     const [input, setInput] = useState('')
     const [displayInputField, setDisplayInputField] = useState('')
 
@@ -193,6 +200,7 @@ function FileList({ files, path, inputRef }: FileListProps) {
                 key={file.name}
                 file={file}
                 path={path}
+                courseId={courseId}
                 input={input}
                 setInput={setInput}
                 inputRef={inputRef}
@@ -203,7 +211,7 @@ function FileList({ files, path, inputRef }: FileListProps) {
     )
 }
 
-function File({ file, className, path, input, setInput, inputRef, displayInputField, setDisplayInputField }: FileProps) {
+function File({ file, className, path, courseId, input, setInput, inputRef, displayInputField, setDisplayInputField }: FileProps) {
     if (file.name === 'root') {
         return
     }
@@ -215,7 +223,11 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
     }
 
     function addFile() {
-        sendFile({ courseId: course, name: input, parent: file.name })
+        if (!courseId) {
+            return
+        }
+
+        sendFile({ courseId, name: input, parent: file.name })
         setDisplayInputField('')
         if (inputRef.current) {
             inputRef.current.value = ''
@@ -223,7 +235,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
     }
 
     function handleDelete() {
-        deleteFile({ courseId: course, name: file.name })
+        deleteFile(file.id)
     }
 
     return (
@@ -262,6 +274,7 @@ function File({ file, className, path, input, setInput, inputRef, displayInputFi
                     key={file.name}
                     file={file}
                     path={path}
+                    courseId={courseId}
                     input={input}
                     setInput={setInput}
                     inputRef={inputRef}

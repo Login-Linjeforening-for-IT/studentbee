@@ -157,6 +157,7 @@ type Vote = {
 }
 
 type Files = {
+    id: number
     name: string
     content: string
     files: Files[]
@@ -166,6 +167,7 @@ type Files = {
 type FileListProps = {
     files: Files[]
     path: string
+    courseId: number | null
     inputRef: RefObject<HTMLInputElement | null>
 }
 

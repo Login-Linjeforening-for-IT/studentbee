@@ -35,6 +35,33 @@ export default async function putCourse(req: FastifyRequest, res: FastifyReply):
                 return res.status(404).send({ error: 'Course not found' })
             }
 
+            const rootFileUpdate = await client.query(
+                `
+                UPDATE files
+                SET content = $1, updated_by = $2, updated_at = NOW()
+                WHERE course_id = $3
+                  AND name = 'root'
+                  AND parent IS NULL
+                RETURNING id;
+                `,
+                [notes, userId, id]
+            )
+
+            if (rootFileUpdate.rowCount === 0) {
+                await client.query(
+                    `
+                    INSERT INTO files (
+                        name,
+                        content,
+                        course_id,
+                        created_by,
+                        updated_by
+                    ) VALUES ('root', $1, $2, $3, $3);
+                    `,
+                    [notes, id, userId]
+                )
+            }
+
             if (Array.isArray(cards)) {
                 await client.query(`DELETE FROM cards WHERE course_id = $1`, [id])
 

@@ -10,6 +10,7 @@ import putUserScore from './handlers/user/putScore.ts'
 import putUserTime from './handlers/user/putTime.ts'
 import getScoreboard from './handlers/scoreboard/get.ts'
 import fileHandler from './handlers/file/get.ts'
+import fileByCourseHandler from './handlers/file/getByCourse.ts'
 import courseHandler from './handlers/course/get.ts'
 import commentsHandler from './handlers/comment/get.ts'
 import gradeHandler from './handlers/grades/get.ts'
@@ -75,6 +76,7 @@ export default async function apiRoutes(fastify: FastifyInstance, _: FastifyPlug
     // files
     fastify.get('/files/:id', filesHandler)
     fastify.get('/file/:id', fileHandler)
+    fastify.get('/file/course/:courseId/:name', fileByCourseHandler)
     fastify.put('/file', { preHandler }, putFile)
     fastify.post('/file', { preHandler }, postFile)
     fastify.delete('/file/:id', { preHandler }, deleteFile)

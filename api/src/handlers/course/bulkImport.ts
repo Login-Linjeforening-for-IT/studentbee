@@ -23,16 +23,43 @@ export default async function bulkImport(req: FastifyRequest, res: FastifyReply)
                     throw new Error('Invalid course structure')
                 }
 
+                const notes = typeof course.text === 'string' ? course.text : ''
+
                 const courseResult = await run(`
                     INSERT INTO courses (code, name, notes, created_by, updated_by)
-                    VALUES ($1, $2, '', $3, $3)
+                    VALUES ($1, $2, $3, $4, $4)
                     ON CONFLICT (code)
-                    DO UPDATE SET updated_at = NOW(), updated_by = $3
+                    DO UPDATE SET
+                        notes = EXCLUDED.notes,
+                        learning_based = EXCLUDED.learning_based,
+                        updated_at = NOW(),
+                        updated_by = $4
                     RETURNING id
-                `, [course.id.toUpperCase(), course.id.toUpperCase(), userId])
+                `, [
+                    course.id.toUpperCase(),
+                    course.id.toUpperCase(),
+                    notes,
+                    userId,
+                ])
 
                 const courseId = courseResult.rows[0].id
                 let cardsInserted = 0
+
+                const rootFileUpdate = await run(`
+                    UPDATE files
+                    SET content = $1, updated_by = $2, updated_at = NOW()
+                    WHERE course_id = $3
+                      AND name = 'root'
+                      AND parent IS NULL
+                    RETURNING id
+                `, [notes, userId, courseId])
+
+                if (rootFileUpdate.rowCount === 0) {
+                    await run(`
+                        INSERT INTO files (name, content, course_id, created_by, updated_by)
+                        VALUES ('root', $1, $2, $3, $3)
+                    `, [notes, courseId, userId])
+                }
 
                 for (const card of course.cards) {
                     if (

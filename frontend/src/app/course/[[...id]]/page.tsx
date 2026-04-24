@@ -16,7 +16,9 @@ export default async function Course(props: { params: Promise<{ id?: string[] }>
     const IDasString = idArray[1] || '1'
     const current = Number(IDasString) - 1
     const course = await getCourseByCode(id)
-    const fileContent = await getFile(id, idArray[2] || 'root')
+    const file = !('error' in course)
+        ? await getFile(course.id, idArray[2] || 'root')
+        : null
 
     return (
         <div className='grid grid-cols-10 gap-2 w-full h-full max-h-full'>
@@ -28,7 +30,9 @@ export default async function Course(props: { params: Promise<{ id?: string[] }>
                     course={'error' in course ? null : course}
                     id={id}
                     current={current}
-                    fileContent={fileContent.split('\n')}
+                    courseId={'error' in course ? null : course.id}
+                    fileId={typeof file === 'string' || !file ? null : file.id}
+                    fileContent={typeof file === 'string' || !file ? [] : file.content.split('\n')}
                 />
             </div>
         </div>

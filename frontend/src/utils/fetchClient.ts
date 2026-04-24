@@ -7,14 +7,13 @@ type MarkProps = {
 }
 
 type SendFileProps = {
-    courseId: string
+    courseId: number
     name: string
     parent?: string
 }
 
 type UpdateFileProps = {
-    courseId: string
-    name: string
+    id: number
     content: string
 }
 
@@ -110,7 +109,6 @@ export async function sendFile({ courseId, name, parent }: SendFileProps) {
             'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-            username: username,
             courseId,
             name,
             parent
@@ -125,10 +123,9 @@ export async function sendFile({ courseId, name, parent }: SendFileProps) {
     return await response.json()
 }
 
-export async function updateFile({ courseId, name, content }: UpdateFileProps) {
-    const username = getCookie('user_nickname')
+export async function updateFile({ id, content }: UpdateFileProps) {
     const token = getCookie('access_token')
-    if (!username) {
+    if (!token) {
         throw Error('You must be logged in to upload a file')
     }
 
@@ -138,12 +135,7 @@ export async function updateFile({ courseId, name, content }: UpdateFileProps) {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-            username,
-            courseId,
-            name,
-            content
-        })
+        body: JSON.stringify({ id, content })
     })
 
     if (!response.ok) {
@@ -154,22 +146,18 @@ export async function updateFile({ courseId, name, content }: UpdateFileProps) {
     return await response.json()
 }
 
-export async function deleteFile({ courseId, name }: SendFileProps) {
-    const username = getCookie('user_nickname')
+export async function deleteFile(id: number) {
     const token = getCookie('access_token')
-    if (!username) {
+    if (!token) {
         throw Error('You must be logged in to delete a file')
     }
 
-    const response = await fetch(`${config.url.BROWSER_API}/file/${courseId}/${name}`, {
+    const response = await fetch(`${config.url.BROWSER_API}/file/${id}`, {
         method: 'DELETE',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({
-            username: username
-        })
+        }
     })
 
     if (!response.ok) {
@@ -180,11 +168,11 @@ export async function deleteFile({ courseId, name }: SendFileProps) {
     return await response.json()
 }
 
-export async function getFile(courseId: string, name: string) {
+export async function getFile(courseId: number, name: string): Promise<Files | string> {
     const token = getCookie('access_token')
 
     try {
-        const response = await fetch(`${config.url.API}/file/${courseId}/${name}`, {
+        const response = await fetch(`${config.url.API}/file/course/${courseId}/${encodeURIComponent(name)}`, {
             next: { revalidate: 10 },
             method: 'GET',
             headers: {
@@ -204,7 +192,7 @@ export async function getFile(courseId: string, name: string) {
     }
 }
 
-export async function getFiles(courseId: string) {
+export async function getFiles(courseId: number): Promise<Files[] | string> {
     const token = getCookie('access_token')
 
     try {

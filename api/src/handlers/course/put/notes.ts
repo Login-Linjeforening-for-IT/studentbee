@@ -36,6 +36,22 @@ export default async function putCourseNotes(req: FastifyRequest, res: FastifyRe
             return res.status(404).send({ error: 'Course not found' })
         }
 
+        const rootFileUpdate = await run(`
+            UPDATE files
+            SET content = $1, updated_by = $2, updated_at = NOW()
+            WHERE course_id = $3
+              AND name = 'root'
+              AND parent IS NULL
+            RETURNING id
+        `, [notes, req.user.id, id])
+
+        if (rootFileUpdate.rowCount === 0) {
+            await run(`
+                INSERT INTO files (name, content, course_id, created_by, updated_by)
+                VALUES ('root', $1, $2, $3, $3)
+            `, [notes, id, req.user.id])
+        }
+
         return res.send({ id: result.rows[0].id })
     } catch (error) {
         return res.status(500).send({ error: (error as Error).message })
