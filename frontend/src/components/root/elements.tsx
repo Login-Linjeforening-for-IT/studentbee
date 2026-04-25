@@ -66,12 +66,13 @@ export default function Elements({ id, current, course }: ElementsProps) {
 // Gets all the course questions
 function GetQuestions({ cards, current, id }: QuestionsProps) {
     const router = useRouter()
-    const remaining = cards.length - (current || 0)
-    const count = remaining > 9
-        ? 7
-        : Math.min(15, 7 + (9 - remaining))
-
-    const relevant = cards.slice(Math.max(0, (current || 0) - count))
+    const currentIndex = current || 0
+    const maxVisibleQuestions = 14
+    const previousQuestionCount = 5
+    const preferredStartIndex = Math.max(0, currentIndex - previousQuestionCount)
+    const endIndex = Math.min(cards.length, preferredStartIndex + maxVisibleQuestions)
+    const startIndex = Math.max(0, endIndex - maxVisibleQuestions)
+    const relevant = cards.slice(startIndex, endIndex)
 
     if (!cards.length) {
         return
@@ -82,7 +83,7 @@ function GetQuestions({ cards, current, id }: QuestionsProps) {
             <h1 className='text-lg font-semibold text-login-100 pl-1'>Questions</h1>
             <div className='flex flex-col gap-2'>
                 {relevant.map((card, i) => {
-                    const index = i + 1 + cards.length - relevant.length
+                    const index = startIndex + i + 1
                     const isActive = current === index - 1
 
                     return (
