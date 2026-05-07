@@ -18,7 +18,7 @@ sub vcl_recv {
         return (pass);
     }
 
-    if (req.url ~ "^/(api/login|api/callback|api/logout|api/token|login)(/.*)?$") {
+    if (req.url ~ "^/(api/auth|login)(/.*)?$") {
         return (pass);
     }
     
@@ -42,6 +42,18 @@ sub vcl_hash {
 }
 
 sub vcl_backend_response {
+    if (beresp.status >= 300 && beresp.status < 400) {
+        set beresp.uncacheable = true;
+        set beresp.ttl = 0s;
+        return (deliver);
+    }
+
+    if (beresp.http.Set-Cookie) {
+        set beresp.uncacheable = true;
+        set beresp.ttl = 0s;
+        return (deliver);
+    }
+
     unset beresp.http.Cache-Control;
     set beresp.ttl = 10m;
     return (deliver);
