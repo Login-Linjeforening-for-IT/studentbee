@@ -9,9 +9,10 @@ type ApiRequestProps = {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data?: any
     options?: RequestInit
+    quietStatuses?: number[]
 }
 
-async function apiRequest({ method, path, data, options = {} }: ApiRequestProps) {
+async function apiRequest({ method, path, data, options = {}, quietStatuses = [] }: ApiRequestProps) {
     const Cookies = await cookies()
     const token = Cookies.get('access_token')?.value || ''
 
@@ -35,7 +36,15 @@ async function apiRequest({ method, path, data, options = {} }: ApiRequestProps)
         const response = await fetch(`${baseUrl}${path}`, finalOptions)
 
         if (!response.ok) {
-            console.error('API request failed:', await response.text())
+            const body = await response.text()
+            if (quietStatuses.includes(response.status)) {
+                try {
+                    return JSON.parse(body)
+                } catch {
+                    return { error: body || `API request failed with status ${response.status}` }
+                }
+            }
+            console.error('API request failed:', body)
             throw new Error(`API request failed with status ${response.status}`)
         }
 
@@ -52,8 +61,8 @@ async function apiRequest({ method, path, data, options = {} }: ApiRequestProps)
 }
 
 // Wrapper functions for backward compatibility
-async function getWrapper({ path, options = {} }: { path: string; options?: RequestInit }) {
-    return await apiRequest({ method: 'GET', path, options })
+async function getWrapper({ path, options = {}, quietStatuses }: { path: string; options?: RequestInit; quietStatuses?: number[] }) {
+    return await apiRequest({ method: 'GET', path, options, quietStatuses })
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
