@@ -13,4 +13,5 @@ echo "-------------------- NOTE --------------------"
 
 # Starts Next.js — exec replaces sh as PID 1 so SIGTERM reaches bun directly
 export PORT=3001
+export HOSTNAME=0.0.0.0
 exec bun server.js

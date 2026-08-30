@@ -34,7 +34,7 @@ export async function getCourses(): Promise<Courses[] | ErrorResponse> {
 }
 
 export async function getCourseByCode(id: string): Promise<Course | ErrorResponse> {
-    return await getWrapper({ path: `/course/code/${id}`, quietStatuses: [404] })
+    return await getWrapper({ path: `/course/code/${id}` })
 }
 
 export async function getCourse(id: string): Promise<Course | ErrorResponse> {

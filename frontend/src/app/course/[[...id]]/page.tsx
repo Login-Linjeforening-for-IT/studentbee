@@ -2,7 +2,9 @@ import CourseClient from '@parent/src/components/course/courseClient'
 import CourseList from '@parent/src/components/root/courses'
 import SelectCourseList from '@parent/src/components/list/list'
 import { getCourseByCode } from '@utils/api'
+import { getCourses } from '@utils/api'
 import { getFile } from '@utils/fetchClient'
+import { notFound } from 'next/navigation'
 
 export default async function Course(props: { params: Promise<{ id?: string[] }> }) {
     const params = await props.params
@@ -15,6 +17,11 @@ export default async function Course(props: { params: Promise<{ id?: string[] }>
     const idArray = Array.isArray(params?.id) ? params.id : []
     const IDasString = idArray[1] || '1'
     const current = Number(IDasString) - 1
+    const courses = await getCourses()
+    if (!('error' in courses) && !courses.some(course => course.code === id.toUpperCase())) {
+        notFound()
+    }
+
     const course = await getCourseByCode(id)
     const file = !('error' in course)
         ? await getFile(course.id, idArray[2] || 'root')
